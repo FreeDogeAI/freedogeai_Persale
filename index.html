@@ -2,88 +2,140 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreeDogeAI Token Presale</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>FreeDogeAI Presale</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #000;
+    }
+    header {
+      background: #000;
+      color: #facc15;
+      padding: 15px;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      background: #facc15;
+      padding: 10px;
+    }
+    nav a {
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .section {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    .buy-box {
+      background: #f3f3f3;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    input[type="number"] {
+      padding: 10px;
+      width: 100%;
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #facc15;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .language-switch {
+      text-align: center;
+      margin-top: 10px;
+    }
+    footer {
+      background: #000;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    .token-info {
+      margin-top: 20px;
+    }
+    .token-info strong {
+      color: #facc15;
+    }
+  </style>
 </head>
 <body>
-  <header class="logo-bar">
-    <img src="https://i.imgur.com/5y6vXt2.png" alt="FreeDogeAI Logo" class="logo" />
-    <div class="wallet-icons">
-      <img src="https://cryptologos.cc/logos/metamask-fox.svg?v=026" alt="MetaMask" />
-      <img src="https://cryptologos.cc/logos/trust-wallet-trust-wallet-logo.svg?v=026" alt="Trust Wallet" />
-      <img src="https://walletconnect.com/assets/static/media/logo_mark.84dd2535.svg" alt="WalletConnect" />
+  <header>
+    <h1>FreeDogeAI (FDAI) Token Presale</h1>
+  </header>  <nav>
+    <a href="#buy">Buy</a>
+    <a href="#about">About</a>
+    <a href="#community">Community</a>
+  </nav>  <div class="language-switch">
+    <button onclick="setLang('en')">English</button>
+    <button onclick="setLang('tr')">Türkçe</button>
+  </div>  <section class="section" id="buy">
+    <div class="buy-box">
+      <h2 id="buy_title">Buy FDAI Tokens</h2>
+      <p id="bnb_input_label">Enter BNB amount:</p>
+      <input type="number" id="bnbAmount" placeholder="e.g. 0.05" oninput="calculateTokens()" />
+      <p id="token_output">You will get: 0 FDAI</p>
+      <button onclick="connectWallet()">Connect Wallet</button>
+      <button onclick="buyTokens()">Buy Now</button>
     </div>
-  </header>  <main>
-    <h1 id="headerTitle">FreeDogeAI Token Presale</h1>
-    <button id="connectWallet">Connect Wallet</button><div class="lang-switch">
-  <label for="langSelect">Language:</label>
-  <select id="langSelect">
-    <option value="en">English</option>
-    <option value="tr">Türkçe</option>
-  </select>
-</div>
+  </section>  <section class="section token-info">
+    <h2 id="about">About FreeDogeAI</h2>
+    <p id="token_desc">
+      Free Doge AI (FDAI) is a tax-free, community-driven meme + AI token on the BNB Chain. Inspired by Dogecoin and Elon Musk’s dog love,
+      FDAI unites humor, technology, and community. Supply: 2 Quadrillion, 0% Tax, 25% Presale, 18 Decimals.
+    </p>
+  </section>  <section class="section" id="community">
+    <h2>Community</h2>
+    <p>Join our community and stay updated:</p>
+    <ul>
+      <li><a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a></li>
+      <li><a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a></li>
+    </ul>
+  </section>  <footer>
+    &copy; 2025 FreeDogeAI. All rights reserved.
+  </footer>  <script>
+    const rate = 12500000; // 1 BNB = 12.5M FDAI
 
-<section class="info">
-  <h2 id="tokenInfoTitle">Token Information</h2>
-  <ul>
-    <li><strong>Symbol:</strong> FDAI</li>
-    <li><strong>Supply:</strong> 2 Quadrillion</li>
-    <li><strong>Presale:</strong> 25%</li>
-    <li><strong>Network:</strong> BNB Smart Chain (BEP-20)</li>
-  </ul>
-</section>
+    function calculateTokens() {
+      const bnb = parseFloat(document.getElementById("bnbAmount").value);
+      const tokens = isNaN(bnb) ? 0 : bnb * rate;
+      document.getElementById("token_output").innerText = `You will get: ${tokens.toLocaleString()} FDAI`;
+    }
 
-<section class="buy">
-  <h2 id="buySectionTitle">Buy Tokens</h2>
-  <p id="rateInfo">1 BNB = 12,500,000 FDAI</p>
-  <input type="number" id="bnbAmount" placeholder="Enter BNB amount" />
-  <p id="tokenOutput"></p>
-  <button id="buyNow">Buy Now</button>
-  <p class="warning" id="minPurchase">Minimum 0.035 BNB</p>
-</section>
+    function setLang(lang) {
+      if (lang === 'tr') {
+        document.getElementById("buy_title").innerText = "FDAI Token Satın Al";
+        document.getElementById("bnb_input_label").innerText = "BNB miktarını girin:";
+        document.getElementById("token_output").innerText = "Alacağınız miktar: 0 FDAI";
+        document.getElementById("token_desc").innerText =
+          "Free Doge AI (FDAI), BNB zinciri üzerinde çalışan, vergi içermeyen, topluluk odaklı bir meme + yapay zeka tokenıdır. Dogecoin ruhu ve Elon Musk’ın köpek sevgisinden ilham alır. Toplam Arz: 2 Katrilyon, %0 Vergi, %25 Ön Satış, 18 Ondalık.";
+      } else {
+        document.getElementById("buy_title").innerText = "Buy FDAI Tokens";
+        document.getElementById("bnb_input_label").innerText = "Enter BNB amount:";
+        document.getElementById("token_output").innerText = "You will get: 0 FDAI";
+        document.getElementById("token_desc").innerText =
+          "Free Doge AI (FDAI) is a tax-free, community-driven meme + AI token on the BNB Chain. Inspired by Dogecoin and Elon Musk’s dog love, FDAI unites humor, technology, and community. Supply: 2 Quadrillion, 0% Tax, 25% Presale, 18 Decimals.";
+      }
+    }
 
-<section class="tokenomics">
-  <h2 id="tokenomicsTitle">Tokenomics</h2>
-  <ul>
-    <li>%25 Presale</li>
-    <li>%20 Staking & Rewards</li>
-    <li>%15 Liquidity</li>
-    <li>%10 Team</li>
-    <li>%10 Marketing</li>
-    <li>%10 Burn</li>
-    <li>%10 Reserve</li>
-  </ul>
-</section>
+    function connectWallet() {
+      alert("Wallet connection feature is under development.");
+    }
 
-<section class="whitepaper">
-  <h2 id="whitepaperTitle">Whitepaper</h2>
-  <a href="FreeDogeAI_Whitepaper.pdf" target="_blank">
-    <button id="downloadBtn">Download Whitepaper (PDF)</button>
-  </a>
-</section>
-
-<section class="community">
-  <h2>Community</h2>
-  <div class="wallet-icons">
-    <a href="https://t.me/freedogeaiFDAI" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
-    </a>
-    <a href="https://x.com/FreeDogeAI_FDAI?t=eIChyd2UmaOZbljCWY7I2w&s=09" target="_blank">
-      <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter (X)" />
-    </a>
-  </div>
-</section>
-
-<section class="description">
-  <h2>About FreeDogeAI</h2>
-  <p>
-    FreeDogeAI is a next-gen memecoin combining the power of AI with community-driven Doge energy.
-    Built on the BNB Smart Chain, FDAI aims to revolutionize decentralized finance with smart reflections,
-    tax handling, and a loyal user base.
-  </p>
-</section>
-
-  </main>  <footer>
-    <p>&copy; 2025 Free Doge AI. All rights reserved.</p>
-  </footer>  <script src="script.js"></script></body>
+    function buyTokens() {
+      alert("Buy function is under development.");
+    }
+  </script></body>
 </html>
