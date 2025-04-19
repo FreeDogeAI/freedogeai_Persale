@@ -1,34 +1,63 @@
-const TOKENS_PER_BNB = 12500000;
-
-function connectWallet() {
-  alert("Bu sadece örnek. Metamask bağlantısı eklenecek.");
+body {
+  background-color: #000;
+  color: #FFD700;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-document.getElementById("bnbAmount").addEventListener("input", function () {
-  const bnb = parseFloat(this.value);
-  const tokens = isNaN(bnb) ? 0 : bnb * TOKENS_PER_BNB;
-  document.getElementById("tokenResult").textContent =
-    tokens > 0 ? `You'll receive approximately ${tokens.toLocaleString()} FDAI` : "";
-});
+header {
+  background-color: #111;
+  padding: 20px;
+  text-align: center;
+}
 
-function setLang(lang) {
-  const translations = {
-    en: {
-      buyTitle: "Buy FDAI Tokens",
-      tokenDesc: "Tax-free AI + Meme token on BNB Chain",
-      infoTitle: "Token Info",
-      communityTitle: "Join the Community"
-    },
-    tr: {
-      buyTitle: "FDAI Token Satın Al",
-      tokenDesc: "BNB Zinciri üzerinde vergisiz AI + Meme token",
-      infoTitle: "Token Bilgisi",
-      communityTitle: "Topluluğa Katıl"
-    }
-  };
-  const t = translations[lang];
-  document.getElementById("buyTitle").textContent = t.buyTitle;
-  document.getElementById("tokenDesc").textContent = t.tokenDesc;
-  document.getElementById("infoTitle").textContent = t.infoTitle;
-  document.getElementById("communityTitle").textContent = t.communityTitle;
+h1, h2, h3 {
+  color: #FFD700;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  background-color: #111;
+  padding: 10px;
+}
+
+nav a {
+  color: #FFD700;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+button {
+  background-color: #FFD700;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #e5c100;
+}
+
+section {
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+footer {
+  background-color: #111;
+  color: #FFD700;
+  text-align: center;
+  padding: 10px;
+  margin-top: 30px;
 }
