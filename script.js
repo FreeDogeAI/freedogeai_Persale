@@ -1,72 +1,12 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f8f8f8;
-  color: #000;
-}
+// script.js
 
-header {
-  background-color: #000;
-  color: #FFD700;
-  padding: 1rem;
-  text-align: center;
-}
+// Cüzdan bağlantısı (Metamask + WalletConnect) async function connectWallet() { if (window.ethereum) { try { const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' }); const walletAddress = accounts[0]; document.getElementById('wallet-address').innerText = walletAddress; } catch (error) { console.error('Bağlantı hatası:', error); } } else { alert('Lütfen MetaMask veya desteklenen bir cüzdan yükleyin.'); } }
 
-nav {
-  display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-}
+// Token hesaplama function calculateTokens() { const bnbAmount = parseFloat(document.getElementById('bnb-amount').value); const tokensPerBNB = 12500000; // 1 BNB = 12.5M FDAI const result = bnbAmount * tokensPerBNB; document.getElementById('token-amount').innerText = isNaN(result) ? '0' : result.toLocaleString(); }
 
-nav button {
-  margin: 0 10px;
-  padding: 0.5rem 1rem;
-  background: #FFD700;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
+// Satın alma (dummy buton) document.getElementById('buy-button').addEventListener('click', async () => { alert('Satın alma butonuna basıldı. Bu demo versiyonudur. Smart Contract entegrasyonu eklenmelidir.'); });
 
-.container {
-  max-width: 800px;
-  margin: auto;
-  padding: 2rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
+// Dil değişimi function changeLanguage(lang) { const elements = document.querySelectorAll('[data-i18n]'); elements.forEach(el => { const key = el.getAttribute('data-i18n'); el.innerText = translations[lang][key] || key; }); }
 
-.buy-section {
-  margin-top: 2rem;
-  text-align: center;
-}
+// Sayfa yüklenince window.onload = () => { document.getElementById('bnb-amount').addEventListener('input', calculateTokens); document.getElementById('connect-wallet').addEventListener('click', connectWallet); }
 
-input[type="number"] {
-  width: 60%;
-  padding: 10px;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-button.connect {
-  background-color: #000;
-  color: #FFD700;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.footer {
-  margin-top: 3rem;
-  text-align: center;
-  font-size: 14px;
-  color: #777;
-}
-
-.community a {
-  margin: 0 10px;
-  text-decoration: none;
-  color: #000;
-  font-weight: bold;
-}
