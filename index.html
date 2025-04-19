@@ -2,54 +2,161 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Free Doge AI Presale</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://unpkg.com/@thirdweb-dev/wallets@latest/dist/browser/wallets.umd.min.js"></script>
+  <title>FreeDogeAI Token Presale</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  <script defer src="script.js"></script>
+  <script src="https://unpkg.com/@walletconnect/web3-provider@1.6.6/dist/umd/index.min.js"></script>
+  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: #ffd700;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    button {
+      background-color: #ffd700;
+      color: #000;
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    input {
+      padding: 10px;
+      font-size: 1rem;
+    }
+    .lang-switch button {
+      margin: 5px;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1 id="site-title">Free Doge AI (FDAI)</h1>
-    <select id="language-select">
-      <option value="en">English</option>
-      <option value="tr">Türkçe</option>
-      <option value="ar">العربية</option>
-      <option value="ru">Русский</option>
-      <option value="zh">中文</option>
-    </select>
-  </header>  <main>
-    <section class="hero">
-      <h2 id="tagline">AI + Meme + Community</h2>
-      <p id="description">Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.</p>
-      <button id="connectWalletBtn">Connect Wallet</button>
-    </section><section class="buy-section">
-  <h3 id="buy-title">Buy FDAI Token</h3>
-  <input type="number" id="bnbAmount" placeholder="Enter BNB amount" min="0.035" step="0.001">
-  <p id="tokenResult">= 0 FDAI</p>
-  <button id="buyBtn">Buy Now</button>
-</section>
+  <h1 id="title">FreeDogeAI (FDAI) Token Presale</h1>  <div class="lang-switch">
+    <button onclick="setLang('en')">English</button>
+    <button onclick="setLang('tr')">Türkçe</button>
+    <button onclick="setLang('ar')">العربية</button>
+    <button onclick="setLang('ru')">Русский</button>
+    <button onclick="setLang('zh')">中文</button>
+  </div>  <section>
+    <h2 id="headline">AI + Meme + Community</h2>
+    <p id="desc">Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.</p>
+    <button onclick="connectWallet()" id="connectBtn">Connect Wallet</button>
+  </section>  <section>
+    <h2 id="buyTitle">Buy FDAI Token</h2>
+    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" oninput="calculateFDAI()">
+    <p>= <span id="fdaiAmount">0</span> FDAI</p>
+    <button onclick="buyToken()" id="buyBtn">Buy Now</button>
+  </section>  <section>
+    <h2>Token Details</h2>
+    <ul style="list-style: none; padding: 0;">
+      <li>Name: Free Doge AI</li>
+      <li>Symbol: FDAI</li>
+      <li>Supply: 2 Quadrillion</li>
+      <li>Presale: 25%</li>
+      <li>Tax: 0%</li>
+      <li>Network: BNB Chain (BEP-20)</li>
+    </ul>
+    <a href="FreeDogeAI_Whitepaper.pdf" download><button>Download Whitepaper (PDF)</button></a>
+  </section>  <section>
+    <h2 id="community">Community</h2>
+    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+    <a href="https://x.com/FreeDogeAI_FDAI?t=eIChyd2UmaOZbljCWY7I2w&s=09" target="_blank">Twitter (X)</a>
+  </section>  <script>
+    const tokenDropAddress = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
+    const rate = 12500000; // 1 BNB = 12.5M FDAI
 
-<section class="info-section">
-  <h3 id="info-title">Token Details</h3>
-  <ul>
-    <li>Name: Free Doge AI</li>
-    <li>Symbol: FDAI</li>
-    <li>Supply: 2 Quadrillion</li>
-    <li>Presale: 25%</li>
-    <li>Tax: 0%</li>
-    <li>Network: BNB Chain (BEP-20)</li>
-  </ul>
-</section>
+    function calculateFDAI() {
+      const bnb = parseFloat(document.getElementById("bnbAmount").value || 0);
+      document.getElementById("fdaiAmount").innerText = bnb * rate;
+    }
 
-<section class="community">
-  <h3>Community</h3>
-  <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a>
-  <a href="https://x.com/FreeDogeAI_FDAI?t=eIChyd2UmaOZbljCWY7I2w&s=09" target="_blank">Twitter</a>
-</section>
+    async function connectWallet() {
+      if (typeof window.ethereum !== "undefined") {
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          alert("Wallet connected!");
+        } catch (e) {
+          alert("Connection failed: " + e.message);
+        }
+      } else {
+        alert("Please install MetaMask or use WalletConnect compatible wallet.");
+      }
+    }
 
-  </main>  <footer>
-    <p>&copy; 2025 Free Doge AI - All rights reserved.</p>
-  </footer>
-</body>
+    async function buyToken() {
+      if (!window.ethereum) return alert("Wallet not connected!");
+      const bnb = parseFloat(document.getElementById("bnbAmount").value);
+      if (bnb < 0.035) return alert("Minimum 0.035 BNB required");
+
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      try {
+        const tx = await signer.sendTransaction({
+          to: tokenDropAddress,
+          value: ethers.utils.parseEther(bnb.toString())
+        });
+        alert("Transaction sent! TX: " + tx.hash);
+      } catch (e) {
+        alert("Transaction failed: " + e.message);
+      }
+    }
+
+    const translations = {
+      en: {
+        title: "FreeDogeAI (FDAI) Token Presale",
+        headline: "AI + Meme + Community",
+        desc: "Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.",
+        connect: "Connect Wallet",
+        buy: "Buy FDAI Token",
+        buyNow: "Buy Now"
+      },
+      tr: {
+        title: "FreeDogeAI (FDAI) Token Ön Satışı",
+        headline: "Yapay Zeka + Mizah + Topluluk",
+        desc: "BNB zincirinde, %100 vergi̇siz ve topluluk odaklı yapay zekalı mizah token'ına katıl!",
+        connect: "Cüzdanı Bağla",
+        buy: "FDAI Token Satın Al",
+        buyNow: "Şimdi Al"
+      },
+      ar: {
+        title: "البيع المسبق لرمز FreeDogeAI (FDAI)",
+        headline: "الذكاء الصناعي + الميم + المجتمع",
+        desc: "انضم إلى الجيل القادم من رموز الذكاء الصناعي في سلسلة BNB.",
+        connect: "اتصل بالمحفظة",
+        buy: "اشتري FDAI",
+        buyNow: "اشتري الآن"
+      },
+      ru: {
+        title: "Предпродажа FreeDogeAI (FDAI)",
+        headline: "ИИ + Мем + Сообщество",
+        desc: "Присоединяйтесь к новому поколению AI-токенов.",
+        connect: "Подключить кошелек",
+        buy: "Купить FDAI",
+        buyNow: "Купить"
+      },
+      zh: {
+        title: "FreeDogeAI (FDAI) 首次销售",
+        headline: "人工智能 + 表情包 + 社区",
+        desc: "加入新一代在BNB链上的AI社区引擎的表情包代币!",
+        connect: "链接钱包",
+        buy: "购买 FDAI",
+        buyNow: "立即购买"
+      }
+    };
+
+    function setLang(lang) {
+      const t = translations[lang];
+      document.getElementById("title").innerText = t.title;
+      document.getElementById("headline").innerText = t.headline;
+      document.getElementById("desc").innerText = t.desc;
+      document.getElementById("connectBtn").innerText = t.connect;
+      document.getElementById("buyTitle").innerText = t.buy;
+      document.getElementById("buyBtn").innerText = t.buyNow;
+    }
+  </script></body>
 </html>
