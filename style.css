@@ -84,4 +84,29 @@ button:hover {
     width: 100%;
     box-sizing: border-box;
   }
+  /* Genel fade-in animasyon */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animasyon sınıfı */
+.fade-in {
+  animation: fadeInUp 1s ease forwards;
+  opacity: 0;
+}
+
+/* Buton hover efekti */
+button:hover,
+#connectWallet:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+  
 }
