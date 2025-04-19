@@ -1,137 +1,34 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #f4f4f4;
-  color: #222;
+const TOKENS_PER_BNB = 12500000;
+
+function connectWallet() {
+  alert("Bu sadece örnek. Metamask bağlantısı eklenecek.");
 }
 
-header {
-  background-color: #141414;
-  color: white;
-  padding: 20px;
-  text-align: center;
-}
+document.getElementById("bnbAmount").addEventListener("input", function () {
+  const bnb = parseFloat(this.value);
+  const tokens = isNaN(bnb) ? 0 : bnb * TOKENS_PER_BNB;
+  document.getElementById("tokenResult").textContent =
+    tokens > 0 ? `You'll receive approximately ${tokens.toLocaleString()} FDAI` : "";
+});
 
-header h1 {
-  margin: 0 0 10px;
-}
-
-#connectWallet {
-  background: #ff9800;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  border-radius: 5px;
-}
-
-.lang-switch {
-  margin-top: 15px;
-}
-
-section {
-  padding: 20px;
-  background: white;
-  margin: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-section h2 {
-  border-bottom: 2px solid #ff9800;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-ul li {
-  padding: 6px 0;
-}
-
-button {
-  background: #4caf50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #388e3c;
-}
-
-.warning {
-  color: #e53935;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-@media (max-width: 600px) {
-  section {
-    margin: 10px;
-    padding: 15px;
-  }
-
-  button, #connectWallet {
-    width: 100%;
-    box-sizing: border-box;
-  }
-  /* Genel fade-in animasyon */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Animasyon sınıfı */
-.fade-in {
-  animation: fadeInUp 1s ease forwards;
-  opacity: 0;
-}
-
-/* Buton hover efekti */
-button:hover,
-#connectWallet:hover {
-  transform: scale(1.05);
-  transition: all 0.2s ease-in-out;
-}
-  
-}
-.community {
-  padding: 20px;
-  text-align: center;
-}
-
-.community h2 {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-}
-
-.community .wallet-icons {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.community .wallet-icons img {
-  width: 40px;
-  height: 40px;
-  transition: transform 0.3s ease;
-}
-
-.community .wallet-icons img:hover {
-  transform: scale(1.2);
+function setLang(lang) {
+  const translations = {
+    en: {
+      buyTitle: "Buy FDAI Tokens",
+      tokenDesc: "Tax-free AI + Meme token on BNB Chain",
+      infoTitle: "Token Info",
+      communityTitle: "Join the Community"
+    },
+    tr: {
+      buyTitle: "FDAI Token Satın Al",
+      tokenDesc: "BNB Zinciri üzerinde vergisiz AI + Meme token",
+      infoTitle: "Token Bilgisi",
+      communityTitle: "Topluluğa Katıl"
+    }
+  };
+  const t = translations[lang];
+  document.getElementById("buyTitle").textContent = t.buyTitle;
+  document.getElementById("tokenDesc").textContent = t.tokenDesc;
+  document.getElementById("infoTitle").textContent = t.infoTitle;
+  document.getElementById("communityTitle").textContent = t.communityTitle;
 }
