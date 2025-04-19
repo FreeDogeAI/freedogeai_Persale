@@ -84,5 +84,26 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       alert("Transaction failed: " + err.message);
     }
+    .logo-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.logo-bar .logo {
+  height: 50px;
+}
+
+.wallet-icons img {
+  height: 36px;
+  margin-left: 10px;
+  transition: transform 0.2s;
+}
+
+.wallet-icons img:hover {
+  transform: scale(1.2);
+}
+    
   });
 });
