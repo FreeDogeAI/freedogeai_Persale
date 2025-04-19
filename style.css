@@ -110,3 +110,28 @@ button:hover,
 }
   
 }
+.community {
+  padding: 20px;
+  text-align: center;
+}
+
+.community h2 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.community .wallet-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.community .wallet-icons img {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+.community .wallet-icons img:hover {
+  transform: scale(1.2);
+}
