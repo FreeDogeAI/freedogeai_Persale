@@ -1,184 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FreeDogeAI Token Presale</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
   <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.6.6/dist/umd/index.min.js"></script>
-  <style>
-    body {
-      background-color: #000;
-      color: #ffd700;
-      font-family: Arial, sans-serif;
-    }
-    .lang-switch button {
-      margin: 0 5px;
-    }
-    .input, .button {
-      padding: 10px;
-      margin: 10px;
-      border-radius: 5px;
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.5/dist/index.js"></script>
 </head>
-<body class="text-center p-4">
-  <h1 id="title" class="text-3xl font-bold mb-4">FreeDogeAI (FDAI) Token Presale</h1>
+<body>
+  <div class="container">
+    <header>
+      <h1 id="title">FreeDogeAI (FDAI) Token Presale</h1>
+      <div id="walletAddress"></div>
+      <div class="language-buttons">
+        <button onclick="setLang('en')">English</button>
+        <button onclick="setLang('tr')">Türkçe</button>
+        <button onclick="setLang('ar')">العربية</button>
+        <button onclick="setLang('ru')">Русский</button>
+        <button onclick="setLang('zh')">中文</button>
+        <!-- 15 more will be added later in script.js -->
+      </div>
+    </header><main>
+  <section class="hero">
+    <h2 id="headline">AI + Meme + Community</h2>
+    <p id="desc">Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and community-driven.</p>
+    <button onclick="connectWallet()" id="connectBtn">Connect Wallet</button>
+  </section>
 
-  <div class="lang-switch mb-4">
-    <button onclick="setLang('en')">English</button>
-    <button onclick="setLang('tr')">Türkçe</button>
-    <button onclick="setLang('es')">Español</button>
-    <button onclick="setLang('fr')">Français</button>
-    <button onclick="setLang('de')">Deutsch</button>
-    <button onclick="setLang('ru')">Русский</button>
-    <button onclick="setLang('zh')">中文</button>
-    <button onclick="setLang('ar')">العربية</button>
-    <button onclick="setLang('hi')">हिंदी</button>
-    <button onclick="setLang('ja')">日本語</button>
-    <button onclick="setLang('it')">Italiano</button>
-    <button onclick="setLang('pt')">Português</button>
-    <button onclick="setLang('nl')">Nederlands</button>
-    <button onclick="setLang('pl')">Polski</button>
-    <button onclick="setLang('ko')">한국어</button>
-    <button onclick="setLang('vi')">Tiếng Việt</button>
-    <button onclick="setLang('th')">ไทย</button>
-    <button onclick="setLang('id')">Bahasa Indonesia</button>
-    <button onclick="setLang('fa')">فارسی</button>
-    <button onclick="setLang('uk')">Українська</button>
-  </div>
-
-  <button id="connectBtn" class="button bg-yellow-500 text-black font-bold" onclick="connectWallet()">Connect Wallet</button>
-
-  <div class="mt-6">
-    <input id="bnbAmount" type="number" class="input bg-gray-800 text-white" placeholder="Enter BNB amount" oninput="calculateFDAI()" step="0.01">
+  <section class="buy">
+    <h2 id="buyTitle">Buy FDAI Token</h2>
+    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" oninput="calculateFDAI()">
     <p>= <span id="fdaiAmount">0</span> FDAI</p>
-    <button id="buyBtn" class="button bg-yellow-500 text-black font-bold" onclick="buyToken()">Buy Now</button>
-  </div>
+    <button onclick="buyToken()" id="buyBtn">Buy Now</button>
+  </section>
 
-  <div class="mt-6">
-    <a href="FreeDogeAI_Whitepaper.pdf" download><button class="button bg-yellow-600">Download Whitepaper</button></a>
-  </div>
+  <section class="whitepaper">
+    <a href="FreeDogeAI_Whitepaper.pdf" target="_blank">
+      <button>Download Whitepaper (PDF)</button>
+    </a>
+  </section>
 
-  <div class="mt-6">
+  <section class="community">
     <h2 id="community">Community</h2>
-    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> | 
-    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
-  </div>
+    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+    <a href="https://x.com/FreeDogeAI_FDAI?t=eIChyd2UmaOZbljCWY7I2w&s=09" target="_blank">Twitter (X)</a>
+  </section>
 
-  <script>
-    const tokenDropAddress = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
-    const userWalletAddress = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // Ali'nin cüzdanı
-    const rate = 12500000;
+  <section class="about">
+    <h2 id="about">About</h2>
+    <p id="aboutText">Free Doge AI (FDAI) is a tax-free, community-powered meme + AI token on the BNB Chain. Don't miss out — join the future of digital culture today. Limited supply, unlimited potential. Be early, be free!</p>
+  </section>
+</main>
 
-    window.onload = () => {
-      if (window.ethereum) {
-        window.ethereum.request({ method: 'eth_requestAccounts' });
-      }
-    };
+<footer>
+  <p>&copy; 2025 FreeDogeAI. All rights reserved.</p>
+</footer>
 
-    async function connectWallet() {
-      if (window.ethereum) {
-        try {
-          await window.ethereum.request({ method: 'eth_requestAccounts' });
-          alert("Wallet connected");
-        } catch (e) {
-          alert("Connection failed");
-        }
-      } else {
-        alert("Please install a wallet like MetaMask or TrustWallet.");
-      }
-    }
-
-    async function buyToken() {
-      const bnb = parseFloat(document.getElementById("bnbAmount").value);
-      if (!bnb || bnb < 0.035) return alert("Minimum 0.035 BNB required");
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      try {
-        const tx = await signer.sendTransaction({
-          to: userWalletAddress,
-          value: ethers.utils.parseEther(bnb.toString())
-        });
-        alert("Transaction sent! TX: " + tx.hash);
-      } catch (e) {
-        alert("Transaction failed: " + e.message);
-      }
-    }
-
-    function calculateFDAI() {
-      const bnb = parseFloat(document.getElementById("bnbAmount").value);
-      document.getElementById("fdaiAmount").innerText = isNaN(bnb) ? 0 : (bnb * rate).toLocaleString();
-    }
-
-    function setLang(lang) {
-      // Bu kısımda çeviri veritabanı ayrı bir JS dosyasına yazılacak 
-      alert("Language set to: " + lang);
-    }
-  </script>
-</body>
-</html>ne // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
-
-interface IERC20 {
-    function transfer(address to, uint256 amount) external returns (bool);
-    function balanceOf(address account) external view returns (uint256);
-}
-
-contract BNBPresale {
-    address public owner;
-    IERC20 public token;
-    uint256 public rate; // 1 BNB = ? token
-    uint256 public hardCap; // Maksimum BNB
-    uint256 public raisedAmount;
-    bool public isPresaleOpen;
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Yetkiniz yok");
-        _;
-    }
-
-    event TokenPurchased(address indexed buyer, uint256 bnbAmount, uint256 tokenAmount);
-    event PresaleClosed();
-
-    constructor(address _tokenAddress, uint256 _rate, uint256 _hardCap) {
-        owner = msg.sender;
-        token = IERC20(_tokenAddress);
-        rate = _rate;
-        hardCap = _hardCap;
-        isPresaleOpen = true;
-    }
-
-    receive() external payable {
-        buyToken();
-    }
-
-    function buyToken() public payable {
-        require(isPresaleOpen, "Ön satış kapalı");
-        require(msg.value > 0, "BNB gönderilmedi");
-        require(raisedAmount + msg.value <= hardCap, "Hard cap aşıldı");
-
-        uint256 tokenAmount = msg.value * rate;
-        raisedAmount += msg.value;
-
-        require(token.transfer(msg.sender, tokenAmount), "Token gönderimi başarısız");
-
-        emit TokenPurchased(msg.sender, msg.value, tokenAmount);
-    }
-
-    function closePresale() external onlyOwner {
-        isPresaleOpen = false;
-        emit PresaleClosed();
-    }
-
-    function withdrawBNB() external onlyOwner {
-        payable(owner).transfer(address(this).balance);
-    }
-
-    function withdrawUnsoldTokens() external onlyOwner {
-        uint256 remaining = token.balanceOf(address(this));
-        require(token.transfer(owner, remaining), "Token çekilemedi");
-    }
-}
+  </div>  <script src="script.js"></script></body>
+</html>
