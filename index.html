@@ -1,46 +1,66 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreeDogeAI (FDAI) Token Presale</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeDogeAI (FDAI) Token Presale</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/i18next@21.6.10/dist/umd/i18next.min.js"></script>
+    <script src="https://unpkg.com/web3@1.7.0/dist/web3.min.js"></script>
 </head>
 <body>
-  <div class="container">
-    <h1 id="title">FreeDogeAI (FDAI) Token Presale</h1><div class="lang-switch">
-  <button onclick="setLang('en')">English</button>
-  <button onclick="setLang('tr')">Türkçe</button>
-  <button onclick="setLang('ar')">العربية</button>
-  <button onclick="setLang('ru')">Русский</button>
-  <button onclick="setLang('zh')">中文</button>
-</div>
+    <div class="container">
+        <div class="language-switcher">
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="tr">Türkçe</option>
+                <option value="ar">العربية</option>
+                <option value="ru">Русский</option>
+                <option value="zh">中文</option>
+                <option value="fr">Français</option>
+                <option value="es">Español</option>
+                <option value="de">Deutsch</option>
+                <option value="it">Italiano</option>
+                <option value="ja">日本語</option>
+                <option value="ko">한국어</option>
+                <option value="pt">Português</option>
+                <option value="nl">Nederlands</option>
+                <option value="hi">हिन्दी</option>
+                <option value="bn">বাংলা</option>
+                <option value="vi">Tiếng Việt</option>
+                <option value="th">ไทย</option>
+                <option value="pl">Polski</option>
+                <option value="sv">Svenska</option>
+                <option value="el">Ελληνικά</option>
+            </select>
+        </div>
 
-<p id="desc">Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.</p>
+        <h1 data-i18n="title">FreeDogeAI (FDAI) Token Presale</h1>
+        <p data-i18n="description">Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.</p>
 
-<button onclick="connectWallet()" id="connectBtn">Connect Wallet</button>
-<p id="walletAddress"></p>
+        <button id="connectWallet" data-i18n="connectWallet">Connect Wallet</button>
 
-<div class="buy-box">
-  <label id="buyTitle">Buy FDAI Token</label>
-  <input type="number" id="bnbAmount" placeholder="Enter BNB amount" oninput="calculateFDAI()">
-  <p>= <span id="fdaiAmount">0</span> FDAI</p>
-  <button onclick="buyToken()" id="buyBtn">Buy Now</button>
-</div>
+        <div class="buy-section">
+            <label data-i18n="buyLabel">Buy FDAI Token</label>
+            <input type="number" id="bnbAmount" placeholder="Enter BNB amount" step="0.01" min="0.035">
+            <p><span id="fdaiAmount">0</span> FDAI</p>
+            <button id="buyButton" data-i18n="buyButton">Buy Now</button>
+        </div>
 
-<section>
-  <h2>Community</h2>
-  <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
-  <a href="https://x.com/FreeDogeAI_FDAI?t=eIChyd2UmaOZbljCWY7I2w&s=09" target="_blank">Twitter (X)</a>
-</section>
+        <div class="community-links">
+            <h3 data-i18n="community">Community</h3>
+            <a href="https://t.me/freedogeaiFDAI" target="_blank" data-i18n="telegram">Telegram</a> | 
+            <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" data-i18n="twitter">Twitter (X)</a>
+        </div>
 
-<section>
-  <h2>About</h2>
-  <p id="about">Free Doge AI (FDAI) is a tax-free, community-driven meme + AI token built on the BNB Chain (BEP-20). Don’t miss out – FOMO is real, and the rocket is launching. Be a part of the revolution today!</p>
-</section>
+        <div class="about-section">
+            <h3 data-i18n="about">About</h3>
+            <p data-i18n="aboutDescription">Free Doge AI (FDAI) is a tax-free, community-driven meme + AI token built on the BNB Chain (BEP-20). Don’t miss out – FOMO is real and the rocket is launching. Be a part of the revolution today!</p>
+            <a href="FreeDogeAI_Whitepaper.pdf" download><button data-i18n="whitepaper">Download Whitepaper (PDF)</button></a>
+        </div>
+    </div>
 
-<a href="FreeDogeAI_Whitepaper.pdf" download>
-  <button>Download Whitepaper (PDF)</button>
-</a>
-
-  </div>  <script src="script.js"></script></body>
+    <script src="script.js"></script>
+</body>
 </html>
