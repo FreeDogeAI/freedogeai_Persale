@@ -1,48 +1,122 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreeDogeAI Presale</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>FreeDogeAI Token Presale</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://unpkg.com/@walletconnect/web3-provider@1.6.6/dist/umd/index.min.js"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: #ffd700;
+      font-family: Arial, sans-serif;
+    }
+    .lang-switch button {
+      margin: 0 5px;
+    }
+    .input, .button {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+    }
+  </style>
 </head>
-<body>
-  <div class="language-switch">
-    <select id="language" onchange="changeLanguage()">
-      <option value="en">English</option>
-      <option value="tr">Turkish</option>
-      <option value="ar">Arabic</option>
-      <option value="ru">Russian</option>
-      <option value="zh">Chinese</option>
-    </select>
+<body class="text-center p-4">
+  <h1 id="title" class="text-3xl font-bold mb-4">FreeDogeAI (FDAI) Token Presale</h1>
+
+  <div class="lang-switch mb-4">
+    <button onclick="setLang('en')">English</button>
+    <button onclick="setLang('tr')">Türkçe</button>
+    <button onclick="setLang('es')">Español</button>
+    <button onclick="setLang('fr')">Français</button>
+    <button onclick="setLang('de')">Deutsch</button>
+    <button onclick="setLang('ru')">Русский</button>
+    <button onclick="setLang('zh')">中文</button>
+    <button onclick="setLang('ar')">العربية</button>
+    <button onclick="setLang('hi')">हिंदी</button>
+    <button onclick="setLang('ja')">日本語</button>
+    <button onclick="setLang('it')">Italiano</button>
+    <button onclick="setLang('pt')">Português</button>
+    <button onclick="setLang('nl')">Nederlands</button>
+    <button onclick="setLang('pl')">Polski</button>
+    <button onclick="setLang('ko')">한국어</button>
+    <button onclick="setLang('vi')">Tiếng Việt</button>
+    <button onclick="setLang('th')">ไทย</button>
+    <button onclick="setLang('id')">Bahasa Indonesia</button>
+    <button onclick="setLang('fa')">فارسی</button>
+    <button onclick="setLang('uk')">Українська</button>
   </div>
-  <header>
-    <h1 id="title">FreeDogeAI (FDAI) Token Presale</h1>
-    <p id="tagline">AI + Meme + Community</p>
-  </header>
-  <section class="connect-wallet">
-    <button id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
-    <p id="walletAddress"></p>
-  </section>
-  <section class="buy-section">
-    <h2 id="buyTitle">Buy FDAI Token</h2>
-    <input type="number" id="bnbAmount" placeholder="Enter BNB" oninput="calculateFDAI()" step="0.01">
+
+  <button id="connectBtn" class="button bg-yellow-500 text-black font-bold" onclick="connectWallet()">Connect Wallet</button>
+
+  <div class="mt-6">
+    <input id="bnbAmount" type="number" class="input bg-gray-800 text-white" placeholder="Enter BNB amount" oninput="calculateFDAI()" step="0.01">
     <p>= <span id="fdaiAmount">0</span> FDAI</p>
-    <button onclick="buyToken()" id="buyBtn">Buy Now</button>
-  </section>
-  <section class="whitepaper">
-    <a href="FreeDogeAI_Whitepaper.pdf" target="_blank">Download Whitepaper (PDF)</a>
-  </section>
-  <section class="community">
-    <h2 id="communityTitle">Community</h2>
-    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a>
+    <button id="buyBtn" class="button bg-yellow-500 text-black font-bold" onclick="buyToken()">Buy Now</button>
+  </div>
+
+  <div class="mt-6">
+    <a href="FreeDogeAI_Whitepaper.pdf" download><button class="button bg-yellow-600">Download Whitepaper</button></a>
+  </div>
+
+  <div class="mt-6">
+    <h2 id="community">Community</h2>
+    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> | 
     <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
-  </section>
-  <section class="about">
-    <h2 id="aboutTitle">About FreeDogeAI</h2>
-    <p id="aboutText">FreeDogeAI is a tax-free, meme + AI driven token on BNB Chain. Join the revolution before it's too late. Don’t miss out!</p>
-  </section>
-  <script src="script.js"></script>
+  </div>
+
+  <script>
+    const tokenDropAddress = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
+    const userWalletAddress = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // Ali'nin cüzdanı
+    const rate = 12500000;
+
+    window.onload = () => {
+      if (window.ethereum) {
+        window.ethereum.request({ method: 'eth_requestAccounts' });
+      }
+    };
+
+    async function connectWallet() {
+      if (window.ethereum) {
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          alert("Wallet connected");
+        } catch (e) {
+          alert("Connection failed");
+        }
+      } else {
+        alert("Please install a wallet like MetaMask or TrustWallet.");
+      }
+    }
+
+    async function buyToken() {
+      const bnb = parseFloat(document.getElementById("bnbAmount").value);
+      if (!bnb || bnb < 0.035) return alert("Minimum 0.035 BNB required");
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      try {
+        const tx = await signer.sendTransaction({
+          to: userWalletAddress,
+          value: ethers.utils.parseEther(bnb.toString())
+        });
+        alert("Transaction sent! TX: " + tx.hash);
+      } catch (e) {
+        alert("Transaction failed: " + e.message);
+      }
+    }
+
+    function calculateFDAI() {
+      const bnb = parseFloat(document.getElementById("bnbAmount").value);
+      document.getElementById("fdaiAmount").innerText = isNaN(bnb) ? 0 : (bnb * rate).toLocaleString();
+    }
+
+    function setLang(lang) {
+      // Bu kısımda çeviri veritabanı ayrı bir JS dosyasına yazılacak 
+      alert("Language set to: " + lang);
+    }
+  </script>
 </body>
 </html>
