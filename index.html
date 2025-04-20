@@ -1,27 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Presale</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-  <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
-  <script defer src="script.js"></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>FreeDogeAI Token Presale</h1>
-    <button id="connectBtn">Connect Wallet</button>
-    <p id="walletAddress">Wallet not connected</p>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">
+        <h1>FreeDogeAI Token Presale</h1>
+      </div>
+      <div class="top-controls">
+        <button id="connectBtn" class="wallet-button">Connect Wallet</button>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <input type="number" id="bnbAmount" placeholder="Enter BNB" />
-    <p id="tokenAmount">0 FDAI</p>
-    <button id="buyBtn">Buy Tokens</button>
-    <a href="whitepaper.pdf" target="_blank">Read Whitepaper</a>
-  </main>
+  <!-- Cüzdan Bağlama Modal -->
+  <div id="walletModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Connect Wallet</h2>
+      <p class="info-text">What's a Web3 Wallet? <a href="#" class="info-link">Learn More</a></p>
+      <div class="wallet-options">
+        <button class="wallet-option" data-wallet="metamask">
+          <img src="https://cryptologos.cc/logos/metamask-metamask-logo.png" alt="MetaMask" class="wallet-icon">
+          MetaMask
+        </button>
+        <button class="wallet-option" data-wallet="trustwallet">
+          <img src="https://cryptologos.cc/logos/trust-wallet-trust-wallet-logo.png" alt="Trust Wallet" class="wallet-icon">
+          Trust Wallet
+        </button>
+        <button class="wallet-option" data-wallet="binance">
+          <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.png" alt="Binance Chain Wallet" class="wallet-icon">
+          Binance Chain Wallet
+        </button>
+        <button class="wallet-option" data-wallet="infinity">
+          <img src="https://cryptologos.cc/logos/infinity-wallet-infinity-logo.png" alt="Infinity Wallet" class="wallet-icon">
+          Infinity Wallet
+        </button>
+      </div>
+      <p class="info-text">Haven't got a crypto wallet yet? <a href="#" class="info-link">Learn How to Connect</a></p>
+    </div>
+  </div>
+
+  <section class="hero-section">
+    <div class="container">
+      <p id="walletAddress">Wallet not connected</p>
+      <h2 class="highlight-text">Don’t miss the presale!</h2>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Join our community for updates</p>
+    </div>
+  </footer>
 </body>
 </html>
