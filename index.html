@@ -1,12 +1,15 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FreeDogeAI Presale</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <!-- Web3Modal ve WalletConnect kütüphaneleri -->
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
   <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
+  <!-- Dil dosyası ve ana JavaScript dosyası -->
   <script src="languages.js" defer></script>
   <script src="script.js" defer></script>
 </head>
@@ -30,25 +33,33 @@
         <button id="connectBtn" class="wallet-button" data-translate="connect">Connect Wallet</button>
       </div>
     </div>
-  </header>  <section class="hero-section">
+  </header>
+
+  <section class="hero-section">
     <div class="container">
       <p id="walletAddress" data-translate="notConnected">Wallet not connected</p>
       <h2 class="highlight-text" data-translate="heroTag">Don’t miss the presale!</h2>
     </div>
-  </section>  <section class="buy-area container">
+  </section>
+
+  <section class="buy-area container">
     <div class="buy-box">
-      <input type="number" id="bnbAmount" placeholder="Enter BNB">
+      <input type="number" id="bnbAmount" placeholder="Enter BNB" />
       <p id="tokenAmount">0 FDAI</p>
       <button id="buyBtn" data-translate="buy">Buy Tokens</button>
     </div>
-  </section>  <section class="about-section container">
+  </section>
+
+  <section class="about-section container">
     <h2 data-translate="aboutTitle">About FreeDogeAI</h2>
     <p data-translate="aboutText">
       FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.
       Get in early and don’t miss the moon ride!
     </p>
     <a class="whitepaper-link" href="/whitepaper.pdf" target="_blank" data-translate="readWhitepaper">Read our Whitepaper</a>
-  </section>  <footer class="site-footer">
+  </section>
+
+  <footer class="site-footer">
     <div class="container">
       <p data-translate="footer">Join our community for updates</p>
       <div class="footer-links">
