@@ -119,4 +119,66 @@
     }
   </script>
 </body>
-</html>
+</html>ne // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+interface IERC20 {
+    function transfer(address to, uint256 amount) external returns (bool);
+    function balanceOf(address account) external view returns (uint256);
+}
+
+contract BNBPresale {
+    address public owner;
+    IERC20 public token;
+    uint256 public rate; // 1 BNB = ? token
+    uint256 public hardCap; // Maksimum BNB
+    uint256 public raisedAmount;
+    bool public isPresaleOpen;
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Yetkiniz yok");
+        _;
+    }
+
+    event TokenPurchased(address indexed buyer, uint256 bnbAmount, uint256 tokenAmount);
+    event PresaleClosed();
+
+    constructor(address _tokenAddress, uint256 _rate, uint256 _hardCap) {
+        owner = msg.sender;
+        token = IERC20(_tokenAddress);
+        rate = _rate;
+        hardCap = _hardCap;
+        isPresaleOpen = true;
+    }
+
+    receive() external payable {
+        buyToken();
+    }
+
+    function buyToken() public payable {
+        require(isPresaleOpen, "Ön satış kapalı");
+        require(msg.value > 0, "BNB gönderilmedi");
+        require(raisedAmount + msg.value <= hardCap, "Hard cap aşıldı");
+
+        uint256 tokenAmount = msg.value * rate;
+        raisedAmount += msg.value;
+
+        require(token.transfer(msg.sender, tokenAmount), "Token gönderimi başarısız");
+
+        emit TokenPurchased(msg.sender, msg.value, tokenAmount);
+    }
+
+    function closePresale() external onlyOwner {
+        isPresaleOpen = false;
+        emit PresaleClosed();
+    }
+
+    function withdrawBNB() external onlyOwner {
+        payable(owner).transfer(address(this).balance);
+    }
+
+    function withdrawUnsoldTokens() external onlyOwner {
+        uint256 remaining = token.balanceOf(address(this));
+        require(token.transfer(owner, remaining), "Token çekilemedi");
+    }
+}
