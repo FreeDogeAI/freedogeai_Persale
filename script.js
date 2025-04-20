@@ -1,4 +1,4 @@
-l// script.js
+// script.js
 
 window.onload = async function () { if (window.ethereum) { try { await window.ethereum.request({ method: 'eth_requestAccounts' }); console.log("Wallet connected automatically"); } catch (e) { console.error("Connection failed on load:", e); } } };
 
