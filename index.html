@@ -1,49 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI (FDAI) Token Presale</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/web3@1.7.0/dist/web3.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeDogeAI (FDAI) Presale</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="language-switcher">
-            <select id="languageSelect">
-                <option value="en">English</option>
-                <option value="tr">Türkçe</option>
-                <option value="ar">العربية</option>
-                <!-- Add more languages here if needed -->
-            </select>
-        </div>
+  <div class="container">
+    <header>
+      <h1 id="title">FreeDogeAI (FDAI) Token Presale</h1>
+      <div class="lang-switch">
+        <select onchange="setLang(this.value)">
+          <option value="en">English</option>
+          <option value="tr">Türkçe</option>
+          <option value="ar">العربية</option>
+          <option value="ru">Русский</option>
+          <option value="zh">中文</option>
+          <!-- 15 dil daha eklenecek -->
+        </select>
+      </div>
+    </header><main>
+  <section class="intro">
+    <h2 id="headline">AI + Meme + Community</h2>
+    <p id="desc">Join the next generation of meme-powered AI token on BNB Chain.</p>
+    <button onclick="connectWallet()" id="connectBtn">Connect Wallet</button>
+  </section>
 
-        <h1 id="title">FreeDogeAI (FDAI) Token Presale</h1>
-        <p id="description">Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.</p>
+  <section class="purchase">
+    <h2 id="buyTitle">Buy FDAI Token</h2>
+    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" oninput="calculateFDAI()" step="0.01" min="0.001">
+    <p>= <span id="fdaiAmount">0</span> FDAI</p>
+    <button onclick="buyToken()" id="buyBtn">Buy Now</button>
+  </section>
 
-        <button id="connectWallet">Connect Wallet</button>
+  <section class="whitepaper">
+    <a href="FreeDogeAI_Whitepaper.pdf" download><button>Download Whitepaper</button></a>
+  </section>
 
-        <div class="buy-section">
-            <label id="buyLabel">Buy FDAI Token</label>
-            <input type="number" id="bnbAmount" placeholder="Enter BNB amount" step="0.01" min="0.035">
-            <p><span id="fdaiAmount">0</span> FDAI</p>
-            <button id="buyButton">Buy Now</button>
-        </div>
+  <section class="community">
+    <h2 id="community">Community</h2>
+    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+    <a href="https://x.com/FreeDogeAI_FDAI?t=eIChyd2UmaOZbljCWY7I2w" target="_blank">Twitter</a>
+  </section>
 
-        <div class="community-links">
-            <h3 id="community">Community</h3>
-            <a href="https://t.me/freedogeaiFDAI" target="_blank" id="telegram">Telegram</a> | 
-            <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" id="twitter">Twitter (X)</a>
-        </div>
+  <section class="about">
+    <h2>About</h2>
+    <p>Don't miss out! FreeDogeAI is not just a token. It's a revolution in AI-powered meme culture. With zero tax, full community control, and utility built on fun, you're not just buying tokens - you're joining the movement. FOMO now, or regret later!</p>
+  </section>
+</main>
 
-        <div class="about-section">
-            <h3 id="about">About</h3>
-            <p id="aboutDescription">Free Doge AI (FDAI) is a tax-free, community-driven meme + AI token built on the BNB Chain (BEP-20). Don’t miss out – FOMO is real and the rocket is launching. Be a part of the revolution today!</p>
-            <a href="FreeDogeAI_Whitepaper.pdf" download><button id="whitepaper">Download Whitepaper (PDF)</button></a>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
