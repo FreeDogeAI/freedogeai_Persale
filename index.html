@@ -1,63 +1,27 @@
-<!DOCTYPE html><html lang="en">
-<head>
-  <button id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreeDogeAI Token Presale</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="https://unpkg.com/@walletconnect/web3-provider@1.6.6/dist/umd/index.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.5/dist/index.js"></script>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <h1 id="title">FreeDogeAI (FDAI) Token Presale</h1>
-      <div id="walletAddress"></div>
-      <div class="language-buttons">
-        <button onclick="setLang('en')">English</button>
-        <button onclick="setLang('tr')">Türkçe</button>
-        <button onclick="setLang('ar')">العربية</button>
-        <button onclick="setLang('ru')">Русский</button>
-        <button onclick="setLang('zh')">中文</button>
-        <!-- 15 more will be added later in script.js -->
-      </div>
-    </header><main>
-  <section class="hero">
-    <h2 id="headline">AI + Meme + Community</h2>
-    <p id="desc">Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and community-driven.</p>
-    <button onclick="connectWallet()" id="connectBtn">Connect Wallet</button>
-  </section>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Wallet</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  </head>
+  <body style="background:#000; color:gold; text-align:center; padding:50px;">
+    <button id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
 
-  <section class="buy">
-    <h2 id="buyTitle">Buy FDAI Token</h2>
-    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" oninput="calculateFDAI()">
-    <p>= <span id="fdaiAmount">0</span> FDAI</p>
-    <button onclick="buyToken()" id="buyBtn">Buy Now</button>
-  </section>
-
-  <section class="whitepaper">
-    <a href="FreeDogeAI_Whitepaper.pdf" target="_blank">
-      <button>Download Whitepaper (PDF)</button>
-    </a>
-  </section>
-
-  <section class="community">
-    <h2 id="community">Community</h2>
-    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
-    <a href="https://x.com/FreeDogeAI_FDAI?t=eIChyd2UmaOZbljCWY7I2w&s=09" target="_blank">Twitter (X)</a>
-  </section>
-
-  <section class="about">
-    <h2 id="about">About</h2>
-    <p id="aboutText">Free Doge AI (FDAI) is a tax-free, community-powered meme + AI token on the BNB Chain. Don't miss out — join the future of digital culture today. Limited supply, unlimited potential. Be early, be free!</p>
-  </section>
-</main>
-
-<footer>
-  <p>&copy; 2025 FreeDogeAI. All rights reserved.</p>
-</footer>
-
-  </div>  <script src="script.js"></script></body>
+    <script>
+      async function connectWallet() {
+        if (window.ethereum) {
+          try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const userAddress = accounts[0];
+            alert("Wallet connected: " + userAddress);
+          } catch (error) {
+            alert("Connection failed: " + error.message);
+          }
+        } else {
+          alert("Please install MetaMask or use compatible wallet.");
+        }
+      }
+    </script>
+  </body>
 </html>
