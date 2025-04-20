@@ -2,55 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreeDogeAI Token Presale</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FreeDogeAI Presale</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="https://unpkg.com/@walletconnect/web3-provider@1.6.6/dist/umd/index.min.js"></script>
-  <script defer src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
 <body>
   <h1 id="title">FreeDogeAI (FDAI) Token Presale</h1>
 
-  <div class="language-buttons">
+  <div id="lang-buttons" class="language-switcher">
     <button onclick="setLang('en')">English</button>
     <button onclick="setLang('tr')">Türkçe</button>
+    <button onclick="setLang('es')">Español</button>
+    <button onclick="setLang('fr')">Français</button>
+    <button onclick="setLang('de')">Deutsch</button>
     <button onclick="setLang('ar')">العربية</button>
-    <button onclick="setLang('ru')">Русский</button>
     <button onclick="setLang('zh')">中文</button>
-    <!-- Add more languages as needed -->
+    <button onclick="setLang('ru')">Русский</button>
+    <button onclick="setLang('hi')">हिंदी</button>
+    <button onclick="setLang('pt')">Português</button>
+    <button onclick="setLang('ja')">日本語</button>
+    <button onclick="setLang('ko')">한국어</button>
+    <button onclick="setLang('it')">Italiano</button>
+    <button onclick="setLang('pl')">Polski</button>
+    <button onclick="setLang('uk')">Українська</button>
+    <button onclick="setLang('id')">Bahasa</button>
+    <button onclick="setLang('fa')">فارسی</button>
+    <button onclick="setLang('bn')">বাংলা</button>
+    <button onclick="setLang('vi')">Tiếng Việt</button>
+    <button onclick="setLang('ms')">Melayu</button>
   </div>
 
-  <section>
-    <h2 id="headline">AI + Meme + Community</h2>
-    <p id="desc">Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.</p>
-    <button id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
-  </section>
+  <p id="desc">Join the next generation of meme-powered AI token on BNB Chain.</p>
+  <button id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
 
-  <section>
-    <h2 id="buyTitle">Buy FDAI Token</h2>
-    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" oninput="calculateFDAI()" />
-    <p>= <span id="fdaiAmount">0</span> FDAI</p>
-    <button id="buyBtn" onclick="buyToken()">Buy Now</button>
-  </section>
+  <h2 id="buyTitle">Buy FDAI Token</h2>
+  <input type="number" id="bnbAmount" placeholder="Enter BNB amount" oninput="calculateFDAI()" step="0.01" min="0.035">
+  <p>= <span id="fdaiAmount">0</span> FDAI</p>
+  <button onclick="buyToken()" id="buyBtn">Buy Now</button>
 
-  <section>
-    <a href="FreeDogeAI_Whitepaper.pdf" download>
-      <button>Download Whitepaper (PDF)</button>
-    </a>
-  </section>
+  <a href="FreeDogeAI_Whitepaper.pdf" download><button id="downloadBtn">Download Whitepaper (PDF)</button></a>
 
-  <section>
-    <h2 id="community">Community</h2>
-    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
-    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
-  </section>
+  <h2 id="community">Community</h2>
+  <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+  <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
 
-  <section>
-    <h2 id="about">About</h2>
-    <p id="aboutText">Free Doge AI (FDAI) is a tax-free, community-driven meme + AI token built on the BNB Chain (BEP-20). Join early before it explodes—don’t miss out!</p>
-  </section>
+  <h2 id="aboutTitle">About</h2>
+  <p id="aboutText">FreeDogeAI is a tax-free, community-driven meme + AI token built on BNB Chain (BEP-20). Don't miss this opportunity — join early before it's too late!</p>
+
+  <script src="script.js"></script>
 </body>
 </html>
-<p id="walletAddress">Wallet: Not Connected</p>
-<p id="walletBalance">BNB Balance: 0</p>
