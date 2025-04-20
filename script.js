@@ -8,14 +8,27 @@ function calculateFDAI() {
 }
 
 async function connectWallet() {
-  if (typeof window.ethereum !== "undefined") {
+  if (window.ethereum) {
     try {
-      await ethereum.request({ method: 'eth_requestAccounts' });
+      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+      const userAddress = accounts[0];
+      document.getElementById("walletAddress").innerText = "Wallet: " + userAddress;
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const balance = await provider.getBalance(userAddress);
+      const ethBalance = ethers.utils.formatEther(balance);
+      document.getElementById("walletBalance").innerText = "BNB Balance: " + parseFloat(ethBalance).toFixed(4);
+
     } catch (err) {
       alert("Wallet connection rejected.");
     }
   } else {
-    window.location.href = "https://metamask.io/download/";
+    // Mobil cüzdan uygulaması varsa yönlendirme:
+    if (/Android|iPhone/i.test(navigator.userAgent)) {
+      window.location.href = "https://metamask.app.link/dapp/freedogeai.github.io";
+    } else {
+      alert("Please install MetaMask or compatible wallet.");
+    }
   }
 }
 
@@ -37,32 +50,6 @@ async function buyToken() {
     alert("Transaction failed: " + err.message);
   }
 }
-
-const translations = {
-  en: {
-    title: "FreeDogeAI (FDAI) Token Presale",
-    headline: "AI + Meme + Community",
-    desc: "Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.",
-    connect: "Connect Wallet",
-    buy: "Buy FDAI Token",
-    buyNow: "Buy Now",
-    community: "Community",
-    about: "About",
-    aboutText: "Free Doge AI (FDAI) is a tax-free, community-driven meme + AI token built on the BNB Chain (BEP-20). Join early before it explodes—don’t miss out!"
-  },
-  tr: {
-    title: "FreeDogeAI (FDAI) Token Ön Satışı",
-    headline: "Yapay Zeka + Mizah + Topluluk",
-    desc: "BNB zincirinde yeni nesil mizah + yapay zeka token'a katıl!",
-    connect: "Cüzdan Bağla",
-    buy: "FDAI Token Satın Al",
-    buyNow: "Şimdi Al",
-    community: "Topluluk",
-    about: "Hakkında",
-    aboutText: "Free Doge AI (FDAI), vergi alınmayan, topluluk destekli bir mizah + yapay zeka tokenıdır. BNB zinciri üzerinde çalışır. Patlamadan önce yakala!"
-  },
-  // Add 18 more languages here...
-};
 
 function setLang(lang) {
   const t = translations[lang];
