@@ -1,78 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FreeDogeAI Presale</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeDogeAI Token Presale</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  <script src="https://unpkg.com/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      background-color: #fffbea;
-    }
-
-    #connectBtn {
-      padding: 14px 28px;
-      background-color: #fcd200;
-      border: none;
-      font-size: 18px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    #walletAddress {
-      margin-top: 20px;
-      font-size: 16px;
-      font-weight: bold;
-    }
-  </style>
+  <script src="https://unpkg.com/@web3modal/standalone@2.6.1/dist/index.js"></script>
+  <script src="languages.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <h1>FreeDogeAI Token Presale</h1>
-  <button id="connectBtn">Connect Wallet</button>
-  <p id="walletAddress">Wallet not connected</p>
+  <header>
+    <h1 data-translate="title">FreeDogeAI Token Presale</h1>
+    <select id="languageSelect">
+      <option value="en">English</option>
+      <option value="tr">Türkçe</option>
+      <option value="ar">العربية</option>
+      <option value="ru">Русский</option>
+      <option value="zh">中文</option>
+    </select>
+  </header>  <main>
+    <button id="connectBtn" data-translate="connect">Connect Wallet</button>
+    <p id="walletAddress" data-translate="notConnected">Wallet not connected</p><div class="buy-section">
+  <input type="number" id="bnbAmount" placeholder="Enter BNB" />
+  <p id="tokenAmount">0 FDAI</p>
+  <button id="buyBtn" data-translate="buy">Buy Tokens</button>
+</div>
 
-  <script>
-    let web3;
-    let provider;
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const connectBtn = document.getElementById("connectBtn");
-      const walletAddress = document.getElementById("walletAddress");
-
-      connectBtn.addEventListener("click", async () => {
-        if (typeof window.ethereum !== "undefined") {
-          try {
-            await window.ethereum.request({ method: "eth_requestAccounts" });
-            web3 = new Web3(window.ethereum);
-            const accounts = await web3.eth.getAccounts();
-            walletAddress.textContent = `Connected: ${accounts[0]}`;
-          } catch (error) {
-            walletAddress.textContent = "Connection failed.";
-          }
-        } else {
-          // WalletConnect fallback
-          provider = new WalletConnectProvider.default({
-            rpc: {
-              56: "https://bsc-dataseed.binance.org/"
-            },
-            chainId: 56
-          });
-
-          try {
-            await provider.enable();
-            web3 = new Web3(provider);
-            const accounts = await web3.eth.getAccounts();
-            walletAddress.textContent = `Connected: ${accounts[0]}`;
-          } catch (err) {
-            walletAddress.textContent = "WalletConnect failed.";
-          }
-        }
-      });
-    });
-  </script>
+  </main>  <footer>
+    <p data-translate="footer">Join our community for updates</p>
+    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+    <a href="https://x.com/FreeDogeAI_FDAI?t=eIChyd2UmaOZbljCWY7I2w&s=09" target="_blank">Twitter (X)</a>
+  </footer>
 </body>
 </html>
