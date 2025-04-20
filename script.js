@@ -1,63 +1,83 @@
-let web3;
-let userAddress = "";
-
-const TOKENS_PER_BNB = 12500000;
-const TOKEN_DROP_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
-
-const providerOptions = {
-  walletconnect: {
-    package: window.WalletConnectProvider.default,
-    options: {
-      rpc: {
-        56: "https://bsc-dataseed.binance.org/"
-      },
-      chainId: 56
-    }
-  }
-};
-
-const web3Modal = new window.Web3Modal.default({
-  cacheProvider: false,
-  providerOptions
-});
-
+// Modal Kontrolü
 const connectBtn = document.getElementById("connectBtn");
+const walletModal = document.getElementById("walletModal");
+const closeModal = document.querySelector(".close");
 const walletAddress = document.getElementById("walletAddress");
-const bnbAmountInput = document.getElementById("bnbAmount");
-const tokenAmount = document.getElementById("tokenAmount");
-const buyBtn = document.getElementById("buyBtn");
 
-connectBtn.addEventListener("click", async () => {
-  try {
-    const provider = await web3Modal.connect();
-    web3 = new Web3(provider);
-    const accounts = await web3.eth.getAccounts();
-    userAddress = accounts[0];
-    walletAddress.textContent = `Connected: ${userAddress}`;
-  } catch (err) {
-    walletAddress.textContent = "Connection failed";
+let web3;
+let provider;
+
+// Modal Açma
+connectBtn.addEventListener("click", () => {
+  walletModal.style.display = "block";
+});
+
+// Modal Kapatma
+closeModal.addEventListener("click", () => {
+  walletModal.style.display = "none";
+});
+
+// Modal Dışına Tıklayınca Kapatma
+window.addEventListener("click", (event) => {
+  if (event.target == walletModal) {
+    walletModal.style.display = "none";
   }
 });
 
-bnbAmountInput.addEventListener("input", () => {
-  const bnb = parseFloat(bnbAmountInput.value);
-  tokenAmount.textContent = !isNaN(bnb) && bnb > 0 ? `${bnb * TOKENS_PER_BNB} FDAI` : "0 FDAI";
+// WalletConnect Provider
+const walletConnectProvider = new WalletConnectProvider({
+  rpc: {
+    56: "https://bsc-dataseed.binance.org/"
+  },
+  chainId: 56
 });
 
-buyBtn.addEventListener("click", async () => {
-  const bnb = parseFloat(bnbAmountInput.value);
-  if (!userAddress) return alert("Please connect wallet");
-  if (isNaN(bnb) || bnb < 0.035) return alert("Minimum is 0.035 BNB");
+// Cüzdan Seçenekleri
+const walletOptions = document.querySelectorAll(".wallet-option");
 
-  try {
-    await web3.eth.sendTransaction({
-      from: userAddress,
-      to: TOKEN_DROP_ADDRESS,
-      value: web3.utils.toWei(bnb.toString(), "ether")
-    });
-    alert("Transaction sent!");
-  } catch (err) {
-    console.error(err);
-    alert("Transaction failed");
-  }
+walletOptions.forEach(option => {
+  option.addEventListener("click", async () => {
+    const walletType = option.getAttribute("data-wallet");
+    
+    try {
+      if (walletType === "metamask") {
+        // MetaMask Bağlantısı
+        if (window.ethereum) {
+          provider = window.ethereum;
+          await provider.request({ method: "eth_requestAccounts" });
+          web3 = new Web3(provider);
+          const accounts = await web3.eth.getAccounts();
+          walletAddress.textContent = `Connected: ${accounts[0]}`;
+          walletModal.style.display = "none";
+        } else {
+          alert("MetaMask yüklü değil! Lütfen MetaMask'ı yükleyin.");
+        }
+      } else if (walletType === "trustwallet") {
+        // Trust Wallet Bağlantısı (WalletConnect)
+        provider = walletConnectProvider;
+        await provider.enable();
+        web3 = new Web3(provider);
+        const accounts = await web3.eth.getAccounts();
+        walletAddress.textContent = `Connected: ${accounts[0]}`;
+        walletModal.style.display = "none";
+      } else if (walletType === "binance") {
+        // Binance Chain Wallet Bağlantısı
+        if (window.BinanceChain) {
+          provider = window.BinanceChain;
+          await provider.request({ method: "eth_requestAccounts" });
+          web3 = new Web3(provider);
+          const accounts = await web3.eth.getAccounts();
+          walletAddress.textContent = `Connected: ${accounts[0]}`;
+          walletModal.style.display = "none";
+        } else {
+          alert("Binance Chain Wallet yüklü değil!");
+        }
+      } else if (walletType === "infinity") {
+        alert("Infinity Wallet bağlantısı henüz desteklenmiyor.");
+      }
+    } catch (error) {
+      walletAddress.textContent = "Wallet connection failed.";
+      console.error(error);
+    }
+  });
 });
