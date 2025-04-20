@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FreeDogeAI Presale</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeDogeAI Token Presale</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-  <script src="script.js" defer></script>
+  <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
+  <script defer src="script.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -16,49 +17,55 @@
         <h1>FreeDogeAI Token Presale</h1>
       </div>
       <div class="top-controls">
+        <select id="languageSelect">
+          <option value="en">English</option>
+          <option value="tr">Türkçe</option>
+          <option value="ar">العربية</option>
+          <option value="ru">Русский</option>
+          <option value="zh">中文</option>
+          <option value="de">Deutsch</option>
+          <option value="fr">Français</option>
+          <option value="es">Español</option>
+        </select>
         <button id="connectBtn" class="wallet-button">Connect Wallet</button>
       </div>
     </div>
   </header>
 
-  <!-- Cüzdan Bağlama Modal -->
-  <div id="walletModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Connect Wallet</h2>
-      <p class="info-text">What's a Web3 Wallet? <a href="#" class="info-link">Learn More</a></p>
-      <div class="wallet-options">
-        <button class="wallet-option" data-wallet="metamask">
-          <img src="https://cryptologos.cc/logos/metamask-metamask-logo.png" alt="MetaMask" class="wallet-icon">
-          MetaMask
-        </button>
-        <button class="wallet-option" data-wallet="trustwallet">
-          <img src="https://cryptologos.cc/logos/trust-wallet-trust-wallet-logo.png" alt="Trust Wallet" class="wallet-icon">
-          Trust Wallet
-        </button>
-        <button class="wallet-option" data-wallet="binance">
-          <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.png" alt="Binance Chain Wallet" class="wallet-icon">
-          Binance Chain Wallet
-        </button>
-        <button class="wallet-option" data-wallet="infinity">
-          <img src="https://cryptologos.cc/logos/infinity-wallet-infinity-logo.png" alt="Infinity Wallet" class="wallet-icon">
-          Infinity Wallet
-        </button>
+  <main>
+    <section class="hero-section">
+      <div class="container">
+        <p id="walletAddress">Wallet not connected</p>
+        <h2 class="highlight-text">Don’t miss the presale!</h2>
       </div>
-      <p class="info-text">Haven't got a crypto wallet yet? <a href="#" class="info-link">Learn How to Connect</a></p>
-    </div>
-  </div>
+    </section>
 
-  <section class="hero-section">
-    <div class="container">
-      <p id="walletAddress">Wallet not connected</p>
-      <h2 class="highlight-text">Don’t miss the presale!</h2>
-    </div>
-  </section>
+    <section class="buy-area container">
+      <div class="buy-box">
+        <input type="number" id="bnbAmount" placeholder="Enter BNB" />
+        <p id="tokenAmount">0 FDAI</p>
+        <button id="buyBtn">Buy Tokens</button>
+      </div>
+    </section>
+
+    <section class="about-section container">
+      <h2>About FreeDogeAI</h2>
+      <p>
+        FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.
+        Get in early and don’t miss the moon ride!
+      </p>
+      <a class="whitepaper-link" href="whitepaper.pdf" target="_blank">Read our Whitepaper</a>
+    </section>
+  </main>
 
   <footer class="site-footer">
     <div class="container">
       <p>Join our community for updates</p>
+      <div class="footer-links">
+        <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a>
+        <span>|</span>
+        <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
+      </div>
     </div>
   </footer>
 </body>
