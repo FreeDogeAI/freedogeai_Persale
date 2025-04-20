@@ -2,49 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreeDogeAI (FDAI) Token Presale</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FreeDogeAI Presale</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://unpkg.com/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #fffbea;
+    }
+
+    #connectBtn {
+      padding: 14px 28px;
+      background-color: #fcd200;
+      border: none;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #walletAddress {
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <h1 id="title">FreeDogeAI (FDAI) Token Presale</h1>
+  <h1>FreeDogeAI Token Presale</h1>
+  <button id="connectBtn">Connect Wallet</button>
+  <p id="walletAddress">Wallet not connected</p>
 
-  <div class="lang-switch">
-    <button onclick="setLang('en')">English</button>
-    <button onclick="setLang('tr')">Türkçe</button>
-    <button onclick="setLang('ar')">العربية</button>
-    <button onclick="setLang('ru')">Русский</button>
-    <button onclick="setLang('zh')">中文</button>
-    <!-- 15 more languages to be added later -->
-  </div>
+  <script>
+    let web3;
+    let provider;
 
-  <h2 id="headline">AI + Meme + Community</h2>
-  <p id="desc">Join the next generation of meme-powered AI token on BNB Chain.</p>
+    document.addEventListener("DOMContentLoaded", () => {
+      const connectBtn = document.getElementById("connectBtn");
+      const walletAddress = document.getElementById("walletAddress");
 
-  <button id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
+      connectBtn.addEventListener("click", async () => {
+        if (typeof window.ethereum !== "undefined") {
+          try {
+            await window.ethereum.request({ method: "eth_requestAccounts" });
+            web3 = new Web3(window.ethereum);
+            const accounts = await web3.eth.getAccounts();
+            walletAddress.textContent = `Connected: ${accounts[0]}`;
+          } catch (error) {
+            walletAddress.textContent = "Connection failed.";
+          }
+        } else {
+          // WalletConnect fallback
+          provider = new WalletConnectProvider.default({
+            rpc: {
+              56: "https://bsc-dataseed.binance.org/"
+            },
+            chainId: 56
+          });
 
-  <section>
-    <h2 id="buyTitle">Buy FDAI Token</h2>
-    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" oninput="calculateFDAI()" />
-    <p>= <span id="fdaiAmount">0</span> FDAI</p>
-    <button id="buyBtn" onclick="buyToken()">Buy Now</button>
-  </section>
-
-  <a href="FreeDogeAI_Whitepaper.pdf" download><button>Download Whitepaper (PDF)</button></a>
-
-  <h2 id="community">Community</h2>
-  <p>
-    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
-    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
-  </p>
-
-  <h2 id="about">About</h2>
-  <p id="aboutText">
-    Free Doge AI (FDAI) is a 100% tax-free, meme-powered AI token launched on BNB Chain. Don’t miss the presale – FOMO is real.
-  </p>
-
-  <script src="script.js"></script>
+          try {
+            await provider.enable();
+            web3 = new Web3(provider);
+            const accounts = await web3.eth.getAccounts();
+            walletAddress.textContent = `Connected: ${accounts[0]}`;
+          } catch (err) {
+            walletAddress.textContent = "WalletConnect failed.";
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html>
