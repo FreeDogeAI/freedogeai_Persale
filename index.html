@@ -1,11 +1,12 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreeDogeAI Token Presale</title>
+  <title>FreeDogeAI Presale</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  <script src="https://unpkg.com/@web3modal/standalone@2.6.1/dist/index.js"></script>
+  <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
   <script src="languages.js" defer></script>
   <script src="script.js" defer></script>
 </head>
@@ -19,18 +20,23 @@
       <option value="ru">Русский</option>
       <option value="zh">中文</option>
     </select>
-  </header>  <main>
-    <button id="connectBtn" data-translate="connect">Connect Wallet</button>
-    <p id="walletAddress" data-translate="notConnected">Wallet not connected</p><div class="buy-section">
-  <input type="number" id="bnbAmount" placeholder="Enter BNB" />
-  <p id="tokenAmount">0 FDAI</p>
-  <button id="buyBtn" data-translate="buy">Buy Tokens</button>
-</div>
+  </header>
 
-  </main>  <footer>
+  <main>
+    <button id="connectBtn" data-translate="connect">Connect Wallet</button>
+    <p id="walletAddress" data-translate="notConnected">Wallet not connected</p>
+
+    <div class="buy-section">
+      <input type="number" id="bnbAmount" placeholder="Enter BNB" />
+      <p id="tokenAmount">0 FDAI</p>
+      <button id="buyBtn" data-translate="buy">Buy Tokens</button>
+    </div>
+  </main>
+
+  <footer>
     <p data-translate="footer">Join our community for updates</p>
     <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
-    <a href="https://x.com/FreeDogeAI_FDAI?t=eIChyd2UmaOZbljCWY7I2w&s=09" target="_blank">Twitter (X)</a>
+    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
   </footer>
 </body>
 </html>
