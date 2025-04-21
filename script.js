@@ -4,48 +4,53 @@ const PRESALE_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
 
 let web3Modal, provider, web3, userAccount;
 
-// Web3Modal ayarları (MetaMask, TrustWallet, WalletConnect)
+// WalletConnect, TrustWallet, MetaMask desteği
 const providerOptions = {
   walletconnect: {
     package: window.WalletConnectProvider.default,
     options: {
-      rpc: {
-        56: "https://bsc-dataseed.binance.org/"
-      },
-      chainId: 56
+      rpc: { 56: "https://bsc-dataseed.binance.org/" },
+      chainId: 56,
+      qrcodeModalOptions: {
+        mobileLinks: ["trust", "metamask"]
+      }
     }
   }
 };
 
+// Web3Modal başlat
 window.addEventListener("load", () => {
   web3Modal = new window.Web3Modal.default({
     cacheProvider: false,
     providerOptions,
     theme: "dark"
   });
-});
 
-// Cüzdan Bağlantısı
-document.getElementById("connectWalletBtn").addEventListener("click", async () => {
-  try {
-    provider = await web3Modal.connect();
-    web3 = new Web3(provider);
+  // Cüzdan bağlama butonu
+  const btn = document.getElementById("connectWalletBtn");
+  if (btn) {
+    btn.addEventListener("click", async () => {
+      try {
+        provider = await web3Modal.connect();
+        web3 = new Web3(provider);
 
-    const accounts = await web3.eth.getAccounts();
-    userAccount = accounts[0];
+        const accounts = await web3.eth.getAccounts();
+        userAccount = accounts[0];
 
-    const balanceWei = await web3.eth.getBalance(userAccount);
-    const balance = web3.utils.fromWei(balanceWei, "ether");
+        const balanceWei = await web3.eth.getBalance(userAccount);
+        const balance = web3.utils.fromWei(balanceWei, "ether");
 
-    document.getElementById("walletAddress").textContent = userAccount;
-    document.getElementById("walletBalance").textContent = parseFloat(balance).toFixed(4);
-    document.getElementById("walletInfo").classList.remove("hidden");
-  } catch (e) {
-    alert("Connection failed: " + e.message);
+        document.getElementById("walletAddress").textContent = userAccount;
+        document.getElementById("walletBalance").textContent = parseFloat(balance).toFixed(4);
+        document.getElementById("walletInfo").classList.remove("hidden");
+      } catch (err) {
+        alert("Connection failed: " + err.message);
+      }
+    });
   }
 });
 
-// Token hesaplama
+// BNB -> FDAI hesapla
 document.getElementById("bnbInput").addEventListener("input", () => {
   const bnb = parseFloat(document.getElementById("bnbInput").value);
   if (!isNaN(bnb) && bnb >= MIN_BNB) {
@@ -74,7 +79,7 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
   }
 });
 
-// Dil desteği
+// Dil desteği (seçilen dilde çeviri)
 const translations = {
   en: {
     title: "Buy FreeDogeAI Token (FDAI)",
