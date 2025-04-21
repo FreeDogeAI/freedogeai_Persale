@@ -1,48 +1,87 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreeDogeAI - Token Sale</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>FreeDogeAI Wallet Connect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #0c1a2c;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    button {
+      background: #00c2ff;
+      color: black;
+      font-size: 16px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+    .info {
+      margin-top: 30px;
+    }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.12/dist/index.js"></script>
 </head>
 <body>
-  <header>
-    <h1 id="title">Buy FreeDogeAI Token (FDAI)</h1>
-    <select id="languageSelector">
-      <option value="en">English</option>
-      <option value="tr">Türkçe</option>
-      <option value="ar">العربية</option>
-      <option value="ru">Русский</option>
-      <option value="zh">中文</option>
-    </select>
-  </header>  <main>
-    <div class="connect-box">
-      <button id="connectWalletBtn">Connect Wallet</button>
-      <div id="walletInfo" class="hidden">
-        <p><strong>Wallet:</strong> <span id="walletAddress">-</span></p>
-        <p><strong>Balance:</strong> <span id="walletBalance">-</span> BNB</p>
-      </div>
-    </div><div class="buy-box">
-  <label for="bnbInput" id="bnbLabel">Enter BNB amount:</label>
-  <input type="number" id="bnbInput" placeholder="0.05" min="0.035" step="0.001" />
-  <p><strong>1 BNB = 12,500,000 FDAI</strong></p>
-  <p><strong>You'll receive:</strong> <span id="tokenAmount">0</span> FDAI</p>
-  <button id="buyBtn">Buy FDAI</button>
-</div>
 
-<div class="extras">
-  <a href="FreeDogeAI_Whitepaper.pdf" download class="download-btn">Download Whitepaper (PDF)</a>
-</div>
+  <h1>FreeDogeAI Wallet Connect</h1>
+  <button id="connectWalletBtn">Connect Wallet</button>
 
-  </main>  <footer class="site-footer">
-    <p id="footerText">Join our community for updates</p>
-    <div class="footer-links">
-      <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a>
-      <span>|</span>
-      <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
-    </div>
-  </footer>  <script src="script.js"></script></body>
+  <div class="info" id="walletInfo" style="display:none;">
+    <p><strong>Address:</strong> <span id="walletAddress">-</span></p>
+    <p><strong>Balance:</strong> <span id="walletBalance">-</span> BNB</p>
+  </div>
+
+  <script>
+    let web3Modal;
+    let provider;
+    let web3;
+
+    const providerOptions = {
+      walletconnect: {
+        package: window.WalletConnectProvider.default,
+        options: {
+          rpc: {
+            56: "https://bsc-dataseed.binance.org/"
+          },
+          chainId: 56
+        }
+      }
+    };
+
+    window.addEventListener('load', () => {
+      web3Modal = new window.Web3Modal.default({
+        cacheProvider: false,
+        providerOptions,
+        theme: "dark"
+      });
+
+      document.getElementById('connectWalletBtn').addEventListener('click', async () => {
+        try {
+          provider = await web3Modal.connect();
+          web3 = new Web3(provider);
+
+          const accounts = await web3.eth.getAccounts();
+          const address = accounts[0];
+
+          const balanceWei = await web3.eth.getBalance(address);
+          const balance = web3.utils.fromWei(balanceWei, 'ether');
+
+          document.getElementById('walletAddress').textContent = address;
+          document.getElementById('walletBalance').textContent = parseFloat(balance).toFixed(4);
+          document.getElementById('walletInfo').style.display = 'block';
+        } catch (err) {
+          alert("Failed to connect: " + err.message);
+        }
+      });
+    });
+  </script>
+</body>
 </html>
