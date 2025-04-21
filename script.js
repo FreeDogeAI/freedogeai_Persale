@@ -1,85 +1,88 @@
-const TOKENS_PER_BNB = 12500000;
-const MIN_BNB = 0.035;
-const PRESALE_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
+import {
+  EthereumClient,
+  w3mConnectors,
+  w3mProvider
+} from '@web3modal/ethereum';
+import { Web3Modal } from '@web3modal/html';
+import { configureChains, createConfig, getAccount, connect, disconnect, fetchBalance, watchAccount } from '@wagmi/core';
+import { mainnet } from '@wagmi/core/chains';
 
-let web3Modal, provider, web3, userAccount;
+// WalletConnect bilgileri
+const projectId = '3c1933cfa3a872a06dbaa2011dab35a2';
 
-// WalletConnect, TrustWallet, MetaMask desteği
-const providerOptions = {
-  walletconnect: {
-    package: window.WalletConnectProvider.default,
-    options: {
-      rpc: { 56: "https://bsc-dataseed.binance.org/" },
-      chainId: 56,
-      qrcodeModalOptions: {
-        mobileLinks: ["trust", "metamask"]
-      }
-    }
-  }
-};
+const chains = [mainnet];
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 
-// Web3Modal başlat
-window.addEventListener("load", () => {
-  web3Modal = new window.Web3Modal.default({
-    cacheProvider: false,
-    providerOptions,
-    theme: "dark"
-  });
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: w3mConnectors({ projectId, chains }),
+  publicClient
+});
 
-  // Cüzdan bağlama butonu
-  const btn = document.getElementById("connectWalletBtn");
-  if (btn) {
-    btn.addEventListener("click", async () => {
-      try {
-        provider = await web3Modal.connect();
-        web3 = new Web3(provider);
+const ethereumClient = new EthereumClient(wagmiConfig, chains);
+const modal = new Web3Modal({ projectId, ethereumClient });
 
-        const accounts = await web3.eth.getAccounts();
-        userAccount = accounts[0];
-
-        const balanceWei = await web3.eth.getBalance(userAccount);
-        const balance = web3.utils.fromWei(balanceWei, "ether");
-
-        document.getElementById("walletAddress").textContent = userAccount;
-        document.getElementById("walletBalance").textContent = parseFloat(balance).toFixed(4);
-        document.getElementById("walletInfo").classList.remove("hidden");
-      } catch (err) {
-        alert("Connection failed: " + err.message);
-      }
-    });
+// Bağlantı butonu
+document.getElementById('connectWalletBtn').addEventListener('click', async () => {
+  try {
+    await modal.openModal(); // popup ikonlu menüyü aç
+  } catch (err) {
+    alert('Connection error: ' + err.message);
   }
 });
 
-// BNB -> FDAI hesapla
-document.getElementById("bnbInput").addEventListener("input", () => {
-  const bnb = parseFloat(document.getElementById("bnbInput").value);
-  if (!isNaN(bnb) && bnb >= MIN_BNB) {
-    const tokens = bnb * TOKENS_PER_BNB;
-    document.getElementById("tokenAmount").textContent = tokens.toLocaleString();
-  } else {
-    document.getElementById("tokenAmount").textContent = "0";
+// Cüzdan izleme (otomatik güncelleme)
+watchAccount({
+  onChange(account) {
+    if (account?.address) {
+      document.getElementById('walletAddress').textContent = account.address;
+      document.getElementById('walletInfo').classList.remove('hidden');
+      updateBalance(account.address);
+    } else {
+      document.getElementById('walletInfo').classList.add('hidden');
+    }
   }
+});
+
+// Bakiye göster
+async function updateBalance(address) {
+  const balance = await fetchBalance({ address });
+  const bnb = parseFloat(balance.formatted).toFixed(4);
+  document.getElementById('walletBalance').textContent = bnb;
+}
+
+// Token hesaplama
+document.getElementById('bnbInput').addEventListener('input', () => {
+  const bnb = parseFloat(document.getElementById('bnbInput').value);
+  const rate = 12500000;
+  const tokens = bnb >= 0.035 ? (bnb * rate).toLocaleString() : '0';
+  document.getElementById('tokenAmount').textContent = tokens;
 });
 
 // Satın alma
-document.getElementById("buyBtn").addEventListener("click", async () => {
-  const bnbAmount = parseFloat(document.getElementById("bnbInput").value);
-  if (!userAccount) return alert("Please connect your wallet.");
-  if (isNaN(bnbAmount) || bnbAmount < MIN_BNB) return alert(`Minimum: ${MIN_BNB} BNB`);
+document.getElementById('buyBtn').addEventListener('click', async () => {
+  const bnb = parseFloat(document.getElementById('bnbInput').value);
+  if (!bnb || bnb < 0.035) return alert('Minimum purchase is 0.035 BNB');
+
+  const { address } = getAccount();
+  const to = '0x45583DB8b6Db50311Ba8e7303845ACc6958589B7';
 
   try {
-    await web3.eth.sendTransaction({
-      from: userAccount,
-      to: PRESALE_ADDRESS,
-      value: web3.utils.toWei(bnbAmount.toString(), "ether")
+    await window.ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [{
+        from: address,
+        to,
+        value: '0x' + (bnb * 1e18).toString(16)
+      }]
     });
-    alert("Purchase successful! Tokens will be sent automatically.");
+    alert('Purchase successful!');
   } catch (err) {
-    alert("Transaction failed: " + err.message);
+    alert('Transaction failed: ' + err.message);
   }
 });
 
-// Dil desteği (seçilen dilde çeviri)
+// Dil sistemi
 const translations = {
   en: {
     title: "Buy FreeDogeAI Token (FDAI)",
