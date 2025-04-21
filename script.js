@@ -1,56 +1,65 @@
-const connectBtn = document.getElementById("connectBtn");
-const walletInfo = document.getElementById("walletInfo");
-const walletAddressEl = document.getElementById("walletAddress");
-const walletBalanceEl = document.getElementById("walletBalance");
-const buyBtn = document.getElementById("buyBtn");
-const bnbInput = document.getElementById("bnbInput");
-const tokenAmount = document.getElementById("tokenAmount");
-
-const TOKENS_PER_BNB = 12500000; // 12.5M FDAI per 1 BNB
+const TOKENS_PER_BNB = 12500000;
 const MIN_BNB = 0.035;
-const PRESALE_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; // Token Drop contract
+const PRESALE_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
 
 let web3;
+let provider;
 let userAccount = null;
 
-// Connect Wallet
-connectBtn.addEventListener("click", async () => {
-  if (window.ethereum) {
-    try {
-      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-      userAccount = accounts[0];
-      web3 = new Web3(window.ethereum);
-
-      const balanceWei = await web3.eth.getBalance(userAccount);
-      const balanceBNB = web3.utils.fromWei(balanceWei, "ether");
-
-      walletAddressEl.textContent = userAccount;
-      walletBalanceEl.textContent = parseFloat(balanceBNB).toFixed(4);
-      walletInfo.classList.remove("hidden");
-    } catch (err) {
-      alert("Connection failed: " + err.message);
+// Web3Modal setup
+const providerOptions = {
+  walletconnect: {
+    package: window.WalletConnectProvider.default,
+    options: {
+      rpc: {
+        56: "https://bsc-dataseed.binance.org/" // Binance Smart Chain
+      },
+      chainId: 56
     }
-  } else {
-    alert("No wallet found. Install MetaMask or TrustWallet.");
+  }
+};
+
+const web3Modal = new window.Web3Modal.default({
+  cacheProvider: false,
+  providerOptions,
+  theme: "dark"
+});
+
+document.getElementById("connectWalletBtn").addEventListener("click", async () => {
+  try {
+    provider = await web3Modal.connect();
+    web3 = new Web3(provider);
+
+    const accounts = await web3.eth.getAccounts();
+    userAccount = accounts[0];
+
+    const balanceWei = await web3.eth.getBalance(userAccount);
+    const balanceBNB = web3.utils.fromWei(balanceWei, "ether");
+
+    document.getElementById("walletAddress").textContent = userAccount;
+    document.getElementById("walletBalance").textContent = parseFloat(balanceBNB).toFixed(4);
+    document.getElementById("walletInfo").classList.remove("hidden");
+  } catch (err) {
+    alert("Connection failed: " + err.message);
   }
 });
 
-// BNB to Token Calculation
-bnbInput.addEventListener("input", () => {
-  const bnb = parseFloat(bnbInput.value);
+// BNB -> FDAI hesaplama
+document.getElementById("bnbInput").addEventListener("input", () => {
+  const bnb = parseFloat(document.getElementById("bnbInput").value);
   if (!isNaN(bnb) && bnb >= MIN_BNB) {
     const tokens = bnb * TOKENS_PER_BNB;
-    tokenAmount.textContent = tokens.toLocaleString();
+    document.getElementById("tokenAmount").textContent = tokens.toLocaleString();
   } else {
-    tokenAmount.textContent = "0";
+    document.getElementById("tokenAmount").textContent = "0";
   }
 });
 
-// Buy FDAI Tokens
-buyBtn.addEventListener("click", async () => {
-  const bnbAmount = parseFloat(bnbInput.value);
-  if (!userAccount) return alert("Please connect your wallet.");
-  if (isNaN(bnbAmount) || bnbAmount < MIN_BNB) return alert(`Minimum purchase is ${MIN_BNB} BNB.`);
+// Satın alma işlemi
+document.getElementById("buyBtn").addEventListener("click", async () => {
+  const bnbAmount = parseFloat(document.getElementById("bnbInput").value);
+  if (!userAccount) return alert("Please connect your wallet first.");
+  if (isNaN(bnbAmount) || bnbAmount < MIN_BNB) return alert(`Minimum amount is ${MIN_BNB} BNB`);
 
   try {
     await web3.eth.sendTransaction({
@@ -58,13 +67,13 @@ buyBtn.addEventListener("click", async () => {
       to: PRESALE_ADDRESS,
       value: web3.utils.toWei(bnbAmount.toString(), "ether")
     });
-    alert("Purchase successful! Tokens will be distributed automatically.");
+    alert("Purchase successful! FDAI tokens will be sent to your wallet.");
   } catch (err) {
     alert("Transaction failed: " + err.message);
   }
 });
 
-// Language Switcher
+// Dil sistemi
 const translations = {
   en: {
     title: "Buy FreeDogeAI Token (FDAI)",
