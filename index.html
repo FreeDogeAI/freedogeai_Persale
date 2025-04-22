@@ -1,35 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FreeDogeAI Token Presale</title>
-  <link rel="stylesheet" href="style.css" />
-  <!-- Kütüphaneler -->
+  <meta charset="UTF-8">
+  <title>FDAI Presale</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-  <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
 </head>
 <body>
-  <header>
-    <h1>FreeDogeAI Token Presale</h1>
-    <button id="connectBtn">Connect Wallet</button>
-    <p id="walletAddress">Wallet not connected</p>
-    <p id="walletBalance"></p>
-  </header>
+  <h1>FreeDogeAI Token Presale</h1>
+  <button id="connectWallet">Connect Wallet</button>
+  <p id="walletAddress">Wallet not connected</p>
+  <input type="number" id="bnbAmount" placeholder="Enter BNB" />
+  <button id="buyTokens">Buy Tokens</button>
 
-  <main>
-    <input type="number" id="bnbAmount" placeholder="Enter BNB" />
-    <p id="tokenAmount">0 FDAI</p>
-    <button id="buyBtn">Buy Tokens</button>
-  </main>
-
-  <footer>
-    <p>Join our community:</p>
-    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
-    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
-  </footer>
-
-  <script src="script.js"></script>
+  <script src="walletconnect.js"></script>
 </body>
 </html>
