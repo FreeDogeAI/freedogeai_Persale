@@ -1,125 +1,23 @@
-import {
-  EthereumClient,
-  w3mConnectors,
-  w3mProvider
-} from '@web3modal/ethereum';
-import { Web3Modal } from '@web3modal/html';
-import { configureChains, createConfig, getAccount, connect, disconnect, fetchBalance, watchAccount } from '@wagmi/core';
-import { mainnet } from '@wagmi/core/chains';
+// script.js let web3; let userAddress = "";
 
-// WalletConnect bilgileri
-const projectId = '3c1933cfa3a872a06dbaa2011dab35a2';
+const TOKENS_PER_BNB = 12500000; const TOKEN_DROP_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; const MINIMUM_BNB = 0.035;
 
-const chains = [mainnet];
-const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
+const providerOptions = { walletconnect: { package: window.WalletConnectProvider.default, options: { rpc: { 56: "https://bsc-dataseed.binance.org/" }, chainId: 56, qrcodeModalOptions: { mobileLinks: ["trust", "metamask", "coinbase"] } } } };
 
-const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors: w3mConnectors({ projectId, chains }),
-  publicClient
-});
+const web3Modal = new window.Web3Modal.default({ cacheProvider: false, providerOptions, theme: "dark" });
 
-const ethereumClient = new EthereumClient(wagmiConfig, chains);
-const modal = new Web3Modal({ projectId, ethereumClient });
+const connectBtn = document.getElementById("connectBtn"); const walletAddress = document.getElementById("walletAddress"); const bnbAmountInput = document.getElementById("bnbAmount"); const tokenAmount = document.getElementById("tokenAmount"); const buyBtn = document.getElementById("buyBtn"); const languageSelect = document.getElementById("languageSelect");
 
-// Bağlantı butonu
-document.getElementById('connectWalletBtn').addEventListener('click', async () => {
-  try {
-    await modal.openModal(); // popup ikonlu menüyü aç
-  } catch (err) {
-    alert('Connection error: ' + err.message);
-  }
-});
+connectBtn.addEventListener("click", async () => { try { const provider = await web3Modal.connect(); web3 = new Web3(provider); const accounts = await web3.eth.getAccounts(); userAddress = accounts[0]; walletAddress.textContent = Connected: ${userAddress}; } catch (error) { console.error("Connection failed:", error); walletAddress.textContent = "Connection failed"; } });
 
-// Cüzdan izleme (otomatik güncelleme)
-watchAccount({
-  onChange(account) {
-    if (account?.address) {
-      document.getElementById('walletAddress').textContent = account.address;
-      document.getElementById('walletInfo').classList.remove('hidden');
-      updateBalance(account.address);
-    } else {
-      document.getElementById('walletInfo').classList.add('hidden');
-    }
-  }
-});
+bnbAmountInput.addEventListener("input", () => { const bnb = parseFloat(bnbAmountInput.value); tokenAmount.textContent = !isNaN(bnb) && bnb > 0 ? ${(bnb * TOKENS_PER_BNB).toLocaleString()} FDAI : "0 FDAI"; });
 
-// Bakiye göster
-async function updateBalance(address) {
-  const balance = await fetchBalance({ address });
-  const bnb = parseFloat(balance.formatted).toFixed(4);
-  document.getElementById('walletBalance').textContent = bnb;
-}
+buyBtn.addEventListener("click", async () => { const bnb = parseFloat(bnbAmountInput.value); if (!userAddress) return alert("Please connect your wallet first."); if (isNaN(bnb) || bnb < MINIMUM_BNB) return alert(Minimum is ${MINIMUM_BNB} BNB);
 
-// Token hesaplama
-document.getElementById('bnbInput').addEventListener('input', () => {
-  const bnb = parseFloat(document.getElementById('bnbInput').value);
-  const rate = 12500000;
-  const tokens = bnb >= 0.035 ? (bnb * rate).toLocaleString() : '0';
-  document.getElementById('tokenAmount').textContent = tokens;
-});
+try { const valueInWei = web3.utils.toWei(bnb.toString(), "ether"); await web3.eth.sendTransaction({ from: userAddress, to: TOKEN_DROP_ADDRESS, value: valueInWei }); alert("Transaction sent successfully!"); } catch (error) { console.error("Transaction failed:", error); alert("Transaction failed."); } });
 
-// Satın alma
-document.getElementById('buyBtn').addEventListener('click', async () => {
-  const bnb = parseFloat(document.getElementById('bnbInput').value);
-  if (!bnb || bnb < 0.035) return alert('Minimum purchase is 0.035 BNB');
+const translations = { en: { title: "FreeDogeAI Token Presale", connect: "Connect Wallet", notconnected: "Wallet not connected", dontmiss: "Don’t miss the presale!", buy: "Buy Tokens", about: "About FreeDogeAI", aboutdesc: "FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin. Get in early and don’t miss the moon ride!", readwhite: "Download Whitepaper", community: "Join our community for updates" }, tr: { title: "FreeDogeAI Token Ön Satışı", connect: "Cüzdanı Bağla", notconnected: "Cüzdan bağlı değil", dontmiss: "Ön satışı kaçırma!", buy: "Token Satın Al", about: "FreeDogeAI Hakkında", aboutdesc: "FreeDogeAI, Dogecoin ruhu ve yapay zeka hype'ını birleştiren mizahi bir tokendir. Erken gir, roketi kaçırma!", readwhite: "Whitepaper'ı indir", community: "Topluluğumuza katılın" }, ar: { title: "عرض ما قبل البيع FreeDogeAI", connect: "اتصل بالمحفظة", notconnected: "المحفظة غير متصلة", dontmiss: "لا تفوت العرض المسبق!", buy: "شراء الرموز", about: "حول FreeDogeAI", aboutdesc: "FreeDogeAI هو رمز مستوحى من meme يجمع بين حماس الذكاء الاصطناعي وروح Dogecoin. كن من الأوائل!", readwhite: "تحميل الورقة البيضاء", community: "انضم إلى مجتمعنا للتحديثات" } // Diğer diller buraya eklenebilir };
 
-  const { address } = getAccount();
-  const to = '0x45583DB8b6Db50311Ba8e7303845ACc6958589B7';
+languageSelect.addEventListener("change", () => { const selected = languageSelect.value; const items = document.querySelectorAll("[data-i18n]"); items.forEach(el => { const key = el.getAttribute("data-i18n"); if (translations[selected] && translations[selected][key]) { el.textContent = translations[selected][key]; } }); });
 
-  try {
-    await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [{
-        from: address,
-        to,
-        value: '0x' + (bnb * 1e18).toString(16)
-      }]
-    });
-    alert('Purchase successful!');
-  } catch (err) {
-    alert('Transaction failed: ' + err.message);
-  }
-});
-
-// Dil sistemi
-const translations = {
-  en: {
-    title: "Buy FreeDogeAI Token (FDAI)",
-    bnbLabel: "Enter BNB amount:",
-    footerText: "Join our community for updates",
-    buyBtn: "Buy FDAI"
-  },
-  tr: {
-    title: "FreeDogeAI Token (FDAI) Satın Al",
-    bnbLabel: "BNB miktarını girin:",
-    footerText: "Güncellemeler için topluluğumuza katılın",
-    buyBtn: "FDAI Satın Al"
-  },
-  ar: {
-    title: "شراء رمز FreeDogeAI (FDAI)",
-    bnbLabel: "أدخل كمية BNB:",
-    footerText: "انضم إلى مجتمعنا للتحديثات",
-    buyBtn: "شراء FDAI"
-  },
-  ru: {
-    title: "Купить FreeDogeAI Token (FDAI)",
-    bnbLabel: "Введите сумму BNB:",
-    footerText: "Присоединяйтесь к нашему сообществу для обновлений",
-    buyBtn: "Купить FDAI"
-  },
-  zh: {
-    title: "购买 FreeDogeAI 代币 (FDAI)",
-    bnbLabel: "输入 BNB 数量:",
-    footerText: "加入我们的社区以获取更新",
-    buyBtn: "购买 FDAI"
-  }
-};
-
-document.getElementById("languageSelector").addEventListener("change", (e) => {
-  const lang = e.target.value;
-  document.getElementById("title").textContent = translations[lang].title;
-  document.getElementById("bnbLabel").textContent = translations[lang].bnbLabel;
-  document.getElementById("footerText").textContent = translations[lang].footerText;
-  document.getElementById("buyBtn").textContent = translations[lang].buyBtn;
-});
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
