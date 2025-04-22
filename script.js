@@ -1,16 +1,14 @@
 let web3, userAddress = "";
-
 const TOKENS_PER_BNB = 12500000;
 const MINIMUM_BNB = 0.035;
 const TOKEN_DROP_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
 
+// WalletConnect ayarları
 const providerOptions = {
   walletconnect: {
     package: window.WalletConnectProvider.default,
     options: {
-      rpc: {
-        56: "https://bsc-dataseed.binance.org/",
-      },
+      rpc: { 56: "https://bsc-dataseed.binance.org/" },
       chainId: 56,
       qrcodeModalOptions: {
         mobileLinks: ["metamask", "trust", "coinbase"],
@@ -19,153 +17,108 @@ const providerOptions = {
   },
 };
 
+// Web3Modal v1 başlat
 const web3Modal = new window.Web3Modal.default({
   cacheProvider: false,
   providerOptions,
   theme: "dark",
 });
 
-// Connect Wallet
+// Cüzdan bağlama
 document.getElementById("connectBtn").addEventListener("click", async () => {
   try {
-    console.log("Connecting to wallet...");
     const provider = await web3Modal.connect();
-    if (!provider) throw new Error("Provider not initialized");
-
     web3 = new Web3(provider);
-    console.log("Web3 initialized:", web3);
-
-    const accounts = await provider.request({ method: "eth_requestAccounts" });
-    if (!accounts || accounts.length === 0) throw new Error("No account found");
-
+    const accounts = await web3.eth.getAccounts();
     userAddress = accounts[0];
+
     document.getElementById("walletAddress").textContent = `Connected: ${userAddress}`;
-    console.log("Connected account:", userAddress);
-
-    const chainId = await web3.eth.getChainId();
-    if (chainId !== 56) {
-      await switchToBSC(provider);
-    }
-
+    
     const balanceWei = await web3.eth.getBalance(userAddress);
     const balance = web3.utils.fromWei(balanceWei, "ether");
     document.getElementById("walletBalance").textContent = `BNB Balance: ${parseFloat(balance).toFixed(4)} BNB`;
 
-    // Provider events
-    provider.on("accountsChanged", (accounts) => {
-      console.log("Accounts changed:", accounts);
-      userAddress = accounts.length > 0 ? accounts[0] : "";
-      document.getElementById("walletAddress").textContent = userAddress
-        ? `Connected: ${userAddress}`
-        : "Wallet disconnected.";
-    });
+    const chainId = await web3.eth.getChainId();
+    if (chainId !== 56) await switchToBSC(provider);
 
-    provider.on("chainChanged", (chainId) => {
-      console.log("Chain changed:", chainId);
-      if (parseInt(chainId) !== 56) {
-        alert("Please switch to Binance Smart Chain!");
-      }
+    provider.on("accountsChanged", (accounts) => {
+      userAddress = accounts.length > 0 ? accounts[0] : "";
+      document.getElementById("walletAddress").textContent = userAddress ? `Connected: ${userAddress}` : "Wallet disconnected.";
     });
 
     provider.on("disconnect", () => {
-      console.log("Provider disconnected");
       userAddress = "";
       document.getElementById("walletAddress").textContent = "Wallet disconnected.";
     });
+
   } catch (error) {
-    console.error("Connection error:", error);
-    document.getElementById("walletAddress").textContent = `Connection failed: ${error.message}`;
+    console.error(error);
+    alert("Connection failed: " + error.message);
   }
 });
 
-// Switch to BSC
+// BNB girince token hesaplama
+document.getElementById("bnbAmount").addEventListener("input", () => {
+  const bnb = parseFloat(document.getElementById("bnbAmount").value);
+  document.getElementById("tokenAmount").textContent =
+    !isNaN(bnb) && bnb > 0 ? `${(bnb * TOKENS_PER_BNB).toLocaleString()} FDAI` : "0 FDAI";
+});
+
+// Token satın alma
+document.getElementById("buyBtn").addEventListener("click", async () => {
+  try {
+    if (!userAddress) return alert("Please connect your wallet first.");
+    const bnb = parseFloat(document.getElementById("bnbAmount").value);
+    if (isNaN(bnb) || bnb < MINIMUM_BNB) return alert(`Minimum is ${MINIMUM_BNB} BNB`);
+
+    const chainId = await web3.eth.getChainId();
+    if (chainId !== 56) await switchToBSC(web3.currentProvider);
+
+    const tx = {
+      from: userAddress,
+      to: TOKEN_DROP_ADDRESS,
+      value: web3.utils.toWei(bnb.toString(), "ether"),
+      gas: 210000,
+    };
+
+    const txHash = await web3.eth.sendTransaction(tx);
+    alert("Transaction sent!\nHash: " + txHash.transactionHash);
+  } catch (error) {
+    console.error(error);
+    let msg = "Transaction failed.";
+    if (error.code === 4001) msg = "Transaction rejected by user.";
+    else if (error.code === -32002) msg = "Request already pending in wallet.";
+    else if (error.message.includes("insufficient funds")) msg = "Insufficient BNB balance.";
+    alert(msg + "\nDetails: " + error.message);
+  }
+});
+
+// BSC ağına geçiş
 async function switchToBSC(provider) {
   try {
     await provider.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0x38" }], // BSC chainId: 56 (hex: 0x38)
+      params: [{ chainId: "0x38" }],
     });
-  } catch (switchError) {
-    if (switchError.code === 4902) {
+  } catch (error) {
+    if (error.code === 4902) {
       await provider.request({
         method: "wallet_addEthereumChain",
-        params: [
-          {
-            chainId: "0x38",
-            chainName: "Binance Smart Chain",
-            rpcUrls: ["https://bsc-dataseed.binance.org/"],
-            nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
-            blockExplorerUrls: ["https://bscscan.com"],
-          },
-        ],
+        params: [{
+          chainId: "0x38",
+          chainName: "Binance Smart Chain",
+          rpcUrls: ["https://bsc-dataseed.binance.org/"],
+          nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+          blockExplorerUrls: ["https://bscscan.com"],
+        }],
       });
     } else {
-      throw switchError;
+      throw error;
     }
   }
 }
 
-// Calculate FDAI
-document.getElementById("bnbAmount").addEventListener("input", () => {
-  const bnb = parseFloat(document.getElementById("bnbAmount").value);
-  document.getElementById("tokenAmount").textContent = !isNaN(bnb) && bnb > 0 ? `${(bnb * TOKENS_PER_BNB).toLocaleString()} FDAI` : "0 FDAI";
-});
-
-// Buy Tokens
-document.getElementById("buyBtn").addEventListener("click", async () => {
-  try {
-    console.log("Initiating buy transaction...");
-    if (!userAddress) {
-      alert("Please connect your wallet first.");
-      return;
-    }
-
-    const bnb = parseFloat(document.getElementById("bnbAmount").value);
-    if (isNaN(bnb) || bnb < MINIMUM_BNB) {
-      alert(`Minimum is ${MINIMUM_BNB} BNB`);
-      return;
-    }
-
-    const chainId = await web3.eth.getChainId();
-    if (chainId !== 56) {
-      alert("Switching to Binance Smart Chain...");
-      await switchToBSC(web3.currentProvider);
-    }
-
-    const value = web3.utils.toWei(bnb.toString(), "ether");
-    const gasPrice = await web3.eth.getGasPrice();
-    const transactionParameters = {
-      from: userAddress,
-      to: TOKEN_DROP_ADDRESS,
-      value: value,
-      gas: web3.utils.toHex(210000), // Default gas limit
-      gasPrice: web3.utils.toHex(gasPrice),
-    };
-
-    console.log("Transaction parameters:", transactionParameters);
-
-    const txHash = await web3.currentProvider.request({
-      method: "eth_sendTransaction",
-      params: [transactionParameters],
-    });
-
-    console.log("Transaction sent, hash:", txHash);
-    alert(`Transaction sent! Hash: ${txHash}`);
-  } catch (error) {
-    console.error("Transaction error:", error);
-    let errorMessage = "Transaction failed.";
-    if (error.code === 4001) {
-      errorMessage = "Transaction rejected by user.";
-    } else if (error.code === -32002) {
-      errorMessage = "Request already pending in wallet.";
-    } else if (error.message.includes("insufficient funds")) {
-      errorMessage = "Insufficient BNB balance.";
-    }
-    alert(`${errorMessage} Details: ${error.message}`);
-  }
-});
-
-// Translations (unchanged)
+// Dil değiştirme
 const translations = {
   en: {
     title: "FreeDogeAI Token Presale",
@@ -209,16 +162,12 @@ const translations = {
   },
 };
 
-// Language switch
 document.getElementById("languageSelect").addEventListener("change", () => {
   const lang = document.getElementById("languageSelect").value;
-  console.log("Selected language:", lang);
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     const key = el.getAttribute("data-i18n");
     if (translations[lang] && translations[lang][key]) {
       el.textContent = translations[lang][key];
-    } else {
-      console.warn(`Translation missing for key: ${key} in language: ${lang}`);
     }
   });
 });
