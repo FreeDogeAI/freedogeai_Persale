@@ -1,87 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>FreeDogeAI Wallet Connect</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      background-color: #0c1a2c;
-      color: white;
-      font-family: sans-serif;
-      text-align: center;
-      padding: 40px;
-    }
-    button {
-      background: #00c2ff;
-      color: black;
-      font-size: 16px;
-      padding: 12px 24px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-    }
-    .info {
-      margin-top: 30px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeDogeAI Token Presale</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.12/dist/index.js"></script>
+  <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+  <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
+  <script defer src="script.js"></script>
 </head>
 <body>
-
-  <h1>FreeDogeAI Wallet Connect</h1>
-  <button id="connectWalletBtn">Connect Wallet</button>
-
-  <div class="info" id="walletInfo" style="display:none;">
-    <p><strong>Address:</strong> <span id="walletAddress">-</span></p>
-    <p><strong>Balance:</strong> <span id="walletBalance">-</span> BNB</p>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">
+        <h1 data-i18n="title">FreeDogeAI Token Presale</h1>
+      </div>
+      <div class="top-controls">
+        <select id="languageSelect">
+          <option value="en">English</option>
+          <option value="tr">Türkçe</option>
+          <option value="ar">العربية</option>
+          <option value="ru">Русский</option>
+          <option value="zh">中文</option>
+          <option value="de">Deutsch</option>
+          <option value="fr">Français</option>
+          <option value="es">Español</option>
+        </select>
+        <button id="connectBtn" class="wallet-button" data-i18n="connect">Connect Wallet</button>
+      </div>
+    </div>
+  </header>  <main>
+    <section class="hero-section">
+      <div class="container">
+        <p id="walletAddress" data-i18n="notconnected">Wallet not connected</p>
+        <h2 class="highlight-text" data-i18n="dontmiss">Don’t miss the presale!</h2>
+      </div>
+    </section><section class="buy-area container">
+  <div class="buy-box">
+    <input type="number" id="bnbAmount" placeholder="Enter BNB" />
+    <p id="tokenAmount">0 FDAI</p>
+    <button id="buyBtn" data-i18n="buy">Buy Tokens</button>
   </div>
+</section>
 
-  <script>
-    let web3Modal;
-    let provider;
-    let web3;
+<section class="about-section container">
+  <h2 data-i18n="about">About FreeDogeAI</h2>
+  <p data-i18n="aboutdesc">
+    FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.
+    Get in early and don’t miss the moon ride!
+  </p>
+  <a class="whitepaper-link" href="whitepaper.pdf" download data-i18n="readwhite">Download Whitepaper</a>
+</section>
 
-    const providerOptions = {
-      walletconnect: {
-        package: window.WalletConnectProvider.default,
-        options: {
-          rpc: {
-            56: "https://bsc-dataseed.binance.org/"
-          },
-          chainId: 56
-        }
-      }
-    };
-
-    window.addEventListener('load', () => {
-      web3Modal = new window.Web3Modal.default({
-        cacheProvider: false,
-        providerOptions,
-        theme: "dark"
-      });
-
-      document.getElementById('connectWalletBtn').addEventListener('click', async () => {
-        try {
-          provider = await web3Modal.connect();
-          web3 = new Web3(provider);
-
-          const accounts = await web3.eth.getAccounts();
-          const address = accounts[0];
-
-          const balanceWei = await web3.eth.getBalance(address);
-          const balance = web3.utils.fromWei(balanceWei, 'ether');
-
-          document.getElementById('walletAddress').textContent = address;
-          document.getElementById('walletBalance').textContent = parseFloat(balance).toFixed(4);
-          document.getElementById('walletInfo').style.display = 'block';
-        } catch (err) {
-          alert("Failed to connect: " + err.message);
-        }
-      });
-    });
-  </script>
+  </main>  <footer class="site-footer">
+    <div class="container">
+      <p data-i18n="community">Join our community for updates</p>
+      <div class="footer-links">
+        <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a>
+        <span>|</span>
+        <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
