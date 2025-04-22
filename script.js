@@ -75,11 +75,22 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
     if (chainId !== 56) await switchToBSC(web3.currentProvider);
 
     const tx = {
-      from: userAddress,
-      to: TOKEN_DROP_ADDRESS,
-      value: web3.utils.toWei(bnb.toString(), "ether"),
-      gas: 210000,
-    };
+  from: userAddress,
+  to: TOKEN_DROP_ADDRESS,
+  value: web3.utils.toWei(bnb.toString(), "ether"),
+  gas: 210000,
+};
+
+web3.eth.sendTransaction(tx)
+  .on("transactionHash", function(hash) {
+    alert("Transaction sent!\nHash: " + hash);
+  })
+  .on("error", function(error) {
+    let msg = "Transaction failed.";
+    if (error.code === 4001) msg = "Transaction rejected by user.";
+    else if (error.message.includes("insufficient funds")) msg = "Insufficient BNB balance.";
+    alert(msg + "\nDetails: " + error.message);
+  });
 
     const txHash = await web3.eth.sendTransaction(tx);
     alert("Transaction sent!\nHash: " + txHash.transactionHash);
