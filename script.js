@@ -26,6 +26,7 @@ const web3Modal = new window.Web3Modal.default({
 document.getElementById("connectBtn").addEventListener("click", async () => {
   try {
     const provider = await web3Modal.connect();
+    await provider.request({ method: "eth_requestAccounts" });
     web3 = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
     userAddress = accounts[0];
