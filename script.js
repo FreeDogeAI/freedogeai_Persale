@@ -24,16 +24,23 @@ const web3Modal = new window.Web3Modal.default({
   theme: "dark",
 });
 
-// Cüzdan bağla butonu
+// Cüzdan Bağla
 document.getElementById("connectBtn").addEventListener("click", async () => {
   try {
     const provider = await web3Modal.connect();
+    web3 = new Web3(provider);
 
-    provider.on("disconnect", () => {
-      userAddress = "";
-      document.getElementById("walletAddress").textContent = "Wallet disconnected";
-      document.getElementById("walletBalance").textContent = "";
-    });
+    const accounts = await web3.eth.requestAccounts();
+    userAddress = accounts[0];
+
+    const balanceWei = await web3.eth.getBalance(userAddress);
+    const balance = web3.utils.fromWei(balanceWei, "ether");
+
+    document.getElementById("walletAddress").textContent = `Connected: ${userAddress}`;
+    document.getElementById("walletBalance").textContent = `BNB Balance: ${parseFloat(balance).toFixed(4)} BNB`;
+
+    const chainId = await web3.eth.getChainId();
+    if (chainId !== 56) await switchToBSC(provider);
 
     provider.on("accountsChanged", (accounts) => {
       userAddress = accounts[0] || "";
@@ -42,19 +49,11 @@ document.getElementById("connectBtn").addEventListener("click", async () => {
         : "Wallet disconnected";
     });
 
-    web3 = new Web3(provider);
-
-    const accounts = await web3.eth.requestAccounts(); // bu işlem onay penceresi açtırır
-    userAddress = accounts[0];
-
-    const balanceWei = await web3.eth.getBalance(userAddress);
-    const balance = web3.utils.fromWei(balanceWei, "ether");
-
-    document.getElementById("walletAddress").textContent = "Connected: " + userAddress;
-    document.getElementById("walletBalance").textContent = "BNB Balance: " + parseFloat(balance).toFixed(4) + " BNB";
-
-    const chainId = await web3.eth.getChainId();
-    if (chainId !== 56) await switchToBSC(provider);
+    provider.on("disconnect", () => {
+      userAddress = "";
+      document.getElementById("walletAddress").textContent = "Wallet disconnected";
+      document.getElementById("walletBalance").textContent = "";
+    });
 
   } catch (err) {
     console.error("Connection failed:", err);
@@ -62,22 +61,20 @@ document.getElementById("connectBtn").addEventListener("click", async () => {
   }
 });
 
-// Token miktarını otomatik hesapla
+// BNB girilince token hesapla
 document.getElementById("bnbAmount").addEventListener("input", () => {
   const bnb = parseFloat(document.getElementById("bnbAmount").value);
   document.getElementById("tokenAmount").textContent =
     !isNaN(bnb) && bnb > 0 ? `${(bnb * TOKENS_PER_BNB).toLocaleString()} FDAI` : "0 FDAI";
 });
 
-// Token satın al
+// Satın Al
 document.getElementById("buyBtn").addEventListener("click", async () => {
   try {
-    if (!userAddress) return alert("Connect your wallet first");
+    if (!userAddress) return alert("Connect wallet first");
 
     const bnb = parseFloat(document.getElementById("bnbAmount").value);
-    if (isNaN(bnb) || bnb < MINIMUM_BNB) {
-      return alert(`Minimum is ${MINIMUM_BNB} BNB`);
-    }
+    if (isNaN(bnb) || bnb < MINIMUM_BNB) return alert(`Minimum is ${MINIMUM_BNB} BNB`);
 
     const tx = {
       from: userAddress,
@@ -86,7 +83,6 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
       gas: web3.utils.toHex(210000),
     };
 
-    // Bu onay penceresini garantili açar:
     const txHash = await web3.currentProvider.request({
       method: "eth_sendTransaction",
       params: [tx],
@@ -99,7 +95,7 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
   }
 });
 
-// BSC ağına geç
+// Ağ geçişi
 async function switchToBSC(provider) {
   try {
     await provider.request({
