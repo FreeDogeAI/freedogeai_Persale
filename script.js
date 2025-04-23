@@ -1,46 +1,64 @@
-// script.js — MetaMask & TrustWallet destekli, imza ile onaylı
+let web3;
+let userAddress = "";
 
-let web3; let userAddress = "";
+const connectBtn = document.getElementById("connectBtn");
+const walletAddressEl = document.getElementById("walletAddress");
+const walletBalanceEl = document.getElementById("walletBalance");
+const buyBtn = document.getElementById("buyBtn");
 
-const connectBtn = document.getElementById("connectBtn"); const walletAddressEl = document.getElementById("walletAddress"); const walletBalanceEl = document.getElementById("walletBalance"); const buyBtn = document.getElementById("buyBtn");
+connectBtn.addEventListener("click", async () => {
+  try {
+    if (!window.ethereum) return alert("MetaMask not found");
 
-connectBtn.addEventListener("click", async () => { try { if (window.ethereum) { web3 = new Web3(window.ethereum); await window.ethereum.request({ method: "eth_requestAccounts" });
+    web3 = new Web3(window.ethereum);
+    await window.ethereum.request({ method: "eth_requestAccounts" });
 
-const accounts = await web3.eth.getAccounts();
-  userAddress = accounts[0];
+    const accounts = await web3.eth.getAccounts();
+    userAddress = accounts[0];
 
-  // imza isteği
-  const message = "Please sign to connect your wallet to FreeDogeAI.";
-  await web3.eth.personal.sign(message, userAddress);
+    const message = "Welcome to FreeDogeAI. Please sign to continue.";
+    const hexMsg = web3.utils.utf8ToHex(message);
 
-  walletAddressEl.textContent = `Wallet: ${userAddress}`;
+    const signature = await window.ethereum.request({
+      method: "personal_sign",
+      params: [hexMsg, userAddress]
+    });
 
-  const balanceWei = await web3.eth.getBalance(userAddress);
-  const balance = web3.utils.fromWei(balanceWei, "ether");
-  walletBalanceEl.textContent = `Balance: ${parseFloat(balance).toFixed(4)} BNB`;
+    if (!signature) throw new Error("Signature failed");
 
-  buyBtn.disabled = false;
+    walletAddressEl.textContent = `Wallet: ${userAddress}`;
+    const balanceWei = await web3.eth.getBalance(userAddress);
+    const balance = web3.utils.fromWei(balanceWei, "ether");
+    walletBalanceEl.textContent = `Balance: ${parseFloat(balance).toFixed(4)} BNB`;
 
-} else {
-  alert("Please install MetaMask or use a Web3-enabled browser.");
-}
+    buyBtn.disabled = false;
 
-} catch (error) { console.error(error); alert("Wallet connection or signature failed."); } });
+  } catch (err) {
+    console.error(err);
+    alert("Error: " + err.message);
+  }
+});
 
-buyBtn.addEventListener("click", async () => { if (!userAddress) return alert("Please connect your wallet first.");
+buyBtn.addEventListener("click", async () => {
+  if (!userAddress) return alert("Connect wallet first");
 
-const bnbAmount = prompt("Enter BNB amount to spend:"); if (!bnbAmount || isNaN(bnbAmount)) return;
+  const bnb = prompt("Enter BNB amount:");
+  if (!bnb || isNaN(bnb)) return;
 
-try { const value = web3.utils.toWei(bnbAmount.toString(), "ether");
+  try {
+    const value = web3.utils.toWei(bnb.toString(), "ether");
 
-const tx = {
-  from: userAddress,
-  to: "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7", // Token satış adresi
-  value: value
-};
+    const tx = {
+      from: userAddress,
+      to: "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7",
+      value: value
+    };
 
-const txHash = await web3.eth.sendTransaction(tx);
-alert("Transaction sent! Hash: " + txHash.transactionHash);
+    const hash = await web3.eth.sendTransaction(tx);
+    alert("Transaction sent! Hash: " + hash.transactionHash);
 
-} catch (error) { console.error(error); alert("Transaction failed: " + error.message); } });
-
+  } catch (err) {
+    console.error(err);
+    alert("Transaction failed: " + err.message);
+  }
+});
