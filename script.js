@@ -1,8 +1,51 @@
-// script.js — Tüm sistem sıfırdan, eksiksiz
+// script.js — Tüm sistem sıfırdan, eksiksiz + Wallet bağlantı
 
 let web3; let userAddress = ""; const TOKEN_DROP_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; const MINIMUM_BNB = 0.035; const TOKENS_PER_BNB = 12500000;
 
 // 12 DIL DESTEKLI ÇEVIRI const translations = { en: { title: "FreeDogeAI Token Presale", connect: "Connect Wallet", notconnected: "Wallet not connected", buy: "Buy Tokens", about: "About FreeDogeAI", aboutdesc: "FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.", readwhite: "Download Whitepaper", community: "Join our community:" }, tr: { title: "FreeDogeAI Token Ön Satışı", connect: "Cüzdanı Bağla", notconnected: "Cüzdan bağlı değil", buy: "Token Satın Al", about: "FreeDogeAI Hakkında", aboutdesc: "FreeDogeAI, Dogecoin ruhunu ve yapay zekayı birleştiren mizahi bir tokendir.", readwhite: "Whitepaper'ı İndir", community: "Topluluğumuza katılın:" }, az: { title: "FreeDogeAI Token Əvvəl Satışı", connect: "Cüzdanı Bağla", notconnected: "Cüzdan bağlı deyil", buy: "Token Al", about: "FreeDogeAI Haqqında", aboutdesc: "FreeDogeAI Dogecoin ruhunu və süni intellekti birləşdirən zarafatlı bir tokendir.", readwhite: "Whitepaper Yüklə", community: "İcmamıza qoşulun:" }, ar: { title: "عرض ما قبل البيع FreeDogeAI", connect: "اتصل بالمحفظة", notconnected: "المحفظة غير متصلة", buy: "شراء الرموز", about: "حول FreeDogeAI", aboutdesc: "FreeDogeAI هو رمز يمزج بين Dogecoin والذكاء الاصطناعي.", readwhite: "تحميل الوثيقة", community: "انضم إلى مجتمعنا:" }, zh: { title: "FreeDogeAI 代币预售", connect: "连接钱包", notconnected: "钱包未连接", buy: "购买代币", about: "关于 FreeDogeAI", aboutdesc: "FreeDogeAI 是结合 AI 热潮与狗狗币精神的 Meme 代币。", readwhite: "下载白皮书", community: "加入我们的社区：" }, ru: { title: "Предпродажа токена FreeDogeAI", connect: "Подключить кошелёк", notconnected: "Кошелёк не подключен", buy: "Купить токены", about: "О FreeDogeAI", aboutdesc: "FreeDogeAI — это токен-мем, сочетающий ИИ и дух Dogecoin.", readwhite: "Скачать Whitepaper", community: "Присоединяйтесь к нашему сообществу:" }, ku: { title: "Pêşfirotinê ya Tokenê FreeDogeAI", connect: "Girêdanê Pêvebike", notconnected: "Pêve girêdayî nîne", buy: "Token bikire", about: "Derbarê FreeDogeAI", aboutdesc: "FreeDogeAI tokenek e ku AI û ruhê Dogecoin bi hev tîne.", readwhite: "Whitepaper daxîne", community: "Bi civaka me re bibin:" }, ja: { title: "FreeDogeAI トークン先行販売", connect: "ウォレット接続", notconnected: "ウォレットが接続されていません", buy: "トークンを購入", about: "FreeDogeAI について", aboutdesc: "FreeDogeAI は AI ブームと Dogecoin の精神を融合したミームトークンです。", readwhite: "ホワイトペーパーをダウンロード", community: "コミュニティに参加：" }, fr: { title: "Prévente du jeton FreeDogeAI", connect: "Connecter le portefeuille", notconnected: "Portefeuille non connecté", buy: "Acheter des tokens", about: "À propos de FreeDogeAI", aboutdesc: "FreeDogeAI est un token mème combinant l'IA et l'esprit du Dogecoin.", readwhite: "Télécharger le Whitepaper", community: "Rejoignez notre communauté :" }, de: { title: "FreeDogeAI Token Vorverkauf", connect: "Wallet verbinden", notconnected: "Wallet nicht verbunden", buy: "Token kaufen", about: "Über FreeDogeAI", aboutdesc: "FreeDogeAI ist ein Meme-Token, der KI-Hype und den Dogecoin-Geist vereint.", readwhite: "Whitepaper herunterladen", community: "Tritt unserer Community bei:" }, ur: { title: "FreeDogeAI ٹوکن پری سیل", connect: "والیٹ سے جڑیں", notconnected: "والیٹ منسلک نہیں ہے", buy: "ٹوکن خریدیں", about: "FreeDogeAI کے بارے میں", aboutdesc: "FreeDogeAI ایک meme ٹوکن ہے جو AI ہائپ اور Dogecoin روح کو جوڑتا ہے۔", readwhite: "وائٹ پیپر ڈاؤن لوڈ کریں", community: "ہماری کمیونٹی میں شامل ہوں:" }, hi: { title: "FreeDogeAI टोकन प्रीसेल", connect: "वॉलेट कनेक्ट करें", notconnected: "वॉलेट कनेक्ट नहीं है", buy: "टोकन खरीदें", about: "FreeDogeAI के बारे में", aboutdesc: "FreeDogeAI एक मीम टोकन है जो AI और Dogecoin की आत्मा को मिलाता है।", readwhite: "व्हाइटपेपर डाउनलोड करें", community: "हमारे समुदाय से जुड़ें:" } };
 
 document.getElementById("languageSelect").addEventListener("change", () => { const lang = document.getElementById("languageSelect").value; const t = translations[lang]; if (!t) return; document.getElementById("title").textContent = t.title; document.getElementById("connectBtn").textContent = t.connect; document.getElementById("walletAddress").textContent = t.notconnected; document.getElementById("buyBtn").textContent = t.buy; document.getElementById("about").textContent = t.about; document.getElementById("aboutText").textContent = t.aboutdesc; document.getElementById("whiteLink").textContent = t.readwhite; document.getElementById("communityText").textContent = t.community; });
+
+// CÜZDAN BAĞLANTI — TAM OTOMATİK
+
+document.getElementById("connectBtn").addEventListener("click", connectWallet);
+
+async function connectWallet() { try { const providerOptions = { walletconnect: { package: window.WalletConnectProvider.default, options: { rpc: { 56: "https://bsc-dataseed.binance.org/" }, chainId: 56, qrcodeModalOptions: { mobileLinks: ["metamask", "trust", "coinbase"] } } } };
+
+const web3Modal = new window.Web3Modal.default({
+  cacheProvider: false,
+  providerOptions,
+  theme: "dark"
+});
+
+const provider = await web3Modal.connect();
+web3 = new Web3(provider);
+
+const accounts = await provider.request({ method: "eth_requestAccounts" });
+if (!accounts || accounts.length === 0) {
+  alert("No wallet connected.");
+  return;
+}
+
+userAddress = accounts[0];
+document.getElementById("walletAddress").textContent = `Connected: ${userAddress}`;
+
+const balanceWei = await web3.eth.getBalance(userAddress);
+const balance = web3.utils.fromWei(balanceWei, "ether");
+document.getElementById("walletBalance").textContent = `BNB Balance: ${parseFloat(balance).toFixed(4)} BNB`;
+
+provider.on("accountsChanged", async (accounts) => {
+  userAddress = accounts[0];
+  const balance = await web3.eth.getBalance(userAddress);
+  document.getElementById("walletAddress").textContent = `Connected: ${userAddress}`;
+  document.getElementById("walletBalance").textContent = `BNB Balance: ${web3.utils.fromWei(balance, "ether")} BNB`;
+});
+
+provider.on("disconnect", () => {
+  userAddress = "";
+  document.getElementById("walletAddress").textContent = "Wallet disconnected.";
+  document.getElementById("walletBalance").textContent = "";
+});
+
+} catch (err) { console.error("Wallet connection error:", err); alert("Wallet connection failed: " + err.message); } }
 
