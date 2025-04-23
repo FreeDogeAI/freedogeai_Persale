@@ -10,7 +10,10 @@ const providerOptions = {
     package: window.WalletConnectProvider.default,
     options: {
       rpc: { 56: "https://bsc-dataseed.binance.org/" },
-      chainId: 56
+      chainId: 56,
+      qrcodeModalOptions: {
+        mobileLinks: ["metamask", "trust"]
+      }
     }
   }
 };
@@ -23,46 +26,49 @@ const web3Modal = new window.Web3Modal.default({
 
 connectBtn.addEventListener("click", async () => {
   try {
+    // Web3Modal ile cüzdan bağlantısı
     const provider = await web3Modal.connect();
     web3 = new Web3(provider);
 
-    const accounts = await web3.eth.getAccounts();
+    // Kullanıcı hesaplarını al
+    const accounts = await provider.request({ method: "eth_requestAccounts" });
     userAddress = accounts[0];
 
-    // --- İMZA ZORUNLU ---
+    // İmza işlemi
     const message = "Sign to verify connection with FreeDogeAI";
-    const hexMsg = web3.utils.utf8ToHex(message);
-
     let signature;
     try {
-      // 1. yöntem
+      // personal_sign yöntemi: [mesaj, hesap]
       signature = await provider.request({
         method: "personal_sign",
-        params: [hexMsg, userAddress]
+        params: [message, userAddress]
       });
-    } catch {
+    } catch (err) {
+      // Hata durumunda alternatif yöntem
       try {
-        // 2. yöntem (fallback)
         signature = await web3.eth.personal.sign(message, userAddress);
-      } catch (err) {
-        throw new Error("Signature was denied.");
+      } catch (signErr) {
+        throw new Error("Signature was denied or failed: " + signErr.message);
       }
     }
 
     if (!signature) throw new Error("Signature failed.");
 
+    // Cüzdan adresini ve bakiyeyi göster
     walletAddressEl.textContent = `Wallet: ${userAddress}`;
     const balance = web3.utils.fromWei(await web3.eth.getBalance(userAddress), "ether");
     walletBalanceEl.textContent = `Balance: ${parseFloat(balance).toFixed(4)} BNB`;
 
+    // Satın alma butonunu aktif et
     buyBtn.disabled = false;
 
   } catch (err) {
-    console.error(err);
+    console.error("Wallet connection failed:", err);
     alert("Wallet connection failed: " + err.message);
   }
 });
 
+// Mevcut satın alma işlemi (değişmeden kalıyor)
 buyBtn.addEventListener("click", async () => {
   if (!userAddress) return alert("Connect wallet first");
   const bnb = prompt("Enter amount of BNB:");
