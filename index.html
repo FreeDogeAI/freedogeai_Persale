@@ -1,56 +1,95 @@
-// script.js
-
-let web3; let userAddress = ""; const TOKEN_DROP_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; const MINIMUM_BNB = 0.035; const TOKENS_PER_BNB = 12500000;
-
-const providerOptions = { walletconnect: { package: window.WalletConnectProvider.default, options: { rpc: { 56: "https://bsc-dataseed.binance.org/" }, chainId: 56, qrcodeModalOptions: { mobileLinks: ["metamask", "trust", "coinbase"], }, }, }, };
-
-const web3Modal = new window.Web3Modal.default({ cacheProvider: false, providerOptions, theme: "dark", });
-
-const translations = { en: { title: "FreeDogeAI Token Presale", connect: "Connect Wallet", notconnected: "Wallet not connected", buy: "Buy Tokens", about: "About FreeDogeAI", aboutdesc: "FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.", readwhite: "Download Whitepaper", community: "Join our community:" }, tr: { title: "FreeDogeAI Token Ön Satışı", connect: "Cüzdanı Bağla", notconnected: "Cüzdan bağlı değil", buy: "Token Satın Al", about: "FreeDogeAI Hakkında", aboutdesc: "FreeDogeAI, Dogecoin ruhu ile yapay zekayı birleştiren mizahi bir tokendir.", readwhite: "Whitepaper'ı İndir", community: "Topluluğumuza katılın:" }, az: { title: "FreeDogeAI Token Əvvəl Satışı", connect: "Cüzdanı Bağla", notconnected: "Cüzdan bağlı deyil", buy: "Token Al", about: "FreeDogeAI Haqqında", aboutdesc: "FreeDogeAI Dogecoin ruhunu və süni intellekti birləşdirən zarafatlı bir tokendir.", readwhite: "Whitepaper Yüklə", community: "İcmamıza qoşulun:" }, ar: { title: "عرض ما قبل البيع FreeDogeAI", connect: "اتصل بالمحفظة", notconnected: "المحفظة غير متصلة", buy: "شراء الرموز", about: "حول FreeDogeAI", aboutdesc: "FreeDogeAI هو رمز يمزج بين Dogecoin والذكاء الاصطناعي.", readwhite: "تحميل المستند التقني", community: "انضم إلى مجتمعنا:" } };
-
-const langSelect = document.getElementById("languageSelect"); langSelect.addEventListener("change", () => { const lang = langSelect.value; const t = translations[lang]; if (!t) return;
-
-document.querySelector("h1").textContent = t.title; document.getElementById("connectBtn").textContent = t.connect; document.getElementById("walletAddress").textContent = t.notconnected; document.getElementById("buyBtn").textContent = t.buy; document.querySelector("h2").textContent = t.about; document.getElementById("aboutText").textContent = t.aboutdesc; document.getElementById("whiteLink").textContent = t.readwhite; document.getElementById("communityText").textContent = t.community; });
-
-// Cüzdan Bağla const connectBtn = document.getElementById("connectBtn"); connectBtn.addEventListener("click", async () => { try { const provider = await web3Modal.connect(); web3 = new Web3(provider);
-
-const accounts = await web3.eth.requestAccounts();
-userAddress = accounts[0];
-
-const balanceWei = await web3.eth.getBalance(userAddress);
-const balance = web3.utils.fromWei(balanceWei, "ether");
-
-document.getElementById("walletAddress").textContent = `Connected: ${userAddress}`;
-document.getElementById("walletBalance").textContent = `BNB Balance: ${parseFloat(balance).toFixed(4)} BNB`;
-
-const chainId = await web3.eth.getChainId();
-if (chainId !== 56) await switchToBSC(provider);
-
-} catch (err) { console.error("Connection failed:", err); alert("Wallet connection failed"); } });
-
-// BNB girilince token hesapla const bnbInput = document.getElementById("bnbAmount"); bnbInput.addEventListener("input", () => { const bnb = parseFloat(bnbInput.value); const amount = !isNaN(bnb) && bnb > 0 ? ${(bnb * TOKENS_PER_BNB).toLocaleString()} FDAI : "0 FDAI"; document.getElementById("tokenAmount").textContent = amount; });
-
-// Token Satın Al const buyBtn = document.getElementById("buyBtn"); buyBtn.addEventListener("click", async () => { try { if (!userAddress) return alert("Connect wallet first");
-
-const bnb = parseFloat(bnbInput.value);
-if (isNaN(bnb) || bnb < MINIMUM_BNB) return alert(`Minimum is ${MINIMUM_BNB} BNB`);
-
-const tx = {
-  from: userAddress,
-  to: TOKEN_DROP_ADDRESS,
-  value: web3.utils.toHex(web3.utils.toWei(bnb.toString(), "ether")),
-  gas: web3.utils.toHex(210000)
-};
-
-const txHash = await web3.currentProvider.request({
-  method: "eth_sendTransaction",
-  params: [tx],
-});
-
-alert("Transaction sent!\nHash: " + txHash);
-
-} catch (err) { console.error(err); alert("Transaction failed:\n" + err.message); } });
-
-// BSC'ye geçiş fonksiyonu async function switchToBSC(provider) { try { await provider.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x38" }] }); } catch (err) { if (err.code === 4902) { await provider.request({ method: "wallet_addEthereumChain", params: [{ chainId: "0x38", chainName: "Binance Smart Chain", rpcUrls: ["https://bsc-dataseed.binance.org/"], nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 }, blockExplorerUrls: ["https://bscscan.com"] }] }); } else { throw err; } } }
-
-  
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeDogeAI Token Presale</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #FFD700;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #FFD700;
+      margin: 20px 0;
+    }
+    input, select, button {
+      font-size: 16px;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+    input {
+      width: 200px;
+      background: #111;
+      color: #FFD700;
+      border: 2px solid #FFD700;
+    }
+    select {
+      background-color: #111;
+      color: #FFD700;
+      border: 1px solid #FFD700;
+    }
+    button {
+      background-color: #FFD700;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background-color: #e5c100;
+      transform: scale(1.05);
+    }
+    a {
+      color: #FFD700;
+      text-decoration: none;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
+  <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+  <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
+</head>
+<body>
+  <h1>FreeDogeAI Token Presale</h1>
+  <div>
+    <select id="languageSelect">
+      <option value="en">English</option>
+      <option value="tr">Türkçe</option>
+      <option value="az">Azərbaycan dili</option>
+      <option value="ar">العربية</option>
+      <option value="zh">中文</option>
+      <option value="ru">Русский</option>
+      <option value="ku">Kurdî (Kurmancî)</option>
+      <option value="ja">日本語</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="ur">اردو</option>
+      <option value="hi">हिन्दी</option>
+    </select>
+    <button id="connectBtn">Connect Wallet</button>
+  </div>
+  <p id="walletAddress">Wallet not connected</p>
+  <p id="walletBalance"></p>
+  <input type="number" id="bnbAmount" placeholder="Enter BNB">
+  <p id="tokenAmount">0 FDAI</p>
+  <button id="buyBtn">Buy Tokens</button>
+  <h2>About FreeDogeAI</h2>
+  <p id="aboutText">FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.</p>
+  <a href="whitepaper.pdf" download id="whiteLink">Download Whitepaper</a>
+  <footer>
+    <p id="communityText">Join our community:</p>
+    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
