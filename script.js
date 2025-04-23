@@ -1,16 +1,49 @@
-// script.js – Full Wallet + Dil + Satın Alma Sistemi
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeDogeAI - Open in Wallet</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #FFD700;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 15px 25px;
+      font-size: 18px;
+      background-color: #FFD700;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #e5c100;
+    }
+  </style>
+</head>
+<body>
+  <h1>Launch FreeDogeAI in Your Wallet</h1>
+  <p>This will open your wallet app with our presale page.</p>
+  <br />
+  <button onclick="openMetaMask()">Open in MetaMask</button>
+  <br /><br />
+  <button onclick="openTrustWallet()">Open in TrustWallet</button>  <script>
+    function openMetaMask() {
+      const url = "https://metamask.app.link/dapp/freedogeai.com";
+      window.location.href = url;
+    }
 
-let web3; let userAddress = ""; const TOKEN_DROP_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; const MINIMUM_BNB = 0.035; const TOKENS_PER_BNB = 12500000;
-
-// 12 dil çeviri const translations = { en: { title: "FreeDogeAI Token Presale", connect: "Connect Wallet", notconnected: "Wallet not connected", buy: "Buy Tokens", about: "About FreeDogeAI", aboutdesc: "FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.", readwhite: "Download Whitepaper", community: "Join our community:" }, tr: { title: "FreeDogeAI Token Ön Satışı", connect: "Cüzdanı Bağla", notconnected: "Cüzdan bağlı değil", buy: "Token Satın Al", about: "FreeDogeAI Hakkında", aboutdesc: "FreeDogeAI, Dogecoin ruhu ve yapay zekayı birleştiren mizahi bir tokendir.", readwhite: "Whitepaper'ı İndir", community: "Topluluğumuza katılın:" }, az: { title: "FreeDogeAI Token Əvvəl Satışı", connect: "Cüzdanı Əlavə Et", notconnected: "Cüzdan bağlı deyil", buy: "Token Al", about: "FreeDogeAI Haqqında", aboutdesc: "FreeDogeAI Dogecoin və AI trendini birləşdirən tokendir.", readwhite: "Whitepaper Yüklə", community: "İcmamıza qoşulun:" }, ar: { title: "عرض ما قبل البيع FreeDogeAI", connect: "اتصل بالمحفظة", notconnected: "المحفظة غير متصلة", buy: "شراء الرموز", about: "حول FreeDogeAI", aboutdesc: "FreeDogeAI هو رمز يمزج بين Dogecoin و AI.", readwhite: "تحميل المستند", community: "انضم إلى مجتمعنا:" }, zh: { title: "FreeDogeAI 代币预售", connect: "连接钱包", notconnected: "钱包未连接", buy: "购买代币", about: "关于 FreeDogeAI", aboutdesc: "FreeDogeAI 是结合 AI 与 Dogecoin 精神的 Meme 代币。", readwhite: "下载白皮书", community: "加入我们的社区：" }, ru: { title: "Предпродажа токена FreeDogeAI", connect: "Подключить кошелёк", notconnected: "Кошелёк не подключен", buy: "Купить токены", about: "О FreeDogeAI", aboutdesc: "FreeDogeAI — токен, объединяющий AI и Dogecoin.", readwhite: "Скачать Whitepaper", community: "Присоединяйтесь к нашему сообществу:" }, ku: { title: "Pêşfirotina FreeDogeAI", connect: "Girêdanê Bike", notconnected: "Wallet ne girêdayî ye", buy: "Token bikire", about: "Derbarê FreeDogeAI", aboutdesc: "FreeDogeAI tokenek e ku AI û Dogecoin tê de hebûn.", readwhite: "Whitepaper Daxîne", community: "Bi me re bibin:" }, ja: { title: "FreeDogeAI トークン先行販売", connect: "ウォレットを接続", notconnected: "ウォレットが未接続", buy: "トークン購入", about: "FreeDogeAIについて", aboutdesc: "FreeDogeAIはAIとDogecoinの精神を融合したミームトークンです。", readwhite: "ホワイトペーパーをダウンロード", community: "コミュニティに参加：" }, fr: { title: "Prévente de FreeDogeAI", connect: "Connecter le wallet", notconnected: "Wallet non connecté", buy: "Acheter des tokens", about: "À propos de FreeDogeAI", aboutdesc: "FreeDogeAI est un token combinant AI et Dogecoin.", readwhite: "Télécharger le Whitepaper", community: "Rejoignez notre communauté :" }, de: { title: "FreeDogeAI Token Vorverkauf", connect: "Wallet verbinden", notconnected: "Wallet nicht verbunden", buy: "Token kaufen", about: "Über FreeDogeAI", aboutdesc: "FreeDogeAI ist ein Meme-Token, der KI und Dogecoin vereint.", readwhite: "Whitepaper herunterladen", community: "Tritt unserer Community bei:" }, ur: { title: "FreeDogeAI ٹوکن پری سیل", connect: "والٹ کنیکٹ کریں", notconnected: "والٹ متصل نہیں ہے", buy: "ٹوکن خریدیں", about: "FreeDogeAI کے بارے میں", aboutdesc: "FreeDogeAI ایک meme token ہے جو AI اور Dogecoin کو ملاتا ہے۔", readwhite: "وائٹ پیپر ڈاؤن لوڈ کریں", community: "ہماری کمیونٹی میں شامل ہوں:" }, hi: { title: "FreeDogeAI टोकन प्रीसेल", connect: "वॉलेट कनेक्ट करें", notconnected: "वॉलेट कनेक्ट नहीं है", buy: "टोकन खरीदें", about: "FreeDogeAI के बारे में", aboutdesc: "FreeDogeAI एक मीम टोकन है जो AI और Dogecoin की आत्मा को मिलाता है।", readwhite: "वाइटपेपर डाउनलोड करें", community: "हमारे समुदाय से जुड़ें:" } };
-
-// Dilleri yükle const langSelect = document.getElementById("languageSelect"); Object.entries(translations).forEach(([code, t]) => { const opt = document.createElement("option"); opt.value = code; opt.textContent = code.toUpperCase(); langSelect.appendChild(opt); }); langSelect.addEventListener("change", () => { const t = translations[langSelect.value]; if (!t) return; document.getElementById("title").textContent = t.title; document.getElementById("connectBtn").textContent = t.connect; document.getElementById("walletAddress").textContent = t.notconnected; document.getElementById("buyBtn").textContent = t.buy; document.getElementById("about").textContent = t.about; document.getElementById("aboutText").textContent = t.aboutdesc; document.getElementById("whiteLink").textContent = t.readwhite; document.getElementById("communityText").textContent = t.community; });
-
-// Cüzdan bağla async function connectWallet() { try { const providerOptions = { walletconnect: { package: window.WalletConnectProvider.default, options: { rpc: { 56: "https://bsc-dataseed.binance.org/" }, chainId: 56 } } }; const web3Modal = new window.Web3Modal.default({ cacheProvider: false, providerOptions }); const provider = await web3Modal.connect(); web3 = new Web3(provider); const accounts = await provider.request({ method: "eth_requestAccounts" }); userAddress = accounts[0]; const balanceWei = await web3.eth.getBalance(userAddress); const balance = web3.utils.fromWei(balanceWei, "ether"); document.getElementById("walletAddress").textContent = Connected: ${userAddress}; document.getElementById("walletBalance").textContent = BNB Balance: ${parseFloat(balance).toFixed(4)} BNB; } catch (e) { alert("Wallet connection failed: " + e.message); } }
-
-document.getElementById("connectBtn").addEventListener("click", connectWallet);
-
-document.getElementById("bnbAmount").addEventListener("input", () => { const bnb = parseFloat(document.getElementById("bnbAmount").value); document.getElementById("tokenAmount").textContent = !isNaN(bnb) ? ${(bnb * TOKENS_PER_BNB).toLocaleString()} FDAI : "0 FDAI"; });
-
-document.getElementById("buyBtn").addEventListener("click", async () => { if (!userAddress) return alert("Connect wallet first."); const bnb = parseFloat(document.getElementById("bnbAmount").value); if (isNaN(bnb) || bnb < MINIMUM_BNB) return alert("Minimum is 0.035 BNB"); const tx = { from: userAddress, to: TOKEN_DROP_ADDRESS, value: web3.utils.toHex(web3.utils.toWei(bnb.toString(), "ether")), gas: web3.utils.toHex(210000) }; try { const txHash = await web3.currentProvider.request({ method: "eth_sendTransaction", params: [tx] }); alert("Transaction sent: " + txHash); } catch (err) { alert("Transaction failed: " + err.message); } });
-
+    function openTrustWallet() {
+      const url = "https://link.trustwallet.com/open_url?coin_id=20000714&url=https://freedogeai.com";
+      window.location.href = url;
+    }
+  </script></body>
+</html>
