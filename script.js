@@ -116,6 +116,29 @@ async function switchToBSC(provider) {
       });
     } else {
       throw err;
+      // Automatically injects 12 supported languages into the <select>
+const supportedLanguages = {
+  en: "English",
+  tr: "Türkçe",
+  az: "Azərbaycan dili",
+  ar: "العربية",
+  zh: "中文",
+  ru: "Русский",
+  ku: "Kurdî (Kurmancî)",
+  ja: "日本語",
+  fr: "Français",
+  de: "Deutsch",
+  ur: "اردو",
+  hi: "हिन्दी"
+};
+
+const langSelect = document.getElementById("languageSelect");
+Object.entries(supportedLanguages).forEach(([code, name]) => {
+  const opt = document.createElement("option");
+  opt.value = code;
+  opt.textContent = name;
+  langSelect.appendChild(opt);
+});
       const translations = {
   en: {
     title: "FreeDogeAI Token Presale",
