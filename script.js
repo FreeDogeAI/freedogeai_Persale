@@ -1,60 +1,30 @@
-<!DOCTYPE html><html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FreeDogeAI Token Presale</title>
-  <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
-  <style>
-    body {
-      background-color: #000;
-      color: #FFD700;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-    button {
-      padding: 12px 24px;
-      margin: 10px;
-      background-color: #FFD700;
-      color: #000;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    select, a {
-      margin-top: 10px;
-      display: inline-block;
-      color: #FFD700;
-      text-decoration: none;
-    }
-  </style>
-</head>
-<body>
-  <h1 id="title">FreeDogeAI Token Presale</h1><button onclick="connectViaMetaMask()">Connect with MetaMask</button> <button onclick="connectViaTrustWallet()">Connect with TrustWallet</button>
+const metaBtn = document.getElementById("connectMeta");
+const trustBtn = document.getElementById("connectTrust");
 
-  <p id="walletAddress">Wallet not connected</p>
-  <p id="walletBalance"></p>
-  <input type="number" id="bnbAmount" placeholder="Enter BNB" />
-  <p id="tokenAmount">0 FDAI</p>
-  <button id="buyBtn">Buy Tokens</button>  <h2 id="about">About FreeDogeAI</h2>
-  <p id="aboutText">FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.</p>
-  <a id="whiteLink" href="whitepaper.pdf" download>Download Whitepaper</a>  <footer>
-    <p id="communityText">Join our community:</p>
-    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
-    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
-  </footer>  <script>
-    const connectViaMetaMask = () => {
-      window.location.href = "https://metamask.app.link/dapp/freedogeai.github.io";
-    };
+metaBtn.addEventListener("click", () => {
+  const deepLink = "metamask://dapp/freedogeai.github.io/freedogeai_Persale/";
+  window.location.href = deepLink;
+});
 
-    const connectViaTrustWallet = () => {
-      window.location.href = "https://link.trustwallet.com/open_url?coin_id=20000714&url=https://freedogeai.github.io";
-    };
+trustBtn.addEventListener("click", () => {
+  const deepLink = "trust://browser_enable?url=https://freedogeai.github.io/freedogeai_Persale/";
+  window.location.href = deepLink;
+});
 
-    document.getElementById("bnbAmount").addEventListener("input", () => {
-      const bnb = parseFloat(document.getElementById("bnbAmount").value);
-      document.getElementById("tokenAmount").textContent = !isNaN(bnb) && bnb > 0 ? `${(bnb * 12500000).toLocaleString()} FDAI` : "0 FDAI";
-    });
-  </script></body>
-</html>
+// Cüzdan bağlıysa adres ve bakiye göster
+window.addEventListener("load", async () => {
+  if (typeof window.ethereum !== "undefined") {
+    try {
+      const web3 = new Web3(window.ethereum);
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+      const userAddress = accounts[0];
+      document.getElementById("walletAddress").textContent = `Connected: ${userAddress}`;
+      
+      const balanceWei = await web3.eth.getBalance(userAddress);
+      const balance = web3.utils.fromWei(balanceWei, "ether");
+      document.getElementById("walletBalance").textContent = `BNB Balance: ${parseFloat(balance).toFixed(4)} BNB`;
+    } catch (err) {
+      console.error("Wallet error:", err);
+    }
+  }
+});
