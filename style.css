@@ -1,28 +1,29 @@
-/* Genel zemin ve font ayarları */
+/* Body - dark background, golden text */
 body {
   background-color: #000000;
   color: #FFD700;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 20px;
   text-align: center;
 }
 
-/* Başlıklar */
+/* Headings */
 h1, h2 {
   color: #FFD700;
   margin-bottom: 20px;
   animation: fadeIn 1s ease-in-out;
 }
 
-/* Paragraflar */
+/* Paragraphs */
 p {
   color: #FFD700;
   font-size: 16px;
+  margin: 10px 0;
   animation: fadeIn 1s ease-in-out;
 }
 
-/* Input alanları */
+/* Input fields */
 input[type="number"] {
   padding: 12px;
   font-size: 16px;
@@ -35,7 +36,7 @@ input[type="number"] {
   animation: fadeIn 1s ease-in-out;
 }
 
-/* Butonlar */
+/* Buttons */
 button {
   background-color: #FFD700;
   color: #000000;
@@ -64,7 +65,7 @@ select {
   margin-left: 10px;
 }
 
-/* Linkler */
+/* Links */
 a {
   color: #FFD700;
   text-decoration: none;
@@ -74,14 +75,14 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Footer metni */
+/* Footer */
 footer p {
   font-size: 14px;
   opacity: 0.8;
   margin-top: 40px;
 }
 
-/* Animasyon */
+/* Animation */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
