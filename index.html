@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreeDogeAI Presale</title>
+  <title>FreeDogeAI Token Presale</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
   <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
@@ -11,19 +10,43 @@
     body {
       background-color: #000;
       color: #FFD700;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       text-align: center;
       padding: 20px;
+      margin: 0;
+    }
+    h1, h2 {
+      margin: 20px 0;
     }
     input, select, button {
       margin: 10px;
-      padding: 10px;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    input, select {
+      background: #111;
+      color: #FFD700;
+      border: 1px solid #FFD700;
     }
     button {
       background-color: #FFD700;
       color: #000;
       font-weight: bold;
+      border: none;
       cursor: pointer;
+    }
+    button:hover {
+      background-color: #e5c100;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    a {
+      color: #FFD700;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -39,11 +62,11 @@
   <h2 id="about">About FreeDogeAI</h2>
   <p id="aboutText">FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.</p>
   <a id="whiteLink" href="whitepaper.pdf" download>Download Whitepaper</a>
-  <p id="communityText">Join our community:</p>
-  <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
-  <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter</a>
-
-  <script>
+  <footer>
+    <p id="communityText">Join our community for updates:</p>
+    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter</a>
+  </footer>  <script>
     let web3;
     let userAddress = "";
     const TOKEN_DROP_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
@@ -118,6 +141,5 @@
       const txHash = await web3.currentProvider.request({ method: "eth_sendTransaction", params: [tx] });
       alert("Transaction sent: " + txHash);
     });
-  </script>
-</body>
+  </script></body>
 </html>
