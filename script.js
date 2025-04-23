@@ -1,13 +1,12 @@
-let web3;
-let userAddress = "";
+let web3, userAddress = "";
 const TOKEN_DROP_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
 const MINIMUM_BNB = 0.035;
 const TOKENS_PER_BNB = 12500000;
 
-// DİL ÇEVİRİLERİ
+// 12 DİL ÇEVİRİLERİ
 const translations = {
   en: { title: "FreeDogeAI Token Presale", connect: "Connect Wallet", notconnected: "Wallet not connected", buy: "Buy Tokens", about: "About FreeDogeAI", aboutdesc: "FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.", readwhite: "Download Whitepaper", community: "Join our community:" },
-  tr: { title: "FreeDogeAI Token Ön Satışı", connect: "Cüzdanı Bağla", notconnected: "Cüzdan bağlı değil", buy: "Token Satın Al", about: "FreeDogeAI Hakkında", aboutdesc: "FreeDogeAI, Dogecoin ruhu ve yapay zekayı birleştiren mizahi bir tokendir.", readwhite: "Whitepaper'ı İndir", community: "Topluluğumuza katılın:" },
+  tr: { title: "FreeDogeAI Token Ön Satışı", connect: "Cüzdanı Bağla", notconnected: "Cüzdan bağlı değil", buy: "Token Satın Al", about: "FreeDogeAI Hakkında", aboutdesc: "FreeDogeAI, Dogecoin ruhunu ve yapay zekayı birleştiren mizahi bir tokendir.", readwhite: "Whitepaper'ı İndir", community: "Topluluğumuza katılın:" },
   az: { title: "FreeDogeAI Token Əvvəl Satışı", connect: "Cüzdanı Bağla", notconnected: "Cüzdan bağlı deyil", buy: "Token Al", about: "FreeDogeAI Haqqında", aboutdesc: "FreeDogeAI Dogecoin ruhunu və süni intellekti birləşdirən zarafatlı bir tokendir.", readwhite: "Whitepaper Yüklə", community: "İcmamıza qoşulun:" },
   ar: { title: "عرض ما قبل البيع FreeDogeAI", connect: "اتصل بالمحفظة", notconnected: "المحفظة غير متصلة", buy: "شراء الرموز", about: "حول FreeDogeAI", aboutdesc: "FreeDogeAI هو رمز يمزج بين Dogecoin والذكاء الاصطناعي.", readwhite: "تحميل الوثيقة", community: "انضم إلى مجتمعنا:" },
   zh: { title: "FreeDogeAI 代币预售", connect: "连接钱包", notconnected: "钱包未连接", buy: "购买代币", about: "关于 FreeDogeAI", aboutdesc: "FreeDogeAI 是结合 AI 热潮与狗狗币精神的 Meme 代币。", readwhite: "下载白皮书", community: "加入我们的社区：" },
@@ -20,7 +19,7 @@ const translations = {
   hi: { title: "FreeDogeAI टोकन प्रीसेल", connect: "वॉलेट कनेक्ट करें", notconnected: "वॉलेट कनेक्ट नहीं है", buy: "टोकन खरीदें", about: "FreeDogeAI के बारे में", aboutdesc: "FreeDogeAI एक मीम टोकन है जो AI और Dogecoin की आत्मा को मिलाता है।", readwhite: "व्हाइटपेपर डाउनलोड करें", community: "हमारे समुदाय से जुड़ें:" }
 };
 
-// Dil Değiştir
+// Dil değiştirme
 document.getElementById("languageSelect").addEventListener("change", () => {
   const lang = document.getElementById("languageSelect").value;
   const t = translations[lang];
@@ -35,7 +34,7 @@ document.getElementById("languageSelect").addEventListener("change", () => {
   document.getElementById("communityText").textContent = t.community;
 });
 
-// WalletConnect Ayarları
+// WalletConnect + MetaMask
 const providerOptions = {
   walletconnect: {
     package: window.WalletConnectProvider.default,
@@ -52,39 +51,40 @@ const web3Modal = new window.Web3Modal.default({
   theme: "dark"
 });
 
-// Cüzdan Bağla
+// Cüzdan bağla
 document.getElementById("connectBtn").addEventListener("click", async () => {
   try {
     const provider = await web3Modal.connect();
     web3 = new Web3(provider);
     const accounts = await provider.request({ method: "eth_requestAccounts" });
     userAddress = accounts[0];
+
     const balanceWei = await web3.eth.getBalance(userAddress);
     const balance = web3.utils.fromWei(balanceWei, "ether");
 
     document.getElementById("walletAddress").textContent = `Connected: ${userAddress}`;
     document.getElementById("walletBalance").textContent = `BNB Balance: ${parseFloat(balance).toFixed(4)} BNB`;
   } catch (err) {
-    alert("Wallet connection failed");
+    alert("Connection failed");
     console.error(err);
   }
 });
 
-// BNB girince FDAI hesapla
+// BNB → FDAI hesapla
 document.getElementById("bnbAmount").addEventListener("input", () => {
   const bnb = parseFloat(document.getElementById("bnbAmount").value);
-  const amount = !isNaN(bnb) && bnb > 0 ? `${(bnb * TOKENS_PER_BNB).toLocaleString()} FDAI` : "0 FDAI";
-  document.getElementById("tokenAmount").textContent = amount;
+  const tokenAmount = !isNaN(bnb) && bnb > 0 ? `${(bnb * TOKENS_PER_BNB).toLocaleString()} FDAI` : "0 FDAI";
+  document.getElementById("tokenAmount").textContent = tokenAmount;
 });
 
-// Token Satın Al
+// Satın Al
 document.getElementById("buyBtn").addEventListener("click", async () => {
   try {
     if (!userAddress) return alert("Connect your wallet first.");
     const bnb = parseFloat(document.getElementById("bnbAmount").value);
     if (isNaN(bnb) || bnb < MINIMUM_BNB) return alert(`Minimum is ${MINIMUM_BNB} BNB`);
 
-    const txParams = {
+    const tx = {
       from: userAddress,
       to: TOKEN_DROP_ADDRESS,
       value: web3.utils.toHex(web3.utils.toWei(bnb.toString(), "ether")),
@@ -93,12 +93,12 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
 
     const txHash = await web3.currentProvider.request({
       method: "eth_sendTransaction",
-      params: [txParams]
+      params: [tx]
     });
 
     alert("Transaction sent!\nTx Hash: " + txHash);
   } catch (err) {
-    console.error("Transaction error:", err);
-    alert(err.message);
+    if (err.code === 4001) alert("Transaction rejected.");
+    else alert("Transaction failed: " + err.message);
   }
 });
