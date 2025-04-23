@@ -26,44 +26,47 @@ const web3Modal = new window.Web3Modal.default({
 
 connectBtn.addEventListener("click", async () => {
   try {
-    // Web3Modal ile cüzdan bağlantısı
+    console.log("1. Web3Modal ile bağlantı başlatılıyor...");
     const provider = await web3Modal.connect();
-    web3 = new Web3(provider);
+    console.log("2. Provider alındı:", provider);
 
-    // Kullanıcı hesaplarını al
+    web3 = new Web3(provider);
+    console.log("3. Web3 instance oluşturuldu.");
+
+    console.log("4. Kullanıcı hesapları isteniyor...");
     const accounts = await provider.request({ method: "eth_requestAccounts" });
     userAddress = accounts[0];
+    console.log("5. Kullanıcı adresi alındı:", userAddress);
 
     // İmza işlemi
     const message = "Sign to verify connection with FreeDogeAI";
+    console.log("6. İmza işlemi başlatılıyor, mesaj:", message);
+
     let signature;
     try {
-      // personal_sign yöntemi: [mesaj, hesap]
+      // MetaMask ve WalletConnect için en uyumlu yöntem: personal_sign
       signature = await provider.request({
         method: "personal_sign",
-        params: [message, userAddress]
+        params: [message, userAddress] // Mesaj önce, adres sonra
       });
+      console.log("7. İmza başarılı:", signature);
     } catch (err) {
-      // Hata durumunda alternatif yöntem
-      try {
-        signature = await web3.eth.personal.sign(message, userAddress);
-      } catch (signErr) {
-        throw new Error("Signature was denied or failed: " + signErr.message);
-      }
+      console.error("İmza hatası:", err);
+      throw new Error("Signature failed: " + err.message);
     }
-
-    if (!signature) throw new Error("Signature failed.");
 
     // Cüzdan adresini ve bakiyeyi göster
     walletAddressEl.textContent = `Wallet: ${userAddress}`;
     const balance = web3.utils.fromWei(await web3.eth.getBalance(userAddress), "ether");
     walletBalanceEl.textContent = `Balance: ${parseFloat(balance).toFixed(4)} BNB`;
+    console.log("8. Adres ve bakiye gösterildi.");
 
     // Satın alma butonunu aktif et
     buyBtn.disabled = false;
+    console.log("9. Satın alma butonu aktif edildi.");
 
   } catch (err) {
-    console.error("Wallet connection failed:", err);
+    console.error("Bağlantı veya imza hatası:", err);
     alert("Wallet connection failed: " + err.message);
   }
 });
