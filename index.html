@@ -1,63 +1,93 @@
-
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Token Presale</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
   <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
   <style>
-    body { background-color: #000; color: #FFD700; font-family: sans-serif; text-align: center; margin: 0; padding: 20px; }
-    h1, h2 { margin: 20px 0; }
-    input, select, button { font-size: 16px; padding: 10px; margin: 10px; border-radius: 6px; }
-    input { width: 200px; background: #111; color: #FFD700; border: 2px solid #FFD700; }
-    select { background-color: #111; color: #FFD700; border: 1px solid #FFD700; }
-    button { background-color: #FFD700; color: #000; font-weight: bold; cursor: pointer; }
-    button:hover { background-color: #e5c100; transform: scale(1.05); }
-    a { color: #FFD700; text-decoration: none; }
-    footer { margin-top: 40px; font-size: 14px; }
+    body {
+      background-color: #000;
+      color: #FFD700;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    button {
+      padding: 12px 24px;
+      margin: 10px;
+      background-color: #FFD700;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    select, a {
+      margin-top: 10px;
+      display: inline-block;
+      color: #FFD700;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
   <h1 id="title">FreeDogeAI Token Presale</h1>
-
-  <div>
-    <select id="languageSelect">
-      <option value="en">English</option>
-      <option value="tr">Türkçe</option>
-      <option value="az">Azərbaycan dili</option>
-      <option value="ar">العربية</option>
-      <option value="zh">中文</option>
-      <option value="ru">Русский</option>
-      <option value="ku">Kurdî (Kurmancî)</option>
-      <option value="ja">日本語</option>
-      <option value="fr">Français</option>
-      <option value="de">Deutsch</option>
-      <option value="ur">اردو</option>
-      <option value="hi">हिन्दी</option>
-    </select>
-    <button id="connectBtn">Connect Wallet</button>
-  </div>
-
+  <button id="connectBtn">Connect Wallet</button>
   <p id="walletAddress">Wallet not connected</p>
   <p id="walletBalance"></p>
-
   <input type="number" id="bnbAmount" placeholder="Enter BNB" />
   <p id="tokenAmount">0 FDAI</p>
-  <button id="buyBtn">Buy Tokens</button>
-
-  <h2 id="about">About FreeDogeAI</h2>
+  <button id="buyBtn">Buy Tokens</button>  <h2 id="about">About FreeDogeAI</h2>
   <p id="aboutText">FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.</p>
-  <a href="whitepaper.pdf" download id="whiteLink">Download Whitepaper</a>
-
-  <footer>
+  <a id="whiteLink" href="whitepaper.pdf" download>Download Whitepaper</a>  <footer>
     <p id="communityText">Join our community:</p>
     <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
     <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
-  </footer>
+  </footer>  <script>
+    let web3;
+    let userAddress = "";
 
-  <script src="script.js"></script>
-</body>
+    const providerOptions = {
+      walletconnect: {
+        package: window.WalletConnectProvider.default,
+        options: {
+          rpc: { 56: "https://bsc-dataseed.binance.org/" },
+          chainId: 56,
+          qrcodeModalOptions: {
+            mobileLinks: ["metamask", "trust"]
+          }
+        }
+      }
+    };
+
+    const web3Modal = new window.Web3Modal.default({
+      cacheProvider: false,
+      providerOptions,
+      theme: "dark"
+    });
+
+    document.getElementById("connectBtn").addEventListener("click", async () => {
+      try {
+        const provider = await web3Modal.connect();
+        web3 = new Web3(provider);
+
+        const accounts = await provider.request({ method: "eth_requestAccounts" });
+        userAddress = accounts[0];
+
+        const message = "FreeDogeAI - Wallet Connection Verification";
+        await web3.eth.personal.sign(message, userAddress);
+
+        document.getElementById("walletAddress").textContent = `Connected: ${userAddress}`;
+        const balanceWei = await web3.eth.getBalance(userAddress);
+        const balance = web3.utils.fromWei(balanceWei, "ether");
+        document.getElementById("walletBalance").textContent = `BNB Balance: ${parseFloat(balance).toFixed(4)} BNB`;
+
+      } catch (err) {
+        console.error("Connection failed:", err);
+        alert("Wallet connection failed: " + err.message);
+      }
+    });
+  </script></body>
 </html>
