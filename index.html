@@ -1,49 +1,63 @@
-<!DOCTYPE html><html lang="en">
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FreeDogeAI - Open in Wallet</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeDogeAI Token Presale</title>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
+  <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+  <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
   <style>
-    body {
-      background-color: #000;
-      color: #FFD700;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-    }
-    h1 {
-      margin-bottom: 20px;
-    }
-    button {
-      padding: 15px 25px;
-      font-size: 18px;
-      background-color: #FFD700;
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background-color: #e5c100;
-    }
+    body { background-color: #000; color: #FFD700; font-family: sans-serif; text-align: center; margin: 0; padding: 20px; }
+    h1, h2 { margin: 20px 0; }
+    input, select, button { font-size: 16px; padding: 10px; margin: 10px; border-radius: 6px; }
+    input { width: 200px; background: #111; color: #FFD700; border: 2px solid #FFD700; }
+    select { background-color: #111; color: #FFD700; border: 1px solid #FFD700; }
+    button { background-color: #FFD700; color: #000; font-weight: bold; cursor: pointer; }
+    button:hover { background-color: #e5c100; transform: scale(1.05); }
+    a { color: #FFD700; text-decoration: none; }
+    footer { margin-top: 40px; font-size: 14px; }
   </style>
 </head>
 <body>
-  <h1>Launch FreeDogeAI in Your Wallet</h1>
-  <p>This will open your wallet app with our presale page.</p>
-  <br />
-  <button onclick="openMetaMask()">Open in MetaMask</button>
-  <br /><br />
-  <button onclick="openTrustWallet()">Open in TrustWallet</button>  <script>
-    function openMetaMask() {
-      const url = "https://metamask.app.link/dapp/freedogeai.com";
-      window.location.href = url;
-    }
+  <h1 id="title">FreeDogeAI Token Presale</h1>
 
-    function openTrustWallet() {
-      const url = "https://link.trustwallet.com/open_url?coin_id=20000714&url=https://freedogeai.com";
-      window.location.href = url;
-    }
-  </script></body>
+  <div>
+    <select id="languageSelect">
+      <option value="en">English</option>
+      <option value="tr">Türkçe</option>
+      <option value="az">Azərbaycan dili</option>
+      <option value="ar">العربية</option>
+      <option value="zh">中文</option>
+      <option value="ru">Русский</option>
+      <option value="ku">Kurdî (Kurmancî)</option>
+      <option value="ja">日本語</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="ur">اردو</option>
+      <option value="hi">हिन्दी</option>
+    </select>
+    <button id="connectBtn">Connect Wallet</button>
+  </div>
+
+  <p id="walletAddress">Wallet not connected</p>
+  <p id="walletBalance"></p>
+
+  <input type="number" id="bnbAmount" placeholder="Enter BNB" />
+  <p id="tokenAmount">0 FDAI</p>
+  <button id="buyBtn">Buy Tokens</button>
+
+  <h2 id="about">About FreeDogeAI</h2>
+  <p id="aboutText">FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.</p>
+  <a href="whitepaper.pdf" download id="whiteLink">Download Whitepaper</a>
+
+  <footer>
+    <p id="communityText">Join our community:</p>
+    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
 </html>
