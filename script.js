@@ -1,16 +1,39 @@
-// Cüzdan adresini göster
-    walletAddressSpan.innerText = account;
 
-    // BNB bakiyesi göster
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const balanceWei = await provider.getBalance(account);
-    const balanceBnb = ethers.utils.formatEther(balanceWei);
+```javascript
+const connectWalletBtn = document.getElementById("connectWalletBtn");
+const walletAddressSpan = document.getElementById("walletAddress");
+const walletBalanceSpan = document.getElementById("walletBalance");
 
-    walletBalanceSpan.innerText = balanceBnb;
-
-  } catch (error) {
-    console.error("Hata:", error);
-    alert("Bağlantı ya da imza reddedildi.");
+connectWalletBtn.addEventListener("click", async () => {
+  if (typeof window.ethereum === "undefined") {
+    alert("Metamask yüklü değil knk!");
+    return;
   }
-});
-```
+
+  try {
+    // BSC'ye bağlanmak için ağ değiştirme (Eğer BSC ağında değilsen)
+    await window.ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [{
+        chainId: '0x38', // Binance Smart Chain Mainnet (0x38 == 56 decimal)
+        chainName: 'Binance Smart Chain',
+        nativeCurrency: {
+          name: 'BNB',
+          symbol: 'BNB',
+          decimals: 18
+        },
+        rpcUrls: ['https://bsc-dataseed.binance.org/'],
+        blockExplorerUrls: ['https://bscscan.com']
+      }]
+    });
+
+    // Cüzdan bağlama
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    const account = accounts[0];
+
+    // İmza alma
+    const message = "FDAI sitesine giriş yapmak için imza veriyorsunuz.";
+    await ethereum.request({
+      method: "personal_sign",
+      params: [message, account]
+    });
