@@ -2,46 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FreeDogeAI Token Presale</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <!-- Web3 Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
   <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
   <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
-</head>
-<body>
-  <header>
-    <h1 data-i18n="title">FreeDogeAI Token Presale</h1>
-    <div>
-      <select id="languageSelect">
-        <option value="en">English</option>
-        <option value="tr">Türkçe</option>
-        <option value="az">Azərbaycan dili</option>
-        <option value="ar">العربية</option>
-      </select>
-      <button id="connectBtn" data-i18n="connect">Connect Wallet</button>
-    </div>
-    <p id="walletAddress" data-i18n="notconnected">Wallet not connected</p>
-    <p id="walletBalance"></p>
-  </header>
 
-  <main>
-    <input type="number" id="bnbAmount" placeholder="Enter BNB" />
-    <p id="tokenAmount">0 FDAI</p>
-    <button id="buyBtn" data-i18n="buy">Buy Tokens</button>
-    <h2 data-i18n="about">About FreeDogeAI</h2>
-    <p data-i18n="aboutdesc">
-      FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.
-    </p>
-    <a href="whitepaper.pdf" download data-i18n="readwhite">Download Whitepaper</a>
-  </main>
+  <!-- Gömülü CSS -->
+  <style>
+    body {
+      background-color: #000000;
+      color: #FFD700;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1, h2 {
+      color: #FFD700;
+      margin: 20px 0;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    p {
+      color: #FFD700;
+      margin: 10px 0;
+    }
+
+    input[type="number"] {
+      padding: 12px;
+      font-size: 16px;
+      background-color: #111;
+      color: #FFD700;
+      border: 2px solid #FFD700;
+      border-radius: 6px;
+      margin-top: 10px;
+      width: 250px;
+      outline: none;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      background-color: #FFD700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e5c100;
+      transform: scale(1.05);
+    }
+
+    select {
+      margin-left: 10px;
+      padding: 6px;
+      background-color: #111;
+      color: #FFD700;
+      border: 1px solid #FFD700;
+      border-radius: 4px;
+    }
+
+    a {
+      color: #FFD700;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>FreeDogeAI Token Presale</h1>
+
+  <div>
+    <select id="languageSelect">
+      <option value="en">English</option>
+      <option value="tr">Türkçe</option>
+      <option value="az">Azərbaycan dili</option>
+      <option value="ar">العربية</option>
+    </select>
+    <button id="connectBtn">Connect Wallet</button>
+  </div>
+
+  <p id="walletAddress">Wallet not connected</p>
+  <p id="walletBalance"></p>
+
+  <input type="number" id="bnbAmount" placeholder="Enter BNB"/>
+  <p id="tokenAmount">0 FDAI</p>
+  <button id="buyBtn">Buy Tokens</button>
+
+  <h2>About FreeDogeAI</h2>
+  <p>FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.</p>
+  <a href="whitepaper.pdf" download>Download Whitepaper</a>
 
   <footer>
-    <p data-i18n="community">Join our community for updates</p>
+    <p>Join our community:</p>
     <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
     <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
   </footer>
 
+  <!-- Script -->
   <script>
     let web3, userAddress = "";
     const TOKENS_PER_BNB = 12500000;
@@ -54,6 +136,9 @@
         options: {
           rpc: { 56: "https://bsc-dataseed.binance.org/" },
           chainId: 56,
+          qrcodeModalOptions: {
+            mobileLinks: ["metamask", "trust", "coinbase"],
+          },
         },
       },
     };
@@ -69,32 +154,33 @@
         const provider = await web3Modal.connect();
         web3 = new Web3(provider);
 
-        const accounts = await web3.eth.getAccounts();
+        const accounts = await web3.eth.requestAccounts();
         userAddress = accounts[0];
-        document.getElementById("walletAddress").textContent = `Connected: ${userAddress}`;
-
         const balanceWei = await web3.eth.getBalance(userAddress);
         const balance = web3.utils.fromWei(balanceWei, "ether");
+
+        document.getElementById("walletAddress").textContent = `Connected: ${userAddress}`;
         document.getElementById("walletBalance").textContent = `BNB Balance: ${parseFloat(balance).toFixed(4)} BNB`;
 
         const chainId = await web3.eth.getChainId();
-        if (chainId !== 56) {
-          await switchToBSC(provider);
-        }
+        if (chainId !== 56) await switchToBSC(provider);
 
         provider.on("accountsChanged", (accounts) => {
-          userAddress = accounts.length > 0 ? accounts[0] : "";
-          document.getElementById("walletAddress").textContent = userAddress ? `Connected: ${userAddress}` : "Wallet disconnected.";
+          userAddress = accounts[0] || "";
+          document.getElementById("walletAddress").textContent = userAddress
+            ? "Connected: " + userAddress
+            : "Wallet disconnected";
         });
 
         provider.on("disconnect", () => {
           userAddress = "";
-          document.getElementById("walletAddress").textContent = "Wallet disconnected.";
+          document.getElementById("walletAddress").textContent = "Wallet disconnected";
+          document.getElementById("walletBalance").textContent = "";
         });
 
-      } catch (error) {
-        console.error("Connection error:", error);
-        alert("Wallet connection failed.");
+      } catch (err) {
+        console.error("Connection failed:", err);
+        alert("Wallet connection failed");
       }
     });
 
@@ -111,25 +197,22 @@
         const bnb = parseFloat(document.getElementById("bnbAmount").value);
         if (isNaN(bnb) || bnb < MINIMUM_BNB) return alert(`Minimum is ${MINIMUM_BNB} BNB`);
 
-        const value = web3.utils.toHex(web3.utils.toWei(bnb.toString(), "ether"));
-
         const tx = {
           from: userAddress,
           to: TOKEN_DROP_ADDRESS,
-          value: value,
+          value: web3.utils.toHex(web3.utils.toWei(bnb.toString(), "ether")),
           gas: web3.utils.toHex(210000),
         };
 
-        const txHash = await window.ethereum.request({
+        const txHash = await web3.currentProvider.request({
           method: "eth_sendTransaction",
           params: [tx],
         });
 
-        alert("Transaction sent! Hash:\n" + txHash);
-
-      } catch (error) {
-        console.error(error);
-        alert("Transaction failed: " + error.message);
+        alert("Transaction sent!\nHash: " + txHash);
+      } catch (err) {
+        console.error(err);
+        alert("Transaction failed:\n" + err.message);
       }
     });
 
@@ -139,8 +222,8 @@
           method: "wallet_switchEthereumChain",
           params: [{ chainId: "0x38" }],
         });
-      } catch (error) {
-        if (error.code === 4902) {
+      } catch (err) {
+        if (err.code === 4902) {
           await provider.request({
             method: "wallet_addEthereumChain",
             params: [{
@@ -152,63 +235,10 @@
             }],
           });
         } else {
-          throw error;
+          throw err;
         }
       }
     }
-
-    const translations = {
-      en: {
-        title: "FreeDogeAI Token Presale",
-        connect: "Connect Wallet",
-        notconnected: "Wallet not connected",
-        buy: "Buy Tokens",
-        about: "About FreeDogeAI",
-        aboutdesc: "FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.",
-        readwhite: "Download Whitepaper",
-        community: "Join our community for updates",
-      },
-      tr: {
-        title: "FreeDogeAI Token Ön Satışı",
-        connect: "Cüzdanı Bağla",
-        notconnected: "Cüzdan bağlı değil",
-        buy: "Token Satın Al",
-        about: "FreeDogeAI Hakkında",
-        aboutdesc: "FreeDogeAI, Dogecoin ruhu ve yapay zeka hype'ını birleştiren mizahi bir tokendir.",
-        readwhite: "Whitepaper'ı İndir",
-        community: "Topluluğumuza katılın",
-      },
-      az: {
-        title: "FreeDogeAI Token Əvvəl Satışı",
-        connect: "Cüzdanı Bağla",
-        notconnected: "Cüzdan bağlı deyil",
-        buy: "Token Al",
-        about: "FreeDogeAI Haqqında",
-        aboutdesc: "FreeDogeAI Dogecoin ruhunu və süni intellekt trendini birləşdirən zarafatlı bir tokendir.",
-        readwhite: "Whitepaper Yüklə",
-        community: "Yeniləmələr üçün icmamıza qoşulun",
-      },
-      ar: {
-        title: "عرض ما قبل البيع FreeDogeAI",
-        connect: "اتصل بالمحفظة",
-        notconnected: "المحفظة غير متصلة",
-        buy: "شراء الرموز",
-        about: "حول FreeDogeAI",
-        aboutdesc: "FreeDogeAI هو رمز يمزج بين الذكاء الاصطناعي و Dogecoin.",
-        readwhite: "تحميل المستند التقني",
-        community: "انضم إلى مجتمعنا للتحديثات",
-      },
-    };
-
-    document.getElementById("languageSelect").addEventListener("change", () => {
-      const lang = document.getElementById("languageSelect").value;
-      document.querySelectorAll("[data-i18n]").forEach((el) => {
-        const key = el.getAttribute("data-i18n");
-        if (translations[lang] && translations[lang][key]) {
-          el.textContent = translations[lang][key];
-        }
-      });
-    });
   </script>
 </body>
 </html>
