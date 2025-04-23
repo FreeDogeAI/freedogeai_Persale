@@ -4,8 +4,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Token Presale</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
-  <script src="https://unpkg.com/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-  <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
   <style>
     body {
       background-color: #000;
@@ -33,7 +31,7 @@
   </style>
 </head>
 <body>
-  <h1 id="title">FreeDogeAI Token Presale</h1><button onclick="window.location.href='https://metamask.app.link/dapp/freedogeai.github.io'">Connect with MetaMask</button> <button onclick="window.location.href='https://link.trustwallet.com/open_url?coin_id=20000714&url=https://freedogeai.github.io'">Connect with TrustWallet</button>
+  <h1 id="title">FreeDogeAI Token Presale</h1><button onclick="connectViaMetaMask()">Connect with MetaMask</button> <button onclick="connectViaTrustWallet()">Connect with TrustWallet</button>
 
   <p id="walletAddress">Wallet not connected</p>
   <p id="walletBalance"></p>
@@ -46,27 +44,13 @@
     <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
     <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
   </footer>  <script>
-    let web3;
-    let userAddress = "";
-
-    const providerOptions = {
-      walletconnect: {
-        package: window.WalletConnectProvider.default,
-        options: {
-          rpc: { 56: "https://bsc-dataseed.binance.org/" },
-          chainId: 56,
-          qrcodeModalOptions: {
-            mobileLinks: ["metamask", "trust"]
-          }
-        }
-      }
+    const connectViaMetaMask = () => {
+      window.location.href = "https://metamask.app.link/dapp/freedogeai.github.io";
     };
 
-    const web3Modal = new window.Web3Modal.default({
-      cacheProvider: false,
-      providerOptions,
-      theme: "dark"
-    });
+    const connectViaTrustWallet = () => {
+      window.location.href = "https://link.trustwallet.com/open_url?coin_id=20000714&url=https://freedogeai.github.io";
+    };
 
     document.getElementById("bnbAmount").addEventListener("input", () => {
       const bnb = parseFloat(document.getElementById("bnbAmount").value);
