@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,33 +12,57 @@
       text-align: center;
       padding: 20px;
     }
-    h1 { margin-bottom: 10px; }
-    p { margin: 10px 0; }
     button {
-      padding: 12px 20px;
+      padding: 12px 24px;
       margin: 10px;
       background-color: #FFD700;
       color: #000;
-      font-weight: bold;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      font-weight: bold;
+    }
+    input {
+      padding: 10px;
+      width: 200px;
+      margin: 10px;
+      border: 1px solid #FFD700;
+      border-radius: 5px;
+    }
+    footer {
+      margin-top: 30px;
+      font-size: 14px;
+    }
+    a {
+      color: #FFD700;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
-  <h1>Launch FreeDogeAI in Your Wallet</h1>
-  <p>This will open your wallet app with our presale page.</p><button onclick="openInMetaMask()">Open in MetaMask</button> <button onclick="openInTrustWallet()">Open in TrustWallet</button>
+  <h1 id="title">FreeDogeAI Token Presale</h1>
 
-  <script>
-    const siteURL = encodeURIComponent("https://freedogeai.github.io/freedogeai_Persale/");
+  <button id="connectMetaMask">Bağlan: MetaMask</button>
+  <button id="connectTrustWallet">Bağlan: TrustWallet</button>
 
-    function openInMetaMask() {
-      window.location.href = `https://metamask.app.link/dapp/${siteURL}`;
-    }
+  <p id="walletAddress">Wallet not connected</p>
+  <p id="walletBalance"></p>
 
-    function openInTrustWallet() {
-      window.location.href = `https://link.trustwallet.com/open_url?coin_id=20000714&url=${siteURL}`;
-    }
-  </script></body>
+  <input type="number" id="bnbAmount" placeholder="Enter BNB">
+  <p id="tokenAmount">0 FDAI</p>
+  <button id="buyBtn">Buy Tokens</button>
+
+  <h2 id="about">About FreeDogeAI</h2>
+  <p id="aboutText">FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.</p>
+
+  <a id="whiteLink" href="whitepaper.pdf" download>Download Whitepaper</a>
+
+  <footer>
+    <p id="communityText">Join our community:</p>
+    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
 </html>
