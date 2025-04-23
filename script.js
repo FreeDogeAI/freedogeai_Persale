@@ -133,6 +133,7 @@ const supportedLanguages = {
 };
 
 const langSelect = document.getElementById("languageSelect");
+langSelect.innerHTML = ""; 
 Object.entries(supportedLanguages).forEach(([code, name]) => {
   const opt = document.createElement("option");
   opt.value = code;
