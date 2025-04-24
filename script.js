@@ -1,71 +1,147 @@
+// script.js — FreeDogeAI Token Satış Sistemi
 let provider, signer, userAddress;
-const CONTRACT_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
-const FDAI_PER_BNB = 12500000;
-const MIN_BNB = 0.035;
+const CONTRACT_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // BNB gönderilecek adres
+const TOKEN_CONTRACT = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; // FDAI Token adresi
+const TOKEN_PRICE = 12500000; // 1 BNB = 12.5M FDAI
+const MIN_BNB = 0.035; // Minimum satın alma miktarı
+const EXPECTED_CHAIN_ID = 56; // Binance Smart Chain (mainnet)
 
-// MetaMask bağlantısı
+// Akıllı sözleşme ABI'si
+const CONTRACT_ABI = [
+  "function buyTokens() public payable"
+];
+
+// MetaMask veya diğer Web3 cüzdan bağlantısı
 async function connectMetaMask() {
-  if (!window.ethereum) return alert("MetaMask not detected.");
   try {
+    if (!window.ethereum) {
+      alert("Please install a Web3 wallet like MetaMask!");
+      return;
+    }
+
     provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     signer = provider.getSigner();
     userAddress = await signer.getAddress();
-    await signer.signMessage("Verify connection to FreeDogeAI");
-    updateWalletInfo();
+
+    // Zincir kontrolü
+    const network = await provider.getNetwork();
+    if (network.chainId !== EXPECTED_CHAIN_ID) {
+      alert("Please switch to Binance Smart Chain!");
+      return;
+    }
+
+    await updateInfo();
   } catch (err) {
-    alert("MetaMask error: " + err.message);
+    console.error("MetaMask connection error:", err);
+    alert(`Connection failed: ${err.message}`);
   }
 }
 
-// TrustWallet yönlendirme
-function connectTrustWallet() {
-  const siteURL = encodeURIComponent("https://freedogeai.com/");
-  window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${siteURL}`;
+// TrustWallet bağlantısı
+async function connectTrustWallet() {
+  try {
+    if (!window.ethereum) {
+      const site = encodeURIComponent(window.location.href);
+      window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`;
+      return;
+    }
+    await connectMetaMask(); // TrustWallet Web3 enjeksiyonu varsa MetaMask gibi bağlan
+  } catch (err) {
+    console.error("TrustWallet connection error:", err);
+    alert(`TrustWallet connection failed: ${err.message}`);
+  }
 }
 
-// Cüzdan bilgileri ve bakiye gösterimi
-async function updateWalletInfo() {
-  document.getElementById("walletAddress").textContent = `Connected: ${userAddress}`;
+// Arayüzü güncelleme
+async function updateInfo() {
+  const elements = {
+    wallet: document.getElementById("walletAddress"),
+    bnbBalance: document.getElementById("bnbBalance"),
+    input: document.getElementById("bnbAmount"),
+    output: document.getElementById("fdaiAmount"),
+    buyBtn: document.getElementById("buyButton"),
+    warning: document.getElementById("insufficientFunds")
+  };
+
+  if (!Object.values(elements).every(el => el)) {
+    console.error("One or more DOM elements not found:", elements);
+    alert("Error: UI elements missing!");
+    return;
+  }
+
+  elements.wallet.textContent = `Connected: ${userAddress}`;
   const balanceWei = await provider.getBalance(userAddress);
   const bnb = parseFloat(ethers.utils.formatEther(balanceWei));
-  document.getElementById("bnbBalance").textContent = `BNB Balance: ${bnb.toFixed(4)}`;
-  updateBuyButton(bnb);
+  elements.bnbBalance.textContent = `BNB: ${bnb.toFixed(4)}`;
+
+  // Input olay dinleyicisini sıfırla ve bağla
+  elements.input.oninput = null;
+  elements.input.oninput = () => {
+    const val = parseFloat(elements.input.value);
+    const tokens = isNaN(val) ? 0 : val * TOKEN_PRICE;
+    elements.output.textContent = `${tokens.toLocaleString()} FDAI`;
+    elements.buyBtn.disabled = val < MIN_BNB || val > bnb;
+    elements.warning.style.display = val > bnb ? "block" : "none";
+  };
 }
 
-// Hesaplama ve buton aktifliği
-function updateBuyButton(bnbBalance) {
-  const inputField = document.getElementById("bnbAmount");
-  const tokenDisplay = document.getElementById("fdaiAmount");
-  const buyButton = document.getElementById("buyButton");
-  const insufficient = document.getElementById("insufficientFunds");
-
-  inputField.addEventListener("input", () => {
-    const val = parseFloat(inputField.value);
-    const tokenAmount = isNaN(val) ? 0 : val * FDAI_PER_BNB;
-    tokenDisplay.textContent = `${tokenAmount.toLocaleString()} FDAI`;
-    const hasEnough = val <= bnbBalance;
-    buyButton.disabled = isNaN(val) || val < MIN_BNB || !hasEnough;
-    insufficient.style.display = hasEnough ? "none" : "block";
-  });
-}
-
-// Satın alma
+// Token satın alma işlemi
 async function buyTokens() {
   try {
-    const amount = parseFloat(document.getElementById("bnbAmount").value);
-    if (isNaN(amount) || amount < MIN_BNB) return alert(`Minimum is ${MIN_BNB} BNB`);
-    const tx = await signer.sendTransaction({
-      to: CONTRACT_ADDRESS,
-      value: ethers.utils.parseEther(amount.toString())
+    const input = document.getElementById("bnbAmount");
+    if (!input) {
+      console.error("BNB amount input not found");
+      alert("Error: Input field not found!");
+      return;
+    }
+
+    const val = parseFloat(input.value);
+    if (isNaN(val) || val < MIN_BNB) {
+      alert(`Minimum purchase is ${MIN_BNB} BNB!`);
+      return;
+    }
+
+    const contract = new ethers.Contract(TOKEN_CONTRACT, CONTRACT_ABI, signer);
+    const tx = await contract.buyTokens({
+      value: ethers.utils.parseEther(val.toString()),
+      gasLimit: 200000
     });
+
     await tx.wait();
-    alert("Transaction complete!");
-  } catch (e) {
-    alert("Transaction failed: " + e.message);
+    alert("Tokens purchased successfully!");
+    await updateInfo();
+  } catch (err) {
+    console.error("Buy tokens error:", err);
+    alert(`Transaction failed: ${err.message}`);
   }
 }
 
-document.getElementById("connectMetaMask").onclick = connectMetaMask;
-document.getElementById("connectTrustWallet").onclick = connectTrustWallet;
-document.getElementById("buyButton").onclick = buyTokens;
+// Olay dinleyicilerini bağlama
+function initializeEventListeners() {
+  const elements = {
+    metaMaskBtn: document.getElementById("connectMetaMask"),
+    trustWalletBtn: document.getElementById("connectTrustWallet"),
+    buyBtn: document.getElementById("buyButton")
+  };
+
+  if (!Object.values(elements).every(el => el)) {
+    console.error("One or more button elements not found:", elements);
+    alert("Error: Button elements missing!");
+    return;
+  }
+
+  elements.metaMaskBtn.onclick = connectMetaMask;
+  elements.trustWalletBtn.onclick = connectTrustWallet;
+  elements.buyBtn.onclick = buyTokens;
+}
+
+// Başlatma
+document.addEventListener("DOMContentLoaded", () => {
+  try {
+    initializeEventListeners();
+  } catch (err) {
+    console.error("Initialization error:", err);
+    alert("Error initializing application!");
+  }
+});
