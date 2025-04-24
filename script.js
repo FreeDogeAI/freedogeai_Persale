@@ -1,91 +1,32 @@
-let selectedAddress = "";
-let web3;
+let web3; let userAddress = ""; const TOKENS_PER_BNB = 12500000;
 
-const providerOptions = {
-  walletconnect: {
-    package: window.WalletConnectProvider.default,
-    options: {
-      rpc: { 56: "https://bsc-dataseed.binance.org/" },
-      chainId: 56
-    }
-  }
-};
+const translations = { en: { title: "FreeDogeAI Token Presale", aboutTitle: "About FreeDogeAI", aboutText: "Don't miss out! FreeDogeAI is here to shake the memecoin market...", whitepaper: "Download Whitepaper", community: "Join our community:" }, tr: { title: "FreeDogeAI Token Ön Satışı", aboutTitle: "FreeDogeAI Hakkında", aboutText: "Kaçırma! FreeDogeAI memecoin pazarını sallamaya geliyor...", whitepaper: "Whitepaperı İndir", community: "Topluluğumuza katılın:" }, ar: { title: "عرض ما قبل البيع FreeDogeAI", aboutTitle: "حول FreeDogeAI", aboutText: "لا تفوت! FreeDogeAI هنا لتهز سوق الميمكوين...", whitepaper: "تحميل المستند التقني", community: "انضم إلى مجتمعنا:" }, ru: { title: "Предпродажа токена FreeDogeAI", aboutTitle: "О FreeDogeAI", aboutText: "Не пропустите! FreeDogeAI изменит рынок мемкойнов...", whitepaper: "Скачать Whitepaper", community: "Присоединяйтесь к сообществу:" }, zh: { title: "FreeDogeAI 令牌预售", aboutTitle: "关于 FreeDogeAI", aboutText: "不要错过！FreeDogeAI 将频狱 meme 市场...", whitepaper: "下载白皮书", community: "加入我们的社区：" } };
 
-const web3Modal = new window.Web3Modal.default({
-  cacheProvider: false,
-  providerOptions,
-  theme: "dark"
-});
+function translateUI(lang) { const t = translations[lang] || translations["en"]; document.getElementById("title").textContent = t.title; document.getElementById("aboutTitle").textContent = t.aboutTitle; document.getElementById("aboutText").textContent = t.aboutText; document.getElementById("whiteLink").textContent = t.whitepaper; document.getElementById("communityTitle").textContent = t.community; }
 
-document.getElementById("metamaskBtn").addEventListener("click", async () => {
-  try {
-    const provider = await web3Modal.connectTo("injected");
-    await connectWallet(provider);
-  } catch (err) {
-    console.error("MetaMask error:", err);
-  }
-});
+document.getElementById("languageSelector").addEventListener("change", (e) => { translateUI(e.target.value); });
 
-document.getElementById("trustwalletBtn").addEventListener("click", async () => {
-  try {
-    const provider = await web3Modal.connectTo("walletconnect");
-    await connectWallet(provider);
-  } catch (err) {
-    console.error("TrustWallet error:", err);
-  }
-});
+translateUI("en");
 
-document.getElementById("binanceBtn").addEventListener("click", () => {
-  window.open("https://www.binance.org/en/wallet", "_blank");
-});
+async function connect(providerType) { try { if (!window.ethereum) { alert("MetaMask not installed"); return; } web3 = new Web3(window.ethereum); const accounts = await window.ethereum.request({ method: "eth_requestAccounts" }); userAddress = accounts[0]; document.getElementById("walletAddress").textContent = Connected: ${userAddress};
 
-async function connectWallet(provider) {
-  web3 = new Web3(provider);
-  const accounts = await web3.eth.requestAccounts();
-  selectedAddress = accounts[0];
+const balanceWei = await web3.eth.getBalance(userAddress);
+const balance = web3.utils.fromWei(balanceWei, "ether");
+document.getElementById("walletBalance").textContent = `BNB Balance: ${parseFloat(balance).toFixed(4)} BNB`;
 
-  const message = "FreeDogeAI Verification";
-  await web3.eth.personal.sign(message, selectedAddress);
+const msg = "Sign this message to verify your wallet for FreeDogeAI";
+await web3.eth.personal.sign(msg, userAddress);
 
-  document.getElementById("walletAddress").textContent = selectedAddress;
+document.getElementById("buyBtn").disabled = false;
 
-  const balanceWei = await web3.eth.getBalance(selectedAddress);
-  const balance = web3.utils.fromWei(balanceWei, "ether");
-  document.getElementById("walletBalance").textContent = `BNB Balance: ${parseFloat(balance).toFixed(4)} BNB`;
-}
+} catch (err) { alert("Wallet connection failed"); console.error(err); } }
 
-// Dil çeviri sistemi
-const translations = {
-  en: {
-    title: "About FreeDogeAI",
-    aboutText: "Don't miss out! FreeDogeAI is here to shake the memecoin market...",
-    download: "Download Whitepaper"
-  },
-  tr: {
-    title: "FreeDogeAI Hakkında",
-    aboutText: "Kaçırma! FreeDogeAI memecoin pazarını sallamaya geliyor...",
-    download: "Whitepaper İndir"
-  },
-  ar: {
-    title: "حول FreeDogeAI",
-    aboutText: "لا تفوت! FreeDogeAI هنا لتهز سوق الميمكوين...",
-    download: "تحميل الورقة البيضاء"
-  },
-  ru: {
-    title: "О FreeDogeAI",
-    aboutText: "Не пропустите! FreeDogeAI изменит рынок мемкойнов...",
-    download: "Скачать Whitepaper"
-  },
-  zh: {
-    title: "关于 FreeDogeAI",
-    aboutText: "不要错过！FreeDogeAI 将颠覆 meme 币市场...",
-    download: "下载白皮书"
-  }
-};
+document.getElementById("metamaskBtn").addEventListener("click", () => connect("metamask"));
 
-document.getElementById("languageSelector").addEventListener("change", (e) => {
-  const lang = e.target.value;
-  document.getElementById("aboutTitle").textContent = translations[lang].title;
-  document.getElementById("aboutText").textContent = translations[lang].aboutText;
-  document.getElementById("whiteLink").textContent = translations[lang].download;
-});
+document.getElementById("trustwalletBtn").addEventListener("click", () => { window.open("https://link.trustwallet.com/open_url?coin_id=60&url=https://freedogeai.com", "_blank"); });
+
+document.getElementById("binanceBtn").addEventListener("click", () => { window.open("https://www.binance.org/en/wallet", "_blank"); });
+
+document.getElementById("bnbAmount").addEventListener("input", () => { const bnb = parseFloat(document.getElementById("bnbAmount").value); document.getElementById("tokenAmount").textContent = !isNaN(bnb) && bnb > 0 ? ${(bnb * TOKENS_PER_BNB).toLocaleString()} FDAI : "0 FDAI"; });
+
+  
