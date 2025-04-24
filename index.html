@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FreeDogeAI Token Presale</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
@@ -10,52 +9,60 @@
   <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
 </head>
 <body>
-  <h1 id="title">FreeDogeAI Token Presale</h1>
-
-  <!-- Dil seçimi -->
-  <select id="languageSelect">
-    <option value="en">English</option>
-    <option value="tr">Türkçe</option>
-    <option value="ar">العربية</option>
-    <option value="ru">Русский</option>
-    <option value="zh">中文</option>
-    <option value="fr">Français</option>
-    <option value="de">Deutsch</option>
-    <option value="es">Español</option>
-    <option value="hi">हिन्दी</option>
-    <option value="ja">日本語</option>
-  </select>
-
-  <!-- Bağlantı butonları -->
-  <div>
-    <button id="connectMetaMask">Connect with MetaMask</button>
-    <button id="connectTrustWallet">Connect with TrustWallet</button>
+  <h1>FreeDogeAI Token Presale</h1>  <div>
+    <button id="connectMetamask">Connect with MetaMask</button>
+    <button id="connectTrust">Connect with TrustWallet</button>
     <button id="connectBinance">Connect with Binance Wallet</button>
-  </div>
-
-  <!-- Cüzdan bilgileri -->
-  <p id="walletAddress">Wallet not connected</p>
-  <p id="walletBalance">BNB Balance: --</p>
-
-  <!-- Alım bölümü -->
-  <input type="number" id="bnbAmount" placeholder="Enter BNB">
-  <p id="tokenAmount">0 FDAI</p>
-  <button id="buyBtn" disabled>Buy Tokens</button>
-
-  <!-- Hakkında kısmı -->
-  <h2 id="about">About FreeDogeAI</h2>
+  </div>  <p id="walletStatus">Wallet not connected</p>
+  <p>BNB Balance: <span id="bnbBalance">--</span></p>  <input type="number" id="bnbInput" placeholder="Enter BNB" />
+  <p id="fdaiAmount">0 FDAI</p>
+  <button id="buyBtn">Buy Tokens</button>  <h2>About FreeDogeAI</h2>
   <p id="aboutText">Don't miss out! FreeDogeAI is here to shake the memecoin market. Be part of the hype before it's too late. This presale won't last forever — secure your place now.</p>
+  <a href="FreeDogeAI_Whitepaper.pdf" download>Download Whitepaper</a>  <h3>Join our community:</h3>
+  <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+  <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>  <script>
+    let web3;
+    let userAddress;
 
-  <!-- Whitepaper -->
-  <a id="whiteLink" href="whitepaper.pdf" download>Download Whitepaper</a>
+    async function connectMetaMask() {
+      if (window.ethereum && window.ethereum.isMetaMask) {
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          web3 = new Web3(window.ethereum);
+          const accounts = await web3.eth.getAccounts();
+          userAddress = accounts[0];
+          document.getElementById("walletStatus").textContent = `Connected: ${userAddress}`;
+          const balance = await web3.eth.getBalance(userAddress);
+          document.getElementById("bnbBalance").textContent = parseFloat(web3.utils.fromWei(balance)).toFixed(4);
 
-  <!-- Topluluk -->
-  <footer>
-    <p id="communityText">Join our community:</p>
-    <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
-    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
-  </footer>
+          // Mobil imza
+          const msg = "Verify wallet to join FreeDogeAI presale.";
+          await web3.eth.personal.sign(msg, userAddress);
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        alert("MetaMask not found. Please install MetaMask.");
+      }
+    }
 
-  <script src="script.js"></script>
-</body>
+    function openWalletApp(wallet) {
+      const currentUrl = encodeURIComponent("https://freedogeai.com");
+      let link = "";
+      if (wallet === 'trust') link = `https://link.trustwallet.com/open_url?coin_id=60&url=${currentUrl}`;
+      if (wallet === 'binance') link = `https://dapp.binance.org/?url=${currentUrl}`;
+      window.location.href = link;
+    }
+
+    document.getElementById("connectMetamask").addEventListener("click", connectMetaMask);
+    document.getElementById("connectTrust").addEventListener("click", () => openWalletApp('trust'));
+    document.getElementById("connectBinance").addEventListener("click", () => openWalletApp('binance'));
+
+    // Token hesaplama
+    document.getElementById("bnbInput").addEventListener("input", (e) => {
+      const bnb = parseFloat(e.target.value);
+      const rate = 12500000; // 1 BNB = 12.5M FDAI
+      document.getElementById("fdaiAmount").textContent = `${bnb * rate} FDAI`;
+    });
+  </script></body>
 </html>
