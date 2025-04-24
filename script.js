@@ -56,13 +56,51 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // 6. TRUST WALLET BAĞLANTISI (MOBİL ÖZEL)
-  async function connectTrustWallet() {
-    if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+  // TrustWallet Bağlantısı (Mobil Özel)
+async function connectTrustWallet() {
+  try {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      // TrustWallet mobil uygulama linki
       window.location.href = `https://link.trustwallet.com/open_url?coin_id=20000714&url=${encodeURIComponent(window.location.href)}`;
     } else {
-      await connectMetaMask(); // Desktop'ta MetaMask gibi çalışır
+      // Desktop'ta MetaMask gibi bağlan
+      if (!window.ethereum) {
+        window.open("https://trustwallet.com/download", "_blank");
+        throw new Error("TrustWallet extension not found!");
+      }
+      await connectMetaMask();
     }
+  } catch (error) {
+    alert(`TrustWallet Error: ${error.message}`);
   }
+}
+
+// MetaMask Bağlantısı (Mobilde Uygulamayı Açar)
+async function connectMetaMask() {
+  try {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    if (isMobile && !window.ethereum?.isMetaMask) {
+      // iOS/Android için doğrudan MetaMask uygulamasını aç
+      window.location.href = `https://metamask.app.link/dapp/${encodeURIComponent(window.location.href)}`;
+      return;
+    }
+
+    if (!window.ethereum) {
+      throw new Error("MetaMask not installed!");
+    }
+
+    // Bağlantı işlemleri
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    signer = provider.getSigner();
+    userAddress = await signer.getAddress();
+  } catch (error) {
+    alert(`MetaMask Error: ${error.message}`);
+  }
+}
 
   // 7. TOKEN SATIN ALMA FONKSİYONU
   async function buyTokens() {
