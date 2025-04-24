@@ -11,6 +11,13 @@ const CONTRACT_ABI = [
   "function buyTokens() public payable"
 ];
 
+// DOM elemanlarını kontrol eden yardımcı fonksiyon
+function getElement(id) {
+  const element = document.getElementById(id);
+  if (!element) console.error(`Element not found: ${id}`);
+  return element;
+}
+
 // MetaMask veya diğer Web3 cüzdan bağlantısı
 async function connectMetaMask() {
   try {
@@ -55,43 +62,46 @@ async function connectTrustWallet() {
 
 // Arayüzü güncelleme
 async function updateInfo() {
-  const elements = {
-    wallet: document.getElementById("walletAddress"),
-    bnbBalance: document.getElementById("bnbBalance"),
-    input: document.getElementById("bnbAmount"),
-    output: document.getElementById("fdaiAmount"),
-    buyBtn: document.getElementById("buyButton"),
-    warning: document.getElementById("insufficientFunds")
-  };
+  try {
+    const elements = {
+      wallet: getElement("walletAddress"),
+      bnbBalance: getElement("bnbBalance"),
+      input: getElement("bnbAmount"),
+      output: getElement("fdaiAmount"),
+      buyBtn: getElement("buyButton"),
+      warning: getElement("insufficientFunds")
+    };
 
-  if (!Object.values(elements).every(el => el)) {
-    console.error("One or more DOM elements not found:", elements);
-    alert("Error: UI elements missing!");
-    return;
+    if (!Object.values(elements).every(el => el)) {
+      alert("Error: UI elements missing!");
+      return;
+    }
+
+    elements.wallet.textContent = `Connected: ${userAddress}`;
+    const balanceWei = await provider.getBalance(userAddress);
+    const bnb = parseFloat(ethers.utils.formatEther(balanceWei));
+    elements.bnbBalance.textContent = `BNB: ${bnb.toFixed(4)}`;
+
+    // Input olay dinleyicisini sıfırla ve bağla
+    elements.input.oninput = null;
+    elements.input.oninput = () => {
+      const val = parseFloat(elements.input.value);
+      const tokens = isNaN(val) ? 0 : val * TOKEN_PRICE;
+      elements.output.textContent = `${tokens.toLocaleString()} FDAI`;
+      elements.buyBtn.disabled = val < MIN_BNB || val > bnb;
+      elements.warning.style.display = val > bnb ? "block" : "none";
+    };
+  } catch (err) {
+    console.error("Update info error:", err);
+    alert(`Error updating UI: ${err.message}`);
   }
-
-  elements.wallet.textContent = `Connected: ${userAddress}`;
-  const balanceWei = await provider.getBalance(userAddress);
-  const bnb = parseFloat(ethers.utils.formatEther(balanceWei));
-  elements.bnbBalance.textContent = `BNB: ${bnb.toFixed(4)}`;
-
-  // Input olay dinleyicisini sıfırla ve bağla
-  elements.input.oninput = null;
-  elements.input.oninput = () => {
-    const val = parseFloat(elements.input.value);
-    const tokens = isNaN(val) ? 0 : val * TOKEN_PRICE;
-    elements.output.textContent = `${tokens.toLocaleString()} FDAI`;
-    elements.buyBtn.disabled = val < MIN_BNB || val > bnb;
-    elements.warning.style.display = val > bnb ? "block" : "none";
-  };
 }
 
 // Token satın alma işlemi
 async function buyTokens() {
   try {
-    const input = document.getElementById("bnbAmount");
+    const input = getElement("bnbAmount");
     if (!input) {
-      console.error("BNB amount input not found");
       alert("Error: Input field not found!");
       return;
     }
@@ -119,29 +129,28 @@ async function buyTokens() {
 
 // Olay dinleyicilerini bağlama
 function initializeEventListeners() {
-  const elements = {
-    metaMaskBtn: document.getElementById("connectMetaMask"),
-    trustWalletBtn: document.getElementById("connectTrustWallet"),
-    buyBtn: document.getElementById("buyButton")
-  };
+  try {
+    const elements = {
+      metaMaskBtn: getElement("connectMetaMask"),
+      trustWalletBtn: getElement("connectTrustWallet"),
+      buyBtn: getElement("buyButton")
+    };
 
-  if (!Object.values(elements).every(el => el)) {
-    console.error("One or more button elements not found:", elements);
-    alert("Error: Button elements missing!");
-    return;
+    if (!Object.values(elements).every(el => el)) {
+      alert("Error: Button elements missing!");
+      return;
+    }
+
+    elements.metaMaskBtn.onclick = connectMetaMask;
+    elements.trustWalletBtn.onclick = connectTrustWallet;
+    elements.buyBtn.onclick = buyTokens;
+  } catch (err) {
+    console.error("Initialize event listeners error:", err);
+    alert("Error initializing buttons!");
   }
-
-  elements.metaMaskBtn.onclick = connectMetaMask;
-  elements.trustWalletBtn.onclick = connectTrustWallet;
-  elements.buyBtn.onclick = buyTokens;
 }
 
 // Başlatma
 document.addEventListener("DOMContentLoaded", () => {
-  try {
-    initializeEventListeners();
-  } catch (err) {
-    console.error("Initialization error:", err);
-    alert("Error initializing application!");
-  }
+  initializeEventListeners();
 });
