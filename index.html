@@ -1,151 +1,71 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FreeDogeAI Token Ön Satışı</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeDogeAI Token Ön Satış</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h1 id="title">FreeDogeAI Token Ön Satışı</h1>
-    <select id="languageSelect" aria-label="Dil seçin">
-      <option value="en">English</option>
-      <option value="tr" selected>Türkçe</option>
-      <option value="ru">Русский</option>
-      <option value="zh">中文</option>
-      <option value="ar">العربية</option>
-      <option value="fr">Français</option>
-      <option value="de">Deutsch</option>
-      <option value="es">Español</option>
-      <option value="hi">हिन्दी</option>
-      <option value="ja">日本語</option>
-    </select>
+    <div class="container">
+        <header>
+            <h1 data-translate="title">FreeDogeAI Token Ön Satış</h1>
+            <div class="language-selector">
+                <label for="language" data-translate="select_language">Dil Seç:</label>
+                <select id="language" onchange="changeLanguage()">
+                    <option value="tr">Türkçe</option>
+                    <option value="en">English</option>
+                    <option value="ar">العربية</option>
+                    <option value="ru">Русский</option>
+                    <option value="zh">简体中文</option>
+                    <option value="ja">日本語</option>
+                    <option value="ur">اردو</option>
+                </select>
+            </div>
+        </header>
 
-    <div class="wallet-buttons">
-      <button id="connectMetaMask" aria-label="MetaMask ile bağlan">MetaMask ile Bağlan</button>
-      <button id="connectTrustWallet" aria-label="TrustWallet ile bağlan">TrustWallet ile Bağlan</button>
+        <section class="wallet-section">
+            <h2 data-translate="connect_wallet">Cüzdanı Bağla</h2>
+            <button id="connectWallet" onclick="connectWallet()" data-translate="connect_button">Cüzdanı Bağla</button>
+            <p id="walletStatus" data-translate="wallet_not_connected">Cüzdan bağlı değil.</p>
+        </section>
+
+        <section class="purchase-section">
+            <h2 data-translate="buy_token">FDAI Token Satın Al</h2>
+            <div class="price-info">
+                installer. <p data-translate="price_info">1 BNB = 12,500,000 FDAI</p>
+                <p data-translate="min_purchase">Minimum Alım: 0.035 BNB</p>
+            </div>
+            <div class="input-group">
+                <input type="number" id="bnbAmount" placeholder="BNB Miktarı" step="0.001" min="0.035">
+                <button id="buyButton" onclick="buyTokens()" disabled data-translate="buy_button">Satın Al</button>
+            </div>
+            <p id="transactionStatus" class="status-message"></p>
+            <div class="progress-bar">
+                <h3 data-translate="sale_progress">Satış İlerlemesi</h3>
+                <div id="progress" class="progress"></div>
+                <p id="progressText" data-translate="progress_info">Satış durumu yükleniyor...</p>
+            </div>
+        </section>
+
+        <section class="token-info">
+            <h2 data-translate="token_info">Token Bilgileri</h2>
+            <ul>
+                <li><strong data-translate="token_name">Token Adı:</strong> FreeDogeAI</li>
+                <li><strong data-translate="token_symbol">Sembol:</strong> FDAI</li>
+                <li><strong data-translate="contract_address">Kontrat Adresi:</strong> 
+                    <a href="https://bscscan.com/address/0x45583DB8b6Db50311Ba8e7303845ACc6958589B7" target="_blank">0x45583DB8b6Db50311Ba8e7303845ACc6958589B7</a>
+                </li>
+            </ul>
+        </section>
+
+        <footer>
+            <p data-translate="footer_text">© 2025 FreeDogeAI. Tüm hakları saklıdır.</p>
+        </footer>
     </div>
 
-    <div id="walletAddress">Cüzdan bağlı değil</div>
-    <div id="bnbBalance">BNB Bakiyesi: --</div>
-
-    <input type="number" id="bnbAmount" placeholder="BNB miktarını girin" min="0" step="0.001" aria-label="BNB miktarı">
-    <div id="fdaiAmount">0 FDAI</div>
-    <button id="buyButton" disabled aria-label="Token satın al">Token Satın Al</button>
-    <div id="insufficientFunds" style="display: none; color: red;">
-      <span aria-hidden="true">⚠</span> Yetersiz bakiye
-    </div>
-
-    <h2 id="about-title">FreeDogeAI Hakkında</h2>
-    <p id="aboutText">
-      Kaçırmayın! FreeDogeAI, memecoin piyasasını sarsmak için burada. Heyecana katılın, geç kalmadan yerinizi alın.
-      Bu ön satış sonsuza kadar sürmeyecek!
-    </p>
-
-    <a id="whiteLink" href="FreeDogeAI_Whitepaper.pdf" download aria-label="Whitepaper indir">Whitepaper İndir</a>
-
-    <footer>
-      <p id="communityText">
-        Topluluğumuza katılın:
-        <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
-        <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>
-      </p>
-    </footer>
-  </div>
-
-  <script>
-    // Dil seçimi için çeviriler
-    const translations = {
-      en: {
-        title: "FreeDogeAI Token Presale",
-        aboutTitle: "About FreeDogeAI",
-        aboutText: "Don't miss out! FreeDogeAI is here to shake the memecoin market. Be part of the hype before it's too late. This presale won't last forever — secure your place now.",
-        connectMetaMask: "Connect with MetaMask",
-        connectTrustWallet: "Connect with TrustWallet",
-        buyButton: "Buy Tokens",
-        communityText: "Join our community: ",
-        insufficientFunds: "Insufficient funds",
-        walletAddress: "Wallet not connected",
-        bnbBalance: "BNB Balance: --",
-        bnbAmountPlaceholder: "Enter BNB amount",
-        whiteLink: "Download Whitepaper"
-      },
-      tr: {
-        title: "FreeDogeAI Token Ön Satışı",
-        aboutTitle: "FreeDogeAI Hakkında",
-        aboutText: "Kaçırmayın! FreeDogeAI, memecoin piyasasını sarsmak için burada. Heyecana katılın, geç kalmadan yerinizi alın. Bu ön satış sonsuza kadar sürmeyecek!",
-        connectMetaMask: "MetaMask ile Bağlan",
-        connectTrustWallet: "TrustWallet ile Bağlan",
-        buyButton: "Token Satın Al",
-        communityText: "Topluluğumuza katılın: ",
-        insufficientFunds: "Yetersiz bakiye",
-        walletAddress: "Cüzdan bağlı değil",
-        bnbBalance: "BNB Bakiyesi: --",
-        bnbAmountPlaceholder: "BNB miktarını girin",
-        whiteLink: "Whitepaper İndir"
-      }
-    };
-
-    function updateLanguage(lang) {
-      try {
-        const t = translations[lang] || translations.tr;
-        const elements = {
-          title: document.getElementById("title"),
-          aboutTitle: document.getElementById("about-title"),
-          aboutText: document.getElementById("aboutText"),
-          connectMetaMask: document.getElementById("connectMetaMask"),
-          connectTrustWallet: document.getElementById("connectTrustWallet"),
-          buyButton: document.getElementById("buyButton"),
-          communityText: document.getElementById("communityText"),
-          insufficientFunds: document.getElementById("insufficientFunds"),
-          walletAddress: document.getElementById("walletAddress"),
-          bnbBalance: document.getElementById("bnbBalance"),
-          bnbAmount: document.getElementById("bnbAmount"),
-          whiteLink: document.getElementById("whiteLink")
-        };
-
-        if (!Object.values(elements).every(el => el)) {
-          console.error("Bazı çeviri elemanları bulunamadı:", elements);
-          return;
-        }
-
-        elements.title.textContent = t.title;
-        elements.aboutTitle.textContent = t.aboutTitle;
-        elements.aboutText.textContent = t.aboutText;
-        elements.connectMetaMask.textContent = t.connectMetaMask;
-        elements.connectTrustWallet.textContent = t.connectTrustWallet;
-        elements.buyButton.textContent = t.buyButton;
-        elements.communityText.innerHTML = `${t.communityText}
-          <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
-          <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>`;
-        elements.insufficientFunds.innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
-        elements.walletAddress.textContent = t.walletAddress;
-        elements.bnbBalance.textContent = t.bnbBalance;
-        elements.bnbAmount.placeholder = t.bnbAmountPlaceholder;
-        elements.whiteLink.textContent = t.whiteLink;
-
-        console.log("Dil güncellendi:", lang);
-      } catch (err) {
-        console.error("Dil güncelleme hatası:", err);
-      }
-    }
-
-    // Dil seçimi olay dinleyicisi
-    document.addEventListener("DOMContentLoaded", () => {
-      const languageSelect = document.getElementById("languageSelect");
-      if (languageSelect) {
-        languageSelect.addEventListener("change", (e) => {
-          console.log("Dil seçimi değişti:", e.target.value);
-          updateLanguage(e.target.value);
-        });
-        updateLanguage("tr"); // Varsayılan dil: Türkçe
-      } else {
-        console.error("Dil seçimi elemanı bulunamadı");
-      }
-    });
-  </script>
-  <script src="script.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.0/web3.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
