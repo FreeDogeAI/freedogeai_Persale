@@ -12,13 +12,14 @@ const CONTRACT_ABI = [
 ];
 
 // MetaMask veya diğer Web3 cüzdan bağlantısı
+
 async function connectMetaMask() {
   try {
     const isMobile = /Android|iPhone/i.test(navigator.userAgent);
 
     if (isMobile && !window.ethereum) {
-      // TrustWallet tarzı sabit yönlendirme
-      window.location.href = "https://metamask.app.link/dapp/freedogeai.com";
+      const site = encodeURIComponent("https://freedogeai.com"); // sabit site yaz
+      window.location.href = `https://metamask.app.link/dapp/${site}`;
       return;
     }
 
@@ -39,7 +40,6 @@ async function connectMetaMask() {
     alert(`Connection failed: ${err.message}`);
   }
 }
-
 // TrustWallet bağlantısı
 async function connectTrustWallet() {
   try {
