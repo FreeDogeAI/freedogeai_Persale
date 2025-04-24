@@ -1,18 +1,53 @@
-// script.js - Tam Entegre Cüzdan, Satın Alma ve Dil Sistemi let provider, signer, userAddress; const CONTRACT_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; const TOKEN_PRICE = 12500000; const MIN_BNB = 0.035;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeDogeAI Token Presale</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1 id="title">FreeDogeAI Token Presale</h1>
 
-async function connectMetaMask() { if (window.ethereum) { provider = new ethers.providers.Web3Provider(window.ethereum); await provider.send("eth_requestAccounts", []); signer = provider.getSigner(); userAddress = await signer.getAddress(); updateWalletInfo(); } else { alert("MetaMask not installed."); } }
+    <select id="languageSelect">
+      <option value="en">English</option>
+      <option value="tr">Türkçe</option>
+      <option value="ru">Русский</option>
+      <option value="zh">中文</option>
+      <option value="ar">العربية</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="es">Español</option>
+      <option value="hi">हिन्दी</option>
+      <option value="ja">日本語</option>
+    </select>
 
-function connectTrustWallet() { const dappUrl = encodeURIComponent(window.location.href); window.location.href = https://link.trustwallet.com/open_url?coin_id=60&url=${dappUrl}; }
+    <div class="wallet-buttons">
+      <button id="connectMetaMask">Connect with MetaMask</button>
+      <button id="connectTrustWallet">Connect with TrustWallet</button>
+    </div>
 
-async function updateWalletInfo() { document.getElementById("walletAddress").textContent = Connected: ${userAddress}; const balance = await provider.getBalance(userAddress); const bnb = parseFloat(ethers.utils.formatEther(balance)); document.getElementById("walletBalance").textContent = BNB: ${bnb.toFixed(4)};
+    <div id="walletAddress">Wallet not connected</div>
+    <div id="bnbBalance">BNB Balance: --</div>
 
-document.getElementById("bnbAmount").addEventListener("input", () => { const bnbInput = parseFloat(document.getElementById("bnbAmount").value); const amount = isNaN(bnbInput) ? 0 : bnbInput * TOKEN_PRICE; document.getElementById("fdaiAmount").textContent = ${amount.toLocaleString()} FDAI; document.getElementById("buyButton").disabled = bnbInput < MIN_BNB || bnbInput > bnb; document.getElementById("errorMessage").textContent = bnbInput > bnb ? "Insufficient balance." : ""; }); }
+    <input type="number" id="bnbAmount" placeholder="Enter BNB amount">
+    <div id="fdaiAmount">0 FDAI</div>
+    <button id="buyButton" disabled>Buy Tokens</button>
+    <div id="insufficientFunds" style="display: none; color: red;">Insufficient funds</div>
 
-async function buyTokens() { try { const bnbAmount = parseFloat(document.getElementById("bnbAmount").value); if (isNaN(bnbAmount) || bnbAmount < MIN_BNB) { alert(Minimum purchase is ${MIN_BNB} BNB.); return; } const tx = await signer.sendTransaction({ to: CONTRACT_ADDRESS, value: ethers.utils.parseEther(bnbAmount.toString()) }); await tx.wait(); alert("Token purchase successful!"); } catch (err) { document.getElementById("errorMessage").textContent = err.message; } }
+    <h2 id="about-title">About FreeDogeAI</h2>
+    <p id="aboutText">Don't miss out! FreeDogeAI is here to shake the memecoin market. Be part of the hype before it's too late. This presale won't last forever — secure your place now.</p>
 
-document.getElementById("connectMetaMask").onclick = connectMetaMask; document.getElementById("connectTrustWallet").onclick = connectTrustWallet; document.getElementById("buyButton").onclick = buyTokens;
+    <a id="whiteLink" href="FreeDogeAI_Whitepaper.pdf" download>Download Whitepaper</a>
 
-const translations = { en: { title: "FreeDogeAI Token Presale", buy: "Buy Tokens", about: "About FreeDogeAI", community: "Join our community:" }, tr: { title: "FreeDogeAI Token Ön Satışı", buy: "Token Satın Al", about: "FreeDogeAI Hakkında", community: "Topluluğumuza katıl:" }, ar: { title: "عرض ما قبل البيع FreeDogeAI", buy: "شراء الرموز", about: "حول FreeDogeAI", community: "انضم إلى مجتمعنا:" }, ru: { title: "Предпродажа токена FreeDogeAI", buy: "Купить токены", about: "О FreeDogeAI", community: "Присоединяйтесь к нам:" }, zh: { title: "FreeDogeAI 代币预售", buy: "购买代币", about: "关于 FreeDogeAI", community: "加入我们的社区：" } };
+    <footer>
+      <p id="communityText">Join our community: <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> | <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a></p>
+    </footer>
+  </div>
 
-document.getElementById("language-select").addEventListener("change", () => { const lang = document.getElementById("language-select").value; document.getElementById("title").textContent = translations[lang].title; document.getElementById("buyButton").textContent = translations[lang].buy; document.getElementById("about-title").textContent = translations[lang].about; document.getElementById("communityText").textContent = translations[lang].community; });
-
+  <script src="script.js"></script>
+</body>
+</html>
+  
