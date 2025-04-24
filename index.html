@@ -1,47 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FreeDogeAI Token Presale</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: #ffd700;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    button {
+      background-color: #ffd700;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      border-radius: 10px;
+    }
+    input {
+      padding: 10px;
+      border: 2px solid #ffd700;
+      background: black;
+      color: white;
+      margin-top: 10px;
+    }
+    a {
+      color: #ffd700;
+    }
+  </style>
 </head>
 <body>
-  <h1 id="title">FreeDogeAI Token Presale</h1>
-
-  <select id="languageSelector">
+  <h1>FreeDogeAI Token Presale</h1>
+  <select id="languageSwitcher" onchange="changeLanguage(this.value)">
     <option value="en">English</option>
     <option value="tr">Türkçe</option>
-    <option value="ar">العربية</option>
     <option value="ru">Русский</option>
+    <option value="ar">العربية</option>
     <option value="zh">中文</option>
   </select>
-
   <div>
-    <button id="metamaskBtn">Connect with MetaMask</button>
-    <button id="trustwalletBtn">Connect with TrustWallet</button>
-    <button id="binanceBtn">Connect with Binance Wallet</button>
+    <button onclick="connectMetaMask()">Connect with MetaMask</button>
+    <button onclick="connectTrustWallet()">Connect with TrustWallet</button>
+    <button onclick="connectBinanceWallet()">Connect with Binance Wallet</button>
   </div>
+  <p id="walletStatus">Wallet not connected</p>
+  <p id="bnbBalance">BNB Balance: --</p>
+  <input type="number" id="bnbAmount" placeholder="Enter BNB amount" step="0.001" />
+  <p id="fdaiAmount">0 FDAI</p>
+  <button onclick="buyTokens()">Buy Tokens</button>  <h2>About FreeDogeAI</h2>
+  <p id="aboutText">Don't miss out! FreeDogeAI is here to shake the memecoin market...</p>
+  <p><a href="FreeDogeAI_Whitepaper.pdf" download>Download Whitepaper</a></p>  <p>Join our community: <a href="https://t.me/freedogeaiFDAI">Telegram</a> | <a href="https://x.com/FreeDogeAI_FDAI">Twitter (X)</a></p>  <script>
+    const translations = {
+      tr: {
+        'Connect with MetaMask': 'MetaMask ile Bağlan',
+        'Connect with TrustWallet': 'TrustWallet ile Bağlan',
+        'Connect with Binance Wallet': 'Binance Cüzdan ile Bağlan',
+        'Wallet not connected': 'Cüzdan bağlı değil',
+        'Enter BNB amount': 'BNB miktarı girin',
+        'Buy Tokens': 'Token Satın Al',
+        'About FreeDogeAI': 'FreeDogeAI Hakkında',
+        "Don't miss out! FreeDogeAI is here to shake the memecoin market...": 'Kaçırma! FreeDogeAI memecoin pazarını sarsmaya geliyor...'
+      },
+      ru: {
+        'Connect with MetaMask': 'Подключить MetaMask',
+        'Connect with TrustWallet': 'Подключить TrustWallet',
+        'Connect with Binance Wallet': 'Подключить Binance кошелек',
+        'Wallet not connected': 'Кошелек не подключен',
+        'Enter BNB amount': 'Введите сумму BNB',
+        'Buy Tokens': 'Купить токены',
+        'About FreeDogeAI': 'О FreeDogeAI',
+        "Don't miss out! FreeDogeAI is here to shake the memecoin market...": 'Не пропустите! FreeDogeAI потрясет рынок мемекоинов...'
+      },
+      ar: {
+        'Connect with MetaMask': 'اتصل بـ MetaMask',
+        'Connect with TrustWallet': 'اتصل بـ TrustWallet',
+        'Connect with Binance Wallet': 'اتصل بـ Binance Wallet',
+        'Wallet not connected': 'المحفظة غير متصلة',
+        'Enter BNB amount': 'أدخل مبلغ BNB',
+        'Buy Tokens': 'شراء الرموز',
+        'About FreeDogeAI': 'عن FreeDogeAI',
+        "Don't miss out! FreeDogeAI is here to shake the memecoin market...": 'لا تفوت الفرصة! FreeDogeAI هنا لهز سوق ميمكوين...'
+      },
+      zh: {
+        'Connect with MetaMask': '链接MetaMask',
+        'Connect with TrustWallet': '链接TrustWallet',
+        'Connect with Binance Wallet': '链接Binance钱包',
+        'Wallet not connected': '钱包未连接',
+        'Enter BNB amount': '输入BNB量',
+        'Buy Tokens': '购买令牌',
+        'About FreeDogeAI': '关于FreeDogeAI',
+        "Don't miss out! FreeDogeAI is here to shake the memecoin market...": '不要错过! FreeDogeAI 将震撼实物币市场...'
+      }
+    };
 
-  <p id="walletAddress">Wallet not connected</p>
-  <p id="walletBalance">BNB Balance: --</p>
+    function changeLanguage(lang) {
+      const elements = document.querySelectorAll("button, p, h2, input, a");
+      elements.forEach(el => {
+        const original = el.textContent.trim();
+        if (translations[lang][original]) {
+          el.textContent = translations[lang][original];
+        }
+      });
+    }
 
-  <input type="number" id="bnbAmount" placeholder="Enter BNB amount" />
-  <p id="tokenAmount">0 FDAI</p>
-  <button id="buyBtn" disabled>Buy Tokens</button>
+    async function connectMetaMask() {
+      if (typeof window.ethereum !== 'undefined') {
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          const address = accounts[0];
+          document.getElementById('walletStatus').textContent = address;
+          // BNB balance burada yazılır
+        } catch (err) {
+          alert("Connection failed.");
+        }
+      } else {
+        alert("MetaMask not installed");
+        window.location.href = "https://metamask.app.link/dapp/freedogeai.com";
+      }
+    }
 
-  <h2 id="aboutTitle">About FreeDogeAI</h2>
-  <p id="aboutText">
-    Don't miss out! FreeDogeAI is here to shake the memecoin market...
-  </p>
+    function connectTrustWallet() {
+      window.location.href = "https://link.trustwallet.com/open_url?coin_id=60&url=https://freedogeai.com";
+    }
 
-  <a id="whiteLink" href="FreeDogeAI_Whitepaper.pdf" download>Download Whitepaper</a>
+    function connectBinanceWallet() {
+      window.location.href = "https://dapp.binance.org/?ref=freedogeai.com";
+    }
 
-  <h3 id="communityTitle">Join our community:</h3>
-  <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
-  <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
-
-  <script src="script.js"></script>
-</body>
+    function buyTokens() {
+      const bnb = parseFloat(document.getElementById('bnbAmount').value);
+      if (bnb < 0.035) {
+        alert("Minimum purchase: 0.035 BNB");
+        return;
+      }
+      alert("Purchase simulated: " + (bnb * 12500000).toFixed(0) + " FDAI");
+    }
+  </script></body>
 </html>
