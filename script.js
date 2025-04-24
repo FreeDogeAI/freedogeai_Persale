@@ -13,59 +13,23 @@ document.addEventListener('DOMContentLoaded', function() {
   // 2. DURUM DEĞİŞKENLERİ
   let provider, signer, userAddress;
 
-  // javascript
-// MetaMask Bağlantısı (Mobilde Uygulamayı Açacak)
-async function connectMetaMask() {
-  try {
-    // Mobil cihaz kontrolü
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    
-    if (isMobile) {
-      // MetaMask mobil uygulama linki (doğrudan uygulamayı açar)
-      window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
-      return;
-    }
-    
-    // Desktop için normal bağlantı
-    if (!window.ethereum) {
-      window.open("https://metamask.io/download.html", "_blank");
-      return;
-    }
-    
-    // Bağlantı işlemleri...
-  } catch (error) {
-    console.error("MetaMask error:", error);
-  }
-}
-
-// TrustWallet Bağlantısı (Mobilde Uygulamayı Açacak)
+  TrustWallet bağlantısı
 async function connectTrustWallet() {
   try {
-    // Mobil cihaz kontrolü
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    
-    if (isMobile) {
-      // TrustWallet mobil uygulama linki (doğrudan uygulamayı açar)
-      window.location.href = `https://link.trustwallet.com/open_url?coin_id=20000714&url=${encodeURIComponent(window.location.href)}`;
+    if (isMobile && !window.ethereum) {
+      console.log("Mobil cihazda TrustWallet yönlendirmesi başlatılıyor...");
+      const site = encodeURIComponent(window.location.href);
+      alert("You are being redirected to TrustWallet. After opening the app, return to this site.");
+      window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`;
       return;
     }
-    
-    // Desktop için normal bağlantı
-    if (!window.ethereum?.isTrust) {
-      window.open("https://trustwallet.com/download", "_blank");
-      return;
-    }
-    
-    // Bağlantı işlemleri...
-  } catch (error) {
-    console.error("TrustWallet error:", error);
+    console.log("TrustWallet Web3 enjeksiyonu tespit edildi, bağlanıyor...");
+    await connectMetaMask();
+  } catch (err) {
+    console.error("TrustWallet bağlantı hatası:", err);
+    alert(`TrustWallet connection failed: ${err.message || "An unknown error occurred."}`);
   }
 }
-
-// Buton Event Listener'ları
-document.getElementById('connectMetaMask').onclick = connectMetaMask;
-document.getElementById('connectTrustWallet').onclick = connectTrustWallet;
-```
 
   // 5. ORTAK CÜZDAN BAĞLANTI FONKSİYONU
   async function connectWallet() {
