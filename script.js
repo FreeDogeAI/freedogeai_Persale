@@ -22,14 +22,13 @@ function getElement(id) {
 async function connectMetaMask() {
   try {
     if (!window.ethereum) {
-      alert("MetaMask veya başka bir Web3 cüzdanı yüklü değil! Lütfen MetaMask'i yükleyin veya tarayıcı ayarlarınızı kontrol edin.");
-      window.open("https://metamask.io/download/", "_blank");
-      return;
+      alert("MetaMask yüklü değil! Lütfen MetaMask'i yükleyin veya tarayıcı ayarlarınızı kontrol edin.");
+      return; // Yönlendirme yok, sadece hata mesajı
     }
 
     // MetaMask sağlayıcısını başlat
     provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    await provider.send("eth_requestAccounts", []);
+    await provider.send("eth_requestAccounts", []); // Bu satır, MetaMask pop-up'ını açar
     signer = provider.getSigner();
     userAddress = await signer.getAddress();
 
@@ -72,7 +71,7 @@ async function connectMetaMask() {
   }
 }
 
-// TrustWallet bağlantısı
+// TrustWallet bağlantısı (orijinal hali korundu)
 async function connectTrustWallet() {
   try {
     if (!window.ethereum) {
@@ -106,7 +105,7 @@ async function updateInfo() {
       return;
     }
 
-    elements.wallet.textContent = `Bağlı: ${userAddress}`;
+    elements.wallet.textContent = `Bağlı: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`; // Adresi kısalttım, daha okunabilir
     const balanceWei = await provider.getBalance(userAddress);
     const bnb = parseFloat(ethers.utils.formatEther(balanceWei));
     elements.bnbBalance.textContent = `BNB: ${bnb.toFixed(4)}`;
