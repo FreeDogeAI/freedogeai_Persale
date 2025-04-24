@@ -2,57 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FreeDogeAI Presale</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreeDogeAI Token Presale</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/web3@1.9.0/dist/web3.min.js"></script>
 </head>
 <body>
-  <div class="container">
-    <div id="lang-selector">
-      <select id="languageSelect">
-        <option value="en">English</option>
-        <option value="tr">Türkçe</option>
-        <option value="ar">العربية</option>
-        <option value="ru">Русский</option>
-        <option value="zh">中文</option>
-        <option value="de">Deutsch</option>
-        <option value="fr">Français</option>
-        <option value="es">Español</option>
-        <option value="hi">हिंदी</option>
-        <option value="ja">日本語</option>
-      </select>
-    </div>
+  <h1 id="title">FreeDogeAI Token Presale</h1>
 
-    <h1 id="title">FreeDogeAI Token Presale</h1>
+  <select id="languageSelector">
+    <option value="en">English</option>
+    <option value="tr">Türkçe</option>
+    <option value="ar">العربية</option>
+    <option value="ru">Русский</option>
+    <option value="zh">中文</option>
+  </select>
 
-    <div class="wallet-buttons">
-      <button id="metamaskBtn">Connect with MetaMask</button>
-      <button id="trustBtn">Connect with TrustWallet</button>
-      <button id="binanceBtn">Connect with Binance Wallet</button>
-    </div>
-
-    <p id="walletStatus">Wallet not connected</p>
-    <p id="walletBalance">BNB Balance: --</p>
-
-    <input type="number" id="bnbInput" placeholder="Enter BNB" />
-    <p id="tokenAmount">0 FDAI</p>
-
-    <button id="buyBtn">Buy Tokens</button>
-
-    <h2 id="aboutTitle">About FreeDogeAI</h2>
-    <p id="aboutText">
-      Don't miss out! FreeDogeAI is here to shake the memecoin market. Be part of the hype before it's too late. This presale won't last forever — secure your place now.
-    </p>
-
-    <a href="FreeDogeAI_Whitepaper.pdf" download id="whitepaperBtn">Download Whitepaper</a>
-
-    <h2 id="communityTitle">Join our community:</h2>
-    <p>
-      <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
-      <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
-    </p>
+  <div>
+    <button id="metamaskBtn">Connect with MetaMask</button>
+    <button id="trustwalletBtn">Connect with TrustWallet</button>
+    <button id="binanceBtn">Connect with Binance Wallet</button>
   </div>
+
+  <p id="walletAddress">Wallet not connected</p>
+  <p id="walletBalance">BNB Balance: --</p>
+
+  <input type="number" id="bnbAmount" placeholder="Enter BNB amount" />
+  <p id="tokenAmount">0 FDAI</p>
+  <button id="buyBtn" disabled>Buy Tokens</button>
+
+  <h2 id="aboutTitle">About FreeDogeAI</h2>
+  <p id="aboutText">
+    Don't miss out! FreeDogeAI is here to shake the memecoin market...
+  </p>
+
+  <a id="whiteLink" href="FreeDogeAI_Whitepaper.pdf" download>Download Whitepaper</a>
+
+  <h3 id="communityTitle">Join our community:</h3>
+  <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+  <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
 
   <script src="script.js"></script>
 </body>
