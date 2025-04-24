@@ -1,6 +1,140 @@
+// script.js — FreeDogeAI Token Satış Sistemi
+let provider, signer, userAddress;
+const CONTRACT_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // BNB gönderilecek adres
+const TOKEN_CONTRACT = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; // FDAI Token adresi
+const TOKEN_PRICE = 12500000; // 1 BNB = 12.5M FDAI
+const MIN_BNB = 0.035; // Minimum satın alma miktarı
+const EXPECTED_CHAIN_ID = 56; // Binance Smart Chain (mainnet)
 
-// script.js — Tüm sistem sıfırdan, eksiksiz
-let web3; let userAddress = ""; const TOKEN_DROP_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; const MINIMUM_BNB = 0.035; const TOKENS_PER_BNB = 12500000;
-// 12 DIL DESTEKLI ÇEVIRI const translations = { en: { title: "FreeDogeAI Token Presale", connect: "Connect Wallet", notconnected: "Wallet not connected", buy: "Buy Tokens", about: "About FreeDogeAI", aboutdesc: "FreeDogeAI is a meme-powered token combining AI hype and the spirit of Dogecoin.", readwhite: "Download Whitepaper", community: "Join our community:" }, tr: { title: "FreeDogeAI Token Ön Satışı", connect: "Cüzdanı Bağla", notconnected: "Cüzdan bağlı değil", buy: "Token Satın Al", about: "FreeDogeAI Hakkında", aboutdesc: "FreeDogeAI, Dogecoin ruhunu ve yapay zekayı birleştiren mizahi bir tokendir.", readwhite: "Whitepaper'ı İndir", community: "Topluluğumuza katılın:" }, az: { title: "FreeDogeAI Token Əvvəl Satışı", connect: "Cüzdanı Bağla", notconnected: "Cüzdan bağlı deyil", buy: "Token Al", about: "FreeDogeAI Haqqında", aboutdesc: "FreeDogeAI Dogecoin ruhunu və süni intellekti birləşdirən zarafatlı bir tokendir.", readwhite: "Whitepaper Yüklə", community: "İcmamıza qoşulun:" }, ar: { title: "عرض ما قبل البيع FreeDogeAI", connect: "اتصل بالمحفظة", notconnected: "المحفظة غير متصلة", buy: "شراء الرموز", about: "حول FreeDogeAI", aboutdesc: "FreeDogeAI هو رمز يمزج بين Dogecoin والذكاء الاصطناعي.", readwhite: "تحميل الوثيقة", community: "انضم إلى مجتمعنا:" }, zh: { title: "FreeDogeAI 代币预售", connect: "连接钱包", notconnected: "钱包未连接", buy: "购买代币", about: "关于 FreeDogeAI", aboutdesc: "FreeDogeAI 是结合 AI 热潮与狗狗币精神的 Meme 代币。", readwhite: "下载白皮书", community: "加入我们的社区：" }, ru: { title: "Предпродажа токена FreeDogeAI", connect: "Подключить кошелёк", notconnected: "Кошелёк не подключен", buy: "Купить токены", about: "О FreeDogeAI", aboutdesc: "FreeDogeAI — это токен-мем, сочетающий ИИ и дух Dogecoin.", readwhite: "Скачать Whitepaper", community: "Присоединяйтесь к нашему сообществу:" }, ku: { title: "Pêşfirotinê ya Tokenê FreeDogeAI", connect: "Girêdanê Pêvebike", notconnected: "Pêve girêdayî nîne", buy: "Token bikire", about: "Derbarê FreeDogeAI", aboutdesc: "FreeDogeAI tokenek e ku AI û ruhê Dogecoin bi hev tîne.", readwhite: "Whitepaper daxîne", community: "Bi civaka me re bibin:" }, ja: { title: "FreeDogeAI トークン先行販売", connect: "ウォレット接続", notconnected: "ウォレットが接続されていません", buy: "トークンを購入", about: "FreeDogeAI について", aboutdesc: "FreeDogeAI は AI ブームと Dogecoin の精神を融合したミームトークンです。", readwhite: "ホワイトペーパーをダウンロード", community: "コミュニティに参加：" }, fr: { title: "Prévente du jeton FreeDogeAI", connect: "Connecter le portefeuille", notconnected: "Portefeuille non connecté", buy: "Acheter des tokens", about: "À propos de FreeDogeAI", aboutdesc: "FreeDogeAI est un token mème combinant l'IA et l'esprit du Dogecoin.", readwhite: "Télécharger le Whitepaper", community: "Rejoignez notre communauté :" }, de: { title: "FreeDogeAI Token Vorverkauf", connect: "Wallet verbinden", notconnected: "Wallet nicht verbunden", buy: "Token kaufen", about: "Über FreeDogeAI", aboutdesc: "FreeDogeAI ist ein Meme-Token, der KI-Hype und den Dogecoin-Geist vereint.", readwhite: "Whitepaper herunterladen", community: "Tritt unserer Community bei:" }, ur: { title: "FreeDogeAI ٹوکن پری سیل", connect: "والیٹ سے جڑیں", notconnected: "والیٹ منسلک نہیں ہے", buy: "ٹوکن خریدیں", about: "FreeDogeAI کے بارے میں", aboutdesc: "FreeDogeAI ایک meme ٹوکن ہے جو AI ہائپ اور Dogecoin روح کو جوڑتا ہے۔", readwhite: "وائٹ پیپر ڈاؤن لوڈ کریں", community: "ہماری کمیونٹی میں شامل ہوں:" }, hi: { title: "FreeDogeAI टोकन प्रीसेल", connect: "वॉलेट कनेक्ट करें", notconnected: "वॉलेट कनेक्ट नहीं है", buy: "टोकन खरीदें", about: "FreeDogeAI के बारे में", aboutdesc: "FreeDogeAI एक मीम टोकन है जो AI और Dogecoin की आत्मा को मिलाता है।", readwhite: "व्हाइटपेपर डाउनलोड करें", community: "हमारे समुदाय से जुड़ें:" } };
+// Akıllı sözleşme ABI'si (buyTokens fonksiyonu için)
+const CONTRACT_ABI = [
+  "function buyTokens() public payable"
+];
 
-document.getElementById("languageSelect").addEventListener("change", () => { const lang = document.getElementById("languageSelect").value; const t = translations[lang]; if (!t) return; document.getElementById("title").textContent = t.title; document.getElementById("connectBtn").textContent = t.connect; document.getElementById("walletAddress").textContent = t.notconnected; document.getElementById("buyBtn").textContent = t.buy; document.getElementById("about").textContent = t.about; document.getElementById("aboutText").textContent = t.aboutdesc; document.getElementById("whiteLink").textContent = t.readwhite; document.getElementById("communityText").textContent = t.community; });
+// MetaMask veya diğer Web3 cüzdan bağlantısı
+async function connectMetaMask() {
+  try {
+    if (!window.ethereum) {
+      alert("Please install a Web3 wallet like MetaMask!");
+      return;
+    }
+
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    signer = provider.getSigner();
+    userAddress = await signer.getAddress();
+
+    // Zincir kontrolü (Binance Smart Chain)
+    const network = await provider.getNetwork();
+    if (network.chainId !== EXPECTED_CHAIN_ID) {
+      alert("Please switch to Binance Smart Chain!");
+      return;
+    }
+
+    await updateInfo();
+  } catch (err) {
+    alert(`Connection failed: ${err.message}`);
+  }
+}
+
+// TrustWallet bağlantısı (Web3 entegrasyonu)
+async function connectTrustWallet() {
+  try {
+    if (!window.ethereum) {
+      // TrustWallet derin bağlantısı
+      const site = encodeURIComponent("https://freedogeai.com/");
+      window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`;
+      return;
+    }
+    // TrustWallet zaten enjekte edilmişse MetaMask gibi bağlan
+    await connectMetaMask();
+  } catch (err) {
+    alert(`TrustWallet connection failed: ${err.message}`);
+  }
+}
+
+// Arayüzü güncelleme
+async function updateInfo() {
+  // DOM elemanlarını kontrol et
+  const wallet = document.getElementById("walletAddress");
+  const bnbBalance = document.getElementById("bnbBalance");
+  const input = document.getElementById("bnbAmount");
+  const output = document.getElementById("fdaiAmount");
+  const buyBtn = document.getElementById("buyButton");
+  const warning = document.getElementById("insufficientFunds");
+
+  if (!wallet || !bnbBalance || !input || !output || !buyBtn || !warning) {
+    console.error("One or more DOM elements not found");
+    alert("Error: UI elements missing!");
+    return;
+  }
+
+  wallet.textContent = `Connected: ${userAddress}`;
+  const balanceWei = await provider.getBalance(userAddress);
+  const bnb = parseFloat(ethers.utils.formatEther(balanceWei));
+  bnbBalance.textContent = `BNB: ${bnb.toFixed(4)}`;
+
+  // Input olay dinleyicisini sıfırla ve bağla
+  input.oninput = null;
+  input.oninput = () => {
+    const val = parseFloat(input.value);
+    const tokens = isNaN(val) ? 0 : val * TOKEN_PRICE;
+    output.textContent = `${tokens.toLocaleString()} FDAI`;
+    buyBtn.disabled = val < MIN_BNB || val > bnb;
+    warning.style.display = val > bnb ? "block" : "none";
+  };
+}
+
+// Token satın alma işlemi
+async function buyTokens() {
+  try {
+    const input = document.getElementById("bnbAmount");
+    if (!input) {
+      alert("Error: Input field not found!");
+      return;
+    }
+
+    const val = parseFloat(input.value);
+    if (isNaN(val) || val < MIN_BNB) {
+      alert(`Minimum purchase is ${MIN_BNB} BNB!`);
+      return;
+    }
+
+    // Akıllı sözleşme ile etkileşim
+    const contract = new ethers.Contract(TOKEN_CONTRACT, CONTRACT_ABI, signer);
+    const tx = await contract.buyTokens({
+      value: ethers.utils.parseEther(val.toString()),
+      gasLimit: 200000 // İşlem için tahmini gas limiti
+    });
+
+    // İşlem onayını bekle
+    await tx.wait();
+    alert("Tokens purchased successfully!");
+    
+    // Arayüzü güncelle
+    await updateInfo();
+  } catch (err) {
+    alert(`Transaction failed: ${err.message}`);
+  }
+}
+
+// Olay dinleyicilerini bağlama
+function initializeEventListeners() {
+  const metaMaskBtn = document.getElementById("connectMetaMask");
+  const trustWalletBtn = document.getElementById("connectTrustWallet");
+  const buyBtn = document.getElementById("buyButton");
+
+  if (metaMaskBtn) metaMaskBtn.onclick = connectMetaMask;
+  else console.error("MetaMask button not found");
+
+  if (trustWalletBtn) trustWalletBtn.onclick = connectTrustWallet;
+  else console.error("TrustWallet button not found");
+
+  if (buyBtn) buyBtn.onclick = buyTokens;
+  else console.error("Buy button not found");
+}
+
+// Başlatma
+document.addEventListener("DOMContentLoaded", () => {
+  initializeEventListeners();
+});
