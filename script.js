@@ -13,29 +13,38 @@ const CONTRACT_ABI = [
 
 // MetaMask veya diğer Web3 cüzdan bağlantısı
 async function connectMetaMask() {
-  try {
-    if (!window.ethereum) {
-      alert("Please install a Web3 wallet like MetaMask!");
-      return;
+    try {
+      // Mobil tarayıcı kontrolü (MetaMask uygulamasını aç)
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      if (isMobile && !window.ethereum) {
+        window.location.href = "https://metamask.app.link/dapp/" + encodeURIComponent(window.location.href);
+        return;
+      }
+
+      // Desktop veya MetaMask zaten yüklüyse normal bağlantı
+      if (!window.ethereum) {
+        alert("Please install MetaMask!");
+        window.open("https://metamask.io/download.html", "_blank");
+        return;
+      }
+
+      // Geri kalan kod aynı...
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      signer = provider.getSigner();
+      userAddress = await signer.getAddress();
+
+      const network = await provider.getNetwork();
+      if (network.chainId !== EXPECTED_CHAIN_ID) {
+        alert("Please switch to Binance Smart Chain!");
+        return;
+      }
+
+      await updateInfo();
+    } catch (err) {
+      console.error("MetaMask connection error:", err);
+      alert(`Connection failed: ${err.message}`);
     }
-
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    signer = provider.getSigner();
-    userAddress = await signer.getAddress();
-
-    // Zincir kontrolü
-    const network = await provider.getNetwork();
-    if (network.chainId !== EXPECTED_CHAIN_ID) {
-      alert("Please switch to Binance Smart Chain!");
-      return;
-    }
-
-    await updateInfo();
-  } catch (err) {
-    console.error("MetaMask connection error:", err);
-    alert(`Connection failed: ${err.message}`);
-  }
 }
 
 // TrustWallet bağlantısı
