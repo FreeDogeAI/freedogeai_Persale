@@ -16,13 +16,12 @@ async function connectMetaMask() {
   try {
     const isMobile = /Android|iPhone/i.test(navigator.userAgent);
 
-    // Mobilde ve MetaMask yoksa uygulamayı aç
-    if (!window.ethereum && isMobile) {
+    if (isMobile && !window.ethereum) {
+      // TrustWallet tarzı sabit yönlendirme
       window.location.href = "https://metamask.app.link/dapp/freedogeai.com";
       return;
     }
 
-    // Masaüstü veya mobil MetaMask tarayıcısı
     provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     signer = provider.getSigner();
