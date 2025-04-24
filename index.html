@@ -3,52 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FreeDogeAI Token Ön Satışı</title>
+  <title>FreeDogeAI Token Presale</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1 id="title">FreeDogeAI Token Ön Satışı</h1>
-    <select id="languageSelect" aria-label="Dil seçin">
-      <option value="en">English</option>
-      <option value="tr" selected>Türkçe</option>
-      <option value="ru">Русский</option>
-      <option value="zh">中文</option>
-      <option value="ar">العربية</option>
-      <option value="fr">Français</option>
-      <option value="de">Deutsch</option>
-      <option value="es">Español</option>
-      <option value="hi">हिन्दी</option>
-      <option value="ja">日本語</option>
+    <h1 id="title">FreeDogeAI Token Presale</h1>
+    <select id="languageSelect" aria-label="Select language">
+      <option value="en" selected>English</option>
+      <option value="tr">Türkçe</option>
     </select>
 
     <div class="wallet-buttons">
-      <button id="connectMetaMask" aria-label="MetaMask ile bağlan">MetaMask ile Bağlan</button>
-      <button id="connectTrustWallet" aria-label="TrustWallet ile bağlan">TrustWallet ile Bağlan</button>
+      <button id="connectMetaMask" aria-label="Connect with MetaMask">Connect with MetaMask</button>
+      <button id="connectTrustWallet" aria-label="Connect with TrustWallet">Connect with TrustWallet</button>
     </div>
 
-    <div id="walletAddress">Cüzdan bağlı değil</div>
-    <div id="bnbBalance">BNB Bakiyesi: --</div>
+    <div id="walletAddress">Wallet not connected</div>
+    <div id="bnbBalance">BNB Balance: --</div>
 
-    <input type="number" id="bnbAmount" placeholder="BNB miktarını girin" min="0" step="0.001" aria-label="BNB miktarı">
+    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" min="0" step="0.001" aria-label="BNB amount">
     <div id="fdaiAmount">0 FDAI</div>
-    <button id="buyButton" disabled aria-label="Token satın al">Token Satın Al</button>
+    <button id="buyButton" disabled aria-label="Buy Tokens">Buy Tokens</button>
     <div id="insufficientFunds" style="display: none; color: red;">
-      <span aria-hidden="true">⚠</span> Yetersiz bakiye
+      <span aria-hidden="true">⚠</span> Insufficient funds
     </div>
 
-    <h2 id="about-title">FreeDogeAI Hakkında</h2>
+    <h2 id="about-title">About FreeDogeAI</h2>
     <p id="aboutText">
-      Kaçırmayın! FreeDogeAI, memecoin piyasasını sarsmak için burada. Heyecana katılın, geç kalmadan yerinizi alın.
-      Bu ön satış sonsuza kadar sürmeyecek!
+      Don't miss out! FreeDogeAI is here to shake the memecoin market. Be part of the hype before it's too late.
+      This presale won't last forever — secure your place now.
     </p>
 
-    <a id="whiteLink" href="FreeDogeAI_Whitepaper.pdf" download aria-label="Whitepaper indir">Whitepaper İndir</a>
+    <a id="whiteLink" href="FreeDogeAI_Whitepaper.pdf" download aria-label="Download Whitepaper">Download Whitepaper</a>
 
     <footer>
       <p id="communityText">
-        Topluluğumuza katılın:
+        Join our community:
         <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
         <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>
       </p>
@@ -90,7 +82,7 @@
 
     function updateLanguage(lang) {
       try {
-        const t = translations[lang] || translations.tr;
+        const t = translations[lang] || translations.en;
         const elements = {
           title: document.getElementById("title"),
           aboutTitle: document.getElementById("about-title"),
@@ -137,10 +129,11 @@
       const languageSelect = document.getElementById("languageSelect");
       if (languageSelect) {
         languageSelect.addEventListener("change", (e) => {
-          console.log("Dil seçimi değişti:", e.target.value);
-          updateLanguage(e.target.value);
+          const selectedLang = e.target.value;
+          console.log("Dil seçimi değişti:", selectedLang);
+          updateLanguage(selectedLang);
         });
-        updateLanguage("tr"); // Varsayılan dil: Türkçe
+        updateLanguage("en"); // Varsayılan dil: İngilizce
       } else {
         console.error("Dil seçimi elemanı bulunamadı");
       }
