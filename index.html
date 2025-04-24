@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FreeDogeAI Token Ön Satışı</title>
+  <title>FreeDogeAI Token Presale</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1 id="title">FreeDogeAI Token Ön Satışı</h1>
+    <h1 id="title">FreeDogeAI Token Presale</h1>
     <select id="languageSelect" aria-label="Dil seçin">
       <option value="en">English</option>
-      <option value="tr" selected>Türkçe</option>
+      <option value="tr">Türkçe</option>
       <option value="ru">Русский</option>
       <option value="zh">中文</option>
       <option value="ar">العربية</option>
@@ -68,9 +68,7 @@
         communityText: "Join our community: ",
         insufficientFunds: "Insufficient funds",
         walletAddress: "Wallet not connected",
-        bnbBalance: "BNB Balance: --",
-        bnbAmountPlaceholder: "Enter BNB amount",
-        whiteLink: "Download Whitepaper"
+        bnbBalance: "BNB Balance: --"
       },
       tr: {
         title: "FreeDogeAI Token Ön Satışı",
@@ -82,9 +80,7 @@
         communityText: "Topluluğumuza katılın: ",
         insufficientFunds: "Yetersiz bakiye",
         walletAddress: "Cüzdan bağlı değil",
-        bnbBalance: "BNB Bakiyesi: --",
-        bnbAmountPlaceholder: "BNB miktarını girin",
-        whiteLink: "Whitepaper İndir"
+        bnbBalance: "BNB Bakiyesi: --"
       }
     };
 
@@ -101,9 +97,7 @@
           communityText: document.getElementById("communityText"),
           insufficientFunds: document.getElementById("insufficientFunds"),
           walletAddress: document.getElementById("walletAddress"),
-          bnbBalance: document.getElementById("bnbBalance"),
-          bnbAmount: document.getElementById("bnbAmount"),
-          whiteLink: document.getElementById("whiteLink")
+          bnbBalance: document.getElementById("bnbBalance")
         };
 
         if (!Object.values(elements).every(el => el)) {
@@ -123,10 +117,6 @@
         elements.insufficientFunds.innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
         elements.walletAddress.textContent = t.walletAddress;
         elements.bnbBalance.textContent = t.bnbBalance;
-        elements.bnbAmount.placeholder = t.bnbAmountPlaceholder;
-        elements.whiteLink.textContent = t.whiteLink;
-
-        console.log("Dil güncellendi:", lang);
       } catch (err) {
         console.error("Dil güncelleme hatası:", err);
       }
@@ -136,10 +126,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       const languageSelect = document.getElementById("languageSelect");
       if (languageSelect) {
-        languageSelect.addEventListener("change", (e) => {
-          console.log("Dil seçimi değişti:", e.target.value);
-          updateLanguage(e.target.value);
-        });
+        languageSelect.addEventListener("change", (e) => updateLanguage(e.target.value));
         updateLanguage("tr"); // Varsayılan dil: Türkçe
       } else {
         console.error("Dil seçimi elemanı bulunamadı");
