@@ -1,61 +1,91 @@
+let selectedAddress = "";
 let web3;
-let selectedWallet = "";
-let userAddress = "";
-const connectButtons = {
-  metamask: document.getElementById("connectMetaMask"),
-  trustwallet: document.getElementById("connectTrustWallet"),
-  binance: document.getElementById("connectBinanceWallet"),
+
+const providerOptions = {
+  walletconnect: {
+    package: window.WalletConnectProvider.default,
+    options: {
+      rpc: { 56: "https://bsc-dataseed.binance.org/" },
+      chainId: 56
+    }
+  }
 };
 
-async function connectWallet(wallet) {
+const web3Modal = new window.Web3Modal.default({
+  cacheProvider: false,
+  providerOptions,
+  theme: "dark"
+});
+
+document.getElementById("metamaskBtn").addEventListener("click", async () => {
   try {
-    let provider;
-    if (wallet === "metamask" && window.ethereum && window.ethereum.isMetaMask) {
-      provider = window.ethereum;
-      selectedWallet = "metamask";
-    } else if (wallet === "trustwallet" && window.ethereum && window.ethereum.isTrust) {
-      provider = window.ethereum;
-      selectedWallet = "trustwallet";
-    } else if (wallet === "binance" && window.BinanceChain) {
-      provider = window.BinanceChain;
-      selectedWallet = "binance";
-    } else {
-      alert("Please install the wallet app first.");
-      return;
-    }
-
-    await provider.request({ method: "eth_requestAccounts" });
-    web3 = new Web3(provider);
-
-    const accounts = await web3.eth.getAccounts();
-    userAddress = accounts[0];
-
-    const message = "Sign in to FreeDogeAI";
-    await web3.eth.personal.sign(message, userAddress);
-
-    document.getElementById("walletAddress").textContent = userAddress;
-
-    const balanceWei = await web3.eth.getBalance(userAddress);
-    const balanceBNB = web3.utils.fromWei(balanceWei, "ether");
-    document.getElementById("walletBalance").textContent = `BNB Balance: ${balanceBNB}`;
-
-    document.getElementById("buyBtn").disabled = false;
-  } catch (error) {
-    console.error("Wallet connection error:", error);
-    alert("Failed to connect wallet.");
+    const provider = await web3Modal.connectTo("injected");
+    await connectWallet(provider);
+  } catch (err) {
+    console.error("MetaMask error:", err);
   }
+});
+
+document.getElementById("trustwalletBtn").addEventListener("click", async () => {
+  try {
+    const provider = await web3Modal.connectTo("walletconnect");
+    await connectWallet(provider);
+  } catch (err) {
+    console.error("TrustWallet error:", err);
+  }
+});
+
+document.getElementById("binanceBtn").addEventListener("click", () => {
+  window.open("https://www.binance.org/en/wallet", "_blank");
+});
+
+async function connectWallet(provider) {
+  web3 = new Web3(provider);
+  const accounts = await web3.eth.requestAccounts();
+  selectedAddress = accounts[0];
+
+  const message = "FreeDogeAI Verification";
+  await web3.eth.personal.sign(message, selectedAddress);
+
+  document.getElementById("walletAddress").textContent = selectedAddress;
+
+  const balanceWei = await web3.eth.getBalance(selectedAddress);
+  const balance = web3.utils.fromWei(balanceWei, "ether");
+  document.getElementById("walletBalance").textContent = `BNB Balance: ${parseFloat(balance).toFixed(4)} BNB`;
 }
 
-connectButtons.metamask.onclick = () => connectWallet("metamask");
-connectButtons.trustwallet.onclick = () => connectWallet("trustwallet");
-connectButtons.binance.onclick = () => connectWallet("binance");
-
-document.getElementById("bnbAmount").addEventListener("input", () => {
-  const bnbValue = parseFloat(document.getElementById("bnbAmount").value);
-  if (!isNaN(bnbValue)) {
-    const tokens = bnbValue * 12500000;
-    document.getElementById("tokenAmount").textContent = `${tokens} FDAI`;
-  } else {
-    document.getElementById("tokenAmount").textContent = "0 FDAI";
+// Dil çeviri sistemi
+const translations = {
+  en: {
+    title: "About FreeDogeAI",
+    aboutText: "Don't miss out! FreeDogeAI is here to shake the memecoin market...",
+    download: "Download Whitepaper"
+  },
+  tr: {
+    title: "FreeDogeAI Hakkında",
+    aboutText: "Kaçırma! FreeDogeAI memecoin pazarını sallamaya geliyor...",
+    download: "Whitepaper İndir"
+  },
+  ar: {
+    title: "حول FreeDogeAI",
+    aboutText: "لا تفوت! FreeDogeAI هنا لتهز سوق الميمكوين...",
+    download: "تحميل الورقة البيضاء"
+  },
+  ru: {
+    title: "О FreeDogeAI",
+    aboutText: "Не пропустите! FreeDogeAI изменит рынок мемкойнов...",
+    download: "Скачать Whitepaper"
+  },
+  zh: {
+    title: "关于 FreeDogeAI",
+    aboutText: "不要错过！FreeDogeAI 将颠覆 meme 币市场...",
+    download: "下载白皮书"
   }
+};
+
+document.getElementById("languageSelector").addEventListener("change", (e) => {
+  const lang = e.target.value;
+  document.getElementById("aboutTitle").textContent = translations[lang].title;
+  document.getElementById("aboutText").textContent = translations[lang].aboutText;
+  document.getElementById("whiteLink").textContent = translations[lang].download;
 });
