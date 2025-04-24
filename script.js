@@ -1,88 +1,17 @@
-// ========== Wallet Connection ========== //
-let provider;
-let selectedAddress = "";
-const CONTRACT_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
-const TOKEN_PRICE = 12500000; // 1 BNB = 12,500,000 FDAI
-const MIN_BNB = 0.015;
+// script.js let provider, signer, userAddress; const CONTRACT_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; const TOKEN_PRICE = 12500000; const MIN_BNB = 0.035;
 
-const connectMetaMask = async () => {
-  if (typeof window.ethereum !== "undefined") {
-    try {
-      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-      selectedAddress = accounts[0];
-      updateWalletInfo();
-    } catch (err) {
-      alert("Connection to MetaMask failed.");
-    }
-  } else {
-    alert("MetaMask not installed");
-  }
-};
+// Connect MetaMask async function connectMetaMask() { if (window.ethereum) { provider = new ethers.providers.Web3Provider(window.ethereum); await provider.send("eth_requestAccounts", []); signer = provider.getSigner(); userAddress = await signer.getAddress(); updateWalletInfo(); } else { alert("MetaMask not found!"); } }
 
-const connectTrustWallet = () => {
-  window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(window.location.href)}`;
-};
+// Connect Trust Wallet (via deep link + sign) function connectTrustWallet() { const dappUrl = encodeURIComponent(window.location.href); window.location.href = https://link.trustwallet.com/open_url?coin_id=60&url=${dappUrl}; }
 
-const connectBinanceWallet = () => {
-  window.location.href = "https://dapp.bnbchain.org"; // Placeholder, must be replaced with real URL
-};
+// Update wallet info async function updateWalletInfo() { document.getElementById("walletAddress").textContent = Connected: ${userAddress}; const balance = await provider.getBalance(userAddress); const bnb = parseFloat(ethers.utils.formatEther(balance)); document.getElementById("walletBalance").textContent = BNB Balance: ${bnb.toFixed(4)} BNB;
 
-const updateWalletInfo = async () => {
-  document.getElementById("wallet-address").innerText = selectedAddress;
-  const balance = await provider.getBalance(selectedAddress);
-  const bnb = ethers.utils.formatEther(balance);
-  document.getElementById("wallet-balance").innerText = parseFloat(bnb).toFixed(4) + " BNB";
-};
+document.getElementById("bnbAmount").addEventListener("input", () => { const bnbInput = parseFloat(document.getElementById("bnbAmount").value); const amount = isNaN(bnbInput) ? 0 : bnbInput * TOKEN_PRICE; document.getElementById("fdaiAmount").textContent = ${amount.toLocaleString()} FDAI; document.getElementById("buyButton").disabled = bnbInput < MIN_BNB; }); }
 
-// ========== Buy Token ========== //
-const buyTokens = async () => {
-  const inputBNB = parseFloat(document.getElementById("bnb-amount").value);
-  if (!selectedAddress) {
-    alert("Connect wallet first!");
-    return;
-  }
-  if (isNaN(inputBNB) || inputBNB < MIN_BNB) {
-    alert(`Minimum buy: ${MIN_BNB} BNB`);
-    return;
-  }
+// Buy Tokens async function buyTokens() { try { const bnbAmount = parseFloat(document.getElementById("bnbAmount").value); if (isNaN(bnbAmount) || bnbAmount < MIN_BNB) { alert(Minimum buy is ${MIN_BNB} BNB); return; } const tx = await signer.sendTransaction({ to: CONTRACT_ADDRESS, value: ethers.utils.parseEther(bnbAmount.toString()) }); await tx.wait(); alert("Token purchase successful!"); } catch (err) { alert("Transaction failed: " + err.message); } }
 
-  const signer = provider.getSigner();
-  const contract = new ethers.Contract(CONTRACT_ADDRESS, [
-    "function buy() public payable"
-  ], signer);
+// Language switching const translations = { en: { title: "FreeDogeAI Token Presale", buy: "Buy Tokens" }, tr: { title: "FreeDogeAI Token Ön Satışı", buy: "Token Satın Al" }, ar: { title: "عرض ما قبل البيع FreeDogeAI", buy: "شراء الرموز" }, ru: { title: "Предпродажа токена FreeDogeAI", buy: "Купить токены" }, zh: { title: "FreeDogeAI 代币预售", buy: "购买代币" } };
 
-  try {
-    const tx = await contract.buy({ value: ethers.utils.parseEther(inputBNB.toString()) });
-    await tx.wait();
-    alert(`Purchased ${inputBNB * TOKEN_PRICE} FDAI`);
-  } catch (err) {
-    alert("Transaction failed: " + err.message);
-  }
-};
+document.getElementById("language-select").addEventListener("change", () => { const lang = document.getElementById("language-select").value; document.getElementById("title").textContent = translations[lang].title; document.getElementById("buyButton").textContent = translations[lang].buy; });
 
-// ========== Language ========== //
-const translations = {
-  en: {
-    connectMetaMask: "Connect with MetaMask",
-    connectTrust: "Connect with TrustWallet",
-    connectBinance: "Connect with Binance Wallet",
-    buyTokens: "Buy Tokens",
-    about: "About FreeDogeAI"
-  },
-  tr: {
-    connectMetaMask: "MetaMask ile Bağlan",
-    connectTrust: "TrustWallet ile Bağlan",
-    connectBinance: "Binance Cüzdan ile Bağlan",
-    buyTokens: "Token Satın Al",
-    about: "FreeDogeAI Hakkında"
-  }
-};
-
-function setLang(lang) {
-  document.getElementById("btn-metamask").innerText = translations[lang].connectMetaMask;
-  document.getElementById("btn-trust").innerText = translations[lang].connectTrust;
-  document.getElementById("btn-binance").innerText = translations[lang].connectBinance;
-  document.getElementById("btn-buy").innerText = translations[lang].buyTokens;
-  document.getElementById("about-title").innerText = translations[lang].about;
-}
+// Event bindings window.onload = () => { document.getElementById("connectMetaMask").onclick = connectMetaMask; document.getElementById("connectTrustWallet").onclick = connectTrustWallet; document.getElementById("buyButton").onclick = buyTokens; };
