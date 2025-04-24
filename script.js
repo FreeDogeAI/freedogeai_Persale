@@ -6,13 +6,10 @@ const TOKEN_PRICE = 12500000; // 1 BNB = 12.5M FDAI
 const MIN_BNB = 0.035; // Minimum satın alma miktarı
 const EXPECTED_CHAIN_ID = 56; // Binance Smart Chain (mainnet)
 
-// Akıllı sözleşme ABI'si
+// Akıllı sözleşme ABI'si (token bilgilerine göre güncellenmeli)
 const CONTRACT_ABI = [
   "function buyTokens() public payable"
 ];
-
-// Mobil cihaz kontrolü
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 // DOM elemanlarını kontrol eden yardımcı fonksiyon
 function getElement(id) {
@@ -24,28 +21,10 @@ function getElement(id) {
 // MetaMask bağlantısı
 async function connectMetaMask() {
   try {
-    // Mobil cihazda MetaMask bağlantısı
-    if (isMobile) {
-      if (!window.ethereum || !window.ethereum.isMetaMask) {
-        console.log("Mobil cihazda MetaMask algılanamadı, uygulamaya yönlendiriliyor...");
-        alert("MetaMask ile bağlanmak için MetaMask uygulamasını açmanız gerekiyor.");
-        window.location.href = "metamask://"; // MetaMask uygulamasını aç
-        return;
-      }
-    } else {
-      // Masaüstünde MetaMask kontrolü
-      if (!window.ethereum) {
-        console.log("MetaMask yüklü değil, kullanıcı yönlendiriliyor...");
-        alert("MetaMask yüklü değil! Lütfen MetaMask'i yükleyin: https://metamask.io/download/");
-        window.open("https://metamask.io/download/", "_blank");
-        return;
-      }
-
-      if (!window.ethereum.isMetaMask) {
-        console.log("MetaMask algılanamadı, başka bir Web3 cüzdanı olabilir.");
-        alert("MetaMask algılanamadı. Başka bir Web3 cüzdanı kullanıyorsanız, lütfen MetaMask'i aktif edin.");
-        return;
-      }
+    if (!window.ethereum) {
+      alert("MetaMask veya başka bir Web3 cüzdanı yüklü değil! Lütfen MetaMask'i yükleyin: https://metamask.io/download/");
+      window.open("https://metamask.io/download/", "_blank");
+      return;
     }
 
     // Sağlayıcıyı başlat
@@ -71,13 +50,14 @@ async function connectMetaMask() {
       } catch (switchError) {
         console.error("Ağ değiştirme hatası:", switchError);
         if (switchError.code === 4902) {
+          // Ağ yoksa ekle
           await window.ethereum.request({
             method: "wallet_addEthereumChain",
             params: [{
               chainId: `0x${EXPECTED_CHAIN_ID.toString(16)}`,
               chainName: "Binance Smart Chain",
               nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
-              rpcUrls: ["https://bsc-dataseed.binance.org/"],
+              rpcUrls: ["https://bsc-dataseed.bin Investigation complete!nce.org/"],
               blockExplorerUrls: ["https://bscscan.com"]
             }]
           });
@@ -98,14 +78,14 @@ async function connectMetaMask() {
 // TrustWallet bağlantısı
 async function connectTrustWallet() {
   try {
-    if (isMobile && !window.ethereum) {
-      console.log("Mobil cihazda TrustWallet yönlendirmesi başlatılıyor...");
+    if (!window.ethereum) {
+      console.log("TrustWallet yönlendirmesi başlatılıyor...");
       const site = encodeURIComponent(window.location.href);
       alert("TrustWallet uygulamasına yönlendiriliyorsunuz. Uygulamayı açtıktan sonra siteye geri dönün.");
       window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`;
       return;
     }
-    console.log("TrustWallet Web3 enjeksiyonu tespit edildi, bağlanıyor...");
+    console.log("TrustWallet Web3 enjeksiyonu tespit edildi, MetaMask gibi bağlanıyor...");
     await connectMetaMask();
   } catch (err) {
     console.error("TrustWallet bağlantı hatası:", err);
@@ -137,6 +117,7 @@ async function updateInfo() {
     elements.bnbBalance.textContent = `BNB: ${bnb.toFixed(4)}`;
     console.log("Bakiye güncellendi:", bnb);
 
+    // Input olay dinleyicisini sıfırla ve bağla
     elements.input.oninput = null;
     elements.input.oninput = () => {
       const val = parseFloat(elements.input.value);
