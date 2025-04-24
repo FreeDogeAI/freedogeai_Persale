@@ -14,17 +14,20 @@ const CONTRACT_ABI = [
 // MetaMask veya diğer Web3 cüzdan bağlantısı
 async function connectMetaMask() {
   try {
-    if (!window.ethereum) {
-      alert("Please install a Web3 wallet like MetaMask!");
+    const isMobile = /Android|iPhone/i.test(navigator.userAgent);
+
+    // Mobilde ve MetaMask yoksa uygulamayı aç
+    if (!window.ethereum && isMobile) {
+      window.location.href = "https://metamask.app.link/dapp/freedogeai.com";
       return;
     }
 
+    // Masaüstü veya mobil MetaMask tarayıcısı
     provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     signer = provider.getSigner();
     userAddress = await signer.getAddress();
 
-    // Zincir kontrolü
     const network = await provider.getNetwork();
     if (network.chainId !== EXPECTED_CHAIN_ID) {
       alert("Please switch to Binance Smart Chain!");
