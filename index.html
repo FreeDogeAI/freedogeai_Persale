@@ -56,7 +56,7 @@
   </div>
 
   <script>
-    // Dil seçimi için basit bir mantık
+    // Dil seçimi için çeviriler
     const translations = {
       en: {
         title: "FreeDogeAI Token Presale",
@@ -78,30 +78,53 @@
         communityText: "Topluluğumuza katılın: ",
         insufficientFunds: "Yetersiz bakiye"
       }
-      // Diğer diller için çeviriler eklenebilir
     };
 
     function updateLanguage(lang) {
-      const t = translations[lang] || translations.en;
-      document.getElementById("title").textContent = t.title;
-      document.getElementById("about-title").textContent = t.aboutTitle;
-      document.getElementById("aboutText").textContent = t.aboutText;
-      document.getElementById("connectMetaMask").textContent = t.connectMetaMask;
-      document.getElementById("connectTrustWallet").textContent = t.connectTrustWallet;
-      document.getElementById("buyButton").textContent = t.buyButton;
-      document.getElementById("communityText").innerHTML = `${t.communityText}
-        <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
-        <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>`;
-      document.getElementById("insufficientFunds").innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
+      try {
+        const t = translations[lang] || translations.en;
+        const elements = {
+          title: document.getElementById("title"),
+          aboutTitle: document.getElementById("about-title"),
+          aboutText: document.getElementById("aboutText"),
+          connectMetaMask: document.getElementById("connectMetaMask"),
+          connectTrustWallet: document.getElementById("connectTrustWallet"),
+          buyButton: document.getElementById("buyButton"),
+          communityText: document.getElementById("communityText"),
+          insufficientFunds: document.getElementById("insufficientFunds")
+        };
+
+        if (!Object.values(elements).every(el => el)) {
+          console.error("Some translation elements not found:", elements);
+          return;
+        }
+
+        elements.title.textContent = t.title;
+        elements.aboutTitle.textContent = t.aboutTitle;
+        elements.aboutText.textContent = t.aboutText;
+        elements.connectMetaMask.textContent = t.connectMetaMask;
+        elements.connectTrustWallet.textContent = t.connectTrustWallet;
+        elements.buyButton.textContent = t.buyButton;
+        elements.communityText.innerHTML = `${t.communityText}
+          <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
+          <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>`;
+        elements.insufficientFunds.innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
+      } catch (err) {
+        console.error("Language update error:", err);
+      }
     }
 
-    document.getElementById("languageSelect").addEventListener("change", (e) => {
-      updateLanguage(e.target.value);
+    // Dil seçimi olay dinleyicisi
+    document.addEventListener("DOMContentLoaded", () => {
+      const languageSelect = document.getElementById("languageSelect");
+      if (languageSelect) {
+        languageSelect.addEventListener("change", (e) => updateLanguage(e.target.value));
+        updateLanguage("en"); // Varsayılan dil
+      } else {
+        console.error("Language select element not found");
+      }
     });
-
-    // Varsayılan dil: İngilizce
-    updateLanguage("en");
   </script>
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
