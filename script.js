@@ -1,41 +1,88 @@
-// EXAKT ayarlarla doldurulacak kod - senin sistemine uygun const CONTRACT_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; const FDAI_TOKEN_ADDRESS = "0x8161698A74F2ea0035B9912ED60140893Ac0f39C"; const OWNER_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; const TOKENS_PER_BNB = 12500000; const MINIMUM_BNB = 0.035;
+// ========== Wallet Connection ========== //
+let provider;
+let selectedAddress = "";
+const CONTRACT_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
+const TOKEN_PRICE = 12500000; // 1 BNB = 12,500,000 FDAI
+const MIN_BNB = 0.015;
 
-let web3; let userAccount;
-
-async function connectWallet(providerName) { if (window.ethereum && providerName === 'MetaMask') { web3 = new Web3(window.ethereum); await window.ethereum.request({ method: 'eth_requestAccounts' }); } else if (providerName === 'TrustWallet') { window.location.href = trust://browser_enable?url=${window.location.href}; return; } else if (providerName === 'BinanceWallet') { window.location.href = https://bnbchain.org/en/binance-wallet; // düzeltilebilir return; } else { alert("Wallet not installed"); return; } const accounts = await web3.eth.getAccounts(); userAccount = accounts[0]; document.getElementById("walletStatus").innerText = userAccount; getBNBBalance(); }
-
-async function getBNBBalance() { const balance = await web3.eth.getBalance(userAccount); const bnb = web3.utils.fromWei(balance, "ether"); document.getElementById("bnbBalance").innerText = parseFloat(bnb).toFixed(4); }
-
-async function buyTokens() { const bnbInput = document.getElementById("bnbInput").value; if (!bnbInput || parseFloat(bnbInput) < MINIMUM_BNB) { alert("Minimum amount is 0.035 BNB"); return; }
-
-const value = web3.utils.toWei(bnbInput, "ether");
-const balance = await web3.eth.getBalance(userAccount);
-if (BigInt(balance) < BigInt(value)) {
-    alert("Insufficient funds");
-    return;
-}
-
-const contract = new web3.eth.Contract([
-    {
-        "constant": false,
-        "inputs": [],
-        "name": "buyToken",
-        "outputs": [],
-        "type": "function"
+const connectMetaMask = async () => {
+  if (typeof window.ethereum !== "undefined") {
+    try {
+      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      selectedAddress = accounts[0];
+      updateWalletInfo();
+    } catch (err) {
+      alert("Connection to MetaMask failed.");
     }
-], CONTRACT_ADDRESS);
+  } else {
+    alert("MetaMask not installed");
+  }
+};
 
-await contract.methods.buyToken().send({
-    from: userAccount,
-    value: value
-});
+const connectTrustWallet = () => {
+  window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(window.location.href)}`;
+};
 
+const connectBinanceWallet = () => {
+  window.location.href = "https://dapp.bnbchain.org"; // Placeholder, must be replaced with real URL
+};
+
+const updateWalletInfo = async () => {
+  document.getElementById("wallet-address").innerText = selectedAddress;
+  const balance = await provider.getBalance(selectedAddress);
+  const bnb = ethers.utils.formatEther(balance);
+  document.getElementById("wallet-balance").innerText = parseFloat(bnb).toFixed(4) + " BNB";
+};
+
+// ========== Buy Token ========== //
+const buyTokens = async () => {
+  const inputBNB = parseFloat(document.getElementById("bnb-amount").value);
+  if (!selectedAddress) {
+    alert("Connect wallet first!");
+    return;
+  }
+  if (isNaN(inputBNB) || inputBNB < MIN_BNB) {
+    alert(`Minimum buy: ${MIN_BNB} BNB`);
+    return;
+  }
+
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(CONTRACT_ADDRESS, [
+    "function buy() public payable"
+  ], signer);
+
+  try {
+    const tx = await contract.buy({ value: ethers.utils.parseEther(inputBNB.toString()) });
+    await tx.wait();
+    alert(`Purchased ${inputBNB * TOKEN_PRICE} FDAI`);
+  } catch (err) {
+    alert("Transaction failed: " + err.message);
+  }
+};
+
+// ========== Language ========== //
+const translations = {
+  en: {
+    connectMetaMask: "Connect with MetaMask",
+    connectTrust: "Connect with TrustWallet",
+    connectBinance: "Connect with Binance Wallet",
+    buyTokens: "Buy Tokens",
+    about: "About FreeDogeAI"
+  },
+  tr: {
+    connectMetaMask: "MetaMask ile Bağlan",
+    connectTrust: "TrustWallet ile Bağlan",
+    connectBinance: "Binance Cüzdan ile Bağlan",
+    buyTokens: "Token Satın Al",
+    about: "FreeDogeAI Hakkında"
+  }
+};
+
+function setLang(lang) {
+  document.getElementById("btn-metamask").innerText = translations[lang].connectMetaMask;
+  document.getElementById("btn-trust").innerText = translations[lang].connectTrust;
+  document.getElementById("btn-binance").innerText = translations[lang].connectBinance;
+  document.getElementById("btn-buy").innerText = translations[lang].buyTokens;
+  document.getElementById("about-title").innerText = translations[lang].about;
 }
-
-document.getElementById("connectMetaMask").onclick = () => connectWallet('MetaMask'); document.getElementById("connectTrustWallet").onclick = () => connectWallet('TrustWallet'); document.getElementById("connectBinance").onclick = () => connectWallet('BinanceWallet'); document.getElementById("buyBtn").onclick = buyTokens;
-
-// LANGUAGE SWITCHING const translations = { en: { buy: "Buy Tokens", about: "About FreeDogeAI", download: "Download Whitepaper" }, tr: { buy: "Token Satın Al", about: "FreeDogeAI Hakkında", download: "Whitepaper İndir" }, ru: { buy: "Купить токены", about: "О FreeDogeAI", download: "Скачать Whitepaper" }, zh: { buy: "购买代币", about: "关于 FreeDogeAI", download: "下载白皮书" }, ar: { buy: "شراء الرموز", about: "حول FreeDogeAI", download: "تحميل الورقة البيضاء" } };
-
-document.getElementById("languageSelect").onchange = function () { const lang = this.value; document.getElementById("buyBtn").innerText = translations[lang].buy; document.getElementById("aboutTitle").innerText = translations[lang].about; document.getElementById("whitepaperLink").innerText = translations[lang].download; };
-
-                                            
