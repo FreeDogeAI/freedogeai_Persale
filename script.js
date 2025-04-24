@@ -12,18 +12,35 @@ const CONTRACT_ABI = [
 ];
 
 // MetaMask veya diğer Web3 cüzdan bağlantısı
-
 async function connectMetaMask() {
   try {
     const isMobile = /Android|iPhone/i.test(navigator.userAgent);
 
-    if (isMobile && !window.ethereum) {
-      const site = encodeURIComponent("https://freedogeai.com"); // sabit site yaz
-      window.location.href = `https://metamask.app.link/dapp/${site}`;
+    if (isMobile && typeof window.ethereum === "undefined") {
+      window.location.href = "https://metamask.app.link/dapp/freedogeai.com";
       return;
     }
 
-    provider = new ethers.providers.Web3Provider(window.ethereum);
+    // ethereum geldiyse çalıştır
+    const waitForEthereum = async () => {
+      return new Promise((resolve, reject) => {
+        let attempts = 0;
+        const interval = setInterval(() => {
+          if (window.ethereum) {
+            clearInterval(interval);
+            resolve(window.ethereum);
+          }
+          attempts++;
+          if (attempts > 10) {
+            clearInterval(interval);
+            reject("MetaMask provider not found.");
+          }
+        }, 300); // her 300ms kontrol et, 3 saniye toplam
+      });
+    };
+
+    const eth = await waitForEthereum();
+    provider = new ethers.providers.Web3Provider(eth);
     await provider.send("eth_requestAccounts", []);
     signer = provider.getSigner();
     userAddress = await signer.getAddress();
@@ -37,9 +54,10 @@ async function connectMetaMask() {
     await updateInfo();
   } catch (err) {
     console.error("MetaMask connection error:", err);
-    alert(`Connection failed: ${err.message}`);
+    alert(`Connection failed: ${err}`);
   }
 }
+
 // TrustWallet bağlantısı
 async function connectTrustWallet() {
   try {
