@@ -1,107 +1,175 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ff6f61, #1a73e8);
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    padding: 30px;
 }
 
-h1, h2 {
-  text-align: center;
-  color: #333;
+header {
+    text-align: center;
+    margin-bottom: 40px;
 }
 
-#languageSelect {
-  display: block;
-  margin: 10px auto;
-  padding: 8px;
-  width: 200px;
+header h1 {
+    font-size: 2.8em;
+    color: #ff6f61;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.wallet-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px 0;
+.language-selector {
+    margin-top: 15px;
+}
+
+.language-selector label {
+    font-size: 1.1em;
+    margin-right: 10px;
+    color: #333;
+}
+
+.language-selector select {
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    cursor: pointer;
+}
+
+section {
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 2em;
+    color: #1a73e8;
+    margin-bottom: 20px;
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  pointer-events: auto;
-}
-
-button:hover {
-  background-color: #0056b3;
+    background: linear-gradient(45deg, #ff6f61, #ff8e53);
+    color: #fff;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: transform 0.2s;
 }
 
 button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
+    background: #ccc;
+    cursor: not-allowed;
 }
 
-input[type="number"] {
-  display: block;
-  margin: 10px auto;
-  padding: 8px;
-  width: 200px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+button:hover:not(:disabled) {
+    transform: scale(1.05);
 }
 
-#walletAddress, #bnbBalance, #fdaiAmount {
-  text-align: center;
-  margin: 10px 0;
-  font-size: 16px;
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
 }
 
-#insufficientFunds {
-  text-align: center;
-  font-weight: bold;
+input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+    background: #fff;
 }
 
-#aboutText {
-  text-align: center;
-  margin: 20px 0;
-  color: #555;
+.price-info p {
+    font-size: 1.1em;
+    margin: 10px 0;
+    color: #555;
 }
 
-#whiteLink {
-  display: block;
-  text-align: center;
-  margin: 20px 0;
-  color: #007bff;
-  text-decoration: none;
+.status-message {
+    margin-top: 15px;
+    font-size: 1em;
+    color: #d32f2f;
 }
 
-#whiteLink:hover {
-  text-decoration: underline;
+.progress-bar {
+    margin-top: 20px;
+}
+
+.progress {
+    height: 20px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress::after {
+    content: '';
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(45deg, #1a73e8, #34c759);
+    transition: width 0.5s;
+}
+
+.token-info ul {
+    list-style: none;
+}
+
+.token-info li {
+    font-size: 1.1em;
+    margin: 10px 0;
+}
+
+.token-info a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.token-info a:hover {
+    text-decoration: underline;
 }
 
 footer {
-  text-align: center;
-  margin-top: 20px;
-  color: #555;
+    text-align: center;
+    margin-top: 40px;
+    color: #555;
 }
 
-footer a {
-  color: #007bff;
-  text-decoration: none;
+footer p {
+    font-size: 0.9em;
 }
 
-footer a:hover {
-  text-decoration: underline;
+/* Arapça ve Urduca için sağdan sola metin yönü */
+html[lang="ar"],
+html[lang="ur"] {
+    direction: rtl;
+}
+
+html[lang="ar"] .container,
+html[lang="ur"] .container {
+    text-align: right;
 }
