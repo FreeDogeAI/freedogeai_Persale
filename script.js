@@ -26,16 +26,18 @@ async function connectMetaMask() {
   try {
     // Mobil cihazda MetaMask bağlantısı
     if (isMobile) {
+      console.log("Mobil cihaz tespit edildi, MetaMask kontrolü yapılıyor...");
       if (!window.ethereum || !window.ethereum.isMetaMask) {
-        console.log("Mobil cihazda MetaMask algılanamadı, uygulamaya yönlendiriliyor...");
-        alert("MetaMask ile bağlanmak için MetaMask uygulamasını açmanız gerekiyor.");
-        window.location.href = "metamask://"; // MetaMask uygulamasını aç
+        console.log("Mobil cihazda MetaMask algılanamadı.");
+        alert("MetaMask ile bağlanmak için lütfen MetaMask uygulamasını yükleyin ve bu siteyi MetaMask tarayıcısında açın. MetaMask uygulamasını açmak için aşağıdaki bağlantıyı kullanabilirsiniz.");
+        window.location.href = "https://metamask.app.link"; // MetaMask uygulamasını aç veya yükle
         return;
       }
     } else {
       // Masaüstünde MetaMask kontrolü
+      console.log("Masaüstü cihazda MetaMask kontrolü yapılıyor...");
       if (!window.ethereum) {
-        console.log("MetaMask yüklü değil, kullanıcı yönlendiriliyor...");
+        console.log("MetaMask yüklü değil.");
         alert("MetaMask yüklü değil! Lütfen MetaMask'i yükleyin: https://metamask.io/download/");
         window.open("https://metamask.io/download/", "_blank");
         return;
