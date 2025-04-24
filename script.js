@@ -16,31 +16,32 @@ async function connectMetaMask() {
   try {
     const isMobile = /Android|iPhone/i.test(navigator.userAgent);
 
+    // Mobilde MetaMask yüklü değilse uygulamayı aç
     if (isMobile && typeof window.ethereum === "undefined") {
       window.location.href = "https://metamask.app.link/dapp/freedogeai.com";
       return;
     }
 
-    // ethereum geldiyse çalıştır
+    // Ethereum yüklenmesini bekle (maksimum 3 saniye)
     const waitForEthereum = async () => {
       return new Promise((resolve, reject) => {
         let attempts = 0;
         const interval = setInterval(() => {
-          if (window.ethereum) {
+          if (typeof window.ethereum !== "undefined") {
             clearInterval(interval);
-            resolve(window.ethereum);
+            resolve();
           }
           attempts++;
-          if (attempts > 10) {
+          if (attempts > 30) { // 30 x 100ms = 3 saniye
             clearInterval(interval);
             reject("MetaMask provider not found.");
           }
-        }, 300); // her 300ms kontrol et, 3 saniye toplam
+        }, 100);
       });
     };
 
-    const eth = await waitForEthereum();
-    provider = new ethers.providers.Web3Provider(eth);
+    await waitForEthereum(); // Beklemeden geçme
+    provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
     signer = provider.getSigner();
     userAddress = await signer.getAddress();
@@ -57,7 +58,6 @@ async function connectMetaMask() {
     alert(`Connection failed: ${err}`);
   }
 }
-
 // TrustWallet bağlantısı
 async function connectTrustWallet() {
   try {
