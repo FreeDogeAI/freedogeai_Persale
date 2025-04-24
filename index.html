@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +11,16 @@
   <div class="container">
     <h1 id="title">FreeDogeAI Token Presale</h1>
     <select id="languageSelect" aria-label="Select language">
-      <option value="en" selected>English</option>
+      <option value="en">English</option>
       <option value="tr">Türkçe</option>
+      <option value="ru">Русский</option>
+      <option value="zh">中文</option>
+      <option value="ar">العربية</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="es">Español</option>
+      <option value="hi">हिन्दी</option>
+      <option value="ja">日本語</option>
     </select>
 
     <div class="wallet-buttons">
@@ -48,7 +56,7 @@
   </div>
 
   <script>
-    // Dil seçimi için çeviriler
+    // Dil seçimi için basit bir mantık
     const translations = {
       en: {
         title: "FreeDogeAI Token Presale",
@@ -58,11 +66,7 @@
         connectTrustWallet: "Connect with TrustWallet",
         buyButton: "Buy Tokens",
         communityText: "Join our community: ",
-        insufficientFunds: "Insufficient funds",
-        walletAddress: "Wallet not connected",
-        bnbBalance: "BNB Balance: --",
-        bnbAmountPlaceholder: "Enter BNB amount",
-        whiteLink: "Download Whitepaper"
+        insufficientFunds: "Insufficient funds"
       },
       tr: {
         title: "FreeDogeAI Token Ön Satışı",
@@ -72,73 +76,32 @@
         connectTrustWallet: "TrustWallet ile Bağlan",
         buyButton: "Token Satın Al",
         communityText: "Topluluğumuza katılın: ",
-        insufficientFunds: "Yetersiz bakiye",
-        walletAddress: "Cüzdan bağlı değil",
-        bnbBalance: "BNB Bakiyesi: --",
-        bnbAmountPlaceholder: "BNB miktarını girin",
-        whiteLink: "Whitepaper İndir"
+        insufficientFunds: "Yetersiz bakiye"
       }
+      // Diğer diller için çeviriler eklenebilir
     };
 
     function updateLanguage(lang) {
-      try {
-        const t = translations[lang] || translations.en;
-        const elements = {
-          title: document.getElementById("title"),
-          aboutTitle: document.getElementById("about-title"),
-          aboutText: document.getElementById("aboutText"),
-          connectMetaMask: document.getElementById("connectMetaMask"),
-          connectTrustWallet: document.getElementById("connectTrustWallet"),
-          buyButton: document.getElementById("buyButton"),
-          communityText: document.getElementById("communityText"),
-          insufficientFunds: document.getElementById("insufficientFunds"),
-          walletAddress: document.getElementById("walletAddress"),
-          bnbBalance: document.getElementById("bnbBalance"),
-          bnbAmount: document.getElementById("bnbAmount"),
-          whiteLink: document.getElementById("whiteLink")
-        };
-
-        if (!Object.values(elements).every(el => el)) {
-          console.error("Bazı çeviri elemanları bulunamadı:", elements);
-          return;
-        }
-
-        elements.title.textContent = t.title;
-        elements.aboutTitle.textContent = t.aboutTitle;
-        elements.aboutText.textContent = t.aboutText;
-        elements.connectMetaMask.textContent = t.connectMetaMask;
-        elements.connectTrustWallet.textContent = t.connectTrustWallet;
-        elements.buyButton.textContent = t.buyButton;
-        elements.communityText.innerHTML = `${t.communityText}
-          <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
-          <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>`;
-        elements.insufficientFunds.innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
-        elements.walletAddress.textContent = t.walletAddress;
-        elements.bnbBalance.textContent = t.bnbBalance;
-        elements.bnbAmount.placeholder = t.bnbAmountPlaceholder;
-        elements.whiteLink.textContent = t.whiteLink;
-
-        console.log("Dil güncellendi:", lang);
-      } catch (err) {
-        console.error("Dil güncelleme hatası:", err);
-      }
+      const t = translations[lang] || translations.en;
+      document.getElementById("title").textContent = t.title;
+      document.getElementById("about-title").textContent = t.aboutTitle;
+      document.getElementById("aboutText").textContent = t.aboutText;
+      document.getElementById("connectMetaMask").textContent = t.connectMetaMask;
+      document.getElementById("connectTrustWallet").textContent = t.connectTrustWallet;
+      document.getElementById("buyButton").textContent = t.buyButton;
+      document.getElementById("communityText").innerHTML = `${t.communityText}
+        <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
+        <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>`;
+      document.getElementById("insufficientFunds").innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
     }
 
-    // Dil seçimi olay dinleyicisi
-    document.addEventListener("DOMContentLoaded", () => {
-      const languageSelect = document.getElementById("languageSelect");
-      if (languageSelect) {
-        languageSelect.addEventListener("change", (e) => {
-          const selectedLang = e.target.value;
-          console.log("Dil seçimi değişti:", selectedLang);
-          updateLanguage(selectedLang);
-        });
-        updateLanguage("en"); // Varsayılan dil: İngilizce
-      } else {
-        console.error("Dil seçimi elemanı bulunamadı");
-      }
+    document.getElementById("languageSelect").addEventListener("change", (e) => {
+      updateLanguage(e.target.value);
     });
+
+    // Varsayılan dil: İngilizce
+    updateLanguage("en");
   </script>
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
