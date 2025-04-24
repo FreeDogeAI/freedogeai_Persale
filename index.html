@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Token Presale</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -81,50 +81,46 @@
     };
 
     function updateLanguage(lang) {
-      try {
-        const t = translations[lang] || translations.en;
-        const elements = {
-          title: document.getElementById("title"),
-          aboutTitle: document.getElementById("about-title"),
-          aboutText: document.getElementById("aboutText"),
-          connectMetaMask: document.getElementById("connectMetaMask"),
-          connectTrustWallet: document.getElementById("connectTrustWallet"),
-          buyButton: document.getElementById("buyButton"),
-          communityText: document.getElementById("communityText"),
-          insufficientFunds: document.getElementById("insufficientFunds")
-        };
+      const t = translations[lang] || translations.en;
+      const elements = {
+        title: document.getElementById("title"),
+        aboutTitle: document.getElementById("about-title"),
+        aboutText: document.getElementById("aboutText"),
+        connectMetaMask: document.getElementById("connectMetaMask"),
+        connectTrustWallet: document.getElementById("connectTrustWallet"),
+        buyButton: document.getElementById("buyButton"),
+        communityText: document.getElementById("communityText"),
+        insufficientFunds: document.getElementById("insufficientFunds")
+      };
 
-        if (!Object.values(elements).every(el => el)) {
-          console.error("Some translation elements not found:", elements);
-          return;
-        }
-
-        elements.title.textContent = t.title;
-        elements.aboutTitle.textContent = t.aboutTitle;
-        elements.aboutText.textContent = t.aboutText;
-        elements.connectMetaMask.textContent = t.connectMetaMask;
-        elements.connectTrustWallet.textContent = t.connectTrustWallet;
-        elements.buyButton.textContent = t.buyButton;
-        elements.communityText.innerHTML = `${t.communityText}
-          <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
-          <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>`;
-        elements.insufficientFunds.innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
-      } catch (err) {
-        console.error("Language update error:", err);
+      if (!Object.values(elements).every(el => el)) {
+        console.error("Some translation elements not found");
+        return;
       }
+
+      elements.title.textContent = t.title;
+      elements.aboutTitle.textContent = t.aboutTitle;
+      elements.aboutText.textContent = t.aboutText;
+      elements.connectMetaMask.textContent = t.connectMetaMask;
+      elements.connectTrustWallet.textContent = t.connectTrustWallet;
+      elements.buyButton.textContent = t.buyButton;
+      elements.communityText.innerHTML = `${t.communityText}
+        <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
+        <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>`;
+      elements.insufficientFunds.innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
     }
 
     // Dil seçimi olay dinleyicisi
-    document.addEventListener("DOMContentLoaded", () => {
-      const languageSelect = document.getElementById("languageSelect");
-      if (languageSelect) {
-        languageSelect.addEventListener("change", (e) => updateLanguage(e.target.value));
-        updateLanguage("en"); // Varsayılan dil
-      } else {
-        console.error("Language select element not found");
-      }
-    });
+    const languageSelect = document.getElementById("languageSelect");
+    if (languageSelect) {
+      languageSelect.addEventListener("change", (e) => {
+        updateLanguage(e.target.value);
+      });
+      updateLanguage("en"); // Varsayılan dil
+    } else {
+      console.error("Language select element not found");
+    }
   </script>
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
