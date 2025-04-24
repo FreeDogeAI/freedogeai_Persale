@@ -15,3 +15,4 @@ document.getElementById("bnbAmount").addEventListener("input", () => { const bnb
 document.getElementById("language-select").addEventListener("change", () => { const lang = document.getElementById("language-select").value; document.getElementById("title").textContent = translations[lang].title; document.getElementById("buyButton").textContent = translations[lang].buy; });
 
 // Event bindings window.onload = () => { document.getElementById("connectMetaMask").onclick = connectMetaMask; document.getElementById("connectTrustWallet").onclick = connectTrustWallet; document.getElementById("buyButton").onclick = buyTokens; };
+
