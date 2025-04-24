@@ -13,50 +13,59 @@ document.addEventListener('DOMContentLoaded', function() {
   // 2. DURUM DEĞİŞKENLERİ
   let provider, signer, userAddress;
 
-  // 3. TRUST WALLET BAĞLANTISI (Grok'tan alınan özel çözüm)
-  async function connectTrustWallet() {
-    try {
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
-      if (isMobile) {
-        // Mobil cihazlarda TrustWallet uygulamasını aç
-        window.location.href = `https://link.trustwallet.com/open_url?coin_id=20000714&url=${encodeURIComponent(window.location.href)}`;
-      } else {
-        // Desktop'ta TrustWallet extension kontrolü
-        if (!window.ethereum?.isTrust) {
-          window.open("https://trustwallet.com/browser-extension", "_blank");
-          throw new Error("Lütfen TrustWallet extension'ı yükleyin!");
-        }
-        await connectWallet();
-      }
-    } catch (error) {
-      console.error("TrustWallet error:", error);
-      alert(`TrustWallet Bağlantı Hatası: ${error.message}`);
+  // javascript
+// MetaMask Bağlantısı (Mobilde Uygulamayı Açacak)
+async function connectMetaMask() {
+  try {
+    // Mobil cihaz kontrolü
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      // MetaMask mobil uygulama linki (doğrudan uygulamayı açar)
+      window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
+      return;
     }
-  }
-
-  // 4. META MASK BAĞLANTISI (Mobilde uygulamayı açar)
-  async function connectMetaMask() {
-    try {
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
-      if (isMobile && !window.ethereum?.isMetaMask) {
-        // Mobilde MetaMask uygulamasını aç
-        window.location.href = `https://metamask.app.link/dapp/${encodeURIComponent(window.location.href)}`;
-        return;
-      }
-
-      if (!window.ethereum) {
-        window.open("https://metamask.io/download.html", "_blank");
-        throw new Error("Lütfen MetaMask yükleyin!");
-      }
-
-      await connectWallet();
-    } catch (error) {
-      console.error("MetaMask error:", error);
-      alert(`MetaMask Bağlantı Hatası: ${error.message}`);
+    
+    // Desktop için normal bağlantı
+    if (!window.ethereum) {
+      window.open("https://metamask.io/download.html", "_blank");
+      return;
     }
+    
+    // Bağlantı işlemleri...
+  } catch (error) {
+    console.error("MetaMask error:", error);
   }
+}
+
+// TrustWallet Bağlantısı (Mobilde Uygulamayı Açacak)
+async function connectTrustWallet() {
+  try {
+    // Mobil cihaz kontrolü
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      // TrustWallet mobil uygulama linki (doğrudan uygulamayı açar)
+      window.location.href = `https://link.trustwallet.com/open_url?coin_id=20000714&url=${encodeURIComponent(window.location.href)}`;
+      return;
+    }
+    
+    // Desktop için normal bağlantı
+    if (!window.ethereum?.isTrust) {
+      window.open("https://trustwallet.com/download", "_blank");
+      return;
+    }
+    
+    // Bağlantı işlemleri...
+  } catch (error) {
+    console.error("TrustWallet error:", error);
+  }
+}
+
+// Buton Event Listener'ları
+document.getElementById('connectMetaMask').onclick = connectMetaMask;
+document.getElementById('connectTrustWallet').onclick = connectTrustWallet;
+```
 
   // 5. ORTAK CÜZDAN BAĞLANTI FONKSİYONU
   async function connectWallet() {
