@@ -26,10 +26,10 @@ async function connectMetaMask() {
   try {
     if (isMobile) {
       console.log("Mobil cihazda MetaMask bağlantısı deneniyor...");
-      if (!window.ethereum) {
+      if (!window.ethereum || !window.ethereum.isMetaMask) {
         console.log("window.ethereum algılanamadı, MetaMask uygulamasına yönlendiriliyor...");
-        const site = encodeURIComponent(window.location.href);
-        alert("You are being redirected to MetaMask. Please open this site in the MetaMask browser to connect.");
+        const site = encodeURIComponent("freedogeai.com"); // Sabit URL, dinamik olarak değiştirilebilir
+        alert("To connect with MetaMask, you need to open this site in the MetaMask browser. You will be redirected to MetaMask now. If MetaMask is not installed, you will be taken to the app store.");
         window.location.href = `metamask://dapp/${site}`; // MetaMask uygulamasını aç ve siteyi yükle
         setTimeout(() => {
           // Eğer MetaMask açılmazsa, kullanıcıyı uygulama mağazasına yönlendir
@@ -46,7 +46,7 @@ async function connectMetaMask() {
             }
             window.location.href = storeLink;
           }
-        }, 1500);
+        }, 2000); // 2 saniye bekle
         return;
       }
     } else {
@@ -109,7 +109,7 @@ async function connectMetaMask() {
     await updateInfo();
   } catch (err) {
     console.error("MetaMask bağlantı hatası:", err);
-    alert(`Connection failed: ${err.message || "An unknown error occurred. Please check MetaMask."}`);
+    alert(`Connection failed: MetaMask provider not found. Please ensure you are using the MetaMask browser.`);
   }
 }
 
