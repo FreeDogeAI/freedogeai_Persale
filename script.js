@@ -12,7 +12,7 @@ const CONTRACT_ABI = [
 ];
 
 // Mobil cihaz kontrolü
-const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 // DOM elemanlarını kontrol eden yardımcı fonksiyon
 function getElement(id) {
@@ -24,13 +24,29 @@ function getElement(id) {
 // MetaMask bağlantısı
 async function connectMetaMask() {
   try {
-    // Mobil cihazda MetaMask bağlantısı
     if (isMobile) {
-      console.log("Mobil cihaz tespit edildi, MetaMask kontrolü yapılıyor...");
-      if (!window.ethereum || !window.ethereum.isMetaMask) {
-        console.log("Mobil cihazda MetaMask algılanamadı.");
-        alert("MetaMask ile bağlanmak için lütfen MetaMask uygulamasını yükleyin ve bu siteyi MetaMask tarayıcısında açın. MetaMask uygulamasını açmak için aşağıdaki bağlantıyı kullanabilirsiniz.");
-        window.location.href = "https://metamask.app.link"; // MetaMask uygulamasını aç veya yükle
+      console.log("Mobil cihazda MetaMask bağlantısı deneniyor...");
+      if (!window.ethereum) {
+        console.log("window.ethereum algılanamadı, MetaMask uygulamasına yönlendiriliyor...");
+        const site = encodeURIComponent(window.location.href);
+        alert("You are being redirected to MetaMask. Please open this site in the MetaMask browser to connect.");
+        window.location.href = `metamask://dapp/${site}`; // MetaMask uygulamasını aç ve siteyi yükle
+        setTimeout(() => {
+          // Eğer MetaMask açılmazsa, kullanıcıyı uygulama mağazasına yönlendir
+          if (!document.hidden) {
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+            let storeLink = "";
+            if (isAndroid) {
+              storeLink = "https://play.google.com/store/apps/details?id=io.metamask";
+            } else if (isIOS) {
+              storeLink = "https://apps.apple.com/us/app/metamask-blockchain-wallet/id1438144202";
+            } else {
+              storeLink = "https://metamask.io/download/";
+            }
+            window.location.href = storeLink;
+          }
+        }, 1500);
         return;
       }
     } else {
@@ -38,14 +54,14 @@ async function connectMetaMask() {
       console.log("Masaüstü cihazda MetaMask kontrolü yapılıyor...");
       if (!window.ethereum) {
         console.log("MetaMask yüklü değil.");
-        alert("MetaMask yüklü değil! Lütfen MetaMask'i yükleyin: https://metamask.io/download/");
+        alert("MetaMask is not installed! Please install MetaMask: https://metamask.io/download/");
         window.open("https://metamask.io/download/", "_blank");
         return;
       }
 
       if (!window.ethereum.isMetaMask) {
         console.log("MetaMask algılanamadı, başka bir Web3 cüzdanı olabilir.");
-        alert("MetaMask algılanamadı. Başka bir Web3 cüzdanı kullanıyorsanız, lütfen MetaMask'i aktif edin.");
+        alert("MetaMask could not be detected. If you're using another Web3 wallet, please activate MetaMask.");
         return;
       }
     }
@@ -84,7 +100,7 @@ async function connectMetaMask() {
             }]
           });
         } else {
-          alert(`Lütfen Binance Smart Chain ağına geçin! Hata: ${switchError.message}`);
+          alert(`Please switch to the Binance Smart Chain network! Error: ${switchError.message}`);
           return;
         }
       }
@@ -93,25 +109,25 @@ async function connectMetaMask() {
     await updateInfo();
   } catch (err) {
     console.error("MetaMask bağlantı hatası:", err);
-    alert(`Bağlantı başarısız: ${err.message || "Bilinmeyen bir hata oluştu. Lütfen MetaMask'i kontrol edin."}`);
+    alert(`Connection failed: ${err.message || "An unknown error occurred. Please check MetaMask."}`);
   }
 }
 
 // TrustWallet bağlantısı
 async function connectTrustWallet() {
   try {
-    if (isMobile && !window.ethereum) {
+    if (!window.ethereum) {
       console.log("Mobil cihazda TrustWallet yönlendirmesi başlatılıyor...");
       const site = encodeURIComponent(window.location.href);
-      alert("TrustWallet uygulamasına yönlendiriliyorsunuz. Uygulamayı açtıktan sonra siteye geri dönün.");
+      alert("You are being redirected to TrustWallet. After opening the app, return to this site.");
       window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`;
       return;
     }
     console.log("TrustWallet Web3 enjeksiyonu tespit edildi, bağlanıyor...");
     await connectMetaMask();
   } catch (err) {
-    console.error("TrustWallet bağlantı hatası:", err);
-    alert(`TrustWallet bağlantısı başarısız: ${err.message || "Bilinmeyen bir hata oluştu."}`);
+    console.error("TrustWallet connection error:", err);
+    alert(`TrustWallet connection failed: ${err.message || "An unknown error occurred."}`);
   }
 }
 
@@ -129,11 +145,11 @@ async function updateInfo() {
 
     if (!Object.values(elements).every(el => el)) {
       console.error("Arayüz elemanları eksik:", elements);
-      alert("Hata: Arayüz elemanları eksik!");
+      alert("Error: UI elements are missing!");
       return;
     }
 
-    elements.wallet.textContent = `Bağlı: ${userAddress}`;
+    elements.wallet.textContent = `Connected: ${userAddress}`;
     const balanceWei = await provider.getBalance(userAddress);
     const bnb = parseFloat(ethers.utils.formatEther(balanceWei));
     elements.bnbBalance.textContent = `BNB: ${bnb.toFixed(4)}`;
@@ -150,7 +166,7 @@ async function updateInfo() {
     };
   } catch (err) {
     console.error("Arayüz güncelleme hatası:", err);
-    alert(`Arayüz güncelleme hatası: ${err.message}`);
+    alert(`UI update error: ${err.message}`);
   }
 }
 
@@ -159,13 +175,13 @@ async function buyTokens() {
   try {
     const input = getElement("bnbAmount");
     if (!input) {
-      alert("Hata: BNB miktarı giriş alanı bulunamadı!");
+      alert("Error: BNB amount input field not found!");
       return;
     }
 
     const val = parseFloat(input.value);
     if (isNaN(val) || val < MIN_BNB) {
-      alert(`Minimum satın alma miktarı ${MIN_BNB} BNB!`);
+      alert(`Minimum purchase amount is ${MIN_BNB} BNB!`);
       return;
     }
 
@@ -178,11 +194,11 @@ async function buyTokens() {
 
     console.log("İşlem gönderildi:", tx.hash);
     await tx.wait();
-    alert("Token satın alma başarılı!");
+    alert("Token purchase successful!");
     await updateInfo();
   } catch (err) {
     console.error("Token satın alma hatası:", err);
-    alert(`İşlem başarısız: ${err.message || "Bilinmeyen bir hata oluştu."}`);
+    alert(`Transaction failed: ${err.message || "An unknown error occurred."}`);
   }
 }
 
@@ -197,7 +213,7 @@ function initializeEventListeners() {
 
     if (!Object.values(elements).every(el => el)) {
       console.error("Buton elemanları eksik:", elements);
-      alert("Hata: Buton elemanları eksik!");
+      alert("Error: Button elements are missing!");
       return;
     }
 
@@ -207,7 +223,7 @@ function initializeEventListeners() {
     console.log("Olay dinleyicileri bağlandı:", Object.keys(elements));
   } catch (err) {
     console.error("Olay dinleyicileri bağlama hatası:", err);
-    alert("Butonlar başlatılırken hata oluştu!");
+    alert("Error occurred while initializing buttons!");
   }
 }
 
