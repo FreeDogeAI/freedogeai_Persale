@@ -18,15 +18,17 @@ function getElement(id) {
   return element;
 }
 
-// MetaMask veya diğer Web3 cüzdan bağlantısı
+// MetaMask bağlantısı
 async function connectMetaMask() {
   try {
     if (!window.ethereum) {
-      alert("Please install a Web3 wallet like MetaMask!");
+      alert("MetaMask veya başka bir Web3 cüzdanı yüklü değil! Lütfen MetaMask'i yükleyin veya tarayıcı ayarlarınızı kontrol edin.");
+      window.open("https://metamask.io/download/", "_blank");
       return;
     }
 
-    provider = new ethers.providers.Web3Provider(window.ethereum);
+    // MetaMask sağlayıcısını başlat
+    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     await provider.send("eth_requestAccounts", []);
     signer = provider.getSigner();
     userAddress = await signer.getAddress();
@@ -34,14 +36,39 @@ async function connectMetaMask() {
     // Zincir kontrolü
     const network = await provider.getNetwork();
     if (network.chainId !== EXPECTED_CHAIN_ID) {
-      alert("Please switch to Binance Smart Chain!");
-      return;
+      try {
+        // BSC ağına geçiş yapmayı dene
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: `0x${EXPECTED_CHAIN_ID.toString(16)}` }]
+        });
+      } catch (switchError) {
+        if (switchError.code === 4902) {
+          // Ağ yoksa ekle
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [{
+              chainId: `0x${EXPECTED_CHAIN_ID.toString(16)}`,
+              chainName: "Binance Smart Chain",
+              nativeCurrency: {
+                name: "BNB",
+                symbol: "BNB",
+                decimals: 18
+              },
+              rpcUrls: ["https://bsc-dataseed.binance.org/"],
+              blockExplorerUrls: ["https://bscscan.com"]
+            }]
+          });
+        } else {
+          throw switchError;
+        }
+      }
     }
 
     await updateInfo();
   } catch (err) {
     console.error("MetaMask connection error:", err);
-    alert(`Connection failed: ${err.message}`);
+    alert(`Bağlantı başarısız: ${err.message || "Bilinmeyen bir hata oluştu."}`);
   }
 }
 
@@ -50,13 +77,15 @@ async function connectTrustWallet() {
   try {
     if (!window.ethereum) {
       const site = encodeURIComponent(window.location.href);
+      alert("TrustWallet uygulamasına yönlendiriliyorsunuz. Uygulamayı açtıktan sonra siteye geri dönün.");
       window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`;
       return;
     }
-    await connectMetaMask(); // TrustWallet Web3 enjeksiyonu varsa MetaMask gibi bağlan
+    // TrustWallet Web3 enjeksiyonu varsa MetaMask gibi bağlan
+    await connectMetaMask();
   } catch (err) {
     console.error("TrustWallet connection error:", err);
-    alert(`TrustWallet connection failed: ${err.message}`);
+    alert(`TrustWallet bağlantısı başarısız: ${err.message || "Bilinmeyen bir hata oluştu."}`);
   }
 }
 
@@ -73,11 +102,11 @@ async function updateInfo() {
     };
 
     if (!Object.values(elements).every(el => el)) {
-      alert("Error: UI elements missing!");
+      alert("Hata: Arayüz elemanları eksik!");
       return;
     }
 
-    elements.wallet.textContent = `Connected: ${userAddress}`;
+    elements.wallet.textContent = `Bağlı: ${userAddress}`;
     const balanceWei = await provider.getBalance(userAddress);
     const bnb = parseFloat(ethers.utils.formatEther(balanceWei));
     elements.bnbBalance.textContent = `BNB: ${bnb.toFixed(4)}`;
@@ -93,7 +122,7 @@ async function updateInfo() {
     };
   } catch (err) {
     console.error("Update info error:", err);
-    alert(`Error updating UI: ${err.message}`);
+    alert(`Arayüz güncelleme hatası: ${err.message}`);
   }
 }
 
@@ -102,13 +131,13 @@ async function buyTokens() {
   try {
     const input = getElement("bnbAmount");
     if (!input) {
-      alert("Error: Input field not found!");
+      alert("Hata: BNB miktarı giriş alanı bulunamadı!");
       return;
     }
 
     const val = parseFloat(input.value);
     if (isNaN(val) || val < MIN_BNB) {
-      alert(`Minimum purchase is ${MIN_BNB} BNB!`);
+      alert(`Minimum satın alma miktarı ${MIN_BNB} BNB!`);
       return;
     }
 
@@ -119,11 +148,11 @@ async function buyTokens() {
     });
 
     await tx.wait();
-    alert("Tokens purchased successfully!");
+    alert("Token satın alma başarılı!");
     await updateInfo();
   } catch (err) {
     console.error("Buy tokens error:", err);
-    alert(`Transaction failed: ${err.message}`);
+    alert(`İşlem başarısız: ${err.message || "Bilinmeyen bir hata oluştu."}`);
   }
 }
 
@@ -137,7 +166,7 @@ function initializeEventListeners() {
     };
 
     if (!Object.values(elements).every(el => el)) {
-      alert("Error: Button elements missing!");
+      alert("Hata: Buton elemanları eksik!");
       return;
     }
 
@@ -146,7 +175,7 @@ function initializeEventListeners() {
     elements.buyBtn.onclick = buyTokens;
   } catch (err) {
     console.error("Initialize event listeners error:", err);
-    alert("Error initializing buttons!");
+    alert("Butonlar başlatılırken hata oluştu!");
   }
 }
 
