@@ -1,136 +1,175 @@
-// script.js — FreeDogeAI Token Satış Sistemi
+// Config
+const CONFIG = {
+  BNB_RECEIVER: "0xd924e01c7d319c5b23708cd622bd1143cd4fb360",
+  TOKEN_CONTRACT: "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7",
+  TOKEN_PRICE: 12500000, // 1 BNB = 12.5M FDAI
+  MIN_BNB: 0.035,
+  CHAIN_ID: 56 // BSC Mainnet
+};
+
+// State
 let provider, signer, userAddress;
-const CONTRACT_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // BNB gönderilecek adres
-const TOKEN_CONTRACT = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; // FDAI Token adresi
-const TOKEN_PRICE = 12500000; // 1 BNB = 12.5M FDAI
-const MIN_BNB = 0.035; // Minimum satın alma miktarı
-const EXPECTED_CHAIN_ID = 56; // Binance Smart Chain (mainnet)
 
-// Akıllı sözleşme ABI'si
-const CONTRACT_ABI = [
-  "function buyTokens() public payable"
-];
+// Translations
+const TRANSLATIONS = {
+  en: {
+    title: "FreeDogeAI Token Presale",
+    connectMetaMask: "Connect MetaMask",
+    connectTrustWallet: "Connect TrustWallet",
+    walletNotConnected: "Wallet not connected",
+    buyButton: "Buy Tokens",
+    aboutTitle: "About FreeDogeAI",
+    aboutText: "FreeDogeAI is revolutionizing the meme coin space with AI-powered utilities. Join our presale to get early access to tokens at the best price!",
+    communityText: "Join our community:",
+    insufficientFunds: "Insufficient BNB balance",
+    wrongNetwork: "Please switch to Binance Smart Chain"
+  },
+  zh: {
+    title: "FreeDogeAI代币预售",
+    connectMetaMask: "连接MetaMask",
+    connectTrustWallet: "连接TrustWallet",
+    walletNotConnected: "钱包未连接",
+    buyButton: "购买代币",
+    aboutTitle: "关于FreeDogeAI",
+    aboutText: "FreeDogeAI正在通过人工智能驱动的实用程序彻底改变模因币领域。加入我们的预售，以最佳价格早期获取代币！",
+    communityText: "加入我们的社区：",
+    insufficientFunds: "BNB余额不足",
+    wrongNetwork: "请切换到币安智能链"
+  },
+  tr: {
+    title: "FreeDogeAI Token Ön Satış",
+    connectMetaMask: "MetaMask'e Bağlan",
+    connectTrustWallet: "TrustWallet'e Bağlan",
+    walletNotConnected: "Cüzdan bağlı değil",
+    buyButton: "Token Satın Al",
+    aboutTitle: "FreeDogeAI Hakkında",
+    aboutText: "FreeDogeAI, AI destekli özellikleriyle meme coin alanında devrim yapıyor. En iyi fiyattan token almak için ön satışımıza katılın!",
+    communityText: "Topluluğumuza katılın:",
+    insufficientFunds: "Yetersiz BNB bakiyesi",
+    wrongNetwork: "Lütfen Binance Smart Chain'a geçin"
+  }
+};
 
-// MetaMask veya diğer Web3 cüzdan bağlantısı
-<button id="manualConnect" style="display: none;">
-  Click here if MetaMask doesn't pop up
-</button>
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  initEventListeners();
+  updateLanguage('en');
+});
 
-<script>
-  document.getElementById('manualConnect').onclick = connectMetaMask;
-  
-  // 3 saniye sonra hala bağlanmadıysa butonu göster
-  setTimeout(() => {
-    if (!userAddress) {
-      document.getElementById('manualConnect').style.display = 'block';
+// Language switcher
+function updateLanguage(lang) {
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  document.getElementById('title').textContent = t.title;
+  document.getElementById('connectMetaMask').innerHTML = `<i class="fab fa-ethereum"></i> ${t.connectMetaMask}`;
+  document.getElementById('connectTrustWallet').innerHTML = `<i class="fas fa-wallet"></i> ${t.connectTrustWallet}`;
+  document.getElementById('buyButton').innerHTML = `<i class="fas fa-shopping-cart"></i> ${t.buyButton}`;
+  document.getElementById('aboutTitle').textContent = t.aboutTitle;
+  document.getElementById('aboutText').textContent = t.aboutText;
+  document.getElementById('communityText').textContent = t.communityText;
+}
+
+// MetaMask Connection
+async function connectMetaMask() {
+  try {
+    if (!window.ethereum) {
+      if (/mobile/i.test(navigator.userAgent)) {
+        window.location.href = `https://metamask.app.link/dapp/${encodeURIComponent(window.location.href)}`;
+      } else {
+        window.open('https://metamask.io/download.html', '_blank');
+      }
+      return;
     }
-  }, 3000);
-</script>
 
-// TrustWallet bağlantısı
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    signer = provider.getSigner();
+    userAddress = await signer.getAddress();
+    
+    const network = await provider.getNetwork();
+    if (network.chainId !== CONFIG.CHAIN_ID) {
+      alert(TRANSLATIONS[document.getElementById('languageSelect').value]?.wrongNetwork || "Wrong network");
+      return;
+    }
+    
+    updateWalletInfo();
+  } catch (error) {
+    showError(error.message);
+  }
+}
+
+// TrustWallet Connection
 async function connectTrustWallet() {
   try {
     if (!window.ethereum) {
-      const site = encodeURIComponent(window.location.href);
-      window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`;
+      window.location.href = `https://link.trustwallet.com/open_url?coin_id=20000714&url=${encodeURIComponent(window.location.href)}`;
       return;
     }
-    await connectMetaMask(); // TrustWallet Web3 enjeksiyonu varsa MetaMask gibi bağlan
-  } catch (err) {
-    console.error("TrustWallet connection error:", err);
-    alert(`TrustWallet connection failed: ${err.message}`);
+    await connectMetaMask(); // TrustWallet also injects window.ethereum
+  } catch (error) {
+    showError(error.message);
   }
 }
 
-// Arayüzü güncelleme
-async function updateInfo() {
-  const elements = {
-    wallet: document.getElementById("walletAddress"),
-    bnbBalance: document.getElementById("bnbBalance"),
-    input: document.getElementById("bnbAmount"),
-    output: document.getElementById("fdaiAmount"),
-    buyBtn: document.getElementById("buyButton"),
-    warning: document.getElementById("insufficientFunds")
-  };
-
-  if (!Object.values(elements).every(el => el)) {
-    console.error("One or more DOM elements not found:", elements);
-    alert("Error: UI elements missing!");
-    return;
-  }
-
-  elements.wallet.textContent = `Connected: ${userAddress}`;
-  const balanceWei = await provider.getBalance(userAddress);
-  const bnb = parseFloat(ethers.utils.formatEther(balanceWei));
-  elements.bnbBalance.textContent = `BNB: ${bnb.toFixed(4)}`;
-
-  // Input olay dinleyicisini sıfırla ve bağla
-  elements.input.oninput = null;
-  elements.input.oninput = () => {
-    const val = parseFloat(elements.input.value);
-    const tokens = isNaN(val) ? 0 : val * TOKEN_PRICE;
-    elements.output.textContent = `${tokens.toLocaleString()} FDAI`;
-    elements.buyBtn.disabled = val < MIN_BNB || val > bnb;
-    elements.warning.style.display = val > bnb ? "block" : "none";
-  };
+// Update wallet info
+async function updateWalletInfo() {
+  const balance = await provider.getBalance(userAddress);
+  const bnbBalance = ethers.utils.formatEther(balance);
+  
+  document.getElementById('walletAddress').textContent = `Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+  document.getElementById('bnbBalance').textContent = `BNB Balance: ${parseFloat(bnbBalance).toFixed(4)}`;
+  
+  document.getElementById('bnbAmount').addEventListener('input', (e) => {
+    const bnb = parseFloat(e.target.value);
+    if (isNaN(bnb)) {
+      document.getElementById('fdaiAmount').textContent = '0 FDAI';
+      document.getElementById('buyButton').disabled = true;
+      return;
+    }
+    
+    const tokens = bnb * CONFIG.TOKEN_PRICE;
+    document.getElementById('fdaiAmount').textContent = `${tokens.toLocaleString()} FDAI`;
+    document.getElementById('buyButton').disabled = bnb < CONFIG.MIN_BNB || bnb > parseFloat(bnbBalance);
+    
+    if (bnb > parseFloat(bnbBalance)) {
+      showError(TRANSLATIONS[document.getElementById('languageSelect').value]?.insufficientFunds || "Insufficient funds");
+    } else {
+      clearError();
+    }
+  });
 }
 
-// Token satın alma işlemi
+// Buy tokens
 async function buyTokens() {
   try {
-    const input = document.getElementById("bnbAmount");
-    if (!input) {
-      console.error("BNB amount input not found");
-      alert("Error: Input field not found!");
+    const bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
+    if (bnbAmount < CONFIG.MIN_BNB) {
+      alert(`Minimum purchase is ${CONFIG.MIN_BNB} BNB`);
       return;
     }
 
-    const val = parseFloat(input.value);
-    if (isNaN(val) || val < MIN_BNB) {
-      alert(`Minimum purchase is ${MIN_BNB} BNB!`);
-      return;
-    }
-
-    const contract = new ethers.Contract(TOKEN_CONTRACT, CONTRACT_ABI, signer);
-    const tx = await contract.buyTokens({
-      value: ethers.utils.parseEther(val.toString()),
-      gasLimit: 200000
+    const tx = await signer.sendTransaction({
+      to: CONFIG.BNB_RECEIVER,
+      value: ethers.utils.parseEther(bnbAmount.toString())
     });
-
-    await tx.wait();
-    alert("Tokens purchased successfully!");
-    await updateInfo();
-  } catch (err) {
-    console.error("Buy tokens error:", err);
-    alert(`Transaction failed: ${err.message}`);
+    
+    alert(`Transaction sent! TX Hash: ${tx.hash}`);
+  } catch (error) {
+    showError(error.message);
   }
 }
 
-// Olay dinleyicilerini bağlama
-function initializeEventListeners() {
-  const elements = {
-    metaMaskBtn: document.getElementById("connectMetaMask"),
-    trustWalletBtn: document.getElementById("connectTrustWallet"),
-    buyBtn: document.getElementById("buyButton")
-  };
-
-  if (!Object.values(elements).every(el => el)) {
-    console.error("One or more button elements not found:", elements);
-    alert("Error: Button elements missing!");
-    return;
-  }
-
-  elements.metaMaskBtn.onclick = connectMetaMask;
-  elements.trustWalletBtn.onclick = connectTrustWallet;
-  elements.buyBtn.onclick = buyTokens;
+// Helpers
+function initEventListeners() {
+  document.getElementById('connectMetaMask').addEventListener('click', connectMetaMask);
+  document.getElementById('connectTrustWallet').addEventListener('click', connectTrustWallet);
+  document.getElementById('buyButton').addEventListener('click', buyTokens);
+  document.getElementById('languageSelect').addEventListener('change', (e) => updateLanguage(e.target.value));
 }
 
-// Başlatma
-document.addEventListener("DOMContentLoaded", () => {
-  try {
-    initializeEventListeners();
-  } catch (err) {
-    console.error("Initialization error:", err);
-    alert("Error initializing application!");
-  }
-});
+function showError(message) {
+  document.getElementById('errorMessage').textContent = message;
+}
+
+function clearError() {
+  document.getElementById('errorMessage').textContent = '';
+}
