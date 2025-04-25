@@ -1,162 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FreeDogeAI Token Presale</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <!-- Logo -->
-    <img src="https://freedogeai.com/logo.png" alt="FreeDogeAI Logo" class="logo" id="logo">
+    <img src="logo.png" alt="FreeDogeAI Logo" class="logo" />
 
-    <!-- Dil Seçimi -->
-    <select id="languageSelect" aria-label="Select language">
+    <select id="languageSelect">
       <option value="en" selected>English</option>
-      <option value="zh">中文 (Chinese)</option>
+      <option value="zh">中文</option>
     </select>
 
-    <!-- Cüzdan Bağlama Butonu (Sağ Üst) -->
-    <button id="connectWallet" class="btn btn-connect" aria-label="Connect Wallet">Connect Wallet</button>
+    <button id="connectWallet" class="btn-connect">Connect Wallet</button>
 
-    <!-- Cüzdan Seçme Modal -->
     <div id="walletModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
         <h2 id="modalTitle">Connect Your Wallet</h2>
-        <button id="connectMetaMask" class="btn btn-wallet">MetaMask</button>
-        <button id="connectTrustWallet" class="btn btn-wallet">TrustWallet</button>
+        <button id="connectMetaMask" class="btn-wallet">MetaMask</button>
+        <button id="connectTrustWallet" class="btn-wallet">TrustWallet</button>
       </div>
     </div>
 
-    <!-- Başlık -->
-    <h1 id="title">Free Doge AI (FDAI) is next doge don't miss pre sale</h1>
-
-    <!-- Cüzdan Bilgileri -->
+    <h1 id="title">Free Doge AI (FDAI) is next doge – don't miss pre sale!</h1>
     <div id="walletAddress">WALLET NOT CONNECTED</div>
     <div id="bnbBalance">BNB BALANCE: --</div>
 
-    <!-- Token Satın Alma Alanı -->
-    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" min="0" step="0.001" aria-label="BNB amount">
+    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" min="0" step="0.001" />
     <div id="fdaiAmount">YOU WILL RECEIVE: 0 FDAI</div>
-    <button id="buyButton" class="btn btn-buy" disabled aria-label="Buy Tokens">Buy Tokens</button>
-    <div id="insufficientFunds" style="display: none; color: red;">
-      <span aria-hidden="true">⚠</span> Insufficient funds
+    <button id="buyButton" class="btn-buy" disabled>Buy Tokens</button>
+    <div id="insufficientFunds" style="display:none;color:red;">
+      ⚠ Insufficient funds
     </div>
 
-    <!-- Whitepaper -->
-    <a id="whiteLink" href="FreeDogeAI_Whitepaper.pdf" download class="btn btn-whitepaper" aria-label="Download Whitepaper">Download Whitepaper (PDF)</a>
+    <a href="FreeDogeAI_Whitepaper.pdf" class="btn-whitepaper" download>Download Whitepaper (PDF)</a>
 
-    <!-- Hakkında Kısmı -->
-    <h2 id="aboutTitle">About</h2>
-    <p id="aboutText">
-      The future doesn’t wait! Free Doge AI (FDAI) is the ultimate memecoin revolution—don’t just watch, join the movement! This isn’t just another token; it’s your ticket to the next big wave in crypto. The presale is live now, and it won’t last long. Secure your FDAI tokens before they skyrocket—don’t miss out on this once-in-a-lifetime opportunity!
+    <h2>About</h2>
+    <p>
+      The future doesn’t wait! Free Doge AI (FDAI) is the ultimate memecoin revolution.
+      Don’t just watch — join the movement. Get in early before the rocket launches!
     </p>
 
-    <!-- Topluluk Linkleri -->
     <div class="community">
-      <h3 id="communityTitle">Community</h3>
-      <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
-      <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter</a>
+      <h3>Community</h3>
+      <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
+      <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter</a>
     </div>
   </div>
 
-  <script>
-    // Dil seçimi için çeviriler
-    const translations = {
-      en: {
-        title: "Free Doge AI (FDAI) is next doge don't miss pre sale",
-        connectWallet: "Connect Wallet",
-        modalTitle: "Connect Your Wallet",
-        walletAddress: "WALLET NOT CONNECTED",
-        bnbBalance: "BNB BALANCE: --",
-        bnbAmountPlaceholder: "Enter BNB amount",
-        fdaiAmount: "YOU WILL RECEIVE: 0 FDAI",
-        buyButton: "Buy Tokens",
-        insufficientFunds: "Insufficient funds",
-        whiteLink: "Download Whitepaper (PDF)",
-        aboutTitle: "About",
-        aboutText: "The future doesn’t wait! Free Doge AI (FDAI) is the ultimate memecoin revolution—don’t just watch, join the movement! This isn’t just another token; it’s your ticket to the next big wave in crypto. The presale is live now, and it won’t last long. Secure your FDAI tokens before they skyrocket—don’t miss out on this once-in-a-lifetime opportunity!",
-        communityTitle: "Community"
-      },
-      zh: {
-        title: "Free Doge AI (FDAI) 是下一个狗狗币，不要错过预售",
-        connectWallet: "连接钱包",
-        modalTitle: "连接您的钱包",
-        walletAddress: "钱包未连接",
-        bnbBalance: "BNB 余额：--",
-        bnbAmountPlaceholder: "输入 BNB 金额",
-        fdaiAmount: "您将收到：0 FDAI",
-        buyButton: "购买代币",
-        insufficientFunds: "余额不足",
-        whiteLink: "下载白皮书 (PDF)",
-        aboutTitle: "关于",
-        aboutText: "未来不会等待！Free Doge AI (FDAI) 是终极迷因币革命——不要只是观看，加入这场运动吧！这不仅仅是另一个代币；它是你进入加密货币下一波大浪的门票。预售现已开启，时间不会太长。在 FDAI 代币暴涨之前锁定你的份额——不要错过这个千载难逢的机会！",
-        communityTitle: "社区"
-      }
-    };
-
-    function updateLanguage(lang) {
-      try {
-        const t = translations[lang] || translations.en;
-        const elements = {
-          title: document.getElementById("title"),
-          connectWallet: document.getElementById("connectWallet"),
-          modalTitle: document.getElementById("modalTitle"),
-          walletAddress: document.getElementById("walletAddress"),
-          bnbBalance: document.getElementById("bnbBalance"),
-          bnbAmount: document.getElementById("bnbAmount"),
-          fdaiAmount: document.getElementById("fdaiAmount"),
-          buyButton: document.getElementById("buyButton"),
-          insufficientFunds: document.getElementById("insufficientFunds"),
-          whiteLink: document.getElementById("whiteLink"),
-          aboutTitle: document.getElementById("aboutTitle"),
-          aboutText: document.getElementById("aboutText"),
-          communityTitle: document.getElementById("communityTitle")
-        };
-
-        if (!Object.values(elements).every(el => el)) {
-          console.error("Bazı çeviri elemanları bulunamadı:", elements);
-          return;
-        }
-
-        elements.title.textContent = t.title;
-        elements.connectWallet.textContent = t.connectWallet;
-        elements.modalTitle.textContent = t.modalTitle;
-        elements.walletAddress.textContent = t.walletAddress;
-        elements.bnbBalance.textContent = t.bnbBalance;
-        elements.bnbAmount.placeholder = t.bnbAmountPlaceholder;
-        elements.fdaiAmount.textContent = t.fdaiAmount;
-        elements.buyButton.textContent = t.buyButton;
-        elements.insufficientFunds.innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
-        elements.whiteLink.textContent = t.whiteLink;
-        elements.aboutTitle.textContent = t.aboutTitle;
-        elements.aboutText.textContent = t.aboutText;
-        elements.communityTitle.textContent = t.communityTitle;
-
-        console.log("Dil güncellendi:", lang);
-      } catch (err) {
-        console.error("Dil güncelleme hatası:", err);
-      }
-    }
-
-    // Dil seçimi olay dinleyicisi
-    document.addEventListener("DOMContentLoaded", () => {
-      const languageSelect = document.getElementById("languageSelect");
-      if (languageSelect) {
-        languageSelect.addEventListener("change", (e) => {
-          const selectedLang = e.target.value;
-          console.log("Dil seçimi değişti:", selectedLang);
-          updateLanguage(selectedLang);
-        });
-        updateLanguage("en"); // Varsayılan dil: İngilizce
-      } else {
-        console.error("Dil seçimi elemanı bulunamadı");
-      }
-    });
-  </script>
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </body>
 </html>
