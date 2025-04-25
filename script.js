@@ -6,12 +6,11 @@ const CHAIN_ID = 56;
 
 let provider, signer, userAddress;
 
-// Cüzdan modalını aç
+// Modal aç/kapat
 document.getElementById("connectWallet").onclick = () => {
   document.getElementById("walletModal").style.display = "block";
 };
 
-// Cüzdan modalını kapat
 document.getElementsByClassName("close")[0].onclick = () => {
   document.getElementById("walletModal").style.display = "none";
 };
@@ -19,11 +18,12 @@ document.getElementsByClassName("close")[0].onclick = () => {
 // MetaMask bağlantısı
 document.getElementById("connectMetaMask").onclick = async () => {
   const isMobile = /Android|iPhone/i.test(navigator.userAgent);
+
   if (typeof window.ethereum === "undefined") {
     if (isMobile) {
       window.location.href = "https://metamask.app.link/dapp/freedogeai.github.io";
     } else {
-      alert("Please install MetaMask");
+      alert("Please install MetaMask.");
     }
     return;
   }
@@ -42,16 +42,17 @@ document.getElementById("connectMetaMask").onclick = async () => {
 
 // TrustWallet bağlantısı
 document.getElementById("connectTrustWallet").onclick = () => {
-  const site = encodeURIComponent(window.location.href);
-  window.location.href = `https://link.trustwallet.com/open_url?url=${site}`;
+  const url = encodeURIComponent(window.location.href);
+  window.location.href = `https://link.trustwallet.com/open_url?url=${url}`;
 };
 
-// BNB girilince otomatik hesapla
+// BNB inputu güncelle
 document.getElementById("bnbAmount").oninput = () => {
   const bnb = parseFloat(document.getElementById("bnbAmount").value);
   const tokens = isNaN(bnb) ? 0 : bnb * TOKEN_PRICE;
   document.getElementById("fdaiAmount").innerText = `YOU WILL RECEIVE: ${tokens.toLocaleString()} FDAI`;
   document.getElementById("buyButton").disabled = bnb < MIN_BNB;
+  document.getElementById("insufficientFunds").style.display = bnb > 100 ? "block" : "none"; // İsteğe bağlı: çok büyük girişlerde uyarı
 };
 
 // Satın alma işlemi
@@ -64,12 +65,12 @@ document.getElementById("buyButton").onclick = async () => {
     alert("Token purchase successful!");
     await updateUI();
   } catch (err) {
-    console.error("Buy error:", err);
+    console.error("Transaction failed:", err);
     alert("Transaction failed.");
   }
 };
 
-// Arayüzü güncelle
+// Cüzdan bağlanınca bilgileri güncelle
 async function updateUI() {
   document.getElementById("walletModal").style.display = "none";
   document.getElementById("walletAddress").innerText = `Connected: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
@@ -78,7 +79,7 @@ async function updateUI() {
   document.getElementById("bnbBalance").innerText = `BNB BALANCE: ${parseFloat(bnb).toFixed(4)}`;
 }
 
-// Dil seçimi (İngilizce ve Çince)
+// Dil seçimi (EN / ZH)
 document.getElementById("languageSelect").addEventListener("change", (e) => {
   const lang = e.target.value;
 
@@ -95,7 +96,7 @@ document.getElementById("languageSelect").addEventListener("change", (e) => {
     document.getElementById("buyButton").innerText = "购买代币";
     document.getElementById("insufficientFunds").innerText = "⚠ 余额不足";
     document.querySelector("h2").innerText = "关于";
-    document.querySelector("p").innerText = "未来不会等待！Free Doge AI (FDAI) 是终极迷因币革命。别只是观望，加入这场运动！预售正在进行中，机不可失！";
+    document.querySelector("p").innerText = "Free Doge AI 是终极迷因币革命——预售正在进行中！现在加入吧！";
     document.querySelector(".community h3").innerText = "社区";
   } else {
     document.getElementById("title").innerText = "Free Doge AI (FDAI) is next doge – don't miss pre sale!";
@@ -110,7 +111,7 @@ document.getElementById("languageSelect").addEventListener("change", (e) => {
     document.getElementById("buyButton").innerText = "Buy Tokens";
     document.getElementById("insufficientFunds").innerText = "⚠ Insufficient funds";
     document.querySelector("h2").innerText = "About";
-    document.querySelector("p").innerText = "The future doesn’t wait! Free Doge AI (FDAI) is the ultimate memecoin revolution. Don’t just watch — join the movement. Get in early before the rocket launches!";
+    document.querySelector("p").innerText = "The future doesn’t wait! Free Doge AI (FDAI) is the ultimate memecoin revolution. Get in early before the rocket launches!";
     document.querySelector(".community h3").innerText = "Community";
   }
 });
