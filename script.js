@@ -39,7 +39,6 @@ async function connectMetaMask() {
     closeWalletModal();
     if (isMobile) {
       console.log("Mobil cihazda MetaMask bağlantısı deneniyor...");
-      // Mobil cihazda her zaman MetaMask uygulamasını açmayı dene
       const site = encodeURIComponent("freedogeai.com");
       window.location.href = `metamask://dapp/${site}`; // MetaMask uygulamasını aç ve siteyi yükle
       setTimeout(() => {
@@ -59,15 +58,15 @@ async function connectMetaMask() {
         }
       }, 2000); // 2 saniye bekle
       return;
-    } else {
-      // Masaüstünde MetaMask kontrolü
-      console.log("Masaüstü cihazda MetaMask kontrolü yapılıyor...");
-      if (!window.ethereum || !window.ethereum.isMetaMask) {
-        console.log("MetaMask yüklü değil veya algılanamadı.");
-        alert("MetaMask is not detected. Please install MetaMask or open this page in the MetaMask browser.");
-        window.open("https://metamask.io/download/", "_blank");
-        return;
-      }
+    }
+
+    // Masaüstünde MetaMask kontrolü
+    console.log("Masaüstü cihazda MetaMask kontrolü yapılıyor...");
+    if (!window.ethereum || !window.ethereum.isMetaMask) {
+      console.log("MetaMask yüklü değil veya algılanamadı.");
+      alert("MetaMask is not detected. Please install MetaMask or open this page in the MetaMask browser.");
+      window.open("https://metamask.io/download/", "_blank");
+      return;
     }
 
     // Sağlayıcıyı başlat
@@ -121,23 +120,69 @@ async function connectMetaMask() {
 async function connectTrustWallet() {
   try {
     closeWalletModal();
-    if (isMobile && !window.ethereum) {
+    if (isMobile) {
       console.log("Mobil cihazda TrustWallet yönlendirmesi başlatılıyor...");
       const site = encodeURIComponent(window.location.href);
       window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`; // Doğru derin bağlantı
       return;
     }
 
-    // Eğer window.ethereum varsa, doğrudan bağlan
-    console.log("TrustWallet Web3 enjeksiyonu tespit edildi, bağlanıyor...");
-    await connectMetaMask(); // Web3 enjeksiyonu varsa MetaMask gibi bağlan
+    // Masaüstünde TrustWallet kontrolü
+    if (!window.ethereum) {
+      console.log("TrustWallet yüklü değil veya algılanamadı.");
+      alert("TrustWallet is not detected. Please install TrustWallet or open this page in the TrustWallet browser.");
+      window.open("https://trustwallet.com/download", "_blank");
+      return;
+    }
+
+    // Sağlayıcıyı başlat
+    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    console.log("TrustWallet sağlayıcısı başlatıldı:", window.ethereum);
+
+    // Cüzdan bağlantısı iste
+    await provider.send("eth_requestAccounts", []);
+    signer = provider.getSigner();
+    userAddress = await signer.getAddress();
+    console.log("Cüzdan bağlandı:", userAddress);
+
+    // Zincir kontrolü
+    const network = await provider.getNetwork();
+    console.log("Bağlı ağ:", network);
+    if (network.chainId !== EXPECTED_CHAIN_ID) {
+      try {
+        console.log("BSC ağına geçiş deneniyor...");
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: `0x${EXPECTED_CHAIN_ID.toString(16)}` }]
+        });
+      } catch (switchError) {
+        console.error("Ağ değiştirme hatası:", switchError);
+        if (switchError.code === 4902) {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [{
+              chainId: `0x${EXPECTED_CHAIN_ID.toString(16)}`,
+              chainName: "Binance Smart Chain",
+              nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+              rpcUrls: ["https://bsc-dataseed.binance.org/"],
+              blockExplorerUrls: ["https://bscscan.com"]
+            }]
+          });
+        } else {
+          alert(`Please switch to the Binance Smart Chain network! Error: ${switchError.message}`);
+          return;
+        }
+      }
+    }
+
+    await updateInfo();
   } catch (err) {
     console.error("TrustWallet connection error:", err);
     alert(`TrustWallet connection failed: ${err.message || "An unknown error occurred."}`);
   }
 }
 
-// Arayüzü güncelleme (dil desteği için dinamik metin güncellendi)
+// Arayüzü güncelleme
 async function updateInfo() {
   try {
     const elements = {
