@@ -1,111 +1,67 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FreeDogeAI Presale</title>
-  <script src="https://unpkg.com/@thirdweb-dev/wallets@latest/dist/wallets.umd.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Free Doge AI Presale</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-  <style>
-    body {
-      background: #000;
-      color: #FFD700;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 2rem;
-    }
-    img.logo {
-      max-width: 160px;
-      margin-bottom: 1rem;
-    }
-    button, input {
-      padding: 10px;
-      margin: 10px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
-    }
-    button {
-      background: #FFD700;
-      color: #000;
-      cursor: pointer;
-    }
-    input {
-      background: #222;
-      color: #FFD700;
-      border: 1px solid #FFD700;
-    }
-    #walletDetails {
-      display: none;
-      margin-top: 20px;
-    }
-    footer {
-      margin-top: 40px;
-      font-size: 0.9rem;
-      color: #aaa;
-    }
-    .about, .community, .whitepaper {
-      margin-top: 2rem;
-    }
-    a {
-      color: #FFD700;
-      text-decoration: none;
-    }
-  </style>
+  <script src="https://unpkg.com/i18next@21.6.3/dist/umd/i18next.min.js"></script>
 </head>
 <body>
-  <img src="file_000000009588520ab205ff2....png" class="logo" alt="FreeDogeAI Logo" />
-  <h1>Nex DOGE</h1>
-  <button id="connectButton">Connect Wallet</button>  <div id="walletDetails">
-    <p>Wallet: <span id="walletAddress"></span></p>
-    <p>BNB Balance: <span id="bnbBalance"></span></p>
-    <input type="number" id="bnbAmount" placeholder="Enter BNB (min 0.035)" step="0.001" />
-    <button id="buyButton">Buy FDAI</button>
-  </div>  <div class="whitepaper">
-    <a href="FreeDogeAI_Whitepaper.pdf" download>Download Whitepaper (PDF)</a>
-  </div>  <div class="about">
-    <h3>About</h3>
-    <p>FreeDogeAI is more than just a token — it’s a revolution. Early buyers won’t just invest, they’ll own a piece of history. Join the movement before it’s too late.</p>
-  </div>  <div class="community">
-    <h3>Community</h3>
+  <!-- Logo and Title -->
+  <div style="text-align: center; margin-top: 20px;">
+    <img src="logo.png" alt="Free Doge AI Logo" style="width: 100px; border-radius: 10px;">
+    <h1 style="color: gold; margin: 10px 0 0;">Next DOGE</h1>
+  </div>
+
+  <!-- Language Selector -->
+  <div style="text-align: center; margin-top: 10px;">
+    <select id="languageSwitcher" onchange="changeLanguage(this.value)">
+      <option value="en">English</option>
+      <option value="zh">中文</option>
+      <option value="ja">日本語</option>
+      <option value="ar">العربية</option>
+    </select>
+  </div>
+
+  <!-- Connect Wallet Button -->
+  <div style="text-align: center; margin-top: 20px;">
+    <button id="connectButton">Connect Wallet</button>
+    <div id="walletInfo" style="display: none; margin-top: 10px;">
+      <p><strong>Address:</strong> <span id="walletAddress"></span></p>
+      <p><strong>BNB Balance:</strong> <span id="bnbBalance"></span></p>
+    </div>
+  </div>
+
+  <!-- Token Purchase -->
+  <div style="text-align: center; margin-top: 20px;">
+    <input type="number" id="bnbInput" placeholder="Enter BNB amount" step="0.01">
+    <p>You will receive: <span id="tokenAmount">0</span> FDAI</p>
+    <button id="buyButton" disabled>Buy Tokens</button>
+  </div>
+
+  <!-- Whitepaper -->
+  <div style="text-align: center; margin-top: 20px;">
+    <a href="FreeDogeAI_Whitepaper.pdf" target="_blank">Download Whitepaper (PDF)</a>
+  </div>
+
+  <!-- About Section -->
+  <div style="text-align: center; margin: 40px 20px;">
+    <h2>About</h2>
+    <p id="aboutText">
+      The future doesn’t wait. Free Doge AI is not just a meme—it’s a movement. When others hesitate, we launch. 
+      Don’t be the one who watches from the sidelines. Be the one who rides the next wave. This is your moment. Don’t miss it.
+    </p>
+  </div>
+
+  <!-- Community Links -->
+  <div style="text-align: center; margin-bottom: 40px;">
+    <h2>Community</h2>
     <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
     <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter</a>
-  </div>  <footer>
-    &copy; 2025 FreeDogeAI. All rights reserved.
-  </footer>  <script>
-    const receiverAddress = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
-    let wallet, web3;
+  </div>
 
-    document.getElementById("connectButton").onclick = async () => {
-      try {
-        wallet = await thirdwebWallets.connect({
-          wallets: ["metamask", "trust"],
-          chainId: 56
-        });
-
-        if (!wallet || !wallet.address) return alert("Wallet connection failed");
-        web3 = new Web3(wallet.provider);
-
-        const balance = await web3.eth.getBalance(wallet.address);
-        document.getElementById("walletAddress").innerText = wallet.address;
-        document.getElementById("bnbBalance").innerText = (web3.utils.fromWei(balance, 'ether')) + ' BNB';
-
-        document.getElementById("walletDetails").style.display = "block";
-      } catch (error) {
-        alert("Connection error: " + error.message);
-      }
-    };
-
-    document.getElementById("buyButton").onclick = async () => {
-      const bnb = parseFloat(document.getElementById("bnbAmount").value);
-      if (bnb < 0.035) return alert("Minimum 0.035 BNB required");
-
-      const wei = web3.utils.toWei(bnb.toString(), 'ether');
-      try {
-        await web3.eth.sendTransaction({ from: wallet.address, to: receiverAddress, value: wei });
-        alert("Transaction sent. FDAI token will be delivered.");
-      } catch (err) {
-        alert("Transaction failed: " + err.message);
-      }
-    };
-  </script></body>
-</html>
+  <script src="script.js"></script>
+</body>
+  </html>
