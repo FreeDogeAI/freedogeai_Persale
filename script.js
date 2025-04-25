@@ -111,37 +111,18 @@ async function connectMetaMask() {
   }
 }
 
-// TrustWallet bağlantısı
+// TrustWallet bağlantısı (önceki çalışan hali geri getirildi)
 async function connectTrustWallet() {
   try {
-    if (isMobile) {
+    if (!window.ethereum) {
       console.log("Mobil cihazda TrustWallet yönlendirmesi başlatılıyor...");
-      if (!window.ethereum) {
-        const site = encodeURIComponent("freedogeai.com");
-        window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`; // TrustWallet uygulamasını aç ve siteyi yükle
-        setTimeout(() => {
-          // Eğer TrustWallet yüklü değilse, kullanıcıyı uygulama mağazasına yönlendir
-          if (!document.hidden) {
-            const isAndroid = /Android/i.test(navigator.userAgent);
-            const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-            let storeLink = "";
-            if (isAndroid) {
-              storeLink = "https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp";
-            } else if (isIOS) {
-              storeLink = "https://apps.apple.com/us/app/trust-crypto-bitcoin-wallet/id1288339409";
-            } else {
-              storeLink = "https://trustwallet.com/download";
-            }
-            window.location.href = storeLink;
-          }
-        }, 2000); // 2 saniye bekle
-        return;
-      }
+      const site = encodeURIComponent(window.location.href);
+      alert("You are being redirected to TrustWallet. After opening the app, return to this site.");
+      window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`;
+      return;
     }
-
-    // Web3 enjeksiyonu varsa bağlan
     console.log("TrustWallet Web3 enjeksiyonu tespit edildi, bağlanıyor...");
-    await connectMetaMask(); // Aynı bağlantı mantığını kullan
+    await connectMetaMask(); // TrustWallet Web3 enjeksiyonu varsa MetaMask gibi bağlan
   } catch (err) {
     console.error("TrustWallet connection error:", err);
     alert(`TrustWallet connection failed: ${err.message || "An unknown error occurred."}`);
