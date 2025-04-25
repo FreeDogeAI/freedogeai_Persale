@@ -1,29 +1,32 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #1a1a1a;
-  color: white;
   margin: 0;
   padding: 0;
+  background-color: #1a1a1a;
+  color: #fff;
 }
 
 .container {
   max-width: 600px;
-  margin: auto;
+  margin: 20px auto;
   padding: 20px;
   text-align: center;
 }
 
 .logo {
-  width: 120px;
+  width: 150px; /* Logoyu bir tık büyüttüm */
+  height: auto;
   margin-bottom: 20px;
 }
 
 #languageSelect {
-  padding: 6px;
-  margin-bottom: 20px;
+  display: block;
+  margin: 0 auto 20px;
+  padding: 8px;
+  width: 150px;
   border-radius: 5px;
   background: #444;
-  color: white;
+  color: #fff;
   border: none;
 }
 
@@ -31,13 +34,19 @@ body {
   position: absolute;
   top: 20px;
   right: 20px;
-  padding: 10px 20px;
-  background: #28a745;
-  color: white;
+  background-color: #28A745; /* Yeşil renk */
+  color: #fff;
+  padding: 12px 24px;
   border: none;
   border-radius: 5px;
-  font-weight: bold;
+  font-size: 1em;
   cursor: pointer;
+  transition: transform 0.1s, background-color 0.3s;
+}
+
+.btn-connect:hover {
+  transform: scale(1.05);
+  background-color: #218838;
 }
 
 .modal {
@@ -48,84 +57,146 @@ body {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
   background-color: #333;
-  margin: 25% auto;
+  margin: 15% auto;
   padding: 20px;
-  width: 80%;
-  max-width: 300px;
   border-radius: 10px;
+  width: 80%;
+  max-width: 400px;
   text-align: center;
 }
 
 .close {
+  color: #aaa;
   float: right;
-  color: white;
-  font-size: 24px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #fff;
+  text-decoration: none;
   cursor: pointer;
 }
 
 .btn-wallet {
-  background: #f6851b;
-  color: white;
-  border: none;
+  display: block;
+  width: 100%;
   margin: 10px 0;
   padding: 12px;
-  width: 100%;
+  background-color: #f6851b;
+  color: #fff;
+  border: none;
   border-radius: 5px;
   font-size: 1em;
+  cursor: pointer;
+}
+
+.btn-wallet:hover {
+  background-color: #e07b00;
+}
+
+h1 {
+  color: #FFD700; /* Altın sarısı */
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+#walletAddress, #bnbBalance {
+  font-size: 0.9em;
+  margin: 10px 0;
+  color: #ccc;
 }
 
 input[type="number"] {
-  padding: 12px;
-  font-size: 1.2em;
   width: 100%;
+  padding: 10px;
   margin: 10px 0;
-  border-radius: 8px;
-  background: #fff100;
   border: none;
-  color: #000;
+  border-radius: 5px;
+  background: #444;
+  color: #fff;
+  font-size: 1em;
 }
 
 #fdaiAmount {
+  font-size: 1.2em;
   margin: 10px 0;
-  font-weight: bold;
-  color: #ff9900;
+  color: #f6851b;
 }
 
 .btn-buy {
-  background: #28a745;
-  color: white;
-  padding: 12px;
+  background-color: #28A745; /* Yeşil renk */
+  color: #fff;
   width: 100%;
+  padding: 12px;
+  margin: 10px 0;
   border: none;
   border-radius: 5px;
   font-size: 1.2em;
+  cursor: pointer;
+  transition: transform 0.1s, background-color 0.3s;
+}
+
+.btn-buy:hover {
+  transform: scale(1.05);
+  background-color: #218838;
 }
 
 .btn-buy:disabled {
-  background: #666;
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+#insufficientFunds {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
 }
 
 .btn-whitepaper {
-  display: block;
-  margin: 20px auto;
-  padding: 10px 20px;
-  background: #ff4444;
-  color: white;
-  border-radius: 5px;
+  display: inline-block;
+  margin: 20px 0;
+  padding: 12px 24px;
+  background-color: #ff4444;
+  color: #fff;
   text-decoration: none;
+  border-radius: 5px;
+}
+
+h2 {
+  color: #fff;
+  font-size: 1.5em;
+  margin-top: 30px;
+}
+
+p {
+  color: #ccc;
+  font-size: 1em;
+  line-height: 1.5;
 }
 
 .community {
-  margin-top: 30px;
+  margin-top: 20px;
+}
+
+.community h3 {
+  color: #fff;
+  font-size: 1.2em;
+  margin-bottom: 10px;
 }
 
 .community a {
   color: #1E90FF;
   text-decoration: none;
   margin: 0 5px;
+}
+
+.community a:hover {
+  text-decoration: underline;
 }
