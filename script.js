@@ -39,11 +39,12 @@ async function connectMetaMask() {
     closeWalletModal();
     if (isMobile) {
       console.log("Mobil cihazda MetaMask bağlantısı deneniyor...");
-      const site = encodeURIComponent("freedogeai.com");
-      window.location.href = `metamask://dapp/${site}`; // MetaMask uygulamasını aç ve siteyi yükle
+      const site = encodeURIComponent(window.location.href); // Tam URL’yi kullan
+      window.location.href = `metamask://dapp/${site}`; // MetaMask uygulamasını aç
       setTimeout(() => {
         // Eğer MetaMask yüklü değilse, kullanıcıyı uygulama mağazasına yönlendir
         if (!document.hidden) {
+          console.log("MetaMask açılmadı, kullanıcıyı mağazaya yönlendiriyorum...");
           const isAndroid = /Android/i.test(navigator.userAgent);
           const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
           let storeLink = "";
@@ -122,12 +123,20 @@ async function connectTrustWallet() {
     closeWalletModal();
     if (isMobile) {
       console.log("Mobil cihazda TrustWallet yönlendirmesi başlatılıyor...");
-      const site = encodeURIComponent(window.location.href);
-      window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`; // Doğru derin bağlantı
+      const site = encodeURIComponent(window.location.href); // Tam URL’yi kullan
+      window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`; // TrustWallet uygulamasını aç
+      setTimeout(() => {
+        // Eğer TrustWallet yüklü değilse, kullanıcıyı indirme sayfasına yönlendir
+        if (!document.hidden) {
+          console.log("TrustWallet açılmadı, kullanıcıyı indirme sayfasına yönlendiriyorum...");
+          window.location.href = "https://trustwallet.com/download";
+        }
+      }, 2000); // 2 saniye bekle
       return;
     }
 
     // Masaüstünde TrustWallet kontrolü
+    console.log("Masaüstü cihazda TrustWallet kontrolü yapılıyor...");
     if (!window.ethereum) {
       console.log("TrustWallet yüklü değil veya algılanamadı.");
       alert("TrustWallet is not detected. Please install TrustWallet or open this page in the TrustWallet browser.");
