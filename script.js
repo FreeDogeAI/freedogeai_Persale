@@ -27,9 +27,7 @@ document.getElementById("connectMetaMask").onclick = async () => {
 };
 
 document.getElementById("connectTrustWallet").onclick = () => {
-  const url = encodeURIComponent(window.location.href);
-  window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${url}`;
-};
+  const url = encodeURIComponentwindow.location.href = `https://link.trustwallet.com/open_url?url=${url}`;
 
 document.getElementById("bnbAmount").oninput = () => {
   const bnb = parseFloat(document.getElementById("bnbAmount").value);
