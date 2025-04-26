@@ -112,20 +112,22 @@ async function connectWallet(walletType) {
       let deepLink;
 
       if (walletType === "metamask") {
-        // Use MetaMask's universal deep link for better device compatibility
-        deepLink = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
+        // Alternative deep link for better compatibility
+        deepLink = `metamask://dapp/${window.location.host}${window.location.pathname}`;
+        console.log("MetaMask deep link:", deepLink);
       } else {
-        // Use TrustWallet's universal deep link
-        deepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${window.location.href}`;
+        // Alternative TrustWallet deep link
+        deepLink = `trust://open_url?url=${encodeURIComponent(window.location.href)}`;
+        console.log("TrustWallet deep link:", deepLink);
       }
 
       // Open the app
       console.log(`Triggering deep link: ${deepLink}`);
       window.location.href = deepLink;
 
-      // Wait for MetaMask/TrustWallet to inject window.ethereum
+      // Wait for wallet to inject window.ethereum
       let attempts = 0;
-      const maxAttempts = 20; // 20 seconds
+      const maxAttempts = 30; // 30 seconds
       const checkConnection = setInterval(async () => {
         attempts++;
         if (window.ethereum) {
