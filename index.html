@@ -77,10 +77,22 @@
       border: 1px solid #ddd;
       border-radius: 5px;
     }
+    select {
+      padding: 5px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Dil Seçimi -->
+    <select id="languageSelect">
+      <option value="en">English</option>
+      <option value="zh">中文 (Chinese)</option>
+      <option value="ru">Русский (Russian)</option>
+    </select>
+
     <!-- Logo -->
     <img src="https://freedogeai.com/logo.png" alt="FreeDogeAI Logo" class="logo" id="logo">
 
@@ -91,14 +103,14 @@
     <div id="walletModal" class="modal">
       <div class="modal-content">
         <span class="close">×</span>
-        <h2>Connect Your Wallet</h2>
+        <h2 id="modalTitle">Connect Your Wallet</h2>
         <button id="connectMetaMask" class="btn">MetaMask</button>
         <button id="connectTrustWallet" class="btn">TrustWallet</button>
       </div>
     </div>
 
     <!-- Başlık -->
-    <h1>Free Doge AI (FDAI) Presale</h1>
+    <h1 id="presaleTitle">Free Doge AI (FDAI) Presale</h1>
 
     <!-- Cüzdan Bilgileri -->
     <div id="walletInfo" style="margin: 15px 0;">
@@ -116,10 +128,92 @@
     <button id="dropButton" class="btn" style="background:#FF6347;color:white;width:100%;margin-top:10px;">CLAIM FREE DROP</button>
 
     <!-- Whitepaper -->
-    <a href="FreeDogeAI_Whitepaper.pdf" download class="btn" style="display:block;text-align:center;margin:10px 0;">Download Whitepaper</a>
+    <a href="FreeDogeAI_Whitepaper.pdf" download class="btn" style="display:block;text-align:center;margin:10px 0;" id="whitepaperLink">Download Whitepaper</a>
   </div>
 
+  <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
   <script>
+    // Dil çevirileri
+    const translations = {
+      en: {
+        connectWallet: "Connect Wallet",
+        modalTitle: "Connect Your Wallet",
+        presaleTitle: "Free Doge AI (FDAI) Presale",
+        walletAddress: "Wallet: Not Connected",
+        bnbBalance: "BNB Balance: --",
+        bnbAmountPlaceholder: "Enter BNB amount",
+        fdaiAmount: "YOU WILL RECEIVE: 0 FDAI",
+        buyButton: "Buy Tokens",
+        insufficientFunds: "⚠ Insufficient funds",
+        dropButton: "CLAIM FREE DROP",
+        whitepaperLink: "Download Whitepaper"
+      },
+      zh: {
+        connectWallet: "连接钱包",
+        modalTitle: "连接您的钱包",
+        presaleTitle: "Free Doge AI (FDAI) 预售",
+        walletAddress: "钱包: 未连接",
+        bnbBalance: "BNB 余额: --",
+        bnbAmountPlaceholder: "输入 BNB 数量",
+        fdaiAmount: "您将收到: 0 FDAI",
+        buyButton: "购买代币",
+        insufficientFunds: "⚠ 余额不足",
+        dropButton: "领取免费空投",
+        whitepaperLink: "下载白皮书"
+      },
+      ru: {
+        connectWallet: "Подключить кошелек",
+        modalTitle: "Подключите ваш кошелек",
+        presaleTitle: "Предпродажа Free Doge AI (FDAI)",
+        walletAddress: "Кошелек: Не подключен",
+        bnbBalance: "Баланс BNB: --",
+        bnbAmountPlaceholder: "Введите сумму BNB",
+        fdaiAmount: "ВЫ ПОЛУЧИТЕ: 0 FDAI",
+        buyButton: "Купить токены",
+        insufficientFunds: "⚠ Недостаточно средств",
+        dropButton: "ЗАБРАТЬ БЕСПЛАТНЫЙ ДРОП",
+        whitepaperLink: "Скачать Whitepaper"
+      }
+    };
+
+    // Dil değiştirme fonksiyonu
+    function updateLanguage() {
+      const lang = document.getElementById("languageSelect").value;
+      document.getElementById("connectWallet").textContent = translations[lang].connectWallet;
+      document.getElementById("modalTitle").textContent = translations[lang].modalTitle;
+      document.getElementById("presaleTitle").textContent = translations[lang].presaleTitle;
+      document.getElementById("walletAddress").textContent = translations[lang].walletAddress;
+      document.getElementById("bnbBalance").textContent = translations[lang].bnbBalance;
+      document.getElementById("bnbAmount").placeholder = translations[lang].bnbAmountPlaceholder;
+      document.getElementById("fdaiAmount").textContent = translations[lang].fdaiAmount;
+      document.getElementById("buyButton").textContent = translations[lang].buyButton;
+      document.getElementById("insufficientFunds").textContent = translations[lang].insufficientFunds;
+      document.getElementById("dropButton").textContent = translations[lang].dropButton;
+      document.getElementById("whitepaperLink").textContent = translations[lang].whitepaperLink;
+    }
+
+    // Cüzdan bilgilerini güncelleme fonksiyonu
+    async function updateWalletInfo() {
+      if (window.ethereum) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+        const balanceWei = await provider.getBalance(address);
+        const balance = ethers.utils.formatEther(balanceWei);
+
+        const lang = document.getElementById("languageSelect").value;
+        document.getElementById("walletAddress").textContent = `${translations[lang].walletAddress.split(":")[0]}: ${address.slice(0, 6)}...${address.slice(-4)}`;
+        document.getElementById("bnbBalance").textContent = `${translations[lang].bnbBalance.split(":")[0]}: ${parseFloat(balance).toFixed(4)}`;
+
+        // BNB miktarına göre buton kontrolü
+        const bnbInput = document.getElementById("bnbAmount");
+        const bnbValue = parseFloat(bnbInput.value) || 0;
+        document.getElementById("buyButton").disabled = bnbValue < 0.035 || bnbValue > parseFloat(balance);
+        document.getElementById("insufficientFunds").style.display = bnbValue > parseFloat(balance) ? "block" : "none";
+      }
+    }
+
     // 1. Tüm Temel Fonksiyonlar
     function openModal() {
       document.getElementById("walletModal").style.display = "block";
@@ -134,33 +228,31 @@
       let deepLink;
       
       if (walletType === "metamask") {
-        deepLink = `https://metamask.app.link/dapp/${encodeURIComponent(window.location.href)}`;
+        // URL'yi doğrudan kullan, encodeURIComponent kullanma
+        deepLink = `https://metamask.app.link/dapp/${window.location.href}`;
       } else {
-        deepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(window.location.href)}`;
+        deepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${window.location.href}`;
       }
 
       // Önce uygulamayı aç
+      console.log(`Derin bağlantı tetikleniyor: ${deepLink}`);
       window.location.href = deepLink;
-      
-      // 3 saniye içinde bağlanmazsa mağazaya yönlendir
-      setTimeout(() => {
-        if (!window.ethereum) {
-          const isAndroid = /Android/i.test(navigator.userAgent);
-          let storeLink;
-          
-          if (walletType === "metamask") {
-            storeLink = isAndroid ? 
-              "https://play.google.com/store/apps/details?id=io.metamask" :
-              "https://apps.apple.com/us/app/metamask-blockchain-wallet/id1438144202";
-          } else {
-            storeLink = isAndroid ?
-              "https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp" :
-              "https://apps.apple.com/us/app/trust-crypto-bitcoin-wallet/id1288339409";
-          }
-          
-          window.location.href = storeLink;
+
+      // Bağlantı sonrası window.ethereum'u kontrol et (10 saniye boyunca)
+      let attempts = 0;
+      const maxAttempts = 10; // 10 saniye
+      const checkConnection = setInterval(async () => {
+        attempts++;
+        if (window.ethereum) {
+          clearInterval(checkConnection);
+          console.log(`${walletType} cüzdanı bağlandı.`);
+          await updateWalletInfo();
+        } else if (attempts >= maxAttempts) {
+          clearInterval(checkConnection);
+          console.log(`${walletType} bağlanamadı.`);
+          // TrustWallet için siteye yönlendirme kaldırıldı, sadece log bırakıyorum
         }
-      }, 3000);
+      }, 1000); // Her saniye kontrol et
     }
 
     // 3. Otomatik Hesaplama
@@ -171,10 +263,14 @@
         const bnbValue = parseFloat(this.value) || 0;
         const tokens = bnbValue * 12500000; // 1 BNB = 12.5M FDAI
         
-        document.getElementById("fdaiAmount").textContent = 
-          `YOU WILL RECEIVE: ${tokens.toLocaleString()} FDAI`;
+        const lang = document.getElementById("languageSelect").value;
+        const baseText = translations[lang].fdaiAmount.split("0 FDAI")[0];
+        document.getElementById("fdaiAmount").textContent = `${baseText}${tokens.toLocaleString()} FDAI`;
         
         document.getElementById("buyButton").disabled = bnbValue < 0.035;
+        if (window.ethereum) {
+          updateWalletInfo(); // BNB bakiyesi kontrolü
+        }
       });
     }
 
@@ -183,9 +279,11 @@
     document.getElementById("connectMetaMask").addEventListener("click", () => connectWallet("metamask"));
     document.getElementById("connectTrustWallet").addEventListener("click", () => connectWallet("trustwallet"));
     document.querySelector(".close").addEventListener("click", closeModal);
-    
+    document.getElementById("languageSelect").addEventListener("change", updateLanguage);
+
     // Sayfa yüklendiğinde
     window.addEventListener("DOMContentLoaded", function() {
+      updateLanguage();
       setupCalculator();
     });
   </script>
