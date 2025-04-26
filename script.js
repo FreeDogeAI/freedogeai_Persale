@@ -1,197 +1,162 @@
-// script.js — FreeDogeAI Token Satış Sistemi
-let provider, signer, userAddress;
-const CONTRACT_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // BNB gönderilecek adres
-const TOKEN_CONTRACT = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7"; // FDAI Token adresi
-const TOKEN_PRICE = 12500000; // 1 BNB = 12.5M FDAI
-const MIN_BNB = 0.035; // Minimum satın alma miktarı
-const EXPECTED_CHAIN_ID = 56; // Binance Smart Chain (mainnet)
-
-// Akıllı sözleşme ABI'si (token bilgilerine göre güncellenmeli)
-const CONTRACT_ABI = [
-  "function buyTokens() public payable"
-];
-
-// DOM elemanlarını kontrol eden yardımcı fonksiyon
-function getElement(id) {
-  const element = document.getElementById(id);
-  if (!element) console.error(`Eleman bulunamadı: ${id}`);
-  return element;
+// Check if Ethers.js is loaded
+if (typeof ethers === "undefined") {
+  console.error("Ethers.js library failed to load!");
+  alert("Ethers.js library failed to load. Please check your internet connection.");
+} else {
+  console.log("Ethers.js loaded successfully:", ethers.version);
 }
 
-// MetaMask bağlantısı
-async function connectMetaMask() {
-  try {
-    if (!window.ethereum) {
-      alert("MetaMask veya başka bir Web3 cüzdanı yüklü değil! Lütfen MetaMask'i yükleyin: https://metamask.io/download/");
-      window.open("https://metamask.io/download/", "_blank");
-      return;
-    }
+// Language translations
+const translations = {
+  en: {
+    connectWallet: "Connect Wallet",
+    modalTitle: "Connect Your Wallet",
+    presaleTitle: "Free Doge AI (FDAI) Presale",
+    walletAddress: "Wallet: Not Connected",
+    bnbBalance: "BNB Balance: --",
+    bnbAmountPlaceholder: "Enter BNB amount",
+    fdaiAmount: "YOU WILL RECEIVE: 0 FDAI",
+    buyButton: "Buy Tokens",
+    insufficientFunds: "⚠ Insufficient funds",
+    dropButton: "CLAIM FREE DROP",
+    whitepaperLink: "Download Whitepaper"
+  },
+  zh: {
+    connectWallet: "连接钱包",
+    modalTitle: "连接您的钱包",
+    presaleTitle: "Free Doge AI (FDAI) 预售",
+    walletAddress: "钱包: 未连接",
+    bnbBalance: "BNB 余额: --",
+    bnbAmountPlaceholder: "输入 BNB 数量",
+    fdaiAmount: "您将收到: 0 FDAI",
+    buyButton: "购买代币",
+    insufficientFunds: "⚠ 余额不足",
+    dropButton: "领取免费空投",
+    whitepaperLink: "下载白皮书"
+  },
+  ru: {
+    connectWallet: "Подключить кошелек",
+    modalTitle: "Подключите ваш кошелек",
+    presaleTitle: "Предпродажа Free Doge AI (FDAI)",
+    walletAddress: "Кошелек: Не подключен",
+    bnbBalance: "Баланс BNB: --",
+    bnbAmountPlaceholder: "Введите сумму BNB",
+    fdaiAmount: "ВЫ ПОЛУЧИТЕ: 0 FDAI",
+    buyButton: "Купить токены",
+    insufficientFunds: "⚠ Недостаточно средств",
+    dropButton: "ЗАБРАТЬ БЕСПЛАТНЫЙ ДРОП",
+    whitepaperLink: "Скачать Whitepaper"
+  }
+};
 
-    // Sağlayıcıyı başlat
-    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    console.log("MetaMask sağlayıcısı başlatıldı:", window.ethereum);
+// Function to update language
+function updateLanguage() {
+  const lang = document.getElementById("languageSelect").value;
+  document.getElementById("connectWallet").textContent = translations[lang].connectWallet;
+  document.getElementById("modalTitle").textContent = translations[lang].modalTitle;
+  document.getElementById("presaleTitle").textContent = translations[lang].presaleTitle;
+  document.getElementById("walletAddress").textContent = translations[lang].walletAddress;
+  document.getElementById("bnbBalance").textContent = translations[lang].bnbBalance;
+  document.getElementById("bnbAmount").placeholder = translations[lang].bnbAmountPlaceholder;
+  document.getElementById("fdaiAmount").textContent = translations[lang].fdaiAmount;
+  document.getElementById("buyButton").textContent = translations[lang].buyButton;
+  document.getElementById("insufficientFunds").textContent = translations[lang].insufficientFunds;
+  document.getElementById("dropButton").textContent = translations[lang].dropButton;
+  document.getElementById("whitepaperLink").textContent = translations[lang].whitepaperLink;
+}
 
-    // Cüzdan bağlantısı iste
+// Function to update wallet info
+async function updateWalletInfo() {
+  if (window.ethereum) {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send("eth_requestAccounts", []);
-    signer = provider.getSigner();
-    userAddress = await signer.getAddress();
-    console.log("Cüzdan bağlandı:", userAddress);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    const balanceWei = await provider.getBalance(address);
+    const balance = ethers.utils.formatEther(balanceWei);
 
-    // Zincir kontrolü
-    const network = await provider.getNetwork();
-    console.log("Bağlı ağ:", network);
-    if (network.chainId !== EXPECTED_CHAIN_ID) {
-      try {
-        console.log("BSC ağına geçiş deneniyor...");
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: `0x${EXPECTED_CHAIN_ID.toString(16)}` }]
-        });
-      } catch (switchError) {
-        console.error("Ağ değiştirme hatası:", switchError);
-        if (switchError.code === 4902) {
-          // Ağ yoksa ekle
-          await window.ethereum.request({
-            method: "wallet_addEthereumChain",
-            params: [{
-              chainId: `0x${EXPECTED_CHAIN_ID.toString(16)}`,
-              chainName: "Binance Smart Chain",
-              nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
-              rpcUrls: ["https://bsc-dataseed.bin Investigation complete!nce.org/"],
-              blockExplorerUrls: ["https://bscscan.com"]
-            }]
-          });
-        } else {
-          alert(`Lütfen Binance Smart Chain ağına geçin! Hata: ${switchError.message}`);
-          return;
-        }
-      }
-    }
+    const lang = document.getElementById("languageSelect").value;
+    document.getElementById("walletAddress").textContent = `${translations[lang].walletAddress.split(":")[0]}: ${address.slice(0, 6)}...${address.slice(-4)}`;
+    document.getElementById("bnbBalance").textContent = `${translations[lang].bnbBalance.split(":")[0]}: ${parseFloat(balance).toFixed(4)}`;
 
-    await updateInfo();
-  } catch (err) {
-    console.error("MetaMask bağlantı hatası:", err);
-    alert(`Bağlantı başarısız: ${err.message || "Bilinmeyen bir hata oluştu. Lütfen MetaMask'i kontrol edin."}`);
+    // Check BNB amount and enable/disable Buy button
+    const bnbInput = document.getElementById("bnbAmount");
+    const bnbValue = parseFloat(bnbInput.value) || 0;
+    document.getElementById("buyButton").disabled = bnbValue < 0.035 || bnbValue > parseFloat(balance);
+    document.getElementById("insufficientFunds").style.display = bnbValue > parseFloat(balance) ? "block" : "none";
   }
 }
 
-// TrustWallet bağlantısı
-async function connectTrustWallet() {
-  try {
-    if (!window.ethereum) {
-      console.log("TrustWallet yönlendirmesi başlatılıyor...");
-      const site = encodeURIComponent(window.location.href);
-      alert("TrustWallet uygulamasına yönlendiriliyorsunuz. Uygulamayı açtıktan sonra siteye geri dönün.");
-      window.location.href = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`;
-      return;
-    }
-    console.log("TrustWallet Web3 enjeksiyonu tespit edildi, MetaMask gibi bağlanıyor...");
-    await connectMetaMask();
-  } catch (err) {
-    console.error("TrustWallet bağlantı hatası:", err);
-    alert(`TrustWallet bağlantısı başarısız: ${err.message || "Bilinmeyen bir hata oluştu."}`);
-  }
+// Function to open modal
+function openModal() {
+  document.getElementById("walletModal").style.display = "block";
 }
 
-// Arayüzü güncelleme
-async function updateInfo() {
-  try {
-    const elements = {
-      wallet: getElement("walletAddress"),
-      bnbBalance: getElement("bnbBalance"),
-      input: getElement("bnbAmount"),
-      output: getElement("fdaiAmount"),
-      buyBtn: getElement("buyButton"),
-      warning: getElement("insufficientFunds")
-    };
-
-    if (!Object.values(elements).every(el => el)) {
-      console.error("Arayüz elemanları eksik:", elements);
-      alert("Hata: Arayüz elemanları eksik!");
-      return;
-    }
-
-    elements.wallet.textContent = `Bağlı: ${userAddress}`;
-    const balanceWei = await provider.getBalance(userAddress);
-    const bnb = parseFloat(ethers.utils.formatEther(balanceWei));
-    elements.bnbBalance.textContent = `BNB: ${bnb.toFixed(4)}`;
-    console.log("Bakiye güncellendi:", bnb);
-
-    // Input olay dinleyicisini sıfırla ve bağla
-    elements.input.oninput = null;
-    elements.input.oninput = () => {
-      const val = parseFloat(elements.input.value);
-      const tokens = isNaN(val) ? 0 : val * TOKEN_PRICE;
-      elements.output.textContent = `${tokens.toLocaleString()} FDAI`;
-      elements.buyBtn.disabled = val < MIN_BNB || val > bnb;
-      elements.warning.style.display = val > bnb ? "block" : "none";
-      console.log("Input güncellendi:", { val, tokens, disabled: elements.buyBtn.disabled });
-    };
-  } catch (err) {
-    console.error("Arayüz güncelleme hatası:", err);
-    alert(`Arayüz güncelleme hatası: ${err.message}`);
-  }
+// Function to close modal
+function closeModal() {
+  document.getElementById("walletModal").style.display = "none";
 }
 
-// Token satın alma işlemi
-async function buyTokens() {
-  try {
-    const input = getElement("bnbAmount");
-    if (!input) {
-      alert("Hata: BNB miktarı giriş alanı bulunamadı!");
-      return;
-    }
+// Function to connect wallet (mobile-first)
+async function connectWallet(walletType) {
+  let deepLink;
 
-    const val = parseFloat(input.value);
-    if (isNaN(val) || val < MIN_BNB) {
-      alert(`Minimum satın alma miktarı ${MIN_BNB} BNB!`);
-      return;
-    }
-
-    console.log("Token satın alma işlemi başlatılıyor:", { amount: val });
-    const contract = new ethers.Contract(TOKEN_CONTRACT, CONTRACT_ABI, signer);
-    const tx = await contract.buyTokens({
-      value: ethers.utils.parseEther(val.toString()),
-      gasLimit: 200000
-    });
-
-    console.log("İşlem gönderildi:", tx.hash);
-    await tx.wait();
-    alert("Token satın alma başarılı!");
-    await updateInfo();
-  } catch (err) {
-    console.error("Token satın alma hatası:", err);
-    alert(`İşlem başarısız: ${err.message || "Bilinmeyen bir hata oluştu."}`);
+  if (walletType === "metamask") {
+    // Use the URL directly, no encodeURIComponent to avoid "Invalid URL" error
+    deepLink = `https://metamask.app.link/dapp/${window.location.href}`;
+  } else {
+    deepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${window.location.href}`;
   }
+
+  // Open the app
+  console.log(`Triggering deep link: ${deepLink}`);
+  window.location.href = deepLink;
+
+  // Check for window.ethereum after connection (try for 10 seconds)
+  let attempts = 0;
+  const maxAttempts = 10; // 10 seconds
+  const checkConnection = setInterval(async () => {
+    attempts++;
+    if (window.ethereum) {
+      clearInterval(checkConnection);
+      console.log(`${walletType} wallet connected.`);
+      await updateWalletInfo();
+    } else if (attempts >= maxAttempts) {
+      clearInterval(checkConnection);
+      console.log(`${walletType} connection failed.`);
+      // Removed redirection to TrustWallet site, just log the failure
+    }
+  }, 1000); // Check every second
 }
 
-// Olay dinleyicilerini bağlama
-function initializeEventListeners() {
-  try {
-    const elements = {
-      metaMaskBtn: getElement("connectMetaMask"),
-      trustWalletBtn: getElement("connectTrustWallet"),
-      buyBtn: getElement("buyButton")
-    };
+// Function to set up calculator
+function setupCalculator() {
+  const bnbInput = document.getElementById("bnbAmount");
 
-    if (!Object.values(elements).every(el => el)) {
-      console.error("Buton elemanları eksik:", elements);
-      alert("Hata: Buton elemanları eksik!");
-      return;
+  bnbInput.addEventListener("input", function() {
+    const bnbValue = parseFloat(this.value) || 0;
+    const tokens = bnbValue * 12500000; // 1 BNB = 12.5M FDAI
+
+    const lang = document.getElementById("languageSelect").value;
+    const baseText = translations[lang].fdaiAmount.split("0 FDAI")[0];
+    document.getElementById("fdaiAmount").textContent = `${baseText}${tokens.toLocaleString()} FDAI`;
+
+    document.getElementById("buyButton").disabled = bnbValue < 0.035;
+    if (window.ethereum) {
+      updateWalletInfo(); // Check BNB balance
     }
-
-    elements.metaMaskBtn.onclick = connectMetaMask;
-    elements.trustWalletBtn.onclick = connectTrustWallet;
-    elements.buyBtn.onclick = buyTokens;
-    console.log("Olay dinleyicileri bağlandı:", Object.keys(elements));
-  } catch (err) {
-    console.error("Olay dinleyicileri bağlama hatası:", err);
-    alert("Butonlar başlatılırken hata oluştu!");
-  }
+  });
 }
 
-// Başlatma
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOM yüklendi, başlatılıyor...");
-  initializeEventListeners();
+// Event Listeners
+document.getElementById("connectWallet").addEventListener("click", openModal);
+document.getElementById("connectMetaMask").addEventListener("click", () => connectWallet("metamask"));
+document.getElementById("connectTrustWallet").addEventListener("click", () => connectWallet("trustwallet"));
+document.querySelector(".close").addEventListener("click", closeModal);
+document.getElementById("languageSelect").addEventListener("change", updateLanguage);
+
+// On page load
+window.addEventListener("DOMContentLoaded", function() {
+  updateLanguage();
+  setupCalculator();
 });
