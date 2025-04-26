@@ -18,7 +18,6 @@ const translations = {
     fdaiAmount: "YOU WILL RECEIVE: 0 FDAI",
     buyButton: "Buy Tokens",
     insufficientFunds: "⚠ Insufficient funds",
-    dropButton: "CLAIM FREE DROP",
     whitepaperLink: "Download Whitepaper"
   },
   zh: {
@@ -31,7 +30,6 @@ const translations = {
     fdaiAmount: "您将收到: 0 FDAI",
     buyButton: "购买代币",
     insufficientFunds: "⚠ 余额不足",
-    dropButton: "领取免费空投",
     whitepaperLink: "下载白皮书"
   },
   ru: {
@@ -44,7 +42,6 @@ const translations = {
     fdaiAmount: "ВЫ ПОЛУЧИТЕ: 0 FDAI",
     buyButton: "Купить токены",
     insufficientFunds: "⚠ Недостаточно средств",
-    dropButton: "ЗАБРАТЬ БЕСПЛАТНЫЙ ДРОП",
     whitepaperLink: "Скачать Whitepaper"
   }
 };
@@ -61,7 +58,6 @@ function updateLanguage() {
   document.getElementById("fdaiAmount").textContent = translations[lang].fdaiAmount;
   document.getElementById("buyButton").textContent = translations[lang].buyButton;
   document.getElementById("insufficientFunds").textContent = translations[lang].insufficientFunds;
-  document.getElementById("dropButton").textContent = translations[lang].dropButton;
   document.getElementById("whitepaperLink").textContent = translations[lang].whitepaperLink;
 }
 
@@ -70,12 +66,12 @@ async function updateWalletInfo() {
   try {
     if (window.ethereum) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const accounts = await provider.listAccounts();
+      let accounts = await provider.listAccounts();
       if (accounts.length === 0) {
         console.log("No accounts connected yet, requesting accounts...");
-        await window.ethereum.request({ method: "eth_requestAccounts" });
+        accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
       }
-      const address = accounts[0] || (await provider.listAccounts())[0];
+      const address = accounts[0];
       const balanceWei = await provider.getBalance(address);
       const balance = ethers.utils.formatEther(balanceWei);
 
@@ -114,20 +110,33 @@ async function connectWallet(walletType) {
 
     if (isMobile) {
       let deepLink;
+      const dappUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
 
       if (walletType === "metamask") {
-        // Universal deep link for MetaMask
-        deepLink = `metamask://dapp/${window.location.host}${window.location.pathname}`;
+        // Try multiple deep link formats for MetaMask
+        deepLink = `metamask://dapp/${dappUrl}`;
         console.log("MetaMask deep link:", deepLink);
       } else {
-        // Universal deep link for TrustWallet
-        deepLink = `trust://dapp/${window.location.host}${window.location.pathname}`;
+        // Try multiple deep link formats for TrustWallet
+        deepLink = `trust://open_url?url=${encodeURIComponent(dappUrl)}`;
         console.log("TrustWallet deep link:", deepLink);
       }
 
       // Open the app
       console.log(`Triggering deep link: ${deepLink}`);
       window.location.href = deepLink;
+
+      // Fallback mechanism: If deep link fails, try alternative method
+      setTimeout(() => {
+        if (!window.ethereum) {
+          console.log(`${walletType} deep link may have failed, trying alternative...`);
+          if (walletType === "metamask") {
+            window.location.href = `https://metamask.app.link/dapp/${dappUrl}`;
+          } else {
+            window.location.href = `https://link.trustwallet.com/open_url?url=${encodeURIComponent(dappUrl)}`;
+          }
+        }
+      }, 3000); // Wait 3 seconds before trying the fallback
 
       // Wait for wallet to inject window.ethereum
       let attempts = 0;
@@ -165,7 +174,7 @@ async function connectWallet(walletType) {
         } else if (attempts >= maxAttempts) {
           clearInterval(checkConnection);
           console.log(`${walletType} connection failed on mobile after ${maxAttempts} seconds.`);
-          alert(`Failed to connect to ${walletType}. Please ensure the app is installed and try again.`);
+          alert(`Failed to connect to ${walletType}. Please ensure the app is installed and try again. Alternatively, open this page in the ${walletType} browser.`);
         }
       }, 1000); // Check every second
     } else {
