@@ -156,6 +156,7 @@ const translations = {
 
 // Function to change language
 function changeLanguage(lang) {
+  console.log("Changing language to:", lang);
   localStorage.setItem("language", lang);
   document.getElementById("connectWallet").textContent = translations[lang].connectWallet;
   document.getElementById("modalTitle").textContent = translations[lang].modalTitle;
@@ -195,6 +196,7 @@ function changeLanguage(lang) {
 
 // Function to update wallet info
 async function updateWalletInfo() {
+  console.log("Updating wallet info...");
   try {
     if (window.ethereum) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -215,6 +217,7 @@ async function updateWalletInfo() {
       const bnbInput = document.getElementById("bnbAmount");
       const bnbValue = parseFloat(bnbInput.value) || 0;
       document.getElementById("buyButton").disabled = bnbValue < 0.035 || bnbValue > parseFloat(balance);
+      console.log("Buy button status:", document.getElementById("buyButton").disabled);
     } else {
       console.log("No Ethereum provider detected.");
     }
@@ -225,19 +228,22 @@ async function updateWalletInfo() {
 
 // Function to open modal
 function openModal() {
+  console.log("Opening wallet modal...");
   document.getElementById("walletModal").style.display = "block";
 }
 
 // Function to close modal
 function closeModal() {
+  console.log("Closing wallet modal...");
   document.getElementById("walletModal").style.display = "none";
 }
 
 // Function to connect wallet (mobile-first)
 async function connectWallet(walletType) {
+  console.log(`Connecting to ${walletType}...`);
   try {
-    // Detect if the device is mobile
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    console.log("Is mobile device:", isMobile);
 
     if (isMobile) {
       let deepLink;
@@ -251,11 +257,9 @@ async function connectWallet(walletType) {
         console.log("TrustWallet deep link:", deepLink);
       }
 
-      // Open the app
       console.log(`Triggering deep link: ${deepLink}`);
       window.location.href = deepLink;
 
-      // Fallback mechanism
       setTimeout(() => {
         if (!window.ethereum) {
           console.log(`${walletType} deep link may have failed, trying alternative...`);
@@ -267,9 +271,8 @@ async function connectWallet(walletType) {
         }
       }, 3000);
 
-      // Wait for wallet to inject window.ethereum
       let attempts = 0;
-      const maxAttempts = 30; // 30 seconds
+      const maxAttempts = 30;
       const checkConnection = setInterval(async () => {
         attempts++;
         if (window.ethereum) {
@@ -290,6 +293,7 @@ async function connectWallet(walletType) {
             if (accounts.length > 0) {
               console.log(`${walletType} wallet connected on mobile.`);
               await updateWalletInfo();
+              closeModal();
             } else {
               console.log("No accounts returned by wallet.");
               alert("No accounts found. Please ensure your wallet is unlocked and try again.");
@@ -305,7 +309,6 @@ async function connectWallet(walletType) {
         }
       }, 1000);
     } else {
-      // Desktop connection
       if (!window.ethereum) {
         console.log(`${walletType} not detected on desktop.`);
         alert(`${walletType} is not detected. Please install ${walletType} or open this page in the ${walletType} browser.`);
@@ -316,6 +319,7 @@ async function connectWallet(walletType) {
       await window.ethereum.request({ method: "eth_requestAccounts" });
       console.log(`${walletType} wallet connected on desktop.`);
       await updateWalletInfo();
+      closeModal();
     }
   } catch (error) {
     console.error(`Error connecting to ${walletType}:`, error);
@@ -325,38 +329,76 @@ async function connectWallet(walletType) {
 
 // Function to set up calculator
 function setupCalculator() {
+  console.log("Setting up calculator...");
   const bnbInput = document.getElementById("bnbAmount");
 
-  bnbInput.addEventListener("input", function() {
-    const bnbValue = parseFloat(this.value) || 0;
-    const tokens = bnbValue * 12500000; // 1 BNB = 12.5M FDAI
+  if (bnbInput) {
+    bnbInput.addEventListener("input", function() {
+      const bnbValue = parseFloat(this.value) || 0;
+      const tokens = bnbValue * 12500000; // 1 BNB = 12.5M FDAI
 
-    const lang = localStorage.getItem("language") || "en";
-    const baseText = translations[lang].fdaiAmount.split("0 FDAI")[0];
-    document.getElementById("fdaiAmount").textContent = `${baseText}${tokens.toLocaleString()} FDAI`;
+      const lang = localStorage.getItem("language") || "en";
+      const baseText = translations[lang].fdaiAmount.split("0 FDAI")[0];
+      document.getElementById("fdaiAmount").textContent = `${baseText}${tokens.toLocaleString()} FDAI`;
 
-    document.getElementById("buyButton").disabled = bnbValue < 0.035;
-    if (window.ethereum) {
-      updateWalletInfo(); // Check BNB balance
-    }
-  });
+      document.getElementById("buyButton").disabled = bnbValue < 0.035;
+      console.log("BNB input value:", bnbValue, "Buy button disabled:", document.getElementById("buyButton").disabled);
+      if (window.ethereum) {
+        updateWalletInfo();
+      }
+    });
+  } else {
+    console.error("bnbAmount input not found!");
+  }
 }
 
-// Event Listeners
-document.getElementById("connectWallet").addEventListener("click", openModal);
-document.getElementById("connectMetaMask").addEventListener("click", () => connectWallet("metamask"));
-document.getElementById("connectTrustWallet").addEventListener("click", () => connectWallet("trustwallet"));
-document.querySelector(".close").addEventListener("click", closeModal);
+// Initialize the page
+document.addEventListener("DOMContentLoaded", function() {
+  console.log("DOM fully loaded and parsed");
 
-// On page load
-window.addEventListener("DOMContentLoaded", function() {
-  // Set default language to English if not set
+  // Set default language
   const lang = localStorage.getItem("language") || "en";
   changeLanguage(lang);
+
+  // Set up calculator
   setupCalculator();
 
-  // Check if already connected
-  if (window.ethereum) {
-    updateWalletInfo();
+  // Language buttons
+  const langButtons = document.querySelectorAll(".language-btn");
+  langButtons.forEach(button => {
+    button.addEventListener("click", function() {
+      const lang = this.getAttribute("data-lang");
+      console.log("Language button clicked:", lang);
+      changeLanguage(lang);
+    });
+  });
+
+  // Connect Wallet button
+  const connectWalletBtn = document.getElementById("connectWallet");
+  if (connectWalletBtn) {
+    connectWalletBtn.addEventListener("click", function() {
+      console.log("Connect Wallet button clicked");
+      openModal();
+    });
+  } else {
+    console.error("connectWallet button not found!");
   }
-});
+
+  // MetaMask and TrustWallet buttons
+  const connectMetaMaskBtn = document.getElementById("connectMetaMask");
+  const connectTrustWalletBtn = document.getElementById("connectTrustWallet");
+  if (connectMetaMaskBtn) {
+    connectMetaMaskBtn.addEventListener("click", function() {
+      console.log("Connect MetaMask button clicked");
+      connectWallet("metamask");
+    });
+  } else {
+    console.error("connectMetaMask button not found!");
+  }
+  if (connectTrustWalletBtn) {
+    connectTrustWalletBtn.addEventListener("click", function() {
+      console.log("Connect TrustWallet button clicked");
+      connectWallet("trustwallet");
+    });
+  } else {
+    console.error("connectTrustWallet bu
