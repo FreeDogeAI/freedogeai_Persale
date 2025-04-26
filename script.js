@@ -67,23 +67,29 @@ function updateLanguage() {
 
 // Function to update wallet info
 async function updateWalletInfo() {
-  if (window.ethereum) {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    const balanceWei = await provider.getBalance(address);
-    const balance = ethers.utils.formatEther(balanceWei);
+  try {
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const address = await signer.getAddress();
+      const balanceWei = await provider.getBalance(address);
+      const balance = ethers.utils.formatEther(balanceWei);
 
-    const lang = document.getElementById("languageSelect").value;
-    document.getElementById("walletAddress").textContent = `${translations[lang].walletAddress.split(":")[0]}: ${address.slice(0, 6)}...${address.slice(-4)}`;
-    document.getElementById("bnbBalance").textContent = `${translations[lang].bnbBalance.split(":")[0]}: ${parseFloat(balance).toFixed(4)}`;
+      const lang = document.getElementById("languageSelect").value;
+      document.getElementById("walletAddress").textContent = `${translations[lang].walletAddress.split(":")[0]}: ${address.slice(0, 6)}...${address.slice(-4)}`;
+      document.getElementById("bnbBalance").textContent = `${translations[lang].bnbBalance.split(":")[0]}: ${parseFloat(balance).toFixed(4)}`;
 
-    // Check BNB amount and enable/disable Buy button
-    const bnbInput = document.getElementById("bnbAmount");
-    const bnbValue = parseFloat(bnbInput.value) || 0;
-    document.getElementById("buyButton").disabled = bnbValue < 0.035 || bnbValue > parseFloat(balance);
-    document.getElementById("insufficientFunds").style.display = bnbValue > parseFloat(balance) ? "block" : "none";
+      // Check BNB amount and enable/disable Buy button
+      const bnbInput = document.getElementById("bnbAmount");
+      const bnbValue = parseFloat(bnbInput.value) || 0;
+      document.getElementById("buyButton").disabled = bnbValue < 0.035 || bnbValue > parseFloat(balance);
+      document.getElementById("insufficientFunds").style.display = bnbValue > parseFloat(balance) ? "block" : "none";
+    } else {
+      console.log("No Ethereum provider detected.");
+    }
+  } catch (error) {
+    console.error("Error updating wallet info:", error);
   }
 }
 
@@ -99,34 +105,57 @@ function closeModal() {
 
 // Function to connect wallet (mobile-first)
 async function connectWallet(walletType) {
-  let deepLink;
+  try {
+    // Detect if the device is mobile
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  if (walletType === "metamask") {
-    // Use the URL directly, no encodeURIComponent to avoid "Invalid URL" error
-    deepLink = `https://metamask.app.link/dapp/${window.location.href}`;
-  } else {
-    deepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${window.location.href}`;
-  }
+    if (isMobile) {
+      let deepLink;
 
-  // Open the app
-  console.log(`Triggering deep link: ${deepLink}`);
-  window.location.href = deepLink;
+      if (walletType === "metamask") {
+        // Use a simpler deep link for MetaMask
+        deepLink = `metamask://dapp/${window.location.host}${window.location.pathname}`;
+      } else {
+        // Use a simpler deep link for TrustWallet
+        deepLink = `trustwallet://dapp?host=${window.location.host}${window.location.pathname}`;
+      }
 
-  // Check for window.ethereum after connection (try for 10 seconds)
-  let attempts = 0;
-  const maxAttempts = 10; // 10 seconds
-  const checkConnection = setInterval(async () => {
-    attempts++;
-    if (window.ethereum) {
-      clearInterval(checkConnection);
-      console.log(`${walletType} wallet connected.`);
+      // Open the app
+      console.log(`Triggering deep link: ${deepLink}`);
+      window.location.href = deepLink;
+
+      // Check for window.ethereum after connection (try for 15 seconds)
+      let attempts = 0;
+      const maxAttempts = 15; // 15 seconds
+      const checkConnection = setInterval(async () => {
+        attempts++;
+        if (window.ethereum) {
+          clearInterval(checkConnection);
+          console.log(`${walletType} wallet connected on mobile.`);
+          await updateWalletInfo();
+        } else if (attempts >= maxAttempts) {
+          clearInterval(checkConnection);
+          console.log(`${walletType} connection failed on mobile after ${maxAttempts} seconds.`);
+          alert(`Failed to connect to ${walletType}. Please ensure the app is installed and try again.`);
+        }
+      }, 1000); // Check every second
+    } else {
+      // Desktop connection
+      if (!window.ethereum) {
+        console.log(`${walletType} not detected on desktop.`);
+        alert(`${walletType} is not detected. Please install ${walletType} or open this page in the ${walletType} browser.`);
+        return;
+      }
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      console.log(`${walletType} wallet connected on desktop.`);
       await updateWalletInfo();
-    } else if (attempts >= maxAttempts) {
-      clearInterval(checkConnection);
-      console.log(`${walletType} connection failed.`);
-      // Removed redirection to TrustWallet site, just log the failure
     }
-  }, 1000); // Check every second
+  } catch (error) {
+    console.error(`Error connecting to ${walletType}:`, error);
+    alert(`Failed to connect to ${walletType}: ${error.message}`);
+  }
 }
 
 // Function to set up calculator
@@ -159,4 +188,9 @@ document.getElementById("languageSelect").addEventListener("change", updateLangu
 window.addEventListener("DOMContentLoaded", function() {
   updateLanguage();
   setupCalculator();
+
+  // Check if already connected (e.g., if the page is reloaded)
+  if (window.ethereum) {
+    updateWalletInfo();
+  }
 });
