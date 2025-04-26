@@ -2,87 +2,78 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FreeDogeAI (FDAI) Ön Satışı</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FreeDogeAI (FDAI) Presale</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- ÜST KISIM: Logo ve Dil Değiştirici -->
 <header>
   <img src="logo.png" alt="FreeDogeAI Logo" class="logo">
   <div class="language-switcher">
     <button onclick="setLanguage('tr')">Türkçe</button>
     <button onclick="setLanguage('en')">English</button>
+    <button onclick="setLanguage('ru')">Русский</button>
     <button onclick="setLanguage('zh')">中文</button>
   </div>
 </header>
 
-<!-- ANA BAŞLIK VE BUTONLAR -->
 <main>
-  <section class="hero">
-    <h1 id="main-title">FDAI Ön Satışına Katıl!</h1>
-    <p id="subtitle">Geleceğini FreeDogeAI (FDAI) ile güvence altına al!</p>
-    <button id="join-button" onclick="connectWallet()">Cüzdanını Bağla</button>
-  </section>
 
-  <!-- Satın Alma Bölümü -->
-  <section class="buy-section">
-    <h2 id="buy-title">FDAI Token Satın Al</h2>
-    <p id="buy-desc">FDAI satın almak için BNB gönderebilirsiniz. Tokenlar otomatik olarak cüzdanınıza teslim edilecektir.</p>
-    
-    <input type="number" id="bnb-amount" placeholder="BNB miktarını gir" oninput="calculateTokens()">
-    <p id="token-amount">Alacağınız FDAI: 0</p>
-    
-    <p class="minimum-warning" id="minimum-warning">Minimum alım tutarı: 0.035 BNB</p>
-    
-    <button id="buy-button" onclick="buyTokens()">FDAI Token Satın Al</button>
-  </section>
+<section class="hero">
+  <h1 id="main-title">FDAI Ön Satışına Katıl!</h1>
+  <p id="subtitle">Geleceğini FreeDogeAI (FDAI) ile güvence altına al!</p>
+  <button id="join-button" onclick="connectWallet()">Cüzdanını Bağla</button>
+</section>
 
-  <!-- Nasıl Katılırım Bölümü -->
-  <section class="how-to-join">
-    <h2 id="how-to-title">FDAI Nasıl Satın Alınır?</h2>
-    <ul id="how-to-list">
-      <li>MetaMask veya TrustWallet cüzdanınızı bağlayın.</li>
-      <li>Satın almak istediğiniz BNB miktarını girin.</li>
-      <li>FDAI tokenlar otomatik olarak cüzdanınıza gönderilecektir.</li>
-    </ul>
-  </section>
+<section class="buy-section">
+  <h2 id="buy-title">FDAI Token Satın Al</h2>
+  <p id="buy-desc">FDAI satın almak için BNB gönderebilirsiniz. Tokenlar otomatik olarak cüzdanınıza teslim edilecektir.</p>
+  
+  <input type="number" id="bnb-amount" placeholder="BNB miktarını gir" oninput="calculateTokens()">
+  <p id="token-amount">Alacağınız FDAI: 0</p>
+  
+  <p class="minimum-warning" id="minimum-warning">Minimum alım tutarı: 0.035 BNB</p>
+  
+  <button id="buy-button" onclick="buyTokens()">FDAI Token Satın Al</button>
+</section>
 
-  <!-- Yol Haritası Bölümü -->
-  <section class="roadmap">
-    <h2 id="roadmap-title">Yol Haritamız</h2>
-    <ol id="roadmap-list">
-      <li>Ön Satışın Başlaması</li>
-      <li>Topluluk Oluşturma ve Büyüme</li>
-      <li>DEX ve CEX Borsa Listelenmeleri</li>
-      <li>Yeni İşbirlikleri ve Gelişim</li>
-    </ol>
-  </section>
+<section class="how-to-join">
+  <h2 id="how-to-title">FDAI Nasıl Satın Alınır?</h2>
+  <ul id="how-to-list">
+    <li>MetaMask veya TrustWallet cüzdanınızı bağlayın.</li>
+    <li>Satın almak istediğiniz BNB miktarını girin.</li>
+    <li>FDAI tokenlar otomatik olarak cüzdanınıza gönderilecektir.</li>
+  </ul>
+</section>
 
-  <!-- SSS Bölümü -->
-  <section class="faq">
-    <h2 id="faq-title">Sıkça Sorulan Sorular</h2>
-    <ul id="faq-list">
-      <li><b>FDAI nedir?</b> FDAI, Yapay Zeka ve Doge temalarını birleştiren eşsiz bir meme token'dır.</li>
-      <li><b>FDAI nasıl satın alınır?</b> Cüzdanınızı bağlayın ve BNB ile FDAI satın alın.</li>
-      <li><b>FDAI tokenlarımı nasıl alacağım?</b> Satın alma işlemi tamamlandıktan sonra tokenlar otomatik olarak cüzdanınıza gelecektir.</li>
-    </ul>
-  </section>
+<section class="roadmap">
+  <h2 id="roadmap-title">Yol Haritamız</h2>
+  <ol id="roadmap-list"></ol>
+</section>
 
-</main>
+<section class="wallpaper-download">
+  <h2 id="whitepaper-title">Whitepaper İndir</h2>
+  <a href="FreeDogeAI_Whitepaper.pdf" download class="download-button" id="whitepaper-button">Whitepaper'ı İndir</a>
+</section>
 
-<!-- Alt Bilgi -->
-<footer>
-  <p>© 2025 FreeDogeAI. Tüm Hakları Saklıdır.</p>
+<section class="community-links">
+  <h2 id="community-title">Topluluğumuza Katıl</h2>
+  <p id="community-desc">FreeDogeAI topluluğuna katıl ve gelişmeleri kaçırma!</p>
   <div class="social-links">
     <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
     <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
   </div>
+</section>
+
+</main>
+
+<footer>
+  <p>© 2025 FreeDogeAI. All rights reserved.</p>
 </footer>
 
-<!-- JavaScript Dosyası -->
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
 <script src="script.js"></script>
 
 </body>
-  </html>
+</html>
