@@ -6,79 +6,73 @@
   <title>FreeDogeAI Token Presale</title>
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      color: #fff;
-      background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3); /* Rengarenk gradient arka plan */
-      background-size: 400%;
-      animation: gradientAnimation 15s ease infinite;
+      color: #333;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f); /* Ekran görüntüsündeki yumuşak gradient */
+      background-size: cover;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
 
-    @keyframes gradientAnimation {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
     .container {
       max-width: 600px;
       width: 90%;
-      padding: 30px;
-      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.8);
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       position: relative;
     }
 
     .logo {
       display: block;
-      margin: 0 auto 20px;
-      max-width: 150px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      margin: 0 auto 10px;
+      max-width: 100px;
+    }
+
+    .slogan {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
     }
 
     .btn {
-      background: linear-gradient(45deg, #ff9f43, #feca57);
+      background: #ff6b6b;
       color: #fff;
       border: none;
-      padding: 12px 25px;
+      padding: 10px 20px;
       border-radius: 25px;
       cursor: pointer;
       font-weight: bold;
       font-size: 16px;
       margin: 10px 0;
       transition: transform 0.2s, box-shadow 0.3s;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
     .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
 
     .btn-connect {
       position: absolute;
       top: 20px;
       right: 20px;
-      background: linear-gradient(45deg, #ff6b6b, #ee5253);
     }
 
     .btn-buy {
-      background: linear-gradient(45deg, #1dd1a1, #10ac84);
+      background: #1dd1a1;
       width: 100%;
-      font-size: 18px;
     }
 
-    .btn-drop {
-      background: linear-gradient(45deg, #ff5e57, #ff3f34);
+    .btn-whitepaper {
+      background: #feca57;
       width: 100%;
     }
 
@@ -90,17 +84,17 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.5);
     }
 
     .modal-content {
-      background: rgba(255, 255, 255, 0.9);
+      background: #fff;
       margin: 15% auto;
       padding: 20px;
       border-radius: 20px;
       width: 80%;
       max-width: 400px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
 
     .close {
@@ -117,54 +111,43 @@
 
     input[type="number"] {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       margin: 10px 0;
-      border: none;
-      border-radius: 25px;
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
       font-size: 16px;
-      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     input[type="number"]::placeholder {
-      color: rgba(255, 255, 255, 0.7);
+      color: #aaa;
     }
 
     select {
       padding: 10px;
       margin: 10px 0;
-      border-radius: 25px;
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
-      border: none;
+      border-radius: 5px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
       font-size: 16px;
       width: 100%;
     }
 
-    select option {
-      background: #333;
-      color: #fff;
-    }
-
     h1 {
       text-align: center;
-      font-size: 28px;
+      font-size: 24px;
       margin-bottom: 20px;
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      color: #333;
     }
 
     #walletInfo, #fdaiAmount {
-      font-size: 16px;
+      font-size: 14px;
       margin: 15px 0;
-      color: #fff;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      color: #666;
     }
 
     #insufficientFunds {
       color: #ff6b6b;
       font-weight: bold;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     }
 
     a.btn {
@@ -183,8 +166,11 @@
       <option value="ru">Russian</option>
     </select>
 
-    <!-- Logo (TOKI Logo) -->
-    <img src="https://www.toki.gov.tr/images/logo.png" alt="TOKI Logo" class="logo" id="logo">
+    <!-- Logo -->
+    <img src="logo.png" alt="FreeDogeAI Logo" class="logo" id="logo">
+
+    <!-- Slogan -->
+    <div class="slogan">Free Doge AI (FDAI) is next doge</div>
 
     <!-- Connect Wallet Button -->
     <button id="connectWallet" class="btn btn-connect">Connect Wallet</button>
@@ -214,11 +200,8 @@
     <button id="buyButton" class="btn btn-buy" disabled>Buy Tokens</button>
     <div id="insufficientFunds" style="display:none;">⚠ Insufficient funds</div>
 
-    <!-- Drop Button -->
-    <button id="dropButton" class="btn btn-drop">CLAIM FREE DROP</button>
-
     <!-- Whitepaper -->
-    <a href="FreeDogeAI_Whitepaper.pdf" download class="btn" id="whitepaperLink">Download Whitepaper</a>
+    <a href="FreeDogeAI_Whitepaper.pdf" download class="btn btn-whitepaper" id="whitepaperLink">Download Whitepaper</a>
   </div>
 
   <!-- Load Ethers.js and script.js -->
