@@ -70,8 +70,12 @@ async function updateWalletInfo() {
   try {
     if (window.ethereum) {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const accounts = await provider.send("eth_requestAccounts", []);
-      const address = accounts[0]; // Get the first connected account
+      const accounts = await provider.listAccounts();
+      if (accounts.length === 0) {
+        console.log("No accounts connected yet, requesting accounts...");
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+      }
+      const address = accounts[0] || (await provider.listAccounts())[0];
       const balanceWei = await provider.getBalance(address);
       const balance = ethers.utils.formatEther(balanceWei);
 
@@ -112,12 +116,12 @@ async function connectWallet(walletType) {
       let deepLink;
 
       if (walletType === "metamask") {
-        // Alternative deep link for better compatibility
+        // Universal deep link for MetaMask
         deepLink = `metamask://dapp/${window.location.host}${window.location.pathname}`;
         console.log("MetaMask deep link:", deepLink);
       } else {
-        // Alternative TrustWallet deep link
-        deepLink = `trust://open_url?url=${encodeURIComponent(window.location.href)}`;
+        // Universal deep link for TrustWallet
+        deepLink = `trust://dapp/${window.location.host}${window.location.pathname}`;
         console.log("TrustWallet deep link:", deepLink);
       }
 
@@ -139,8 +143,12 @@ async function connectWallet(walletType) {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             console.log("Provider initialized:", provider);
 
-            // Request account access (this should trigger the "Connect" prompt)
-            const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+            // Check if already connected
+            let accounts = await provider.listAccounts();
+            if (accounts.length === 0) {
+              console.log("Requesting account access...");
+              accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+            }
             console.log("Accounts received:", accounts);
 
             if (accounts.length > 0) {
@@ -169,7 +177,7 @@ async function connectWallet(walletType) {
       }
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []);
+      await window.ethereum.request({ method: "eth_requestAccounts" });
       console.log(`${walletType} wallet connected on desktop.`);
       await updateWalletInfo();
     }
