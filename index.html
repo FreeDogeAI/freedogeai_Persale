@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI (FDAI) Presale</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -11,8 +11,8 @@
 <header>
   <img src="logo.png" alt="FreeDogeAI Logo" class="logo">
   <div class="language-switcher">
-    <button onclick="setLanguage('tr')">Türkçe</button>
     <button onclick="setLanguage('en')">English</button>
+    <button onclick="setLanguage('tr')">Türkçe</button>
     <button onclick="setLanguage('ru')">Русский</button>
     <button onclick="setLanguage('zh')">中文</button>
   </div>
@@ -21,45 +21,47 @@
 <main>
 
 <section class="hero">
-  <h1 id="main-title">FDAI Ön Satışına Katıl!</h1>
-  <p id="subtitle">Geleceğini FreeDogeAI (FDAI) ile güvence altına al!</p>
-  <button id="join-button" onclick="connectWallet()">Cüzdanını Bağla</button>
+  <h1 id="main-title">Join the FDAI Presale!</h1>
+  <p id="subtitle">Secure your future with FreeDogeAI (FDAI)!</p>
+  <button id="join-button" onclick="connectWallet()">Connect Wallet</button>
 </section>
 
 <section class="buy-section">
-  <h2 id="buy-title">FDAI Token Satın Al</h2>
-  <p id="buy-desc">FDAI satın almak için BNB gönderebilirsiniz. Tokenlar otomatik olarak cüzdanınıza teslim edilecektir.</p>
+  <h2 id="buy-title">Buy FDAI Tokens</h2>
+  <p id="buy-desc">Send BNB to purchase FDAI tokens. Tokens will be delivered automatically to your wallet.</p>
   
-  <input type="number" id="bnb-amount" placeholder="BNB miktarını gir" oninput="calculateTokens()">
-  <p id="token-amount">Alacağınız FDAI: 0</p>
+  <input type="number" id="bnb-amount" placeholder="Enter BNB amount" oninput="calculateTokens()">
+  <p id="token-amount">You will receive: 0 FDAI</p>
   
-  <p class="minimum-warning" id="minimum-warning">Minimum alım tutarı: 0.035 BNB</p>
+  <p class="minimum-warning" id="minimum-warning">Minimum purchase: 0.035 BNB</p>
   
-  <button id="buy-button" onclick="buyTokens()">FDAI Token Satın Al</button>
+  <button id="buy-button" onclick="buyTokens()">Buy FDAI Tokens</button>
 </section>
 
 <section class="how-to-join">
-  <h2 id="how-to-title">FDAI Nasıl Satın Alınır?</h2>
+  <h2 id="how-to-title">How to Buy FDAI?</h2>
   <ul id="how-to-list">
-    <li>MetaMask veya TrustWallet cüzdanınızı bağlayın.</li>
-    <li>Satın almak istediğiniz BNB miktarını girin.</li>
-    <li>FDAI tokenlar otomatik olarak cüzdanınıza gönderilecektir.</li>
+    <li>Connect your MetaMask or TrustWallet.</li>
+    <li>Enter the amount of BNB you want to invest.</li>
+    <li>FDAI tokens will be sent automatically to your wallet.</li>
   </ul>
 </section>
 
 <section class="roadmap">
-  <h2 id="roadmap-title">Yol Haritamız</h2>
-  <ol id="roadmap-list"></ol>
+  <h2 id="roadmap-title">Our Roadmap</h2>
+  <ol id="roadmap-list">
+    <!-- Roadmap items will be inserted by script.js dynamically based on selected language -->
+  </ol>
 </section>
 
-<section class="wallpaper-download">
-  <h2 id="whitepaper-title">Whitepaper İndir</h2>
-  <a href="FreeDogeAI_Whitepaper.pdf" download class="download-button" id="whitepaper-button">Whitepaper'ı İndir</a>
+<section class="whitepaper-download">
+  <h2 id="whitepaper-title">Download Whitepaper</h2>
+  <a href="FreeDogeAI_Whitepaper.pdf" download id="whitepaper-button" class="download-button">Download Whitepaper</a>
 </section>
 
 <section class="community-links">
-  <h2 id="community-title">Topluluğumuza Katıl</h2>
-  <p id="community-desc">FreeDogeAI topluluğuna katıl ve gelişmeleri kaçırma!</p>
+  <h2 id="community-title">Join Our Community</h2>
+  <p id="community-desc">Stay connected and follow FreeDogeAI updates!</p>
   <div class="social-links">
     <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
     <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
