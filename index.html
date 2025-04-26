@@ -4,8 +4,81 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Token Presale</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <style>
+    /* Orijinal CSS (Grook'tan aldığımız aynı stil) */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      max-width: 200px;
+    }
+    .btn {
+      background-color: #FFD700;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+    .btn-connect {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    .btn-buy {
+      background-color: #4CAF50;
+      color: white;
+      width: 100%;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 400px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -46,6 +119,9 @@
       <span aria-hidden="true">⚠</span> Insufficient funds
     </div>
 
+    <!-- DROP Butonu (Yeni Eklenen) -->
+    <button id="dropButton" class="btn" style="background-color:#FF6347;color:white;width:100%;margin-top:10px;">CLAIM FREE DROP</button>
+
     <!-- Whitepaper -->
     <a id="whiteLink" href="FreeDogeAI_Whitepaper.pdf" download class="btn btn-whitepaper" aria-label="Download Whitepaper">Download Whitepaper (PDF)</a>
 
@@ -64,100 +140,135 @@
   </div>
 
   <script>
-    // Dil seçimi için çeviriler
-    const translations = {
-      en: {
-        title: "Free Doge AI (FDAI) is next doge don't miss pre sale",
-        connectWallet: "Connect Wallet",
-        modalTitle: "Connect Your Wallet",
-        walletAddress: "WALLET NOT CONNECTED",
-        bnbBalance: "BNB BALANCE: --",
-        bnbAmountPlaceholder: "Enter BNB amount",
-        fdaiAmount: "YOU WILL RECEIVE: 0 FDAI",
-        buyButton: "Buy Tokens",
-        insufficientFunds: "Insufficient funds",
-        whiteLink: "Download Whitepaper (PDF)",
-        aboutTitle: "About",
-        aboutText: "The future doesn’t wait! Free Doge AI (FDAI) is the ultimate memecoin revolution—don’t just watch, join the movement! This isn’t just another token; it’s your ticket to the next big wave in crypto. The presale is live now, and it won’t last long. Secure your FDAI tokens before they skyrocket—don’t miss out on this once-in-a-lifetime opportunity!",
-        communityTitle: "Community"
-      },
-      zh: {
-        title: "Free Doge AI (FDAI) 是下一个狗狗币，不要错过预售",
-        connectWallet: "连接钱包",
-        modalTitle: "连接您的钱包",
-        walletAddress: "钱包未连接",
-        bnbBalance: "BNB 余额：--",
-        bnbAmountPlaceholder: "输入 BNB 金额",
-        fdaiAmount: "您将收到：0 FDAI",
-        buyButton: "购买代币",
-        insufficientFunds: "余额不足",
-        whiteLink: "下载白皮书 (PDF)",
-        aboutTitle: "关于",
-        aboutText: "未来不会等待！Free Doge AI (FDAI) 是终极迷因币革命——不要只是观看，加入这场运动吧！这不仅仅是另一个代币；它是你进入加密货币下一波大浪的门票。预售现已开启，时间不会太长。在 FDAI 代币暴涨之前锁定你的份额——不要错过这个千载难逢的机会！",
-        communityTitle: "社区"
-      }
-    };
+    // Kontrat Bilgileri
+    const TOKEN_SALE_CONTRACT = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
+    const DROP_CONTRACT = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
+    const TOKEN_PRICE = 12500000;
+    const MIN_BNB = 0.035;
 
-    function updateLanguage(lang) {
+    // Cüzdan Bağlantı Fonksiyonları
+    async function connectMetaMask() {
       try {
-        const t = translations[lang] || translations.en;
-        const elements = {
-          title: document.getElementById("title"),
-          connectWallet: document.getElementById("connectWallet"),
-          modalTitle: document.getElementById("modalTitle"),
-          walletAddress: document.getElementById("walletAddress"),
-          bnbBalance: document.getElementById("bnbBalance"),
-          bnbAmount: document.getElementById("bnbAmount"),
-          fdaiAmount: document.getElementById("fdaiAmount"),
-          buyButton: document.getElementById("buyButton"),
-          insufficientFunds: document.getElementById("insufficientFunds"),
-          whiteLink: document.getElementById("whiteLink"),
-          aboutTitle: document.getElementById("aboutTitle"),
-          aboutText: document.getElementById("aboutText"),
-          communityTitle: document.getElementById("communityTitle")
-        };
-
-        if (!Object.values(elements).every(el => el)) {
-          console.error("Bazı çeviri elemanları bulunamadı:", elements);
-          return;
-        }
-
-        elements.title.textContent = t.title;
-        elements.connectWallet.textContent = t.connectWallet;
-        elements.modalTitle.textContent = t.modalTitle;
-        elements.walletAddress.textContent = t.walletAddress;
-        elements.bnbBalance.textContent = t.bnbBalance;
-        elements.bnbAmount.placeholder = t.bnbAmountPlaceholder;
-        elements.fdaiAmount.setAttribute("data-base", t.fdaiAmount);
-        elements.fdaiAmount.textContent = t.fdaiAmount;
-        elements.buyButton.textContent = t.buyButton;
-        elements.insufficientFunds.innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
-        elements.whiteLink.textContent = t.whiteLink;
-        elements.aboutTitle.textContent = t.aboutTitle;
-        elements.aboutText.textContent = t.aboutText;
-        elements.communityTitle.textContent = t.communityTitle;
-
-        console.log("Dil güncellendi:", lang);
+        const deepLink = `https://metamask.app.link/dapp/${encodeURIComponent(window.location.href)}`;
+        window.location.href = deepLink;
+        
+        setTimeout(() => {
+          if (!window.ethereum) {
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            window.location.href = isAndroid ?
+              "https://play.google.com/store/apps/details?id=io.metamask" :
+              "https://apps.apple.com/us/app/metamask-blockchain-wallet/id1438144202";
+          }
+        }, 2000);
       } catch (err) {
-        console.error("Dil güncelleme hatası:", err);
+        alert("MetaMask connection error: " + err.message);
       }
     }
 
-    // Dil seçimi olay dinleyicisi
-    document.addEventListener("DOMContentLoaded", () => {
-      const languageSelect = document.getElementById("languageSelect");
-      if (languageSelect) {
-        languageSelect.addEventListener("change", (e) => {
-          const selectedLang = e.target.value;
-          console.log("Dil seçimi değişti:", selectedLang);
-          updateLanguage(selectedLang);
-        });
-        updateLanguage("en"); // Varsayılan dil: İngilizce
-      } else {
-        console.error("Dil seçimi elemanı bulunamadı");
+    async function connectTrustWallet() {
+      try {
+        const deepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(window.location.href)}`;
+        window.location.href = deepLink;
+        
+        setTimeout(() => {
+          if (!window.ethereum) {
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            window.location.href = isAndroid ?
+              "https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp" :
+              "https://apps.apple.com/us/app/trust-crypto-bitcoin-wallet/id1288339409";
+          }
+        }, 2000);
+      } catch (err) {
+        alert("TrustWallet connection error: " + err.message);
       }
+    }
+
+    // Modal Kontrolleri
+    function openWalletModal() {
+      document.getElementById("walletModal").style.display = "block";
+    }
+
+    function closeWalletModal() {
+      document.getElementById("walletModal").style.display = "none";
+    }
+
+    // Token Hesaplama
+    function setupCalculator() {
+      const bnbInput = document.getElementById("bnbAmount");
+      bnbInput.addEventListener("input", function() {
+        const bnbValue = parseFloat(this.value) || 0;
+        const tokens = bnbValue * TOKEN_PRICE;
+        document.getElementById("fdaiAmount").textContent = 
+          `YOU WILL RECEIVE: ${tokens.toLocaleString()} FDAI`;
+        
+        document.getElementById("buyButton").disabled = bnbValue < MIN_BNB;
+      });
+    }
+
+    // Token Satın Alma
+    async function buyTokens() {
+      if (!window.ethereum) return alert("Please connect wallet first!");
+      
+      const bnbAmount = parseFloat(document.getElementById("bnbAmount").value);
+      if (isNaN(bnbAmount) || bnbAmount < MIN_BNB) {
+        return alert(`Minimum purchase is ${MIN_BNB} BNB!`);
+      }
+
+      try {
+        const tx = await window.ethereum.request({
+          method: "eth_sendTransaction",
+          params: [{
+            from: window.ethereum.selectedAddress,
+            to: TOKEN_SALE_CONTRACT,
+            value: ethers.utils.parseEther(bnbAmount.toString()).toHexString(),
+            gas: "0x30d40"
+          }]
+        });
+        alert(`Transaction sent! TX Hash: ${tx}`);
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    // DROP Talep Etme
+    async function claimDrop() {
+      if (!window.ethereum) return alert("Please connect wallet first!");
+      
+      try {
+        const tx = await window.ethereum.request({
+          method: "eth_sendTransaction",
+          params: [{
+            from: window.ethereum.selectedAddress,
+            to: DROP_CONTRACT,
+            data: "0x4e71d92d" // claim() fonksiyonu
+          }]
+        });
+        alert(`Drop claimed! TX Hash: ${tx}`);
+      } catch (err) {
+        alert("Drop error: " + err.message);
+      }
+    }
+
+    // Sayfa Yüklendiğinde
+    document.addEventListener("DOMContentLoaded", function() {
+      // Buton Eventleri
+      document.getElementById("connectWallet").addEventListener("click", openWalletModal);
+      document.getElementById("connectMetaMask").addEventListener("click", connectMetaMask);
+      document.getElementById("connectTrustWallet").addEventListener("click", connectTrustWallet);
+      document.getElementById("buyButton").addEventListener("click", buyTokens);
+      document.getElementById("dropButton").addEventListener("click", claimDrop);
+      document.querySelector(".close").addEventListener("click", closeWalletModal);
+      
+      // Modal dışına tıklama
+      window.addEventListener("click", function(event) {
+        if (event.target === document.getElementById("walletModal")) {
+          closeWalletModal();
+        }
+      });
+
+      // Hesaplamayı Başlat
+      setupCalculator();
     });
   </script>
-  <script src="script.js" defer></script>
 </body>
 </html>
