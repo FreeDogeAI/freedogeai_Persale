@@ -1,3 +1,6 @@
+// Log to confirm script is loaded
+console.log("script.js loaded");
+
 // Check if Ethers.js is loaded
 if (typeof ethers === "undefined") {
   console.error("Ethers.js library failed to load!");
@@ -158,53 +161,66 @@ const translations = {
 function changeLanguage(lang) {
   console.log("Changing language to:", lang);
   localStorage.setItem("language", lang);
-  document.getElementById("connectWallet").textContent = translations[lang].connectWallet;
-  document.getElementById("modalTitle").textContent = translations[lang].modalTitle;
-  document.getElementById("presaleTitle").textContent = translations[lang].presaleTitle;
-  document.getElementById("presaleSubtitle").textContent = translations[lang].presaleSubtitle;
-  document.getElementById("walletAddress").textContent = translations[lang].walletAddress;
-  document.getElementById("bnbBalance").textContent = translations[lang].bnbBalance;
-  document.getElementById("buyTokensTitle").textContent = translations[lang].buyTokensTitle;
-  document.getElementById("buyTokensSubtitle").textContent = translations[lang].buyTokensSubtitle;
-  document.getElementById("bnbAmount").placeholder = translations[lang].bnbAmountPlaceholder;
-  document.getElementById("fdaiAmount").textContent = translations[lang].fdaiAmount;
-  document.getElementById("minimumPurchase").textContent = translations[lang].minimumPurchase;
-  document.getElementById("buyButton").textContent = translations[lang].buyButton;
-  document.getElementById("howToBuyTitle").textContent = translations[lang].howToBuyTitle;
-  document.getElementById("howToBuyText").innerHTML = translations[lang].howToBuyText;
-  document.getElementById("roadmapTitle").textContent = translations[lang].roadmapTitle;
-  document.getElementById("phase1Title").textContent = translations[lang].phase1Title;
-  document.getElementById("phase1Text").textContent = translations[lang].phase1Text;
-  document.getElementById("phase2Title").textContent = translations[lang].phase2Title;
-  document.getElementById("phase2Text").textContent = translations[lang].phase2Text;
-  document.getElementById("phase3Title").textContent = translations[lang].phase3Title;
-  document.getElementById("phase3Text").textContent = translations[lang].phase3Text;
-  document.getElementById("phase4Title").textContent = translations[lang].phase4Title;
-  document.getElementById("phase4Text").textContent = translations[lang].phase4Text;
-  document.getElementById("phase5Title").textContent = translations[lang].phase5Title;
-  document.getElementById("phase5Text").textContent = translations[lang].phase5Text;
-  document.getElementById("phase6Title").textContent = translations[lang].phase6Title;
-  document.getElementById("phase6Text").textContent = translations[lang].phase6Text;
-  document.getElementById("whitepaperTitle").textContent = translations[lang].whitepaperTitle;
-  document.getElementById("whitepaperLink").textContent = translations[lang].whitepaperLink;
-  document.getElementById("communityTitle").textContent = translations[lang].communityTitle;
-  document.getElementById("communityText").textContent = translations[lang].communityText;
-  document.getElementById("telegramLink").textContent = translations[lang].telegramLink;
-  document.getElementById("twitterLink").textContent = translations[lang].twitterLink;
-  document.getElementById("footerText").textContent = translations[lang].footerText;
+
+  // Update all text elements
+  try {
+    document.getElementById("connectWallet").textContent = translations[lang].connectWallet;
+    document.getElementById("modalTitle").textContent = translations[lang].modalTitle;
+    document.getElementById("presaleTitle").textContent = translations[lang].presaleTitle;
+    document.getElementById("presaleSubtitle").textContent = translations[lang].presaleSubtitle;
+    document.getElementById("walletAddress").textContent = translations[lang].walletAddress;
+    document.getElementById("bnbBalance").textContent = translations[lang].bnbBalance;
+    document.getElementById("buyTokensTitle").textContent = translations[lang].buyTokensTitle;
+    document.getElementById("buyTokensSubtitle").textContent = translations[lang].buyTokensSubtitle;
+    document.getElementById("bnbAmount").placeholder = translations[lang].bnbAmountPlaceholder;
+    document.getElementById("fdaiAmount").textContent = translations[lang].fdaiAmount;
+    document.getElementById("minimumPurchase").textContent = translations[lang].minimumPurchase;
+    document.getElementById("buyButton").textContent = translations[lang].buyButton;
+    document.getElementById("howToBuyTitle").textContent = translations[lang].howToBuyTitle;
+    document.getElementById("howToBuyText").innerHTML = translations[lang].howToBuyText;
+    document.getElementById("roadmapTitle").textContent = translations[lang].roadmapTitle;
+    document.getElementById("phase1Title").textContent = translations[lang].phase1Title;
+    document.getElementById("phase1Text").textContent = translations[lang].phase1Text;
+    document.getElementById("phase2Title").textContent = translations[lang].phase2Title;
+    document.getElementById("phase2Text").textContent = translations[lang].phase2Text;
+    document.getElementById("phase3Title").textContent = translations[lang].phase3Title;
+    document.getElementById("phase3Text").textContent = translations[lang].phase3Text;
+    document.getElementById("phase4Title").textContent = translations[lang].phase4Title;
+    document.getElementById("phase4Text").textContent = translations[lang].phase4Text;
+    document.getElementById("phase5Title").textContent = translations[lang].phase5Title;
+    document.getElementById("phase5Text").textContent = translations[lang].phase5Text;
+    document.getElementById("phase6Title").textContent = translations[lang].phase6Title;
+    document.getElementById("phase6Text").textContent = translations[lang].phase6Text;
+    document.getElementById("whitepaperTitle").textContent = translations[lang].whitepaperTitle;
+    document.getElementById("whitepaperLink").textContent = translations[lang].whitepaperLink;
+    document.getElementById("communityTitle").textContent = translations[lang].communityTitle;
+    document.getElementById("communityText").textContent = translations[lang].communityText;
+    document.getElementById("telegramLink").textContent = translations[lang].telegramLink;
+    document.getElementById("twitterLink").textContent = translations[lang].twitterLink;
+    document.getElementById("footerText").textContent = translations[lang].footerText;
+    console.log("Language change successful");
+  } catch (error) {
+    console.error("Error during language change:", error);
+  }
 }
 
 // Function to update wallet info
 async function updateWalletInfo() {
   console.log("Updating wallet info...");
   try {
-    if (window.ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      let accounts = await provider.listAccounts();
-      if (accounts.length === 0) {
-        console.log("No accounts connected yet, requesting accounts...");
-        accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-      }
+    if (!window.ethereum) {
+      console.log("No Ethereum provider detected.");
+      return;
+    }
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    let accounts = await provider.listAccounts();
+    if (accounts.length === 0) {
+      console.log("No accounts connected yet, requesting accounts...");
+      accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+    }
+
+    if (accounts.length > 0) {
       const address = accounts[0];
       const balanceWei = await provider.getBalance(address);
       const balance = ethers.utils.formatEther(balanceWei);
@@ -213,32 +229,51 @@ async function updateWalletInfo() {
       document.getElementById("walletAddress").textContent = `${translations[lang].walletAddress.split(":")[0]}: ${address.slice(0, 6)}...${address.slice(-4)}`;
       document.getElementById("bnbBalance").textContent = `${translations[lang].bnbBalance.split(":")[0]}: ${parseFloat(balance).toFixed(4)}`;
 
-      // Check BNB amount and enable/disable Buy button
+      // Enable Buy button if BNB amount is sufficient
       const bnbInput = document.getElementById("bnbAmount");
       const bnbValue = parseFloat(bnbInput.value) || 0;
       document.getElementById("buyButton").disabled = bnbValue < 0.035 || bnbValue > parseFloat(balance);
       console.log("Buy button status:", document.getElementById("buyButton").disabled);
     } else {
-      console.log("No Ethereum provider detected.");
+      console.log("No accounts connected.");
     }
   } catch (error) {
     console.error("Error updating wallet info:", error);
+    alert("Failed to update wallet info: " + error.message);
   }
 }
 
 // Function to open modal
 function openModal() {
   console.log("Opening wallet modal...");
-  document.getElementById("walletModal").style.display = "block";
+  try {
+    const modal = document.getElementById("walletModal");
+    if (modal) {
+      modal.style.display = "block";
+    } else {
+      console.error("Wallet modal not found!");
+    }
+  } catch (error) {
+    console.error("Error opening modal:", error);
+  }
 }
 
 // Function to close modal
 function closeModal() {
   console.log("Closing wallet modal...");
-  document.getElementById("walletModal").style.display = "none";
+  try {
+    const modal = document.getElementById("walletModal");
+    if (modal) {
+      modal.style.display = "none";
+    } else {
+      console.error("Wallet modal not found!");
+    }
+  } catch (error) {
+    console.error("Error closing modal:", error);
+  }
 }
 
-// Function to connect wallet (mobile-first)
+// Function to connect wallet
 async function connectWallet(walletType) {
   console.log(`Connecting to ${walletType}...`);
   try {
@@ -334,6 +369,7 @@ function setupCalculator() {
 
   if (bnbInput) {
     bnbInput.addEventListener("input", function() {
+      console.log("BNB amount input changed:", this.value);
       const bnbValue = parseFloat(this.value) || 0;
       const tokens = bnbValue * 12500000; // 1 BNB = 12.5M FDAI
 
@@ -353,8 +389,8 @@ function setupCalculator() {
 }
 
 // Initialize the page
-document.addEventListener("DOMContentLoaded", function() {
-  console.log("DOM fully loaded and parsed");
+window.onload = function() {
+  console.log("Window loaded");
 
   // Set default language
   const lang = localStorage.getItem("language") || "en";
@@ -365,40 +401,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Language buttons
   const langButtons = document.querySelectorAll(".language-btn");
-  langButtons.forEach(button => {
-    button.addEventListener("click", function() {
-      const lang = this.getAttribute("data-lang");
-      console.log("Language button clicked:", lang);
-      changeLanguage(lang);
+  if (langButtons.length > 0) {
+    langButtons.forEach(button => {
+      button.addEventListener("click", function() {
+        const lang = this.getAttribute("data-lang");
+        console.log("Language button clicked:", lang);
+        changeLanguage(lang);
+      });
     });
-  });
+  } else {
+    console.error("Language buttons not found!");
+  }
 
   // Connect Wallet button
-  const connectWalletBtn = document.getElementById("connectWallet");
-  if (connectWalletBtn) {
-    connectWalletBtn.addEventListener("click", function() {
-      console.log("Connect Wallet button clicked");
-      openModal();
-    });
-  } else {
-    console.error("connectWallet button not found!");
-  }
-
-  // MetaMask and TrustWallet buttons
-  const connectMetaMaskBtn = document.getElementById("connectMetaMask");
-  const connectTrustWalletBtn = document.getElementById("connectTrustWallet");
-  if (connectMetaMaskBtn) {
-    connectMetaMaskBtn.addEventListener("click", function() {
-      console.log("Connect MetaMask button clicked");
-      connectWallet("metamask");
-    });
-  } else {
-    console.error("connectMetaMask button not found!");
-  }
-  if (connectTrustWalletBtn) {
-    connectTrustWalletBtn.addEventListener("click", function() {
-      console.log("Connect TrustWallet button clicked");
-      connectWallet("trustwallet");
-    });
-  } else {
-    console.error("connectTrustWallet bu
+  const connectWalletBtn = document.getElem
