@@ -1,144 +1,228 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Token Presale</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+      background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3); /* Rengarenk gradient arka plan */
+      background-size: 400%;
+      animation: gradientAnimation 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      max-width: 600px;
+      width: 90%;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      max-width: 150px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #ff9f43, #feca57);
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 10px 0;
+      transition: transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-connect {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(45deg, #ff6b6b, #ee5253);
+    }
+
+    .btn-buy {
+      background: linear-gradient(45deg, #1dd1a1, #10ac84);
+      width: 100%;
+      font-size: 18px;
+    }
+
+    .btn-drop {
+      background: linear-gradient(45deg, #ff5e57, #ff3f34);
+      width: 100%;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.9);
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 20px;
+      width: 80%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .close {
+      color: #ff6b6b;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #ee5253;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 16px;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="number"]::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    select {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: none;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    select option {
+      background: #333;
+      color: #fff;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    #walletInfo, #fdaiAmount {
+      font-size: 16px;
+      margin: 15px 0;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    #insufficientFunds {
+      color: #ff6b6b;
+      font-weight: bold;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    a.btn {
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1 id="title">FreeDogeAI Token Presale</h1>
-    <select id="languageSelect" aria-label="Select language">
-      <option value="en" selected>English</option>
-      <option value="tr">Türkçe</option>
+    <!-- Language Selection -->
+    <select id="languageSelect">
+      <option value="en">English</option>
+      <option value="zh">Chinese</option>
+      <option value="ru">Russian</option>
     </select>
 
-    <div class="wallet-buttons">
-      <button id="connectMetaMask" aria-label="Connect with MetaMask">Connect with MetaMask</button>
-      <button id="connectTrustWallet" aria-label="Connect with TrustWallet">Connect with TrustWallet</button>
+    <!-- Logo (TOKI Logo) -->
+    <img src="https://www.toki.gov.tr/images/logo.png" alt="TOKI Logo" class="logo" id="logo">
+
+    <!-- Connect Wallet Button -->
+    <button id="connectWallet" class="btn btn-connect">Connect Wallet</button>
+
+    <!-- Wallet Selection Modal -->
+    <div id="walletModal" class="modal">
+      <div class="modal-content">
+        <span class="close">×</span>
+        <h2 id="modalTitle">Connect Your Wallet</h2>
+        <button id="connectMetaMask" class="btn">MetaMask</button>
+        <button id="connectTrustWallet" class="btn">TrustWallet</button>
+      </div>
     </div>
 
-    <div id="walletAddress">Wallet not connected</div>
-    <div id="bnbBalance">BNB Balance: --</div>
+    <!-- Title -->
+    <h1 id="presaleTitle">Free Doge AI (FDAI) Presale</h1>
 
-    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" min="0" step="0.001" aria-label="BNB amount">
-    <div id="fdaiAmount">0 FDAI</div>
-    <button id="buyButton" disabled aria-label="Buy Tokens">Buy Tokens</button>
-    <div id="insufficientFunds" style="display: none; color: red;">
-      <span aria-hidden="true">⚠</span> Insufficient funds
+    <!-- Wallet Info -->
+    <div id="walletInfo" style="margin: 15px 0;">
+      <div id="walletAddress">Wallet: Not Connected</div>
+      <div id="bnbBalance">BNB Balance: --</div>
     </div>
 
-    <h2 id="about-title">About FreeDogeAI</h2>
-    <p id="aboutText">
-      Don't miss out! FreeDogeAI is here to shake the memecoin market. Be part of the hype before it's too late.
-      This presale won't last forever — secure your place now.
-    </p>
+    <!-- Token Purchase -->
+    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" min="0" step="0.001">
+    <div id="fdaiAmount">YOU WILL RECEIVE: 0 FDAI</div>
+    <button id="buyButton" class="btn btn-buy" disabled>Buy Tokens</button>
+    <div id="insufficientFunds" style="display:none;">⚠ Insufficient funds</div>
 
-    <a id="whiteLink" href="FreeDogeAI_Whitepaper.pdf" download aria-label="Download Whitepaper">Download Whitepaper</a>
+    <!-- Drop Button -->
+    <button id="dropButton" class="btn btn-drop">CLAIM FREE DROP</button>
 
-    <footer>
-      <p id="communityText">
-        Join our community:
-        <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
-        <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>
-      </p>
-    </footer>
+    <!-- Whitepaper -->
+    <a href="FreeDogeAI_Whitepaper.pdf" download class="btn" id="whitepaperLink">Download Whitepaper</a>
   </div>
 
-  <script>
-    // Dil seçimi için çeviriler
-    const translations = {
-      en: {
-        title: "FreeDogeAI Token Presale",
-        aboutTitle: "About FreeDogeAI",
-        aboutText: "Don't miss out! FreeDogeAI is here to shake the memecoin market. Be part of the hype before it's too late. This presale won't last forever — secure your place now.",
-        connectMetaMask: "Connect with MetaMask",
-        connectTrustWallet: "Connect with TrustWallet",
-        buyButton: "Buy Tokens",
-        communityText: "Join our community: ",
-        insufficientFunds: "Insufficient funds",
-        walletAddress: "Wallet not connected",
-        bnbBalance: "BNB Balance: --",
-        bnbAmountPlaceholder: "Enter BNB amount",
-        whiteLink: "Download Whitepaper"
-      },
-      tr: {
-        title: "FreeDogeAI Token Ön Satışı",
-        aboutTitle: "FreeDogeAI Hakkında",
-        aboutText: "Kaçırmayın! FreeDogeAI, memecoin piyasasını sarsmak için burada. Heyecana katılın, geç kalmadan yerinizi alın. Bu ön satış sonsuza kadar sürmeyecek!",
-        connectMetaMask: "MetaMask ile Bağlan",
-        connectTrustWallet: "TrustWallet ile Bağlan",
-        buyButton: "Token Satın Al",
-        communityText: "Topluluğumuza katılın: ",
-        insufficientFunds: "Yetersiz bakiye",
-        walletAddress: "Cüzdan bağlı değil",
-        bnbBalance: "BNB Bakiyesi: --",
-        bnbAmountPlaceholder: "BNB miktarını girin",
-        whiteLink: "Whitepaper İndir"
-      }
-    };
-
-    function updateLanguage(lang) {
-      try {
-        const t = translations[lang] || translations.en;
-        const elements = {
-          title: document.getElementById("title"),
-          aboutTitle: document.getElementById("about-title"),
-          aboutText: document.getElementById("aboutText"),
-          connectMetaMask: document.getElementById("connectMetaMask"),
-          connectTrustWallet: document.getElementById("connectTrustWallet"),
-          buyButton: document.getElementById("buyButton"),
-          communityText: document.getElementById("communityText"),
-          insufficientFunds: document.getElementById("insufficientFunds"),
-          walletAddress: document.getElementById("walletAddress"),
-          bnbBalance: document.getElementById("bnbBalance"),
-          bnbAmount: document.getElementById("bnbAmount"),
-          whiteLink: document.getElementById("whiteLink")
-        };
-
-        if (!Object.values(elements).every(el => el)) {
-          console.error("Bazı çeviri elemanları bulunamadı:", elements);
-          return;
-        }
-
-        elements.title.textContent = t.title;
-        elements.aboutTitle.textContent = t.aboutTitle;
-        elements.aboutText.textContent = t.aboutText;
-        elements.connectMetaMask.textContent = t.connectMetaMask;
-        elements.connectTrustWallet.textContent = t.connectTrustWallet;
-        elements.buyButton.textContent = t.buyButton;
-        elements.communityText.innerHTML = `${t.communityText}
-          <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
-          <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>`;
-        elements.insufficientFunds.innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
-        elements.walletAddress.textContent = t.walletAddress;
-        elements.bnbBalance.textContent = t.bnbBalance;
-        elements.bnbAmount.placeholder = t.bnbAmountPlaceholder;
-        elements.whiteLink.textContent = t.whiteLink;
-
-        console.log("Dil güncellendi:", lang);
-      } catch (err) {
-        console.error("Dil güncelleme hatası:", err);
-      }
-    }
-
-    // Dil seçimi olay dinleyicisi
-    document.addEventListener("DOMContentLoaded", () => {
-      const languageSelect = document.getElementById("languageSelect");
-      if (languageSelect) {
-        languageSelect.addEventListener("change", (e) => {
-          const selectedLang = e.target.value;
-          console.log("Dil seçimi değişti:", selectedLang);
-          updateLanguage(selectedLang);
-        });
-        updateLanguage("en"); // Varsayılan dil: İngilizce
-      } else {
-        console.error("Dil seçimi elemanı bulunamadı");
-      }
-    });
-  </script>
-  <script src="script.js" defer></script>
+  <!-- Load Ethers.js and script.js -->
+  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
