@@ -21,56 +21,24 @@ function getElement(id) {
   return element;
 }
 
-// Cüzdan uygulamalarının yüklü olup olmadığını kontrol eden dedektör
-function detectWallet(walletType) {
-  return new Promise((resolve) => {
-    let opened = false;
-    const site = encodeURIComponent(window.location.href);
-    let deepLink = "";
+// Derin bağlantıyı tetikleme fonksiyonu (tarayıcı engellemelerini aşmak için)
+function triggerDeepLink(deepLink) {
+  console.log(`Derin bağlantı tetikleniyor: ${deepLink}`);
+  // Gizli bir iframe ile bağlantıyı tetikle
+  const iframe = document.createElement("iframe");
+  iframe.style.display = "none";
+  iframe.src = deepLink;
+  document.body.appendChild(iframe);
 
-    if (walletType === "MetaMask") {
-      deepLink = `metamask://dapp/${site}`;
-    } else if (walletType === "TrustWallet") {
-      deepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`;
-    }
-
-    // Derin bağlantıyı dene
-    console.log(`${walletType} dedektörü: ${deepLink} deneniyor...`);
+  // Alternatif olarak window.location.href ile de dene
+  setTimeout(() => {
     window.location.href = deepLink;
+  }, 500);
 
-    // 1 saniye içinde sayfa gizlenmezse (uygulama açılmazsa) yüklü değil
-    setTimeout(() => {
-      if (!document.hidden) {
-        console.log(`${walletType} yüklü değil, mağazaya yönlendiriliyor...`);
-        opened = false;
-        const isAndroid = /Android/i.test(navigator.userAgent);
-        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-        let storeLink = "";
-        if (walletType === "MetaMask") {
-          if (isAndroid) {
-            storeLink = "https://play.google.com/store/apps/details?id=io.metamask";
-          } else if (isIOS) {
-            storeLink = "https://apps.apple.com/us/app/metamask-blockchain-wallet/id1438144202";
-          } else {
-            storeLink = "https://metamask.io/download/";
-          }
-        } else if (walletType === "TrustWallet") {
-          if (isAndroid) {
-            storeLink = "https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp";
-          } else if (isIOS) {
-            storeLink = "https://apps.apple.com/us/app/trust-crypto-bitcoin-wallet/id1288339409";
-          } else {
-            storeLink = "https://trustwallet.com/download";
-          }
-        }
-        window.location.href = storeLink;
-      } else {
-        console.log(`${walletType} yüklü ve açıldı.`);
-        opened = true;
-      }
-      resolve(opened);
-    }, 1000);
-  });
+  // iframe'i temizle
+  setTimeout(() => {
+    document.body.removeChild(iframe);
+  }, 1000);
 }
 
 // Cüzdan bağlantı modalını açma
@@ -95,29 +63,49 @@ function closeWalletModal() {
   }
 }
 
-// MetaMask bağlantısı (düzeltildi)
+// MetaMask bağlantısı (yeniden yapılandırıldı)
 async function connectMetaMask() {
   try {
     closeWalletModal();
     if (isMobile) {
       console.log("Mobil cihazda MetaMask bağlantısı deneniyor...");
-      await detectWallet("MetaMask");
+      const site = encodeURIComponent(window.location.href);
+      const deepLink = `metamask://dapp/${site}`;
+      triggerDeepLink(deepLink);
 
-      // Siteye geri dönüldüğünde bağlantıyı kontrol et
-      if (window.ethereum) {
-        provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-        await provider.send("eth_requestAccounts", []);
-        signer = provider.getSigner();
-        userAddress = await signer.getAddress();
-        console.log("MetaMask cüzdanı bağlandı:", userAddress);
-        await updateInfo();
-      } else {
-        console.log("MetaMask bağlanamadı, window.ethereum bulunamadı.");
-      }
+      // Bağlantı sonrası cüzdan bilgilerini kontrol etmek için bir döngü başlat
+      let attempts = 0;
+      const maxAttempts = 10; // 10 saniye boyunca dene (her saniye 1 deneme)
+      const checkConnection = setInterval(async () => {
+        attempts++;
+        if (window.ethereum) {
+          clearInterval(checkConnection);
+          provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+          await provider.send("eth_requestAccounts", []);
+          signer = provider.getSigner();
+          userAddress = await signer.getAddress();
+          console.log("MetaMask cüzdanı bağlandı:", userAddress);
+          await updateInfo();
+        } else if (attempts >= maxAttempts) {
+          clearInterval(checkConnection);
+          console.log("MetaMask bağlanamadı, kullanıcıyı mağazaya yönlendiriyorum...");
+          const isAndroid = /Android/i.test(navigator.userAgent);
+          const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+          let storeLink = "";
+          if (isAndroid) {
+            storeLink = "https://play.google.com/store/apps/details?id=io.metamask";
+          } else if (isIOS) {
+            storeLink = "https://apps.apple.com/us/app/metamask-blockchain-wallet/id1438144202";
+          } else {
+            storeLink = "https://metamask.io/download/";
+          }
+          window.location.href = storeLink;
+        }
+      }, 1000); // Her saniye kontrol et
       return;
     }
 
-    // Masaüstünde MetaMask kontrolü
+    // Masaüstünde MetaMask bağlantısı
     console.log("Masaüstü cihazda MetaMask kontrolü yapılıyor...");
     if (!window.ethereum || !window.ethereum.isMetaMask) {
       console.log("MetaMask yüklü değil veya algılanamadı.");
@@ -126,17 +114,13 @@ async function connectMetaMask() {
       return;
     }
 
-    // Sağlayıcıyı başlat
     provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     console.log("MetaMask sağlayıcısı başlatıldı:", window.ethereum);
-
-    // Cüzdan bağlantısı iste
     await provider.send("eth_requestAccounts", []);
     signer = provider.getSigner();
     userAddress = await signer.getAddress();
     console.log("Cüzdan bağlandı:", userAddress);
 
-    // Zincir kontrolü
     const network = await provider.getNetwork();
     console.log("Bağlı ağ:", network);
     if (network.chainId !== EXPECTED_CHAIN_ID) {
@@ -173,29 +157,49 @@ async function connectMetaMask() {
   }
 }
 
-// TrustWallet bağlantısı (düzeltildi)
+// TrustWallet bağlantısı (yeniden yapılandırıldı)
 async function connectTrustWallet() {
   try {
     closeWalletModal();
     if (isMobile) {
       console.log("Mobil cihazda TrustWallet bağlantısı deneniyor...");
-      await detectWallet("TrustWallet");
+      const site = encodeURIComponent(window.location.href);
+      const deepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${site}`;
+      triggerDeepLink(deepLink);
 
-      // Siteye geri dönüldüğünde bağlantıyı kontrol et
-      if (window.ethereum) {
-        provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-        await provider.send("eth_requestAccounts", []);
-        signer = provider.getSigner();
-        userAddress = await signer.getAddress();
-        console.log("TrustWallet cüzdanı bağlandı:", userAddress);
-        await updateInfo();
-      } else {
-        console.log("TrustWallet bağlanamadı, window.ethereum bulunamadı.");
-      }
+      // Bağlantı sonrası cüzdan bilgilerini kontrol etmek için bir döngü başlat
+      let attempts = 0;
+      const maxAttempts = 10; // 10 saniye boyunca dene (her saniye 1 deneme)
+      const checkConnection = setInterval(async () => {
+        attempts++;
+        if (window.ethereum) {
+          clearInterval(checkConnection);
+          provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+          await provider.send("eth_requestAccounts", []);
+          signer = provider.getSigner();
+          userAddress = await signer.getAddress();
+          console.log("TrustWallet cüzdanı bağlandı:", userAddress);
+          await updateInfo();
+        } else if (attempts >= maxAttempts) {
+          clearInterval(checkConnection);
+          console.log("TrustWallet bağlanamadı, kullanıcıyı mağazaya yönlendiriyorum...");
+          const isAndroid = /Android/i.test(navigator.userAgent);
+          const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+          let storeLink = "";
+          if (isAndroid) {
+            storeLink = "https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp";
+          } else if (isIOS) {
+            storeLink = "https://apps.apple.com/us/app/trust-crypto-bitcoin-wallet/id1288339409";
+          } else {
+            storeLink = "https://trustwallet.com/download";
+          }
+          window.location.href = storeLink;
+        }
+      }, 1000); // Her saniye kontrol et
       return;
     }
 
-    // Masaüstünde TrustWallet kontrolü
+    // Masaüstünde TrustWallet bağlantısı
     console.log("Masaüstü cihazda TrustWallet kontrolü yapılıyor...");
     if (!window.ethereum) {
       console.log("TrustWallet yüklü değil veya algılanamadı.");
@@ -204,17 +208,13 @@ async function connectTrustWallet() {
       return;
     }
 
-    // Sağlayıcıyı başlat
     provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     console.log("TrustWallet sağlayıcısı başlatıldı:", window.ethereum);
-
-    // Cüzdan bağlantısı iste
     await provider.send("eth_requestAccounts", []);
     signer = provider.getSigner();
     userAddress = await signer.getAddress();
     console.log("Cüzdan bağlandı:", userAddress);
 
-    // Zincir kontrolü
     const network = await provider.getNetwork();
     console.log("Bağlı ağ:", network);
     if (network.chainId !== EXPECTED_CHAIN_ID) {
