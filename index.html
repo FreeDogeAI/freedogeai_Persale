@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Token Presale</title>
   <style>
-    /* Orijinal CSS (Grook'tan aldığımız aynı stil) */
     body {
       font-family: Arial, sans-serif;
       background-color: #f5f5f5;
@@ -85,188 +84,108 @@
     <!-- Logo -->
     <img src="https://freedogeai.com/logo.png" alt="FreeDogeAI Logo" class="logo" id="logo">
 
-    <!-- Dil Seçimi -->
-    <select id="languageSelect" aria-label="Select language">
-      <option value="en" selected>English</option>
-      <option value="zh">中文 (Chinese)</option>
-    </select>
-
-    <!-- Cüzdan Bağlama Butonu (Sağ Üst) -->
-    <button id="connectWallet" class="btn btn-connect" aria-label="Connect Wallet">Connect Wallet</button>
+    <!-- Cüzdan Bağlama Butonu -->
+    <button id="connectWallet" class="btn btn-connect">Connect Wallet</button>
 
     <!-- Cüzdan Seçme Modal -->
     <div id="walletModal" class="modal">
       <div class="modal-content">
         <span class="close">×</span>
-        <h2 id="modalTitle">Connect Your Wallet</h2>
-        <button id="connectMetaMask" class="btn btn-wallet">MetaMask</button>
-        <button id="connectTrustWallet" class="btn btn-wallet">TrustWallet</button>
+        <h2>Connect Your Wallet</h2>
+        <button id="connectMetaMask" class="btn">MetaMask</button>
+        <button id="connectTrustWallet" class="btn">TrustWallet</button>
       </div>
     </div>
 
     <!-- Başlık -->
-    <h1 id="title">Free Doge AI (FDAI) is next doge don't miss pre sale</h1>
+    <h1>Free Doge AI (FDAI) Presale</h1>
 
     <!-- Cüzdan Bilgileri -->
-    <div id="walletAddress">WALLET NOT CONNECTED</div>
-    <div id="bnbBalance">BNB BALANCE: --</div>
-
-    <!-- Token Satın Alma Alanı -->
-    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" min="0" step="0.001" aria-label="BNB amount">
-    <div id="fdaiAmount" data-base="YOU WILL RECEIVE: 0 FDAI">YOU WILL RECEIVE: 0 FDAI</div>
-    <button id="buyButton" class="btn btn-buy" disabled aria-label="Buy Tokens">Buy Tokens</button>
-    <div id="insufficientFunds" style="display: none; color: red;">
-      <span aria-hidden="true">⚠</span> Insufficient funds
+    <div id="walletInfo" style="margin: 15px 0;">
+      <div id="walletAddress">Wallet: Not Connected</div>
+      <div id="bnbBalance">BNB Balance: --</div>
     </div>
 
-    <!-- DROP Butonu (Yeni Eklenen) -->
-    <button id="dropButton" class="btn" style="background-color:#FF6347;color:white;width:100%;margin-top:10px;">CLAIM FREE DROP</button>
+    <!-- Token Satın Alma -->
+    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" min="0" step="0.001">
+    <div id="fdaiAmount">YOU WILL RECEIVE: 0 FDAI</div>
+    <button id="buyButton" class="btn btn-buy" disabled>Buy Tokens</button>
+    <div id="insufficientFunds" style="display:none;color:red;">⚠ Insufficient funds</div>
+
+    <!-- DROP Butonu -->
+    <button id="dropButton" class="btn" style="background:#FF6347;color:white;width:100%;margin-top:10px;">CLAIM FREE DROP</button>
 
     <!-- Whitepaper -->
-    <a id="whiteLink" href="FreeDogeAI_Whitepaper.pdf" download class="btn btn-whitepaper" aria-label="Download Whitepaper">Download Whitepaper (PDF)</a>
-
-    <!-- Hakkında Kısmı -->
-    <h2 id="aboutTitle">About</h2>
-    <p id="aboutText">
-      The future doesn’t wait! Free Doge AI (FDAI) is the ultimate memecoin revolution—don’t just watch, join the movement! This isn’t just another token; it’s your ticket to the next big wave in crypto. The presale is live now, and it won’t last long. Secure your FDAI tokens before they skyrocket—don’t miss out on this once-in-a-lifetime opportunity!
-    </p>
-
-    <!-- Topluluk Linkleri -->
-    <div class="community">
-      <h3 id="communityTitle">Community</h3>
-      <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
-      <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter</a>
-    </div>
+    <a href="FreeDogeAI_Whitepaper.pdf" download class="btn" style="display:block;text-align:center;margin:10px 0;">Download Whitepaper</a>
   </div>
 
   <script>
-    // Kontrat Bilgileri
-    const TOKEN_SALE_CONTRACT = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
-    const DROP_CONTRACT = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
-    const TOKEN_PRICE = 12500000;
-    const MIN_BNB = 0.035;
-
-    // Cüzdan Bağlantı Fonksiyonları
-    async function connectMetaMask() {
-      try {
-        const deepLink = `https://metamask.app.link/dapp/${encodeURIComponent(window.location.href)}`;
-        window.location.href = deepLink;
-        
-        setTimeout(() => {
-          if (!window.ethereum) {
-            const isAndroid = /Android/i.test(navigator.userAgent);
-            window.location.href = isAndroid ?
-              "https://play.google.com/store/apps/details?id=io.metamask" :
-              "https://apps.apple.com/us/app/metamask-blockchain-wallet/id1438144202";
-          }
-        }, 2000);
-      } catch (err) {
-        alert("MetaMask connection error: " + err.message);
-      }
-    }
-
-    async function connectTrustWallet() {
-      try {
-        const deepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(window.location.href)}`;
-        window.location.href = deepLink;
-        
-        setTimeout(() => {
-          if (!window.ethereum) {
-            const isAndroid = /Android/i.test(navigator.userAgent);
-            window.location.href = isAndroid ?
-              "https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp" :
-              "https://apps.apple.com/us/app/trust-crypto-bitcoin-wallet/id1288339409";
-          }
-        }, 2000);
-      } catch (err) {
-        alert("TrustWallet connection error: " + err.message);
-      }
-    }
-
-    // Modal Kontrolleri
-    function openWalletModal() {
+    // 1. Tüm Temel Fonksiyonlar
+    function openModal() {
       document.getElementById("walletModal").style.display = "block";
     }
 
-    function closeWalletModal() {
+    function closeModal() {
       document.getElementById("walletModal").style.display = "none";
     }
 
-    // Token Hesaplama
+    // 2. Cüzdan Bağlantıları (MOBİL ÖNCELİKLİ)
+    async function connectWallet(walletType) {
+      let deepLink;
+      
+      if (walletType === "metamask") {
+        deepLink = `https://metamask.app.link/dapp/${encodeURIComponent(window.location.href)}`;
+      } else {
+        deepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(window.location.href)}`;
+      }
+
+      // Önce uygulamayı aç
+      window.location.href = deepLink;
+      
+      // 3 saniye içinde bağlanmazsa mağazaya yönlendir
+      setTimeout(() => {
+        if (!window.ethereum) {
+          const isAndroid = /Android/i.test(navigator.userAgent);
+          let storeLink;
+          
+          if (walletType === "metamask") {
+            storeLink = isAndroid ? 
+              "https://play.google.com/store/apps/details?id=io.metamask" :
+              "https://apps.apple.com/us/app/metamask-blockchain-wallet/id1438144202";
+          } else {
+            storeLink = isAndroid ?
+              "https://play.google.com/store/apps/details?id=com.wallet.crypto.trustapp" :
+              "https://apps.apple.com/us/app/trust-crypto-bitcoin-wallet/id1288339409";
+          }
+          
+          window.location.href = storeLink;
+        }
+      }, 3000);
+    }
+
+    // 3. Otomatik Hesaplama
     function setupCalculator() {
       const bnbInput = document.getElementById("bnbAmount");
+      
       bnbInput.addEventListener("input", function() {
         const bnbValue = parseFloat(this.value) || 0;
-        const tokens = bnbValue * TOKEN_PRICE;
+        const tokens = bnbValue * 12500000; // 1 BNB = 12.5M FDAI
+        
         document.getElementById("fdaiAmount").textContent = 
           `YOU WILL RECEIVE: ${tokens.toLocaleString()} FDAI`;
         
-        document.getElementById("buyButton").disabled = bnbValue < MIN_BNB;
+        document.getElementById("buyButton").disabled = bnbValue < 0.035;
       });
     }
 
-    // Token Satın Alma
-    async function buyTokens() {
-      if (!window.ethereum) return alert("Please connect wallet first!");
-      
-      const bnbAmount = parseFloat(document.getElementById("bnbAmount").value);
-      if (isNaN(bnbAmount) || bnbAmount < MIN_BNB) {
-        return alert(`Minimum purchase is ${MIN_BNB} BNB!`);
-      }
-
-      try {
-        const tx = await window.ethereum.request({
-          method: "eth_sendTransaction",
-          params: [{
-            from: window.ethereum.selectedAddress,
-            to: TOKEN_SALE_CONTRACT,
-            value: ethers.utils.parseEther(bnbAmount.toString()).toHexString(),
-            gas: "0x30d40"
-          }]
-        });
-        alert(`Transaction sent! TX Hash: ${tx}`);
-      } catch (err) {
-        alert("Error: " + err.message);
-      }
-    }
-
-    // DROP Talep Etme
-    async function claimDrop() {
-      if (!window.ethereum) return alert("Please connect wallet first!");
-      
-      try {
-        const tx = await window.ethereum.request({
-          method: "eth_sendTransaction",
-          params: [{
-            from: window.ethereum.selectedAddress,
-            to: DROP_CONTRACT,
-            data: "0x4e71d92d" // claim() fonksiyonu
-          }]
-        });
-        alert(`Drop claimed! TX Hash: ${tx}`);
-      } catch (err) {
-        alert("Drop error: " + err.message);
-      }
-    }
-
-    // Sayfa Yüklendiğinde
-    document.addEventListener("DOMContentLoaded", function() {
-      // Buton Eventleri
-      document.getElementById("connectWallet").addEventListener("click", openWalletModal);
-      document.getElementById("connectMetaMask").addEventListener("click", connectMetaMask);
-      document.getElementById("connectTrustWallet").addEventListener("click", connectTrustWallet);
-      document.getElementById("buyButton").addEventListener("click", buyTokens);
-      document.getElementById("dropButton").addEventListener("click", claimDrop);
-      document.querySelector(".close").addEventListener("click", closeWalletModal);
-      
-      // Modal dışına tıklama
-      window.addEventListener("click", function(event) {
-        if (event.target === document.getElementById("walletModal")) {
-          closeWalletModal();
-        }
-      });
-
-      // Hesaplamayı Başlat
+    // 4. Buton Eventleri
+    document.getElementById("connectWallet").addEventListener("click", openModal);
+    document.getElementById("connectMetaMask").addEventListener("click", () => connectWallet("metamask"));
+    document.getElementById("connectTrustWallet").addEventListener("click", () => connectWallet("trustwallet"));
+    document.querySelector(".close").addEventListener("click", closeModal);
+    
+    // Sayfa yüklendiğinde
+    window.addEventListener("DOMContentLoaded", function() {
       setupCalculator();
     });
   </script>
