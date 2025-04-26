@@ -4,288 +4,127 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Token Presale</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .logo {
-      display: block;
-      margin: 0 auto 20px;
-      max-width: 200px;
-    }
-    .btn {
-      background-color: #FFD700;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      margin: 5px 0;
-    }
-    .btn-connect {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-    }
-    .btn-buy {
-      background-color: #4CAF50;
-      color: white;
-      width: 100%;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.4);
-    }
-    .modal-content {
-      background-color: #fefefe;
-      margin: 15% auto;
-      padding: 20px;
-      border-radius: 10px;
-      width: 80%;
-      max-width: 400px;
-    }
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    input[type="number"] {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-    }
-    select {
-      padding: 5px;
-      margin: 10px 0;
-      border-radius: 5px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <!-- Dil Seçimi -->
-    <select id="languageSelect">
+    <h1 id="title">FreeDogeAI Token Presale</h1>
+    <select id="languageSelect" aria-label="Select language">
       <option value="en">English</option>
-      <option value="zh">中文 (Chinese)</option>
-      <option value="ru">Русский (Russian)</option>
+      <option value="tr">Türkçe</option>
+      <option value="ru">Русский</option>
+      <option value="zh">中文</option>
+      <option value="ar">العربية</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
+      <option value="es">Español</option>
+      <option value="hi">हिन्दी</option>
+      <option value="ja">日本語</option>
     </select>
 
-    <!-- Logo -->
-    <img src="https://freedogeai.com/logo.png" alt="FreeDogeAI Logo" class="logo" id="logo">
-
-    <!-- Cüzdan Bağlama Butonu -->
-    <button id="connectWallet" class="btn btn-connect">Connect Wallet</button>
-
-    <!-- Cüzdan Seçme Modal -->
-    <div id="walletModal" class="modal">
-      <div class="modal-content">
-        <span class="close">×</span>
-        <h2 id="modalTitle">Connect Your Wallet</h2>
-        <button id="connectMetaMask" class="btn">MetaMask</button>
-        <button id="connectTrustWallet" class="btn">TrustWallet</button>
-      </div>
+    <div class="wallet-buttons">
+      <button id="connectMetaMask" aria-label="Connect with MetaMask">Connect with MetaMask</button>
+      <button id="connectTrustWallet" aria-label="Connect with TrustWallet">Connect with TrustWallet</button>
     </div>
 
-    <!-- Başlık -->
-    <h1 id="presaleTitle">Free Doge AI (FDAI) Presale</h1>
+    <div id="walletAddress">Wallet not connected</div>
+    <div id="bnbBalance">BNB Balance: --</div>
 
-    <!-- Cüzdan Bilgileri -->
-    <div id="walletInfo" style="margin: 15px 0;">
-      <div id="walletAddress">Wallet: Not Connected</div>
-      <div id="bnbBalance">BNB Balance: --</div>
+    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" min="0" step="0.001" aria-label="BNB amount">
+    <div id="fdaiAmount">0 FDAI</div>
+    <button id="buyButton" disabled aria-label="Buy Tokens">Buy Tokens</button>
+    <div id="insufficientFunds" style="display: none; color: red;">
+      <span aria-hidden="true">⚠</span> Insufficient funds
     </div>
 
-    <!-- Token Satın Alma -->
-    <input type="number" id="bnbAmount" placeholder="Enter BNB amount" min="0" step="0.001">
-    <div id="fdaiAmount">YOU WILL RECEIVE: 0 FDAI</div>
-    <button id="buyButton" class="btn btn-buy" disabled>Buy Tokens</button>
-    <div id="insufficientFunds" style="display:none;color:red;">⚠ Insufficient funds</div>
+    <h2 id="about-title">About FreeDogeAI</h2>
+    <p id="aboutText">
+      Don't miss out! FreeDogeAI is here to shake the memecoin market. Be part of the hype before it's too late.
+      This presale won't last forever — secure your place now.
+    </p>
 
-    <!-- DROP Butonu -->
-    <button id="dropButton" class="btn" style="background:#FF6347;color:white;width:100%;margin-top:10px;">CLAIM FREE DROP</button>
+    <a id="whiteLink" href="FreeDogeAI_Whitepaper.pdf" download aria-label="Download Whitepaper">Download Whitepaper</a>
 
-    <!-- Whitepaper -->
-    <a href="FreeDogeAI_Whitepaper.pdf" download class="btn" style="display:block;text-align:center;margin:10px 0;" id="whitepaperLink">Download Whitepaper</a>
+    <footer>
+      <p id="communityText">
+        Join our community:
+        <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
+        <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>
+      </p>
+    </footer>
   </div>
 
-  <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
   <script>
-    // Dil çevirileri
+    // Dil seçimi için çeviriler
     const translations = {
       en: {
-        connectWallet: "Connect Wallet",
-        modalTitle: "Connect Your Wallet",
-        presaleTitle: "Free Doge AI (FDAI) Presale",
-        walletAddress: "Wallet: Not Connected",
-        bnbBalance: "BNB Balance: --",
-        bnbAmountPlaceholder: "Enter BNB amount",
-        fdaiAmount: "YOU WILL RECEIVE: 0 FDAI",
+        title: "FreeDogeAI Token Presale",
+        aboutTitle: "About FreeDogeAI",
+        aboutText: "Don't miss out! FreeDogeAI is here to shake the memecoin market. Be part of the hype before it's too late. This presale won't last forever — secure your place now.",
+        connectMetaMask: "Connect with MetaMask",
+        connectTrustWallet: "Connect with TrustWallet",
         buyButton: "Buy Tokens",
-        insufficientFunds: "⚠ Insufficient funds",
-        dropButton: "CLAIM FREE DROP",
-        whitepaperLink: "Download Whitepaper"
+        communityText: "Join our community: ",
+        insufficientFunds: "Insufficient funds"
       },
-      zh: {
-        connectWallet: "连接钱包",
-        modalTitle: "连接您的钱包",
-        presaleTitle: "Free Doge AI (FDAI) 预售",
-        walletAddress: "钱包: 未连接",
-        bnbBalance: "BNB 余额: --",
-        bnbAmountPlaceholder: "输入 BNB 数量",
-        fdaiAmount: "您将收到: 0 FDAI",
-        buyButton: "购买代币",
-        insufficientFunds: "⚠ 余额不足",
-        dropButton: "领取免费空投",
-        whitepaperLink: "下载白皮书"
-      },
-      ru: {
-        connectWallet: "Подключить кошелек",
-        modalTitle: "Подключите ваш кошелек",
-        presaleTitle: "Предпродажа Free Doge AI (FDAI)",
-        walletAddress: "Кошелек: Не подключен",
-        bnbBalance: "Баланс BNB: --",
-        bnbAmountPlaceholder: "Введите сумму BNB",
-        fdaiAmount: "ВЫ ПОЛУЧИТЕ: 0 FDAI",
-        buyButton: "Купить токены",
-        insufficientFunds: "⚠ Недостаточно средств",
-        dropButton: "ЗАБРАТЬ БЕСПЛАТНЫЙ ДРОП",
-        whitepaperLink: "Скачать Whitepaper"
+      tr: {
+        title: "FreeDogeAI Token Ön Satışı",
+        aboutTitle: "FreeDogeAI Hakkında",
+        aboutText: "Kaçırmayın! FreeDogeAI, memecoin piyasasını sarsmak için burada. Heyecana katılın, geç kalmadan yerinizi alın. Bu ön satış sonsuza kadar sürmeyecek!",
+        connectMetaMask: "MetaMask ile Bağlan",
+        connectTrustWallet: "TrustWallet ile Bağlan",
+        buyButton: "Token Satın Al",
+        communityText: "Topluluğumuza katılın: ",
+        insufficientFunds: "Yetersiz bakiye"
       }
     };
 
-    // Dil değiştirme fonksiyonu
-    function updateLanguage() {
-      const lang = document.getElementById("languageSelect").value;
-      document.getElementById("connectWallet").textContent = translations[lang].connectWallet;
-      document.getElementById("modalTitle").textContent = translations[lang].modalTitle;
-      document.getElementById("presaleTitle").textContent = translations[lang].presaleTitle;
-      document.getElementById("walletAddress").textContent = translations[lang].walletAddress;
-      document.getElementById("bnbBalance").textContent = translations[lang].bnbBalance;
-      document.getElementById("bnbAmount").placeholder = translations[lang].bnbAmountPlaceholder;
-      document.getElementById("fdaiAmount").textContent = translations[lang].fdaiAmount;
-      document.getElementById("buyButton").textContent = translations[lang].buyButton;
-      document.getElementById("insufficientFunds").textContent = translations[lang].insufficientFunds;
-      document.getElementById("dropButton").textContent = translations[lang].dropButton;
-      document.getElementById("whitepaperLink").textContent = translations[lang].whitepaperLink;
-    }
+    function updateLanguage(lang) {
+      try {
+        const t = translations[lang] || translations.en;
+        const elements = {
+          title: document.getElementById("title"),
+          aboutTitle: document.getElementById("about-title"),
+          aboutText: document.getElementById("aboutText"),
+          connectMetaMask: document.getElementById("connectMetaMask"),
+          connectTrustWallet: document.getElementById("connectTrustWallet"),
+          buyButton: document.getElementById("buyButton"),
+          communityText: document.getElementById("communityText"),
+          insufficientFunds: document.getElementById("insufficientFunds")
+        };
 
-    // Cüzdan bilgilerini güncelleme fonksiyonu
-    async function updateWalletInfo() {
-      if (window.ethereum) {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        await provider.send("eth_requestAccounts", []);
-        const signer = provider.getSigner();
-        const address = await signer.getAddress();
-        const balanceWei = await provider.getBalance(address);
-        const balance = ethers.utils.formatEther(balanceWei);
+        if (!Object.values(elements).every(el => el)) {
+          console.error("Some translation elements not found:", elements);
+          return;
+        }
 
-        const lang = document.getElementById("languageSelect").value;
-        document.getElementById("walletAddress").textContent = `${translations[lang].walletAddress.split(":")[0]}: ${address.slice(0, 6)}...${address.slice(-4)}`;
-        document.getElementById("bnbBalance").textContent = `${translations[lang].bnbBalance.split(":")[0]}: ${parseFloat(balance).toFixed(4)}`;
-
-        // BNB miktarına göre buton kontrolü
-        const bnbInput = document.getElementById("bnbAmount");
-        const bnbValue = parseFloat(bnbInput.value) || 0;
-        document.getElementById("buyButton").disabled = bnbValue < 0.035 || bnbValue > parseFloat(balance);
-        document.getElementById("insufficientFunds").style.display = bnbValue > parseFloat(balance) ? "block" : "none";
+        elements.title.textContent = t.title;
+        elements.aboutTitle.textContent = t.aboutTitle;
+        elements.aboutText.textContent = t.aboutText;
+        elements.connectMetaMask.textContent = t.connectMetaMask;
+        elements.connectTrustWallet.textContent = t.connectTrustWallet;
+        elements.buyButton.textContent = t.buyButton;
+        elements.communityText.innerHTML = `${t.communityText}
+          <a href="https://t.me/freedogeaiFDAI" target="_blank" rel="noopener noreferrer">Telegram</a> |
+          <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" rel="noopener noreferrer">Twitter (X)</a>`;
+        elements.insufficientFunds.innerHTML = `<span aria-hidden="true">⚠</span> ${t.insufficientFunds}`;
+      } catch (err) {
+        console.error("Language update error:", err);
       }
     }
 
-    // 1. Tüm Temel Fonksiyonlar
-    function openModal() {
-      document.getElementById("walletModal").style.display = "block";
-    }
-
-    function closeModal() {
-      document.getElementById("walletModal").style.display = "none";
-    }
-
-    // 2. Cüzdan Bağlantıları (MOBİL ÖNCELİKLİ)
-    async function connectWallet(walletType) {
-      let deepLink;
-      
-      if (walletType === "metamask") {
-        // URL'yi doğrudan kullan, encodeURIComponent kullanma
-        deepLink = `https://metamask.app.link/dapp/${window.location.href}`;
+    // Dil seçimi olay dinleyicisi
+    document.addEventListener("DOMContentLoaded", () => {
+      const languageSelect = document.getElementById("languageSelect");
+      if (languageSelect) {
+        languageSelect.addEventListener("change", (e) => updateLanguage(e.target.value));
+        updateLanguage("en"); // Varsayılan dil
       } else {
-        deepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${window.location.href}`;
+        console.error("Language select element not found");
       }
-
-      // Önce uygulamayı aç
-      console.log(`Derin bağlantı tetikleniyor: ${deepLink}`);
-      window.location.href = deepLink;
-
-      // Bağlantı sonrası window.ethereum'u kontrol et (10 saniye boyunca)
-      let attempts = 0;
-      const maxAttempts = 10; // 10 saniye
-      const checkConnection = setInterval(async () => {
-        attempts++;
-        if (window.ethereum) {
-          clearInterval(checkConnection);
-          console.log(`${walletType} cüzdanı bağlandı.`);
-          await updateWalletInfo();
-        } else if (attempts >= maxAttempts) {
-          clearInterval(checkConnection);
-          console.log(`${walletType} bağlanamadı.`);
-          // TrustWallet için siteye yönlendirme kaldırıldı, sadece log bırakıyorum
-        }
-      }, 1000); // Her saniye kontrol et
-    }
-
-    // 3. Otomatik Hesaplama
-    function setupCalculator() {
-      const bnbInput = document.getElementById("bnbAmount");
-      
-      bnbInput.addEventListener("input", function() {
-        const bnbValue = parseFloat(this.value) || 0;
-        const tokens = bnbValue * 12500000; // 1 BNB = 12.5M FDAI
-        
-        const lang = document.getElementById("languageSelect").value;
-        const baseText = translations[lang].fdaiAmount.split("0 FDAI")[0];
-        document.getElementById("fdaiAmount").textContent = `${baseText}${tokens.toLocaleString()} FDAI`;
-        
-        document.getElementById("buyButton").disabled = bnbValue < 0.035;
-        if (window.ethereum) {
-          updateWalletInfo(); // BNB bakiyesi kontrolü
-        }
-      });
-    }
-
-    // 4. Buton Eventleri
-    document.getElementById("connectWallet").addEventListener("click", openModal);
-    document.getElementById("connectMetaMask").addEventListener("click", () => connectWallet("metamask"));
-    document.getElementById("connectTrustWallet").addEventListener("click", () => connectWallet("trustwallet"));
-    document.querySelector(".close").addEventListener("click", closeModal);
-    document.getElementById("languageSelect").addEventListener("change", updateLanguage);
-
-    // Sayfa yüklendiğinde
-    window.addEventListener("DOMContentLoaded", function() {
-      updateLanguage();
-      setupCalculator();
     });
   </script>
+  <script src="script.js" defer></script>
 </body>
 </html>
