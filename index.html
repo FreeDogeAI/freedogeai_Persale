@@ -3,65 +3,85 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FreeDogeAI (FDAI) Presale</title>
+  <title>FreeDogeAI (FDAI) Official Presale</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
   <img src="logo.png" alt="FreeDogeAI Logo" class="logo">
-  <div class="language-switcher">
+  <nav class="language-switcher">
     <button onclick="setLanguage('en')">English</button>
     <button onclick="setLanguage('tr')">Türkçe</button>
     <button onclick="setLanguage('ru')">Русский</button>
     <button onclick="setLanguage('zh')">中文</button>
-  </div>
+  </nav>
 </header>
 
 <main>
 
 <section class="hero">
-  <h1 id="main-title">Join the FDAI Presale!</h1>
-  <p id="subtitle">Secure your future with FreeDogeAI (FDAI)!</p>
-  <button id="join-button" onclick="connectWallet()">Connect Wallet</button>
+  <h1 id="main-title">Join FreeDogeAI Presale!</h1>
+  <p id="subtitle">The future of meme coins powered by Artificial Intelligence!</p>
+  <button id="connect-wallet" onclick="connectWallet()">Connect Wallet</button>
 </section>
 
-<section class="buy-section">
+<section class="purchase">
   <h2 id="buy-title">Buy FDAI Tokens</h2>
-  <p id="buy-desc">Send BNB to purchase FDAI tokens. Tokens will be delivered automatically to your wallet.</p>
-  
-  <input type="number" id="bnb-amount" placeholder="Enter BNB amount" oninput="calculateTokens()">
-  <p id="token-amount">You will receive: 0 FDAI</p>
-  
-  <p class="minimum-warning" id="minimum-warning">Minimum purchase: 0.035 BNB</p>
-  
-  <button id="buy-button" onclick="buyTokens()">Buy FDAI Tokens</button>
+  <p id="buy-description">Send BNB to purchase FDAI tokens instantly. Tokens will be delivered automatically after transaction confirmation.</p>
+
+  <div class="purchase-box">
+    <input type="number" id="bnb-amount" placeholder="Enter BNB amount" oninput="calculateTokens()">
+    <p id="token-amount">You will receive: 0 FDAI</p>
+    <p id="minimum-warning">Minimum purchase: 0.035 BNB</p>
+    <button id="buy-button" onclick="buyTokens()">Buy Tokens</button>
+  </div>
 </section>
 
 <section class="how-to-buy">
-  <h2 id="how-to-title">How to Buy FDAI?</h2>
+  <h2 id="how-to-title">How to Buy?</h2>
   <ul id="how-to-list">
-    <li>Connect your MetaMask or TrustWallet.</li>
+    <li>Connect your MetaMask or TrustWallet first.</li>
     <li>Enter the amount of BNB you want to invest.</li>
-    <li>FDAI tokens will be sent automatically to your wallet.</li>
+    <li>Click Buy Tokens and complete the transaction.</li>
+    <li>Tokens will be sent automatically to your wallet.</li>
   </ul>
 </section>
 
 <section class="roadmap">
   <h2 id="roadmap-title">Our Roadmap</h2>
-  <div id="roadmap-content">
-    <!-- Roadmap steps will be dynamically inserted by script.js -->
+  
+  <div id="roadmap-steps">
+
+    <h3 class="phase-title">Phase 1: Building the Foundation</h3>
+    <p class="phase-description">Community creation, website launch, presale initiation, PancakeSwap listing, surprise CEX listing.</p>
+
+    <h3 class="phase-title">Phase 2: Expanding the Ecosystem</h3>
+    <p class="phase-description">Development of FDAI Marketplace, release of AI-driven NFT collections, launch of Swap platform.</p>
+
+    <h3 class="phase-title">Phase 3: Artificial Intelligence Integration</h3>
+    <p class="phase-description">Deployment of AI chatbots, creation of investment analytics tools, launch of AI consulting services for holders.</p>
+
+    <h3 class="phase-title">Phase 4: Gaming Universe</h3>
+    <p class="phase-description">Launch of Play-to-Earn blockchain games, in-game NFT asset upgrades via FDAI tokens, organization of global tournaments.</p>
+
+    <h3 class="phase-title">Phase 5: Global Events and Expansion</h3>
+    <p class="phase-description">Hosting worldwide seminars, sponsoring major blockchain summits, establishment of FreeDogeAI Academy.</p>
+
+    <h3 class="phase-title">Phase 6: Infinite Growth</h3>
+    <p class="phase-description">Creation of FreeDogeAI Foundation, implementation of DAO governance system, integration with global payment systems.</p>
+
   </div>
 </section>
 
-<section class="whitepaper-download">
+<section class="whitepaper">
   <h2 id="whitepaper-title">Download Whitepaper</h2>
-  <a href="FreeDogeAI_Whitepaper.pdf" download id="whitepaper-button" class="download-button">Download Whitepaper</a>
+  <a href="FreeDogeAI_Whitepaper.pdf" download class="download-button" id="whitepaper-button">Download Now</a>
 </section>
 
-<section class="community-links">
+<section class="community">
   <h2 id="community-title">Join Our Community</h2>
-  <p id="community-desc">Stay connected and follow FreeDogeAI updates!</p>
+  <p id="community-description">Stay connected and follow our latest updates!</p>
   <div class="social-links">
     <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a> |
     <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">Twitter (X)</a>
@@ -78,4 +98,4 @@
 <script src="script.js"></script>
 
 </body>
-</html>
+  </html>
