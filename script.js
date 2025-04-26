@@ -68,6 +68,16 @@ async function connectMetaMask() {
           window.location.href = storeLink;
         }
       }, 2000); // 2 saniye bekle
+
+      // Bağlantı sonrası cüzdan bilgilerini kontrol et
+      if (window.ethereum) {
+        provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+        await provider.send("eth_requestAccounts", []);
+        signer = provider.getSigner();
+        userAddress = await signer.getAddress();
+        console.log("MetaMask cüzdanı bağlandı:", userAddress);
+        await updateInfo();
+      }
       return;
     }
 
@@ -152,6 +162,16 @@ async function connectTrustWallet() {
           window.location.href = storeLink;
         }
       }, 2000); // 2 saniye bekle
+
+      // Bağlantı sonrası cüzdan bilgilerini kontrol et
+      if (window.ethereum) {
+        provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+        await provider.send("eth_requestAccounts", []);
+        signer = provider.getSigner();
+        userAddress = await signer.getAddress();
+        console.log("TrustWallet cüzdanı bağlandı:", userAddress);
+        await updateInfo();
+      }
       return;
     }
 
@@ -211,7 +231,7 @@ async function connectTrustWallet() {
   }
 }
 
-// Arayüzü güncelleme
+// Arayüzü güncelleme (cüzdan adresi ve bakiye gösterimi)
 async function updateInfo() {
   try {
     const elements = {
