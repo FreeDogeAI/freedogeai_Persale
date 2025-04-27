@@ -5,28 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Token Presale</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/@thirdweb-dev/sdk/dist/browser.umd.js"></script>
-  <script src="https://unpkg.com/@thirdweb-dev/react@latest/umd/index.js"></script>
 </head>
 <body>
 
-  <div class="container">
-    <img src="logo.png" alt="Logo" class="logo">
-    <h1>Buy FreeDogeAI (FDAI)</h1>
+  <div class="container" style="text-align: center; padding-top: 30px;">
+    <img src="logo.png" alt="Logo" class="logo" style="width: 120px; height: auto;">
+    <h1 style="color: gold;">Buy FreeDogeAI (FDAI)</h1>
+    <button onclick="redirectToBuy()" style="margin-top: 30px; padding: 15px 30px; font-size: 18px; background-color: gold; color: black; border: none; border-radius: 8px; cursor: pointer;">
+      Buy Tokens Now
+    </button>
   </div>
 
-  <!-- Thirdweb Claimable Drop Embed -->
-  <div style="margin-top: 30px; display: flex; justify-content: center;">
-    <iframe 
-      src="https://thirdweb.com/embed/drop/0x45583DB8b6Db50311Ba8e7303845ACc6958589B7?chain=binance"
-      width="400px"
-      height="600px"
-      style="border: none;"
-      frameborder="0"
-      scrolling="no"
-      allowfullscreen>
-    </iframe>
-  </div>
+  <script>
+    function redirectToBuy() {
+      window.open('https://thirdweb.com/binance/0x45583DB8b6Db50311Ba8e7303845ACc6958589B7', '_blank');
+    }
+  </script>
 
 </body>
 </html>
