@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Token Presale</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/@thirdweb-dev/sdk/dist/browser.umd.js"></script>
+  <script src="https://unpkg.com/@thirdweb-dev/react@latest/umd/index.js"></script>
 </head>
 <body>
 
@@ -13,24 +15,18 @@
     <h1>Buy FreeDogeAI (FDAI)</h1>
   </div>
 
-  <!-- Thirdweb Embed Başlangıcı -->
-  <div id="thirdweb-embed" style="margin-top: 30px; display: flex; justify-content: center;"></div>
-
-  <script async src="https://sdk.vercel.thirdweb.com/embedded-wallet/embedded-wallet.umd.js"></script>
-  <script>
-    const sdk = new thirdweb.EmbeddedWalletSdk({
-      clientId: "2080cc00fe22d31747a2bcef11818e52", // SENİN CLIENT ID
-      chain: "binance", // BNB Chain (Mainnet)
-      auth: { strategy: "email_passwordless" },
-      ui: { 
-        theme: "dark",
-        showConnectButton: true,
-        showQrCode: false // QR kod KAPALI!
-      }
-    });
-    sdk.render("#thirdweb-embed");
-  </script>
-  <!-- Thirdweb Embed Bitişi -->
+  <!-- Thirdweb Claimable Drop Embed -->
+  <div style="margin-top: 30px; display: flex; justify-content: center;">
+    <iframe 
+      src="https://thirdweb.com/embed/drop/0x45583DB8b6Db50311Ba8e7303845ACc6958589B7?chain=binance"
+      width="400px"
+      height="600px"
+      style="border: none;"
+      frameborder="0"
+      scrolling="no"
+      allowfullscreen>
+    </iframe>
+  </div>
 
 </body>
 </html>
