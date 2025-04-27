@@ -5,25 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Token Presale</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.2/dist/ethers.umd.min.js"></script>
 </head>
 <body>
 
   <div class="container">
     <img src="logo.png" alt="Logo" class="logo">
     <h1>Buy FreeDogeAI (FDAI)</h1>
-
-    <button id="connectWallet">Connect Wallet</button>
-
-    <div id="walletInfo" style="display: none;">
-      <p id="walletAddress"></p>
-      <p id="walletBalance"></p>
-
-      <input type="number" id="bnbAmount" placeholder="Enter BNB amount" min="0.035" step="0.001">
-      <button id="buyTokens">Buy Tokens</button>
-    </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- Thirdweb Embed Başlangıcı -->
+  <div id="thirdweb-embed" style="margin-top: 30px; display: flex; justify-content: center;"></div>
+
+  <script async src="https://sdk.vercel.thirdweb.com/embedded-wallet/embedded-wallet.umd.js"></script>
+  <script>
+    const sdk = new thirdweb.EmbeddedWalletSdk({
+      clientId: "2080cc00fe22d31747a2bcef11818e52", // SENİN CLIENT ID
+      chain: "binance", // BNB Chain (Mainnet)
+      auth: { strategy: "email_passwordless" },
+      ui: { 
+        theme: "dark",
+        showConnectButton: true,
+        showQrCode: false // QR kod KAPALI!
+      }
+    });
+    sdk.render("#thirdweb-embed");
+  </script>
+  <!-- Thirdweb Embed Bitişi -->
+
 </body>
 </html>
