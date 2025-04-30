@@ -1,27 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FreeDogeAI Token Presale</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeDogeAI (FDAI) | Resmi Token Satışı</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body style="background-color: black; color: gold; text-align: center; padding-top: 30px;">
+<body>
+    <!-- Dil Seçici -->
+    <div class="language-selector">
+        <button onclick="changeLanguage('tr')">🇹🇷 Türkçe</button>
+        <button onclick="changeLanguage('en')">🇬🇧 English</button>
+        <button onclick="changeLanguage('ru')">🇷🇺 Русский</button>
+        <button onclick="changeLanguage('zh')">🇨🇳 中文</button>
+    </div>
 
-  <div class="container">
-    <img src="logo.png" alt="Logo" style="width: 120px; height: auto;">
-    <h1 style="margin-top: 20px;">Buy FreeDogeAI (FDAI)</h1>
+    <!-- Ana Container -->
+    <div class="container">
+        <!-- Logo & Başlık -->
+        <header>
+            <img src="logo.png" alt="FDAI Logo" class="logo">
+            <h1 id="title">FreeDogeAI (FDAI) Token Satışı</h1>
+        </header>
 
-    <button onclick="redirectToThirdweb()" style="margin-top: 40px; padding: 15px 40px; font-size: 20px; background-color: gold; color: black; border: none; border-radius: 10px; cursor: pointer;">
-      Buy Tokens Now
-    </button>
-  </div>
+        <!-- Token Bilgileri -->
+        <div class="token-info">
+            <p><strong id="tokenContractLabel">Token Kontratı:</strong> <span>0x8161698A74F2ea0035B9912ED60140893Ac0f39C</span></p>
+            <p><strong id="tokenPriceLabel">Fiyat:</strong> <span>1 BNB = 12,500,000 FDAI</span></p>
+            <p><strong id="minBuyLabel">Minimum Alım:</strong> <span>0.0166 BNB (~10 USD)</span></p>
+        </div>
 
-  <script>
-    function redirectToThirdweb() {
-      window.open('https://thirdweb.com/binance/0x45583DB8b6Db50311Ba8e7303845ACc6958589B7', '_blank');
-    }
-  </script>
+        <!-- MetaMask Bağlantısı -->
+        <div class="card">
+            <button id="connectWallet"><i class="fab fa-ethereum"></i> <span id="connectText">Cüzdanı Bağla</span></button>
+            <button id="addBNB" style="display: none; background: #F0B90B; color: #000;">
+                <i class="fas fa-link"></i> <span id="addBNBText">BNB Ağını Ekle (ChainList)</span>
+            </button>
+        </div>
 
+        <!-- BNB Gönderim Formu -->
+        <div class="buy-form">
+            <h3 id="buyTitle">FDAI Satın Al</h3>
+            <input type="number" id="bnbAmount" placeholder="BNB miktarı" min="0.0166" step="0.001">
+            <button id="buyButton"><i class="fas fa-coins"></i> <span id="buyText">Satın Al</span></button>
+            <p id="fdaireceived"><strong id="expectedFDaiLabel">Alacağınız FDAI:</strong> <span id="fdaicalc">0</span></p>
+        </div>
+
+        <!-- Ödeme Adresi -->
+        <div class="payment-info">
+            <p><strong id="paymentAddressLabel">BNB Gönderim Adresi:</strong></p>
+            <p class="wallet-address">0xd924e01c7d319c5b23708cd622bd1143cd4fb360</p>
+            <small id="paymentWarning">⚠️ Sadece yukarıdaki adrese BNB gönderin!</small>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
