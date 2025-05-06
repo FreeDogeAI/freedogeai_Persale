@@ -1,107 +1,92 @@
-
-// Dil Desteği
 const translations = {
     tr: {
-        title: "FreeDogeAI (FDAI) Token Satışı",
-        connectText: "Cüzdanı Bağla",
-        addBNBText: "BNB Ağını Ekle (ChainList)",
-        buyTitle: "FDAI Satın Al",
-        buyText: "Satın Al",
-        expectedFDaiLabel: "Alacağınız FDAI:",
-        paymentAddressLabel: "BNB Gönderim Adresi:",
-        paymentWarning: "⚠️ Sadece yukarıdaki adrese BNB gönderin!",
-        tokenContractLabel: "Token Kontratı:",
-        tokenPriceLabel: "Fiyat:",
-        minBuyLabel: "Minimum Alım:"
+        title: "FreeDogeAI (FDAI) Ön Satış",
+        token_info: "Token Bilgileri",
+        token_name: "Token Adı",
+        total_supply: "Toplam Arz",
+        presale_supply: "Ön Satış Arzı",
+        price: "Fiyat",
+        bnb_rate: "1 BNB",
+        target: "Hedef",
+        contract: "Token Kontratı",
+        wallet_connect: "Cüzdan Bağlantısı",
+        connect_wallet: "Cüzdanı Bağla",
+        wallet_address: "Cüzdan Adresi",
+        bnb_balance: "BNB Bakiyesi",
+        purchase: "Satın Al",
+        bnb_amount: "BNB Miktarı",
+        fdai_amount: "Alınacak FDAI",
+        buy: "Satın Al",
+        purchased_amount: "Satın Alınan Miktar",
+        owned_tokens: "Sahip Olunan Token",
+        note: "Klayım işlemleri (tokenlerinizin cüzdanlarınızda görünmesi ön satışın tamamlanmasının ardından gerçekleşecektir). Süreç, şeffaf ve güvenli bir şekilde yürütülecektir. Daha fazla bilgi için [iletişim kanalı].",
+        select_wallet: "Cüzdan Seç",
+        metamask: "Metamask",
+        wallet_connect_option: "WalletConnect",
+        trust_wallet: "Trust Wallet",
+        close: "Kapat"
     },
     en: {
-        title: "FreeDogeAI (FDAI) Token Sale",
-        connectText: "Connect Wallet",
-        addBNBText: "Add BNB Network (ChainList)",
-        buyTitle: "Buy FDAI",
-        buyText: "Buy Now",
-        expectedFDaiLabel: "Expected FDAI:",
-        paymentAddressLabel: "Payment Address:",
-        paymentWarning: "⚠️ Send BNB only to the above address!",
-        tokenContractLabel: "Token Contract:",
-        tokenPriceLabel: "Price:",
-        minBuyLabel: "Minimum Buy:"
+        title: "FreeDogeAI (FDAI) Presale",
+        token_info: "Token Information",
+        token_name: "Token Name",
+        total_supply: "Total Supply",
+        presale_supply: "Presale Supply",
+        price: "Price",
+        bnb_rate: "1 BNB",
+        target: "Target",
+        contract: "Token Contract",
+        wallet_connect: "Wallet Connection",
+        connect_wallet: "Connect Wallet",
+        wallet_address: "Wallet Address",
+        bnb_balance: "BNB Balance",
+        purchase: "Purchase",
+        bnb_amount: "BNB Amount",
+        fdai_amount: "FDAI to Receive",
+        buy: "Buy",
+        purchased_amount: "Purchased Amount",
+        owned_tokens: "Owned Tokens",
+        note: "Claim transactions (the appearance of your tokens in your wallets will occur after the completion of the presale) will be conducted transparently and securely. For more details, visit [communication channel].",
+        select_wallet: "Select Wallet",
+        metamask: "Metamask",
+        wallet_connect_option: "WalletConnect",
+        trust_wallet: "Trust Wallet",
+        close: "Close"
     },
-    ru: {
-        title: "FreeDogeAI (FDAI) Продажа токенов",
-        connectText: "Подключить кошелек",
-        addBNBText: "Добавить сеть BNB (ChainList)",
-        buyTitle: "Купить FDAI",
-        buyText: "Купить",
-        expectedFDaiLabel: "Получите FDAI:",
-        paymentAddressLabel: "Адрес для оплаты:",
-        paymentWarning: "⚠️ Отправляйте BNB только на этот адрес!",
-        tokenContractLabel: "Контракт токена:",
-        tokenPriceLabel: "Цена:",
-        minBuyLabel: "Минимальная покупка:"
+    ar: {
+        title: "FreeDogeAI (FDAI) البيع المسبق",
+        token_info: "معلومات التوكن",
+        token_name: "اسم التوكن",
+        total_supply: "إجمالي العرض",
+        presale_supply: "عرض البيع المسبق",
+        price: "السعر",
+        bnb_rate: "1 BNB",
+        target: "الهدف",
+        contract: "عقد التوكن",
+        wallet_connect: "الاتصال بالمحفظة",
+        connect_wallet: "ربط المحفظة",
+        wallet_address: "عنوان المحفظة",
+        bnb_balance: "رصيد BNB",
+        purchase: "الشراء",
+        bnb_amount: "كمية BNB",
+        fdai_amount: "FDAI المستلم",
+        buy: "شراء",
+        purchased_amount: "الكمية المشتراة",
+        owned_tokens: "التوكنات المملوكة",
+        note: "عمليات المطالبة (ظهور التوكنات في محافظكم سيتم بعد اكتمال البيع المسبق) ستُجرى بطريقة شفافة وآمنة. لمزيد من التفاصيل، تفضلوا بزيارة [قناة التواصل].",
+        select_wallet: "اختر المحفظة",
+        metamask: "Metamask",
+        wallet_connect_option: "WalletConnect",
+        trust_wallet: "Trust Wallet",
+        close: "إغلاق"
     },
-    zh: {
-        title: "FreeDogeAI (FDAI) 代币销售",
-        connectText: "连接钱包",
-        addBNBText: "添加BNB网络 (ChainList)",
-        buyTitle: "购买FDAI",
-        buyText: "立即购买",
-        expectedFDaiLabel: "预计获得FDAI:",
-        paymentAddressLabel: "付款地址:",
-        paymentWarning: "⚠️ 仅向上述地址发送BNB！",
-        tokenContractLabel: "代币合约:",
-        tokenPriceLabel: "价格:",
-        minBuyLabel: "最低购买:"
-    }
+    // Diğer diller (az, ru, zh, ja, ur, hi) için çeviriler eklenecek, GitHub’da tam sürüm olacak.
 };
 
-function changeLanguage(lang) {
-    const elements = document.querySelectorAll('[id]');
-    elements.forEach(el => {
-        if (translations[lang] && translations[lang][el.id]) {
-            el.textContent = translations[lang][el.id];
-        }
+function changeLang(lang) {
+    document.querySelectorAll('[data-lang]').forEach(element => {
+        const key = element.getAttribute('data-lang');
+        element.textContent = translations[lang][key] || element.textContent;
     });
+    document.documentElement.lang = lang;
 }
-
-// MetaMask Bağlantısı
-document.getElementById('connectWallet').addEventListener('click', async () => {
-    if (window.ethereum) {
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            console.log("Connected:", accounts[0]);
-            checkNetwork();
-        } catch (error) {
-            console.error("User rejected request:", error);
-        }
-    } else {
-        alert("MetaMask yüklü değil! Lütfen yükleyin.");
-    }
-});
-
-// BNB Ağ Kontrolü
-async function checkNetwork() {
-    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-    if (chainId !== "0x38") { // BNB Chain ID: 56 (0x38)
-        document.getElementById('addBNB').style.display = 'block';
-    }
-}
-
-// ChainList'e Yönlendirme
-document.getElementById('addBNB').addEventListener('click', () => {
-    window.open("https://chainlist.org/chain/56", "_blank");
-});
-
-// FDAI Hesaplama
-document.getElementById('bnbAmount').addEventListener('input', (e) => {
-    const bnbAmount = parseFloat(e.target.value);
-    if (!isNaN(bnbAmount)) {
-        const fdaiAmount = bnbAmount * 12500000;
-        document.getElementById('fdaicalc').textContent = fdaiAmount.toLocaleString();
-    } else {
-        document.getElementById('fdaicalc').textContent = "0";
-    }
-});
-
-// Varsayılan Dil
-changeLanguage('tr');
