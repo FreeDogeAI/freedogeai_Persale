@@ -1,49 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI (FDAI) Token Presale</title>
+    <title>FreeDogeAI (FDAI) Token Ön Satışı</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/i18next@21.6.10/dist/umd/i18next.min.js"></script>
     <script src="https://unpkg.com/web3@1.7.0/dist/web3.min.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="language-switcher">
             <select id="languageSelect">
-                <option value="en">English</option>
                 <option value="tr">Türkçe</option>
+                <option value="en">English</option>
                 <option value="ar">العربية</option>
-                <option value="ru">Русский</option>
-                <option value="zh">中文</option>
                 <!-- Diğer diller buraya eklenebilir -->
             </select>
         </div>
 
-        <h1 data-i18n="title">FreeDogeAI (FDAI) Token Presale</h1>
-        <p data-i18n="description">Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.</p>
+        <h1 id="title">FreeDogeAI (FDAI) Token Ön Satışı</h1>
+        <p id="description">BNB Chain üzerinde yeni nesil meme destekli AI token'a katılın. %100 vergisiz, merkeziyetsiz ve topluluk tarafından yönlendiriliyor.</p>
 
-        <button id="connectWallet" data-i18n="connectWallet">Connect Wallet</button>
+        <button id="connectWallet">Cüzdanı Bağla</button>
 
         <div class="buy-section">
-            <label data-i18n="buyLabel">Buy FDAI Token</label>
-            <input type="number" id="bnbAmount" placeholder="Enter BNB amount" step="0.01" min="0.035">
+            <label id="buyLabel">FDAI Token Satın Al</label>
+            <input type="number" id="bnbAmount" placeholder="BNB miktarını girin" step="0.01" min="0.035">
             <p><span id="fdaiAmount">0</span> FDAI</p>
-            <button id="buyButton" data-i18n="buyButton">Buy Now</button>
+            <button id="buyButton">Şimdi Satın Al</button>
         </div>
 
         <div class="community-links">
-            <h3 data-i18n="community">Community</h3>
-            <a href="https://t.me/freedogeaiFDAI" target="_blank" data-i18n="telegram">Telegram</a> | 
-            <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" data-i18n="twitter">Twitter (X)</a>
+            <h3 id="community">Topluluk</h3>
+            <a href="https://t.me/freedogeaiFDAI" target="_blank" id="telegram">Telegram</a> | 
+            <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" id="twitter">Twitter (X)</a>
         </div>
 
         <div class="about-section">
-            <h3 data-i18n="about">About</h3>
-            <p data-i18n="aboutDescription">Free Doge AI (FDAI) is a tax-free, community-driven meme + AI token built on the BNB Chain (BEP-20). Don’t miss out – FOMO is real and the rocket is launching. Be a part of the revolution today!</p>
-            <a href="FreeDogeAI_Whitepaper.pdf" download><button data-i18n="whitepaper">Download Whitepaper (PDF)</button></a>
+            <h3 id="about">Hakkında</h3>
+            <p id="aboutDescription">Free Doge AI (FDAI), BNB Chain (BEP-20) üzerinde inşa edilmiş, vergisiz, topluluk odaklı bir meme + AI token'ıdır. Kaçırmayın – FOMO gerçek ve roket fırlıyor. Bugün devrimin bir parçası olun!</p>
+            <a href="FreeDogeAI_Whitepaper.pdf" download><button id="whitepaper">Whitepaper İndir (PDF)</button></a>
         </div>
     </div>
 
