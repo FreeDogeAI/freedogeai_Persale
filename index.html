@@ -294,3 +294,143 @@
                 alert('Failed to connect to Trust Wallet: ' + error.message);
             }
         } else if (window.ethereum) {
+            // Trust Wallet mobile (via WalletConnect)
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                userAddress = accounts[0];
+                handleWalletConnection(userAddress);
+                walletModal.style.display = 'none';
+            } catch (error) {
+                console.error('Error connecting to Trust Wallet:', error);
+                alert('Failed to connect to Trust Wallet: ' + error.message);
+            }
+        } else {
+            alert('Trust Wallet is not detected!');
+        }
+    }
+    
+    function handleWalletConnection(address) {
+        isWalletConnected = true;
+        userAddress = address;
+        
+        // Update UI
+        connectWalletBtn.textContent = translations[currentLang].connectWallet + ' ✔';
+        walletInfo.style.display = 'block';
+        walletAddress.textContent = address;
+        buyBtn.disabled = false;
+        
+        // In a real implementation, you would fetch these from the blockchain
+        bnbBalance.textContent = '0.0 BNB';
+        purchasedFdai.textContent = '0 FDAI';
+        
+        // Show token ownership if they have any
+        if (userFdaiBalance > 0) {
+            tokenOwnership.style.display = 'block';
+            ownedTokens.textContent = `${userFdaiBalance} FDAI`;
+        }
+    }
+    
+    function handleWalletDisconnection() {
+        isWalletConnected = false;
+        userAddress = '';
+        
+        // Update UI
+        connectWalletBtn.textContent = translations[currentLang].connectWallet;
+        walletInfo.style.display = 'none';
+        buyBtn.disabled = true;
+        calculationResult.style.display = 'none';
+        bnbAmountInput.value = '';
+    }
+    
+    function updateWalletInfo(address) {
+        walletAddress.textContent = address;
+        // In a real implementation, you would update the balance here
+    }
+    
+    function calculateFdai() {
+        const bnbAmount = parseFloat(bnbAmountInput.value);
+        
+        if (isNaN(bnbAmount)) {
+            calculationResult.style.display = 'none';
+            return;
+        }
+        
+        const fdai = bnbAmount * FDAI_PER_BNB;
+        fdaiAmount.textContent = formatNumber(fdai);
+        calculationResult.style.display = 'block';
+    }
+    
+    function formatNumber(num) {
+        if (num >= 1000000000) {
+            return (num / 1000000000).toFixed(2) + 'B';
+        }
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(2) + 'M';
+        }
+        if (num >= 1000) {
+            return (num / 1000).toFixed(2) + 'K';
+        }
+        return num.toFixed(2);
+    }
+    
+    async function buyTokens() {
+        if (!isWalletConnected) {
+            alert('Please connect your wallet first!');
+            return;
+        }
+        
+        const bnbAmount = parseFloat(bnbAmountInput.value);
+        
+        if (isNaN(bnbAmount)) {
+            alert('Please enter a valid BNB amount');
+            return;
+        }
+        
+        // In a real implementation, this would send a transaction to your smart contract
+        try {
+            buyBtn.disabled = true;
+            buyBtn.textContent = 'Processing...';
+            
+            // Simulate transaction delay
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Calculate purchased FDAI
+            const purchased = bnbAmount * FDAI_PER_BNB;
+            userFdaiBalance += purchased;
+            
+            // Update UI
+            purchasedFdai.textContent = `${userFdaiBalance} FDAI`;
+            tokenOwnership.style.display = 'block';
+            ownedTokens.textContent = `${userFdaiBalance} FDAI`;
+            
+            // Reset form
+            bnbAmountInput.value = '';
+            calculationResult.style.display = 'none';
+            
+            alert(`Successfully purchased ${purchased} FDAI tokens!`);
+        } catch (error) {
+            console.error('Error purchasing tokens:', error);
+            alert('Failed to purchase tokens: ' + error.message);
+        } finally {
+            buyBtn.disabled = false;
+            buyBtn.textContent = translations[currentLang].buyTokens;
+        }
+    }
+    
+    // Check if wallet is already connected on page load
+    window.addEventListener('load', async () => {
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length > 0) {
+                    userAddress = accounts[0];
+                    handleWalletConnection(userAddress);
+                }
+            } catch (error) {
+                console.error('Error checking connected accounts:', error);
+            }
+        }
+    });
+</script>
+</body>
+</html>
