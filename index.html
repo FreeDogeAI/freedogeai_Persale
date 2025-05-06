@@ -1,436 +1,600 @@
-<!-- Purchase Section -->
-<div class="purchase-section">
-    <div class="input-group">
-        <label for="bnbAmount" class="input-label" id="bnbAmountLabel">Enter BNB Amount:</label>
-        <input type="number" id="bnbAmount" class="input-field" placeholder="0.0" step="any" min="0">
-        <div class="calculation" id="calculationResult" style="display: none;">
-            You will receive: <span id="fdaiAmount">0</span> FDAI
-        </div>
-    </div>
-    <button class="buy-btn" id="buyBtn" disabled>Buy Tokens</button>
-    
-    <div class="token-ownership" id="tokenOwnership" style="display: none;">
-        <p id="ownershipText">You Own:</p>
-        <div class="token-amount" id="ownedTokens">0 FDAI</div>
-        <p class="token-note" id="tokenNote">Your tokens will be reflected in your wallet after the presale ends.</p>
-    </div>
-</div>
-
-<!-- Whitepaper Section -->
-<div class="whitepaper-section">
-    <button class="whitepaper-btn" id="whitepaperBtn">
-        <span>📄</span>
-        <span id="whitepaperText">Download Whitepaper</span>
-    </button>
-</div>
-
-<!-- Community Section -->
-<div class="community-section">
-    <h3 class="community-title" id="communityTitle">Join Our Community</h3>
-    <p class="community-desc" id="communityDesc">Stay updated and connected with the FreeDogeAI community</p>
-    <div class="community-buttons">
-        <a href="https://t.me/freedogeaiFDAI" class="community-btn telegram-btn" target="_blank">
-            <span>📨</span>
-            <span>Telegram</span>
-        </a>
-        <a href="https://x.com/FreeDogeAI_FDAI?t=eIChyd2UmaOZbljCWY7I2w&s=09" class="community-btn twitter-btn" target="_blank">
-            <span>🐦</span>
-            <span>Twitter</span>
-        </a>
-    </div>
-</div>
-</div>
-
-<!-- Wallet Connection Modal -->
-<div class="modal" id="walletModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title" id="modalTitle">Connect Wallet</h3>
-            <button class="close-btn" id="closeModalBtn">&times;</button>
-        </div>
-        <div class="wallet-option" id="metamaskOption">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" class="wallet-icon">
-            <span class="wallet-name">MetaMask</span>
-        </div>
-        <div class="wallet-option" id="trustwalletOption">
-            <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet" class="wallet-icon">
-            <span class="wallet-name">Trust Wallet</span>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Constants
-    const FDAI_PER_BNB = 120000000000; // 120 billion FDAI per 1 BNB
-    const FDAI_TOKEN_ADDRESS = "0x8161698A74F2ea0035B9912ED60140893Ac0f39C";
-    const BNB_RECEIVER_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
-    
-    // DOM Elements
-    const languageBtn = document.getElementById('languageBtn');
-    const languageDropdown = document.getElementById('languageDropdown');
-    const currentLanguage = document.getElementById('currentLanguage');
-    const connectWalletBtn = document.getElementById('connectWalletBtn');
-    const walletInfo = document.getElementById('walletInfo');
-    const walletAddress = document.getElementById('walletAddress');
-    const bnbBalance = document.getElementById('bnbBalance');
-    const purchasedFdai = document.getElementById('purchasedFdai');
-    const bnbAmountInput = document.getElementById('bnbAmount');
-    const calculationResult = document.getElementById('calculationResult');
-    const fdaiAmount = document.getElementById('fdaiAmount');
-    const buyBtn = document.getElementById('buyBtn');
-    const tokenOwnership = document.getElementById('tokenOwnership');
-    const ownedTokens = document.getElementById('ownedTokens');
-    const whitepaperBtn = document.getElementById('whitepaperBtn');
-    const walletModal = document.getElementById('walletModal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const metamaskOption = document.getElementById('metamaskOption');
-    const trustwalletOption = document.getElementById('trustwalletOption');
-    
-    // State
-    let isWalletConnected = false;
-    let userAddress = '';
-    let userFdaiBalance = 0;
-    
-    // Language translations
-    const translations = {
-        en: {
-            title: "Presale Ends Soon",
-            subtitle: "Don't miss your chance to participate in the FreeDogeAI presale",
-            connectWallet: "Connect Wallet",
-            walletInfo: "Wallet Information",
-            enterBnb: "Enter BNB Amount:",
-            youWillReceive: "You will receive:",
-            buyTokens: "Buy Tokens",
-            youOwn: "You Own:",
-            tokenNote: "Your tokens will be reflected in your wallet after the presale ends.",
-            downloadWhitepaper: "Download Whitepaper",
-            joinCommunity: "Join Our Community",
-            communityDesc: "Stay updated and connected with the FreeDogeAI community",
-            connectModalTitle: "Connect Wallet"
-        },
-        tr: {
-            title: "Ön Satış Yakında Bitiyor",
-            subtitle: "FreeDogeAI ön satışına katılma şansını kaçırma",
-            connectWallet: "Cüzdan Bağla",
-            walletInfo: "Cüzdan Bilgisi",
-            enterBnb: "BNB Miktarı Girin:",
-            youWillReceive: "Alacaksınız:",
-            buyTokens: "Token Satın Al",
-            youOwn: "Sahip Olduğunuz:",
-            tokenNote: "Tokenleriniz ön satış sona erdikten sonra cüzdanınıza yansıtılacaktır.",
-            downloadWhitepaper: "Whitepaper İndir",
-            joinCommunity: "Topluluğumuza Katılın",
-            communityDesc: "FreeDogeAI topluluğuyla güncel kalın ve bağlantıda olun",
-            connectModalTitle: "Cüzdan Bağla"
-        },
-        ja: {
-            title: "プレセール終了間近",
-            subtitle: "FreeDogeAIプレセールに参加するチャンスをお見逃しなく",
-            connectWallet: "ウォレットを接続",
-            walletInfo: "ウォレット情報",
-            enterBnb: "BNB数量を入力:",
-            youWillReceive: "受け取ります:",
-            buyTokens: "トークンを購入",
-            youOwn: "所有している:",
-            tokenNote: "トークンはプレセール終了後にウォレットに反映されます。",
-            downloadWhitepaper: "ホワイトペーパーをダウンロード",
-            joinCommunity: "コミュニティに参加",
-            communityDesc: "FreeDogeAIコミュニティとつながり、最新情報を入手しましょう",
-            connectModalTitle: "ウォレットを接続"
-        },
-        zh: {
-            title: "预售即将结束",
-            subtitle: "不要错过参与FreeDogeAI预售的机会",
-            connectWallet: "连接钱包",
-            walletInfo: "钱包信息",
-            enterBnb: "输入BNB数量:",
-            youWillReceive: "你将收到:",
-            buyTokens: "购买代币",
-            youOwn: "你拥有:",
-            tokenNote: "预售结束后，代币将反映在你的钱包中。",
-            downloadWhitepaper: "下载白皮书",
-            joinCommunity: "加入我们的社区",
-            communityDesc: "与FreeDogeAI社区保持联系并获取最新信息",
-            connectModalTitle: "连接钱包"
-        },
-        ru: {
-            title: "Предпродажа скоро закончится",
-            subtitle: "Не упустите шанс принять участие в предпродаже FreeDogeAI",
-            connectWallet: "Подключить кошелек",
-            walletInfo: "Информация о кошельке",
-            enterBnb: "Введите количество BNB:",
-            youWillReceive: "Вы получите:",
-            buyTokens: "Купить токены",
-            youOwn: "В вашем владении:",
-            tokenNote: "Ваши токены будут отражены в вашем кошельке после окончания предпродажи.",
-            downloadWhitepaper: "Скачать Whitepaper",
-            joinCommunity: "Присоединяйтесь к нашему сообществу",
-            communityDesc: "Будьте в курсе и оставайтесь на связи с сообществом FreeDogeAI",
-            connectModalTitle: "Подключить кошелек"
-        }
-    };
-    
-    // Set initial language
-    let currentLang = 'en';
-    updateLanguage(currentLang);
-    
-    // Event Listeners
-    languageBtn.addEventListener('click', () => {
-        languageDropdown.classList.toggle('show');
-    });
-    
-    document.querySelectorAll('.language-option').forEach(option => {
-        option.addEventListener('click', () => {
-            const lang = option.getAttribute('data-lang');
-            currentLang = lang;
-            currentLanguage.textContent = option.textContent;
-            languageDropdown.classList.remove('show');
-            updateLanguage(lang);
-        });
-    });
-    
-    // Close language dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!languageBtn.contains(e.target) && !languageDropdown.contains(e.target)) {
-            languageDropdown.classList.remove('show');
-        }
-    });
-    
-    connectWalletBtn.addEventListener('click', () => {
-        walletModal.style.display = 'flex';
-    });
-    
-    closeModalBtn.addEventListener('click', () => {
-        walletModal.style.display = 'none';
-    });
-    
-    window.addEventListener('click', (e) => {
-        if (e.target === walletModal) {
-            walletModal.style.display = 'none';
-        }
-    });
-    
-    metamaskOption.addEventListener('click', connectMetaMask);
-    trustwalletOption.addEventListener('click', connectTrustWallet);
-    
-    bnbAmountInput.addEventListener('input', calculateFdai);
-    
-    buyBtn.addEventListener('click', buyTokens);
-    
-    whitepaperBtn.addEventListener('click', () => {
-        // In a real implementation, this would link to your actual whitepaper PDF
-        alert('Downloading Whitepaper...');
-        // window.location.href = 'path/to/whitepaper.pdf';
-    });
-    
-    // Functions
-    function updateLanguage(lang) {
-        const texts = translations[lang];
-        
-        document.getElementById('mainTitle').textContent = texts.title;
-        document.getElementById('mainSubtitle').textContent = texts.subtitle;
-        connectWalletBtn.textContent = texts.connectWallet;
-        document.querySelector('.wallet-info h3').textContent = texts.walletInfo;
-        document.getElementById('bnbAmountLabel').textContent = texts.enterBnb;
-        document.getElementById('buyBtn').textContent = texts.buyTokens;
-        document.getElementById('ownershipText').textContent = texts.youOwn;
-        document.getElementById('tokenNote').textContent = texts.tokenNote;
-        document.getElementById('whitepaperText').textContent = texts.downloadWhitepaper;
-        document.getElementById('communityTitle').textContent = texts.joinCommunity;
-        document.getElementById('communityDesc').textContent = texts.communityDesc;
-        document.getElementById('modalTitle').textContent = texts.connectModalTitle;
-        
-        // Update calculation text
-        if (calculationResult.style.display !== 'none') {
-            calculationResult.innerHTML = `${texts.youWillReceive} <span id="fdaiAmount">0</span> FDAI`;
-        }
-    }
-    
-    async function connectMetaMask() {
-        if (typeof window.ethereum === 'undefined') {
-            alert('MetaMask is not installed! Please install it first.');
-            return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeDogeAI Presale</title>
+    <style>
+        :root {
+            --primary: #25D366;
+            --secondary: #6e48aa;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --gray: #6c757d;
         }
         
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            userAddress = accounts[0];
-            handleWalletConnection(userAddress);
-            
-            // Listen for account changes
-            window.ethereum.on('accountsChanged', (newAccounts) => {
-                if (newAccounts.length === 0) {
-                    // Wallet disconnected
-                    handleWalletDisconnection();
-                } else {
-                    // Account changed
-                    userAddress = newAccounts[0];
-                    updateWalletInfo(userAddress);
-                }
-            });
-            
-            // Listen for chain changes
-            window.ethereum.on('chainChanged', () => {
-                window.location.reload();
-            });
-            
-            walletModal.style.display = 'none';
-        } catch (error) {
-            console.error('Error connecting to MetaMask:', error);
-            alert('Failed to connect to MetaMask: ' + error.message);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
-    }
-    
-    async function connectTrustWallet() {
-        if (window.trustwallet) {
-            // Trust Wallet browser
-            try {
-                const accounts = await window.trustwallet.request({ method: 'eth_requestAccounts' });
-                userAddress = accounts[0];
-                handleWalletConnection(userAddress);
-                walletModal.style.display = 'none';
-            } catch (error) {
-                console.error('Error connecting to Trust Wallet:', error);
-                alert('Failed to connect to Trust Wallet: ' + error.message);
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .logo {
+            max-width: 250px;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 10px rgba(37, 211, 102, 0.3));
+        }
+        
+        .title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #25D366, #6e48aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #ccc;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Countdown */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .countdown-item {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            min-width: 100px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .countdown-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+        
+        /* Presale Section */
+        .presale-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .token-info {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .token-info h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .token-details {
+            margin-bottom: 1.5rem;
+        }
+        
+        .token-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .token-row:last-child {
+            border-bottom: none;
+        }
+        
+        .token-label {
+            color: #ccc;
+        }
+        
+        .token-value {
+            font-weight: bold;
+            text-align: right;
+        }
+        
+        /* Purchase Section */
+        .purchase-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .wallet-connect {
+            margin-bottom: 1.5rem;
+        }
+        
+        .connect-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        
+        .wallet-info {
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .wallet-address {
+            font-family: monospace;
+            word-break: break-all;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .bnb-balance {
+            margin-top: 0.5rem;
+            color: #ccc;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: #ccc;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(0,0,0,0.2);
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
+        }
+        
+        .calculation {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(37, 211, 102, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            border: 1px solid rgba(37, 211, 102, 0.2);
+        }
+        
+        .buy-btn {
+            width: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        
+        .buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+        
+        .buy-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .token-ownership {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(110, 72, 170, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(110, 72, 170, 0.2);
+            display: none;
+        }
+        
+        .token-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin: 0.5rem 0;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin: 2rem 0;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 5px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .presale-container {
+                grid-template-columns: 1fr;
             }
-        } else if (window.ethereum) {
-            // Trust Wallet mobile (via WalletConnect)
+            
+            .title {
+                font-size: 2.2rem;
+            }
+            
+            .countdown {
+                flex-wrap: wrap;
+            }
+            
+            .countdown-item {
+                min-width: 80px;
+                padding: 0.8rem;
+            }
+            
+            .countdown-value {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: #1a1a2e;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .wallet-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .wallet-option:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .wallet-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 1rem;
+        }
+        
+        .wallet-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="https://github.com/yourusername/yourrepo/raw/main/logo.png" alt="FreeDogeAI Logo" class="logo">
+            <h1 class="title">FreeDogeAI</h1>
+            <p class="subtitle">The Future of AI-Powered Meme Coins<br>Join the revolution with FDAI - where meme culture meets artificial intelligence</p>
+            
+            <!-- Countdown -->
+            <div class="countdown">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="days">492</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="hours">14</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="minutes">54</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="seconds">19</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Presale Content -->
+        <div class="presale-container">
+            <!-- Token Info -->
+            <div class="token-info">
+                <h2>Pre-Sale Information</h2>
+                <p style="margin-bottom: 1.5rem; color: #ccc;">Don't miss your chance to be part of the FreeDogeAI revolution. Our pre-sale offers exclusive early access to FDAI tokens at a special price.</p>
+                
+                <div class="token-details">
+                    <div class="token-row">
+                        <span class="token-label">Name:</span>
+                        <span class="token-value">FreeDogeAI</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label">Symbol:</span>
+                        <span class="token-value">FDAI</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label">Total Supply:</span>
+                        <span class="token-value">2,000,000,000,000,000</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label">Pre-Sale Supply:</span>
+                        <span class="token-value">125,000,000,000,000</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label">1 FDAI =</span>
+                        <span class="token-value">0.00000000000833 BNB</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label">1 BNB =</span>
+                        <span class="token-value">120,000,000,000 FDAI</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label">Total Target:</span>
+                        <span class="token-value">625 BNB</span>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span>Progress: 35%</span>
+                        <span>Raised: 218.75 BNB / 625 BNB</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 35%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Purchase Section -->
+            <div class="purchase-section">
+                <div class="wallet-connect">
+                    <button class="connect-btn" id="connectWalletBtn">
+                        <span>🔗</span>
+                        <span>Connect Wallet</span>
+                    </button>
+                    <div class="wallet-info" id="walletInfo">
+                        <div class="wallet-address" id="walletAddress"></div>
+                        <div class="bnb-balance" id="bnbBalance"></div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="bnbAmount" class="input-label">Enter BNB Amount:</label>
+                    <input type="number" id="bnbAmount" class="input-field" placeholder="0.0" step="any" min="0">
+                    <div class="calculation" id="calculationResult" style="display: none;">
+                        You will receive: <span id="fdaiAmount">0</span> FDAI
+                    </div>
+                </div>
+                
+                <button class="buy-btn" id="buyBtn" disabled>Buy FDAI Tokens</button>
+                
+                <div class="token-ownership" id="tokenOwnership">
+                    <p>You Own:</p>
+                    <div class="token-amount" id="ownedTokens">0 FDAI</div>
+                    <p style="color: #aaa; font-size: 0.9rem;">Your tokens will be reflected in your wallet after the presale ends.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Wallet Connection Modal -->
+    <div class="modal" id="walletModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Connect Wallet</h3>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="wallet-option" id="metamaskOption">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" class="wallet-icon">
+                <span class="wallet-name">MetaMask</span>
+            </div>
+            <div class="wallet-option" id="trustwalletOption">
+                <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet" class="wallet-icon">
+                <span class="wallet-name">Trust Wallet</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Constants
+        const FDAI_PER_BNB = 120000000000; // 120 billion FDAI per 1 BNB
+        const PRESALE_END_DATE = new Date('2025-12-31T23:59:59').getTime();
+        
+        // DOM Elements
+        const connectWalletBtn = document.getElementById('connectWalletBtn');
+        const walletInfo = document.getElementById('walletInfo');
+        const walletAddress = document.getElementById('walletAddress');
+        const bnbBalance = document.getElementById('bnbBalance');
+        const bnbAmountInput = document.getElementById('bnbAmount');
+        const calculationResult = document.getElementById('calculationResult');
+        const fdaiAmount = document.getElementById('fdaiAmount');
+        const buyBtn = document.getElementById('buyBtn');
+        const tokenOwnership = document.getElementById('tokenOwnership');
+        const ownedTokens = document.getElementById('ownedTokens');
+        const walletModal = document.getElementById('walletModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const metamaskOption = document.getElementById('metamaskOption');
+        const trustwalletOption = document.getElementById('trustwalletOption');
+        
+        // Countdown Elements
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        
+        // State
+        let isWalletConnected = false;
+        let userAddress = '';
+        let userFdaiBalance = 0;
+        
+        // Initialize Countdown
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = PRESALE_END_DATE - now;
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            daysEl.textContent = days;
+            hoursEl.textContent = hours;
+            minutesEl.textContent = minutes;
+            secondsEl.textContent = seconds;
+        }
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+        
+        // Wallet Connection
+        async function connectMetaMask() {
+            if (typeof window.ethereum === 'undefined') {
+                alert('MetaMask is not installed! Please install it first.');
+                return;
+            }
+            
             try {
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 userAddress = accounts[0];
                 handleWalletConnection(userAddress);
+                
+                // Listen for account changes
+                window.ethereum.on('accountsChanged', (newAccounts) => {
+                    if (newAccounts.length === 0) {
+                        handleWalletDisconnection();
+                    } else {
+                        userAddress = newAccounts[0];
+                        updateWalletInfo(userAddress);
+                    }
+                });
+                
                 walletModal.style.display = 'none';
             } catch (error) {
-                console.error('Error connecting to Trust Wallet:', error);
-                alert('Failed to connect to Trust Wallet: ' + error.message);
-            }
-        } else {
-            alert('Trust Wallet is not detected!');
-        }
-    }
-    
-    function handleWalletConnection(address) {
-        isWalletConnected = true;
-        userAddress = address;
-        
-        // Update UI
-        connectWalletBtn.textContent = translations[currentLang].connectWallet + ' ✔';
-        walletInfo.style.display = 'block';
-        walletAddress.textContent = address;
-        buyBtn.disabled = false;
-        
-        // In a real implementation, you would fetch these from the blockchain
-        bnbBalance.textContent = '0.0 BNB';
-        purchasedFdai.textContent = '0 FDAI';
-        
-        // Show token ownership if they have any
-        if (userFdaiBalance > 0) {
-            tokenOwnership.style.display = 'block';
-            ownedTokens.textContent = `${userFdaiBalance} FDAI`;
-        }
-    }
-    
-    function handleWalletDisconnection() {
-        isWalletConnected = false;
-        userAddress = '';
-        
-        // Update UI
-        connectWalletBtn.textContent = translations[currentLang].connectWallet;
-        walletInfo.style.display = 'none';
-        buyBtn.disabled = true;
-        calculationResult.style.display = 'none';
-        bnbAmountInput.value = '';
-    }
-    
-    function updateWalletInfo(address) {
-        walletAddress.textContent = address;
-        // In a real implementation, you would update the balance here
-    }
-    
-    function calculateFdai() {
-        const bnbAmount = parseFloat(bnbAmountInput.value);
-        
-        if (isNaN(bnbAmount)) {
-            calculationResult.style.display = 'none';
-            return;
-        }
-        
-        const fdai = bnbAmount * FDAI_PER_BNB;
-        fdaiAmount.textContent = formatNumber(fdai);
-        calculationResult.style.display = 'block';
-    }
-    
-    function formatNumber(num) {
-        if (num >= 1000000000) {
-            return (num / 1000000000).toFixed(2) + 'B';
-        }
-        if (num >= 1000000) {
-            return (num / 1000000).toFixed(2) + 'M';
-        }
-        if (num >= 1000) {
-            return (num / 1000).toFixed(2) + 'K';
-        }
-        return num.toFixed(2);
-    }
-    
-    async function buyTokens() {
-        if (!isWalletConnected) {
-            alert('Please connect your wallet first!');
-            return;
-        }
-        
-        const bnbAmount = parseFloat(bnbAmountInput.value);
-        
-        if (isNaN(bnbAmount)) {
-            alert('Please enter a valid BNB amount');
-            return;
-        }
-        
-        // In a real implementation, this would send a transaction to your smart contract
-        try {
-            buyBtn.disabled = true;
-            buyBtn.textContent = 'Processing...';
-            
-            // Simulate transaction delay
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            // Calculate purchased FDAI
-            const purchased = bnbAmount * FDAI_PER_BNB;
-            userFdaiBalance += purchased;
-            
-            // Update UI
-            purchasedFdai.textContent = `${userFdaiBalance} FDAI`;
-            tokenOwnership.style.display = 'block';
-            ownedTokens.textContent = `${userFdaiBalance} FDAI`;
-            
-            // Reset form
-            bnbAmountInput.value = '';
-            calculationResult.style.display = 'none';
-            
-            alert(`Successfully purchased ${purchased} FDAI tokens!`);
-        } catch (error) {
-            console.error('Error purchasing tokens:', error);
-            alert('Failed to purchase tokens: ' + error.message);
-        } finally {
-            buyBtn.disabled = false;
-            buyBtn.textContent = translations[currentLang].buyTokens;
-        }
-    }
-    
-    // Check if wallet is already connected on page load
-    window.addEventListener('load', async () => {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                if (accounts.length > 0) {
-                    userAddress = accounts[0];
-                    handleWalletConnection(userAddress);
-                }
-            } catch (error) {
-                console.error('Error checking connected accounts:', error);
-            }
-        }
-    });
-</script>
-</body>
-</html>
+                console.erro
