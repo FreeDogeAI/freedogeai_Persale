@@ -12,7 +12,7 @@ const translations = {
         close: "Close",
         buy_tokens: "Buy FDAI Tokens",
         bnb_amount: "Enter BNB Amount",
-        receive_fdai: "You will receive <span id='fdaiAmount'>0</span> FDAI",
+        receive_fdai: "You will receive",
         your_tokens: "Your Tokens",
         you_own: "You Own",
         token_note: "Your tokens will be reflected in your wallet after the presale ends.",
@@ -41,7 +41,7 @@ const translations = {
         close: "Kapat",
         buy_tokens: "FDAI Token Satın Al",
         bnb_amount: "BNB Miktarı Girin",
-        receive_fdai: "Alacağınız miktar: <span id='fdaiAmount'>0</span> FDAI",
+        receive_fdai: "Alacağınız miktar",
         your_tokens: "Tokenlarınız",
         you_own: "Sahip Olduğunuz",
         token_note: "Tokenlarınız ön satış sona erdikten sonra cüzdanınıza yansıyacaktır.",
@@ -70,7 +70,7 @@ const translations = {
         close: "閉じる",
         buy_tokens: "FDAIトークンを購入",
         bnb_amount: "BNB数量を入力",
-        receive_fdai: "受け取るFDAI: <span id='fdaiAmount'>0</span> FDAI",
+        receive_fdai: "受け取るFDAI",
         your_tokens: "あなたのトークン",
         you_own: "所有トークン",
         token_note: "トークンはプレセール終了後にウォレットに反映されます。",
@@ -99,7 +99,7 @@ const translations = {
         close: "关闭",
         buy_tokens: "购买FDAI代币",
         bnb_amount: "输入BNB数量",
-        receive_fdai: "您将收到 <span id='fdaiAmount'>0</span> FDAI",
+        receive_fdai: "您将收到",
         your_tokens: "您的代币",
         you_own: "您拥有",
         token_note: "您的代币将在预售结束后反映在您的钱包中。",
@@ -128,7 +128,7 @@ const translations = {
         close: "Закрыть",
         buy_tokens: "Купить токены FDAI",
         bnb_amount: "Введите сумму BNB",
-        receive_fdai: "Вы получите <span id='fdaiAmount'>0</span> FDAI",
+        receive_fdai: "Вы получите",
         your_tokens: "Ваши токены",
         you_own: "У вас есть",
         token_note: "Ваши токены будут отражены в вашем кошельке после окончания предпродажи.",
@@ -149,19 +149,14 @@ const translations = {
 function changeLang(lang) {
     document.querySelectorAll('[data-lang]').forEach(element => {
         const key = element.getAttribute('data-lang');
-        if (key === 'receive_fdai') {
-            const amount = document.getElementById('fdaiAmount').textContent;
-            element.innerHTML = translations[lang][key].replace('<span id="fdaiAmount">0</span>', `<span id="fdaiAmount">${amount}</span>`);
-        } else {
-            element.textContent = translations[lang][key] || element.textContent;
-        }
+        element.textContent = translations[lang][key] || element.textContent;
     });
     document.documentElement.lang = lang;
     localStorage.setItem('lang', lang);
 }
 
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('lang') || 'en';
     changeLang(savedLang);
-    document.querySelector('.lang-toggle select').value = savedLang;
+    document.getElementById('langSelect').value = savedLang;
 });
