@@ -3,80 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI (FDAI) Presale</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>FreeDogeAI (FDAI) Token Presale</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/i18next@21.6.10/dist/umd/i18next.min.js"></script>
+    <script src="https://unpkg.com/web3@1.7.0/dist/web3.min.js"></script>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="lang-toggle">
-                <select id="langSelect" onchange="changeLang(this.value)">
-                    <option value="en">🇬🇧 English</option>
-                    <option value="tr">🇹🇷 Türkçe</option>
-                    <option value="ja">🇯🇵 日本語</option>
-                    <option value="zh">🇨🇳 中文</option>
-                    <option value="ru">🇷🇺 Русский</option>
-                </select>
-            </div>
-            <button id="connectWallet" class="btn connect-btn" data-lang="connect-wallet">Connect Wallet</button>
-            <img src="png_logo.png" alt="FDAI Logo" class="logo">
-            <h1 data-lang="presale-title">Presale Ends Soon</h1>
-            <p data-lang="presale-desc">Don't miss your chance to join FreeDogeAI! Buy FDAI tokens now.</p>
+    <div class="container">
+        <div class="language-switcher">
+            <select id="languageSelect">
+                <option value="en">English</option>
+                <option value="tr">Türkçe</option>
+                <option value="ar">العربية</option>
+                <option value="ru">Русский</option>
+                <option value="zh">中文</option>
+                <!-- Diğer diller buraya eklenebilir -->
+            </select>
         </div>
-    </header>
 
-    <main>
-        <section class="wallet container">
-            <div class="wallet-info" id="walletInfo" style="display: none;">
-                <p><strong data-lang="wallet-address">Wallet Address:</strong> <span id="walletAddress">Not Connected</span></p>
-                <p><strong data-lang="bnb-balance">BNB Balance:</strong> <span id="bnbBalance">0 BNB</span></p>
-                <p><strong data-lang="purchased-amount">Purchased FDAI:</strong> <span id="purchasedAmount">0 FDAI</span></p>
-            </div>
-        </section>
+        <h1 data-i18n="title">FreeDogeAI (FDAI) Token Presale</h1>
+        <p data-i18n="description">Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.</p>
 
-        <section class="purchase container">
-            <h2 data-lang="buy-tokens">Buy FDAI Tokens</h2>
-            <div class="purchase-form">
-                <label for="bnbAmount" data-lang="bnb-amount">Enter BNB Amount:</label>
-                <input type="number" id="bnbAmount" placeholder="0.0" step="0.01" min="0">
-                <p><span data-lang="receive-fdai">You will receive</span> <span id="fdaiAmount">0</span> FDAI</p>
-                <button id="buyButton" class="btn buy-btn" data-lang="buy-tokens" disabled>Buy Tokens</button>
-            </div>
-        </section>
+        <button id="connectWallet" data-i18n="connectWallet">Connect Wallet</button>
 
-        <section class="ownership container">
-            <h2 data-lang="your-tokens">Your Tokens</h2>
-            <p><strong data-lang="you-own">You Own:</strong> <span id="ownedTokens">0 FDAI Tokens</span></p>
-            <p class="note" data-lang="token-note">Your tokens will be reflected in your wallet after the presale ends.</p>
-        </section>
+        <div class="buy-section">
+            <label data-i18n="buyLabel">Buy FDAI Token</label>
+            <input type="number" id="bnbAmount" placeholder="Enter BNB amount" step="0.01" min="0.035">
+            <p><span id="fdaiAmount">0</span> FDAI</p>
+            <button id="buyButton" data-i18n="buyButton">Buy Now</button>
+        </div>
 
-        <section class="whitepaper container">
-            <h2 data-lang="whitepaper">Whitepaper</h2>
-            <a href="whitepaper.pdf" download class="btn download-btn" data-lang="download-whitepaper">Download Whitepaper</a>
-        </section>
+        <div class="community-links">
+            <h3 data-i18n="community">Community</h3>
+            <a href="https://t.me/freedogeaiFDAI" target="_blank" data-i18n="telegram">Telegram</a> | 
+            <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" data-i18n="twitter">Twitter (X)</a>
+        </div>
 
-        <section class="community container">
-            <h2 data-lang="community">Join Our Community</h2>
-            <p data-lang="community-desc">Stay updated and connected with the FreeDogeAI community</p>
-            <div class="community-links">
-                <a href="https://t.me/freedogeaiFDAI" target="_blank" class="btn community-btn telegram" data-lang="telegram">Telegram</a>
-                <a href="https://x.com/FreeDogeAI_FDAI?t=eIChyd2UmaOZbljCWY7I2w&s=09" target="_blank" class="btn community-btn twitter" data-lang="twitter">Twitter</a>
-            </div>
-        </section>
-    </main>
-
-    <div id="walletPopup" class="popup">
-        <div class="popup-content">
-            <h3 data-lang="select-wallet">Select Wallet</h3>
-            <button onclick="connectMetamask()" class="btn" data-lang="metamask">MetaMask</button>
-            <button onclick="connectTrustWallet()" class="btn" data-lang="trust-wallet">Trust Wallet</button>
-            <button onclick="closePopup()" class="btn secondary" data-lang="close">Close</button>
+        <div class="about-section">
+            <h3 data-i18n="about">About</h3>
+            <p data-i18n="aboutDescription">Free Doge AI (FDAI) is a tax-free, community-driven meme + AI token built on the BNB Chain (BEP-20). Don’t miss out – FOMO is real and the rocket is launching. Be a part of the revolution today!</p>
+            <a href="FreeDogeAI_Whitepaper.pdf" download><button data-i18n="whitepaper">Download Whitepaper (PDF)</button></a>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.4/web3.min.js"></script>
-    <script src="translations.js"></script>
-    <script src="scripts.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
