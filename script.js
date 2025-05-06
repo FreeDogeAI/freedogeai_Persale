@@ -1,162 +1,172 @@
-const translations = {
-    en: {
-        presale_title: "Presale Ends Soon",
-        presale_desc: "Don't miss your chance to join FreeDogeAI! Buy FDAI tokens now.",
-        connect_wallet: "Connect Wallet",
-        wallet_address: "Wallet Address",
-        bnb_balance: "BNB Balance",
-        purchased_amount: "Purchased FDAI",
-        select_wallet: "Select Wallet",
-        metamask: "MetaMask",
-        trust_wallet: "Trust Wallet",
-        close: "Close",
-        buy_tokens: "Buy FDAI Tokens",
-        bnb_amount: "Enter BNB Amount",
-        receive_fdai: "You will receive",
-        your_tokens: "Your Tokens",
-        you_own: "You Own",
-        token_note: "Your tokens will be reflected in your wallet after the presale ends.",
-        whitepaper: "Whitepaper",
-        download_whitepaper: "Download Whitepaper",
-        community: "Join Our Community",
-        community_desc: "Stay updated and connected with the FreeDogeAI community",
-        telegram: "Telegram",
-        twitter: "Twitter",
-        error_connect: "Wallet connection failed!",
-        install_metamask: "Please install MetaMask or another Web3 wallet!",
-        invalid_amount: "Enter a valid BNB amount!",
-        success: "Purchase successful! FDAI tokens will be reflected in your wallet after the presale.",
-        error_transaction: "Transaction failed"
-    },
-    tr: {
-        presale_title: "Ön Satış Yakında Bitiyor",
-        presale_desc: "FreeDogeAI'a katılma şansınızı kaçırmayın! FDAI tokenlarını şimdi satın alın.",
-        connect_wallet: "Cüzdanı Bağla",
-        wallet_address: "Cüzdan Adresi",
-        bnb_balance: "BNB Bakiyesi",
-        purchased_amount: "Satın Alınan FDAI",
-        select_wallet: "Cüzdan Seç",
-        metamask: "MetaMask",
-        trust_wallet: "Trust Wallet",
-        close: "Kapat",
-        buy_tokens: "FDAI Token Satın Al",
-        bnb_amount: "BNB Miktarı Girin",
-        receive_fdai: "Alacağınız miktar",
-        your_tokens: "Tokenlarınız",
-        you_own: "Sahip Olduğunuz",
-        token_note: "Tokenlarınız ön satış sona erdikten sonra cüzdanınıza yansıyacaktır.",
-        whitepaper: "Beyaz Kitap",
-        download_whitepaper: "Beyaz Kitabı İndir",
-        community: "Topluluğumuza Katılın",
-        community_desc: "FreeDogeAI topluluğu ile güncel kalın ve bağlantıda olun",
-        telegram: "Telegram",
-        twitter: "Twitter",
-        error_connect: "Cüzdan bağlantısı başarısız!",
-        install_metamask: "Lütfen MetaMask veya başka bir Web3 cüzdanı yükleyin!",
-        invalid_amount: "Geçerli bir BNB miktarı girin!",
-        success: "Satın alma başarılı! FDAI tokenlar ön satış sonrası cüzdanınıza yansıyacak.",
-        error_transaction: "İşlem başarısız"
-    },
-    ja: {
-        presale_title: "プレセールが間もなく終了します",
-        presale_desc: "FreeDogeAIに参加するチャンスを逃さないで！今すぐFDAIトークンを購入してください。",
-        connect_wallet: "ウォレットを接続",
-        wallet_address: "ウォレットアドレス",
-        bnb_balance: "BNB残高",
-        purchased_amount: "購入済みFDAI",
-        select_wallet: "ウォレットを選択",
-        metamask: "MetaMask",
-        trust_wallet: "Trust Wallet",
-        close: "閉じる",
-        buy_tokens: "FDAIトークンを購入",
-        bnb_amount: "BNB数量を入力",
-        receive_fdai: "受け取るFDAI",
-        your_tokens: "あなたのトークン",
-        you_own: "所有トークン",
-        token_note: "トークンはプレセール終了後にウォレットに反映されます。",
-        whitepaper: "ホワイトペーパー",
-        download_whitepaper: "ホワイトペーパーをダウンロード",
-        community: "コミュニティに参加",
-        community_desc: "FreeDogeAIコミュニティで最新情報を入手し、つながりを保ちましょう",
-        telegram: "Telegram",
-        twitter: "Twitter",
-        error_connect: "ウォレット接続に失敗しました！",
-        install_metamask: "MetaMaskまたは他のWeb3ウォレットをインストールしてください！",
-        invalid_amount: "有効なBNB数量を入力してください！",
-        success: "購入成功！FDAIトークンはプレセール後にウォレットに反映されます。",
-        error_transaction: "取引に失敗しました"
-    },
-    zh: {
-        presale_title: "预售即将结束",
-        presale_desc: "不要错过加入FreeDogeAI的机会！现在购买FDAI代币。",
-        connect_wallet: "连接钱包",
-        wallet_address: "钱包地址",
-        bnb_balance: "BNB余额",
-        purchased_amount: "已购买FDAI",
-        select_wallet: "选择钱包",
-        metamask: "MetaMask",
-        trust_wallet: "Trust Wallet",
-        close: "关闭",
-        buy_tokens: "购买FDAI代币",
-        bnb_amount: "输入BNB数量",
-        receive_fdai: "您将收到",
-        your_tokens: "您的代币",
-        you_own: "您拥有",
-        token_note: "您的代币将在预售结束后反映在您的钱包中。",
-        whitepaper: "白皮书",
-        download_whitepaper: "下载白皮书",
-        community: "加入我们的社区",
-        community_desc: "与FreeDogeAI社区保持更新和联系",
-        telegram: "Telegram",
-        twitter: "Twitter",
-        error_connect: "钱包连接失败！",
-        install_metamask: "请安装MetaMask或其他Web3钱包！",
-        invalid_amount: "请输入有效的BNB数量！",
-        success: "购买成功！FDAI代币将在预售后反映在您的钱包中。",
-        error_transaction: "交易失败"
-    },
-    ru: {
-        presale_title: "Предпродажа скоро закончится",
-        presale_desc: "Не упустите шанс присоединиться к FreeDogeAI! Покупайте токены FDAI прямо сейчас.",
-        connect_wallet: "Подключить кошелек",
-        wallet_address: "Адрес кошелька",
-        bnb_balance: "Баланс BNB",
-        purchased_amount: "Купленные FDAI",
-        select_wallet: "Выберите кошелек",
-        metamask: "MetaMask",
-        trust_wallet: "Trust Wallet",
-        close: "Закрыть",
-        buy_tokens: "Купить токены FDAI",
-        bnb_amount: "Введите сумму BNB",
-        receive_fdai: "Вы получите",
-        your_tokens: "Ваши токены",
-        you_own: "У вас есть",
-        token_note: "Ваши токены будут отражены в вашем кошельке после окончания предпродажи.",
-        whitepaper: "Белая книга",
-        download_whitepaper: "Скачать белую книгу",
-        community: "Присоединяйтесь к нашему сообществу",
-        community_desc: "Оставайтесь в курсе и на связи с сообществом FreeDogeAI",
-        telegram: "Telegram",
-        twitter: "Twitter",
-        error_connect: "Ошибка подключения кошелька!",
-        install_metamask: "Пожалуйста, установите MetaMask или другой кошелек Web3!",
-        invalid_amount: "Введите действительное количество BNB!",
-        success: "Покупка успешна! Токены FDAI появятся в вашем кошельке после предпродажи.",
-        error_transaction: "Ошибка транзакции"
-    }
-};
+// Konsol mesajı ile başlangıç kontrolü
+console.log("Script loaded successfully.");
 
-function changeLang(lang) {
-    document.querySelectorAll('[data-lang]').forEach(element => {
-        const key = element.getAttribute('data-lang');
-        element.textContent = translations[lang][key] || element.textContent;
+// Dil Çeviri (i18next)
+i18next.init({
+    lng: 'en',
+    debug: true, // Hata ayıklama için debug modunu açtım
+    resources: {
+        en: {
+            translation: {
+                title: "FreeDogeAI (FDAI) Token Presale",
+                description: "Join the next generation of meme-powered AI token on BNB Chain. 100% tax-free, decentralized and driven by community.",
+                connectWallet: "Connect Wallet",
+                buyLabel: "Buy FDAI Token",
+                buyButton: "Buy Now",
+                community: "Community",
+                telegram: "Telegram",
+                twitter: "Twitter (X)",
+                about: "About",
+                aboutDescription: "Free Doge AI (FDAI) is a tax-free, community-driven meme + AI token built on the BNB Chain (BEP-20). Don’t miss out – FOMO is real and the rocket is launching. Be a part of the revolution today!",
+                whitepaper: "Download Whitepaper (PDF)"
+            }
+        },
+        tr: {
+            translation: {
+                title: "FreeDogeAI (FDAI) Token Ön Satışı",
+                description: "BNB Chain üzerinde yeni nesil meme destekli AI token'a katılın. %100 vergisiz, merkeziyetsiz ve topluluk tarafından yönlendiriliyor.",
+                connectWallet: "Cüzdanı Bağla",
+                buyLabel: "FDAI Token Satın Al",
+                buyButton: "Şimdi Satın Al",
+                community: "Topluluk",
+                telegram: "Telegram",
+                twitter: "Twitter (X)",
+                about: "Hakkında",
+                aboutDescription: "Free Doge AI (FDAI), BNB Chain (BEP-20) üzerinde inşa edilmiş, vergisiz, topluluk odaklı bir meme + AI token'ıdır. Kaçırmayın – FOMO gerçek ve roket fırlıyor. Bugün devrimin bir parçası olun!",
+                whitepaper: "Whitepaper İndir (PDF)"
+            }
+        },
+        ar: {
+            translation: {
+                title: "بيع مسبق لتوكن FreeDogeAI (FDAI)",
+                description: "انضم إلى الجيل القادم من التوكنات الممية المدعومة بالذكاء الاصطناعي على سلسلة BNB. خالٍ من الضرائب بنسبة 100%، لامركزي ومدفوع من المجتمع.",
+                connectWallet: "ربط المحفظة",
+                buyLabel: "شراء توكن FDAI",
+                buyButton: "اشترِ الآن",
+                community: "المجتمع",
+                telegram: "تيليجرام",
+                twitter: "تويتر (X)",
+                about: "عن",
+                aboutDescription: "Free Doge AI (FDAI) هو توكن ممي + ذكاء اصطناعي خالٍ من الضرائب، مدفوع من المجتمع ومبني على سلسلة BNB (BEP-20). لا تفوت – الخوف من التفويت حقيقي والصاروخ ينطلق. كن جزءًا من الثورة اليوم!",
+                whitepaper: "تحميل الورقة البيضاء (PDF)"
+            }
+        },
+        // Diğer diller buraya eklenebilir
+    }
+}, function(err, t) {
+    if (err) {
+        console.error("i18next initialization failed:", err);
+    } else {
+        console.log("i18next initialized successfully.");
+        updateContent();
+    }
+});
+
+function updateContent() {
+    console.log("Updating content for language:", i18next.language);
+    $('[data-i18n]').each(function() {
+        const key = $(this).data('i18n');
+        const translatedText = i18next.t(key);
+        console.log(`Translating ${key} to: ${translatedText}`);
+        $(this).text(translatedText);
     });
-    document.documentElement.lang = lang;
-    localStorage.setItem('lang', lang);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('lang') || 'en';
-    changeLang(savedLang);
-    document.getElementById('langSelect').value = savedLang;
+$('#languageSelect').on('change', function() {
+    const selectedLang = $(this).val();
+    console.log("Language selected:", selectedLang);
+    i18next.changeLanguage(selectedLang, function(err) {
+        if (err) {
+            console.error("Language change failed:", err);
+        } else {
+            updateContent();
+        }
+    });
+});
+
+// Web3 ve MetaMask Bağlantısı
+let web3;
+let userAccount;
+const TOKEN_ADDRESS = "0x8161698A74F2ea0035B9912ED60140893Ac0f39C";
+const TOKEN_SALE_ADDRESS = "0x45583DB8b6Db50311Ba8e7303845ACc6958589B7";
+const OWNER_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
+const TOKEN_ABI = [
+    {
+        "constant": false,
+        "inputs": [
+            { "name": "_to", "type": "address" },
+            { "name": "_value", "type": "uint256" }
+        ],
+        "name": "transfer",
+        "outputs": [{ "name": "", "type": "bool" }],
+        "type": "function"
+    }
+];
+
+$('#connectWallet').on('click', async () => {
+    console.log("Connect Wallet button clicked.");
+    if (typeof window.ethereum !== 'undefined') {
+        console.log("Ethereum provider detected.");
+        web3 = new Web3(window.ethereum);
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            userAccount = accounts[0];
+            console.log("Connected account:", userAccount);
+            $('#connectWallet').text(`Connected: ${userAccount.slice(0, 6)}...${userAccount.slice(-4)}`);
+        } catch (error) {
+            console.error("Failed to connect wallet:", error);
+            alert('Failed to connect wallet: ' + error.message);
+        }
+    } else {
+        console.error("Ethereum provider not found. Please install MetaMask.");
+        alert('Please install MetaMask!');
+    }
+});
+
+// BNB Miktarına Göre FDAI Hesaplama
+const RATE = 12500000; // 1 BNB = 12,500,000 FDAI
+$('#bnbAmount').on('input', function() {
+    const bnb = $(this).val();
+    const fdai = bnb * RATE;
+    $('#fdaiAmount').text(fdai.toLocaleString());
+});
+
+// Satın Alma İşlemi
+$('#buyButton').on('click', async () => {
+    console.log("Buy Now button clicked.");
+    if (!userAccount) {
+        console.error("No wallet connected.");
+        alert('Please connect your wallet first!');
+        return;
+    }
+
+    const bnbAmount = $('#bnbAmount').val();
+    if (bnbAmount < 0.035) {
+        console.error("BNB amount below minimum:", bnbAmount);
+        alert('Minimum purchase is 0.035 BNB!');
+        return;
+    }
+
+    try {
+        console.log("Initiating BNB transfer...");
+        // BNB Gönderme
+        await web3.eth.sendTransaction({
+            from: userAccount,
+            to: OWNER_ADDRESS,
+            value: web3.utils.toWei(bnbAmount, 'ether')
+        });
+        console.log("BNB transfer successful.");
+
+        // FDAI Gönderme (Akıllı Sözleşme ile)
+        const tokenContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
+        const fdaiAmount = (bnbAmount * RATE).toString() + "000000000000000000"; // 18 desimal
+        console.log("Initiating FDAI transfer...");
+        await tokenContract.methods.transfer(userAccount, fdaiAmount).send({ from: OWNER_ADDRESS });
+        console.log("FDAI transfer successful.");
+
+        alert('Purchase successful! FDAI tokens have been sent to your wallet.');
+    } catch (error) {
+        console.error("Transaction failed:", error);
+        alert('Transaction failed: ' + error.message);
+    }
 });
