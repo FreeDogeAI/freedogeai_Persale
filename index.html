@@ -3,58 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI (FDAI) | Resmi Token Satışı</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <title>FreeDogeAI (FDAI) Presale</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Dil Seçici -->
-    <div class="language-selector">
-        <button onclick="changeLanguage('tr')">🇹🇷 Türkçe</button>
-        <button onclick="changeLanguage('en')">🇬🇧 English</button>
-        <button onclick="changeLanguage('ru')">🇷🇺 Русский</button>
-        <button onclick="changeLanguage('zh')">🇨🇳 中文</button>
+    <header>
+        <img src="png_logo.png" alt="FDAI Logo" class="logo">
+        <h1 data-lang="title">FreeDogeAI (FDAI) Ön Satış</h1>
+        <div class="lang-toggle">
+            <select onchange="changeLang(this.value)">
+                <option value="tr">🇹🇷 Türkçe</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ar">🇸🇦 العربية</option>
+                <option value="az">🇦🇿 Azərbaycanca</option>
+                <option value="ru">🇷🇺 Русский</option>
+                <option value="zh">🇨🇳 简体中文</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="ur">🇵🇰 اردو</option>
+                <option value="hi">🇮🇳 हिन्दी</option>
+            </select>
+        </div>
+    </header>
+
+    <section class="token-info">
+        <h2 data-lang="token-info">Token Bilgileri</h2>
+        <p><strong data-lang="token-name">Token Adı:</strong> FreeDogeAI (FDAI)</p>
+        <p><strong data-lang="total-supply">Toplam Arz:</strong> 2 Katrilyon</p>
+        <p><strong data-lang="presale-supply">Ön Satış Arzı:</strong> 125 Trilyon</p>
+        <p><strong data-lang="price">Fiyat:</strong> 1 FDAI = 0.00000000000833 BNB</p>
+        <p><strong data-lang="bnb-rate">1 BNB:</strong> 120 Milyar FDAI</p>
+        <p><strong data-lang="target">Hedef:</strong> 625 BNB</p>
+        <p><strong data-lang="contract">Token Kontratı:</strong> <span id="contract">0x8161698A74F2ea0035B9912ED60140893Ac0f39C</span></p>
+    </section>
+
+    <section class="wallet">
+        <h2 data-lang="wallet-connect">Cüzdan Bağlantısı</h2>
+        <button id="connectWallet" data-lang="connect-wallet">Cüzdanı Bağla</button>
+        <p><strong data-lang="wallet-address">Cüzdan Adresi:</strong> <span id="walletAddress">Bağlanmadı</span></p>
+        <p><strong data-lang="bnb-balance">BNB Bakiyesi:</strong> <span id="bnbBalance">0 BNB</span></p>
+    </section>
+
+    <section class="purchase">
+        <h2 data-lang="purchase">Satın Al</h2>
+        <label for="bnbAmount" data-lang="bnb-amount">BNB Miktarı:</label>
+        <input type="number" id="bnbAmount" placeholder="BNB girin" step="0.01">
+        <p><strong data-lang="fdai-amount">Alınacak FDAI:</strong> <span id="fdaiAmount">0</span></p>
+        <button id="buyButton" data-lang="buy" disabled>Satın Al</button>
+        <p><strong data-lang="purchased-amount">Satın Alınan Miktar:</strong> <span id="purchasedAmount">0 FDAI</span></p>
+        <p><strong data-lang="owned-tokens">Sahip Olunan Token:</strong> <span id="ownedTokens">0 FDAI</span></p>
+    </section>
+
+    <footer>
+        <p data-lang="note">Klayım işlemleri (tokenlerinizin cüzdanlarınızda görünmesi ön satışın tamamlanmasının ardından gerçekleşecektir). Süreç, şeffaf ve güvenli bir şekilde yürütülecektir. Daha fazla bilgi için [iletişim kanalı].</p>
+    </footer>
+
+    <div id="walletPopup" class="popup">
+        <div class="popup-content">
+            <h3 data-lang="select-wallet">Cüzdan Seç</h3>
+            <button onclick="connectMetamask()" data-lang="metamask">Metamask</button>
+            <button onclick="connectWalletConnect()" data-lang="wallet-connect-option">WalletConnect</button>
+            <button onclick="connectTrustWallet()" data-lang="trust-wallet">Trust Wallet</button>
+            <button onclick="closePopup()" data-lang="close">Kapat</button>
+        </div>
     </div>
 
-    <!-- Ana Container -->
-    <div class="container">
-        <!-- Logo & Başlık -->
-        <header>
-            <img src="logo.png" alt="FDAI Logo" class="logo">
-            <h1 id="title">FreeDogeAI (FDAI) Token Satışı</h1>
-        </header>
-
-        <!-- Token Bilgileri -->
-        <div class="token-info">
-            <p><strong id="tokenContractLabel">Token Kontratı:</strong> <span>0x8161698A74F2ea0035B9912ED60140893Ac0f39C</span></p>
-            <p><strong id="tokenPriceLabel">Fiyat:</strong> <span>1 BNB = 12,500,000 FDAI</span></p>
-            <p><strong id="minBuyLabel">Minimum Alım:</strong> <span>0.0166 BNB (~10 USD)</span></p>
-        </div>
-
-        <!-- MetaMask Bağlantısı -->
-        <div class="card">
-            <button id="connectWallet"><i class="fab fa-ethereum"></i> <span id="connectText">Cüzdanı Bağla</span></button>
-            <button id="addBNB" style="display: none; background: #F0B90B; color: #000;">
-                <i class="fas fa-link"></i> <span id="addBNBText">BNB Ağını Ekle (ChainList)</span>
-            </button>
-        </div>
-
-        <!-- BNB Gönderim Formu -->
-        <div class="buy-form">
-            <h3 id="buyTitle">FDAI Satın Al</h3>
-            <input type="number" id="bnbAmount" placeholder="BNB miktarı" min="0.0166" step="0.001">
-            <button id="buyButton"><i class="fas fa-coins"></i> <span id="buyText">Satın Al</span></button>
-            <p id="fdaireceived"><strong id="expectedFDaiLabel">Alacağınız FDAI:</strong> <span id="fdaicalc">0</span></p>
-        </div>
-
-        <!-- Ödeme Adresi -->
-        <div class="payment-info">
-            <p><strong id="paymentAddressLabel">BNB Gönderim Adresi:</strong></p>
-            <p class="wallet-address">0xd924e01c7d319c5b23708cd622bd1143cd4fb360</p>
-            <small id="paymentWarning">⚠️ Sadece yukarıdaki adrese BNB gönderin!</small>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.4/web3.min.js"></script>
+    <script src="translations.js"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
