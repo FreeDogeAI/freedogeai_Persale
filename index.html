@@ -5,82 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FreeDogeAI (FDAI) Ön Satış</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
-        <div class="container">
-            <img src="png_logo.png" alt="FDAI Logo" class="logo">
-            <h1 data-lang="title">FreeDogeAI (FDAI) Ön Satış</h1>
-            <div class="lang-toggle">
-                <select onchange="changeLang(this.value)">
-                    <option value="tr">🇹🇷 Türkçe</option>
-                    <option value="en">🇬🇧 English</option>
-                    <option value="ar">🇸🇦 العربية</option>
-                    <option value="az">🇦🇿 Azərbaycanca</option>
-                    <option value="ru">🇷🇺 Русский</option>
-                    <option value="zh">🇨🇳 简体中文</option>
-                    <option value="ja">🇯🇵 日本語</option>
-                    <option value="ur">🇵🇰 اردو</option>
-                    <option value="hi">🇮🇳 हिन्दी</option>
-                </select>
-            </div>
+        <img src="png_logo.png" alt="FDAI Logo" class="logo">
+        <h1 data-lang="title">FreeDogeAI (FDAI) Ön Satış</h1>
+        <div class="lang-toggle">
+            <select onchange="changeLang(this.value)">
+                <option value="tr">🇹🇷 Türkçe</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ar">🇸🇦 العربية</option>
+                <option value="az">🇦🇿 Azərbaycanca</option>
+                <option value="ru">🇷🇺 Русский</option>
+                <option value="zh">🇨🇳 简体中文</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="ur">🇵🇰 اردو</option>
+                <option value="hi">🇮🇳 हिन्दी</option>
+            </select>
         </div>
     </header>
 
     <main>
-        <section class="token-info container">
-            <h2 data-lang="token-info">Token Bilgileri</h2>
-            <div class="info-grid">
-                <p><strong data-lang="token-name">Token Adı:</strong> FreeDogeAI (FDAI)</p>
-                <p><strong data-lang="total-supply">Toplam Arz:</strong> 2 Katrilyon</p>
-                <p><strong data-lang="presale-supply">Ön Satış Arzı:</strong> 125 Trilyon</p>
-                <p><strong data-lang="price">Fiyat:</strong> 1 FDAI = 0.00000000000833 BNB</p>
-                <p><strong data-lang="bnb-rate">1 BNB:</strong> 120 Milyar FDAI</p>
-                <p><strong data-lang="target">Hedef:</strong> 625 BNB</p>
-                <p><strong data-lang="contract">Token Kontratı:</strong> <a href="https://bscscan.com/address/0x8161698A74F2ea0035B9912ED60140893Ac0f39C" target="_blank">0x8161698A74F2ea0035B9912ED60140893Ac0f39C</a></p>
+        <section class="token-info">
+            <h2 data-lang="token-info">TOKEN BILGILERI</h2>
+            <p><strong data-lang="token-name">Token Adı:</strong> FreeDogeAI (FDAI)</p>
+            <p><strong data-lang="total-supply">Toplam Arz:</strong> 2 Katrilyon</p>
+            <p><strong data-lang="presale-supply">Ön Satış Arzı:</strong> 125 Trilyon</p>
+            <p><strong data-lang="price">Fiyat:</strong> 1 FDAI = 0.00000000000833 BNB</p>
+            <p><strong data-lang="bnb-rate">1 BNB:</strong> 120 Milyar FDAI</p>
+            <p><strong data-lang="target">Hedef:</strong> 625 BNB</p>
+            <p><strong data-lang="contract">Token Kontratı:</strong> <a href="https://bscscan.com/address/0x8161698A74F2ea0035B9912ED60140893Ac0f39C" target="_blank">0x8161698A74F2ea0035B9912ED60140893Ac0f39C</a></p>
+        </section>
+
+        <section class="wallet">
+            <h2 data-lang="wallet-connect">CÜZDAN BAĞLANTISI</h2>
+            <p><strong data-lang="wallet-address">Cüzdan Adresi:</strong> <span id="walletAddress">Bağlanmadı</span></p>
+            <p><strong data-lang="bnb-balance">BNB Bakiyesi:</strong> <span id="bnbBalance">0 BNB</span></p>
+            <button id="connectWallet" data-lang="select-wallet">Cüzdan Seç</button>
+            <div class="wallet-options">
+                <button onclick="connectMetamask()" data-lang="metamask">Metamask</button>
+                <button onclick="connectWalletConnect()" data-lang="wallet-connect-option">WalletConnect</button>
+                <button onclick="connectTrustWallet()" data-lang="trust-wallet">Trust Wallet</button>
             </div>
         </section>
 
-        <section class="wallet container">
-            <h2 data-lang="wallet-connect">Cüzdan Bağlantısı</h2>
-            <button id="connectWallet" data-lang="connect-wallet">Cüzdanı Bağla</button>
-            <div class="wallet-info">
-                <p><strong data-lang="wallet-address">Cüzdan Adresi:</strong> <span id="walletAddress">Bağlanmadı</span></p>
-                <p><strong data-lang="bnb-balance">BNB Bakiyesi:</strong> <span id="bnbBalance">0 BNB</span></p>
-            </div>
+        <section class="purchase">
+            <h2 data-lang="purchase">SATIN AL</h2>
+            <label for="bnbAmount" data-lang="bnb-amount">BNB Miktarı:</label>
+            <input type="number" id="bnbAmount" placeholder="BNB girin" step="0.01" min="0">
+            <p><strong data-lang="fdai-amount">Alınacak FDAI:</strong> <span id="fdaiAmount">0</span></p>
+            <p><strong data-lang="purchased-amount">Satın Alınan Miktar:</strong> <span id="purchasedAmount">0 FDAI</span></p>
+            <p><strong data-lang="owned-tokens">Şahip Olunan Token:</strong> <span id="ownedTokens">0 FDAI</span></p>
+            <button id="buyButton" data-lang="buy" disabled>Satın Al</button>
         </section>
 
-        <section class="purchase container">
-            <h2 data-lang="purchase">Satın Al</h2>
-            <div class="purchase-form">
-                <label for="bnbAmount" data-lang="bnb-amount">BNB Miktarı:</label>
-                <input type="number" id="bnbAmount" placeholder="BNB girin" step="0.01" min="0">
-                <p><strong data-lang="fdai-amount">Alınacak FDAI:</strong> <span id="fdaiAmount">0</span></p>
-                <button id="buyButton" data-lang="buy" disabled>Satın Al</button>
-            </div>
-            <div class="purchase-info">
-                <p><strong data-lang="purchased-amount">Satın Alınan Miktar:</strong> <span id="purchasedAmount">0 FDAI</span></p>
-                <p><strong data-lang="owned-tokens">Sahip Olunan Token:</strong> <span id="ownedTokens">0 FDAI</span></p>
-            </div>
-        </section>
+        <footer>
+            <p data-lang="note">Klayım işlemlerİ (tokenlerinizin cüzdanlarınızda görünmesi ön satışın tamamlamasının ardından gerçekleşecektir). Süreç, şeffaf ve güvenli bir şekilde yürütülecektir. Daha fazla bilgi için <a href="[iletişim kanalı]" target="_blank">[iletişim kanalı]</a>.</p>
+        </footer>
     </main>
-
-    <footer>
-        <div class="container">
-            <p data-lang="note">Klayım işlemleri (tokenlerinizin cüzdanlarınızda görünmesi ön satışın tamamlamasının ardından gerçekleşecektir). Süreç, şeffaf ve güvenli bir şekilde yürütülecektir. Daha fazla bilgi için <a href="[iletişim kanalı]" target="_blank">iletişim kanalımız</a>.</p>
-        </div>
-    </footer>
-
-    <div id="walletPopup" class="popup">
-        <div class="popup-content">
-            <h3 data-lang="select-wallet">Cüzdan Seç</h3>
-            <button onclick="connectMetamask()" data-lang="metamask">Metamask</button>
-            <button onclick="connectWalletConnect()" data-lang="wallet-connect-option">WalletConnect</button>
-            <button onclick="connectTrustWallet()" data-lang="trust-wallet">Trust Wallet</button>
-            <button onclick="closePopup()" data-lang="close">Kapat</button>
-        </div>
-    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.4/web3.min.js"></script>
     <script src="translations.js"></script>
