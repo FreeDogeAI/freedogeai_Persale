@@ -145,6 +145,38 @@
             font-weight: bold;
         }
         
+        /* Community Links */
+        .community-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .community-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        
+        .community-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .telegram-btn {
+            background-color: #0088cc;
+        }
+        
+        .twitter-btn {
+            background-color: #1DA1F2;
+        }
+        
         /* Purchase Section */
         .purchase-section {
             background: rgba(255, 255, 255, 0.05);
@@ -405,6 +437,18 @@
                     </div>
                 </div>
                 
+                <!-- Community Links -->
+                <div class="community-links">
+                    <a href="https://t.me/freedogeaiFDAI" class="community-btn telegram-btn" target="_blank">
+                        <span>📨</span>
+                        <span>Telegram</span>
+                    </a>
+                    <a href="https://x.com/FreeDogeAI_FDAI?t=pfYOwiY7gW8LypJ_wVMaZQ&s=09" class="community-btn twitter-btn" target="_blank">
+                        <span>🐦</span>
+                        <span>Twitter</span>
+                    </a>
+                </div>
+                
                 <!-- Whitepaper Button -->
                 <button class="connect-btn" style="margin-top: 2rem;" onclick="window.open('FreeDogeAI_Whitepaper.pdf', '_blank')">
                     <span>📄</span>
@@ -499,7 +543,7 @@
         // Initialize Countdown (90 days from now)
         function updateCountdown() {
             const now = new Date();
-            const endDate = new Date();
+            const endDate = new Date(now);
             endDate.setDate(now.getDate() + PRESALE_DAYS);
             
             const distance = endDate - now;
@@ -510,9 +554,9 @@
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             
             daysEl.textContent = days;
-            hoursEl.textContent = hours;
-            minutesEl.textContent = minutes;
-            secondsEl.textContent = seconds;
+            hoursEl.textContent = hours < 10 ? '0' + hours : hours;
+            minutesEl.textContent = minutes < 10 ? '0' + minutes : minutes;
+            secondsEl.textContent = seconds < 10 ? '0' + seconds : seconds;
         }
         
         // Update countdown every second
@@ -555,38 +599,3 @@
                     userAddress = accounts[0];
                     handleWalletConnection(userAddress);
                     walletModal.style.display = 'none';
-                } catch (error) {
-                    console.error('Trust Wallet bağlantı hatası:', error);
-                    alert('Trust Wallet bağlantısı başarısız: ' + error.message);
-                }
-            } else if (window.ethereum) {
-                try {
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    userAddress = accounts[0];
-                    handleWalletConnection(userAddress);
-                    walletModal.style.display = 'none';
-                } catch (error) {
-                    console.error('Trust Wallet bağlantı hatası:', error);
-                    alert('Trust Wallet bağlantısı başarısız: ' + error.message);
-                }
-            } else {
-                alert('Trust Wallet tespit edilemedi!');
-            }
-        }
-        
-        function handleWalletConnection(address) {
-            isWalletConnected = true;
-            userAddress = address;
-            
-            connectWalletBtn.innerHTML = '<span>✔</span><span>Cüzdan Bağlı</span>';
-            walletInfo.style.display = 'block';
-            walletAddress.textContent = address;
-            buyBtn.disabled = false;
-            
-            // In a real implementation, fetch these from the blockchain
-            bnbBalance.textContent = 'Bakiye: 0.0 BNB';
-        }
-        
-        function handleWalletDisconnection() {
-            isWalletConnected = false;
- 
