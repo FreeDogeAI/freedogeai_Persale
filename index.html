@@ -33,7 +33,6 @@
             padding: 2rem;
         }
         
-        /* Header */
         .header {
             text-align: center;
             margin-bottom: 3rem;
@@ -62,7 +61,6 @@
             margin: 0 auto 2rem;
         }
         
-        /* Countdown */
         .countdown {
             display: flex;
             justify-content: center;
@@ -92,7 +90,6 @@
             text-transform: uppercase;
         }
         
-        /* Presale Section */
         .presale-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -138,7 +135,6 @@
             text-align: right;
         }
         
-        /* Purchase Section */
         .purchase-section {
             background: rgba(255,255,255,0.05);
             border-radius: 15px;
@@ -269,7 +265,6 @@
             margin: 0.5rem 0;
         }
         
-        /* Progress Bar */
         .progress-container {
             margin: 2rem 0;
         }
@@ -295,7 +290,6 @@
             transition: width 1s ease;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             .presale-container {
                 grid-template-columns: 1fr;
@@ -319,7 +313,6 @@
             }
         }
         
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -394,13 +387,12 @@
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
-            <img src="https://github.com/yourusername/yourrepo/raw/main/logo.png" alt="FreeDogeAI Logo" class="logo">
+            <!-- Replace the GitHub logo URL with a placeholder or a publicly accessible logo -->
+            <img src="https://via.placeholder.com/250x100?text=FreeDogeAI+Logo" alt="FreeDogeAI Logo" class="logo">
             <h1 class="title">FreeDogeAI</h1>
             <p class="subtitle">The Future of AI-Powered Meme Coins<br>Join the revolution with FDAI - where meme culture meets artificial intelligence</p>
             
-            <!-- Countdown -->
             <div class="countdown">
                 <div class="countdown-item">
                     <div class="countdown-value" id="days">492</div>
@@ -421,9 +413,7 @@
             </div>
         </div>
         
-        <!-- Presale Content -->
         <div class="presale-container">
-            <!-- Token Info -->
             <div class="token-info">
                 <h2>Pre-Sale Information</h2>
                 <p style="margin-bottom: 1.5rem; color: #ccc;">Don't miss your chance to be part of the FreeDogeAI revolution. Our pre-sale offers exclusive early access to FDAI tokens at a special price.</p>
@@ -459,7 +449,6 @@
                     </div>
                 </div>
                 
-                <!-- Progress Bar -->
                 <div class="progress-container">
                     <div class="progress-info">
                         <span>Progress: 35%</span>
@@ -471,7 +460,6 @@
                 </div>
             </div>
             
-            <!-- Purchase Section -->
             <div class="purchase-section">
                 <div class="wallet-connect">
                     <button class="connect-btn" id="connectWalletBtn">
@@ -487,7 +475,7 @@
                 <div class="input-group">
                     <label for="bnbAmount" class="input-label">Enter BNB Amount:</label>
                     <input type="number" id="bnbAmount" class="input-field" placeholder="0.0" step="any" min="0">
-                    <div class="calculation" id="calculationResult" style="display: none;">
+                    <div class="calculation" id="calculationResult">
                         You will receive: <span id="fdaiAmount">0</span> FDAI
                     </div>
                 </div>
@@ -503,12 +491,11 @@
         </div>
     </div>
     
-    <!-- Wallet Connection Modal -->
     <div class="modal" id="walletModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Connect Wallet</h3>
-                <button class="close-btn" id="closeModalBtn">&times;</button>
+                <button class="close-btn" id="closeModalBtn">×</button>
             </div>
             <div class="wallet-option" id="metamaskOption">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" class="wallet-icon">
@@ -549,8 +536,9 @@
         const secondsEl = document.getElementById('seconds');
         
         // State
-        let isWalletConnected = false;
+        let isWallet繋がConnected = false;
         let userAddress = '';
+        let userBnbBalance = 0;
         let userFdaiBalance = 0;
         
         // Initialize Countdown
@@ -567,34 +555,41 @@
             hoursEl.textContent = hours;
             minutesEl.textContent = minutes;
             secondsEl.textContent = seconds;
+            
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                daysEl.textContent = '0';
+                hoursEl.textContent = '0';
+                minutesEl.textContent = '0';
+                secondsEl.textContent = '0';
+            }
         }
         
-        // Update countdown every second
-        setInterval(updateCountdown, 1000);
-        updateCountdown(); // Initial call
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
         
-        // Wallet Connection
-        async function connectMetaMask() {
-            if (typeof window.ethereum === 'undefined') {
-                alert('MetaMask is not installed! Please install it first.');
-                return;
-            }
+        // Format number with commas
+        function formatNumber(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+        
+        // Calculate FDAI tokens based on BNB input
+        function calculateFdaiTokens(bnbAmount) {
+            const fdaiTokens = bnbAmount * FDAI_PER_BNB;
+            return fdaiTokens;
+        }
+        
+        // Update FDAI amount display
+        bnbAmountInput.addEventListener('input', () => {
+            const bnbAmount = parseFloat(bnbAmountInput.value) || 0;
+            const fdaiTokens = calculateFdaiTokens(bnbAmount);
+            fdaiAmount.textContent = formatNumber(fdaiTokens.toFixed(0));
+            calculationResult.style.display = bnbAmount > 0 ? 'block' : 'none';
             
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                userAddress = accounts[0];
-                handleWalletConnection(userAddress);
-                
-                // Listen for account changes
-                window.ethereum.on('accountsChanged', (newAccounts) => {
-                    if (newAccounts.length === 0) {
-                        handleWalletDisconnection();
-                    } else {
-                        userAddress = newAccounts[0];
-                        updateWalletInfo(userAddress);
-                    }
-                });
-                
-                walletModal.style.display = 'none';
-            } catch (error) {
-                console.erro
+            // Enable Buy button if wallet is connected and BNB amount is valid
+            buyBtn.disabled = !(isWalletConnected && bnbAmount > 0 && bnbAmount <= userBnbBalance);
+        });
+        
+        // Wallet Connection Logic
+        async function connectWallet(walletType) {
+            if 
