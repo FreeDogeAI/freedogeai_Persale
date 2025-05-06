@@ -1,431 +1,306 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI - The Future of AI-Powered Meme Coins</title>
+    <title>FreeDogeAI Ön Satış</title>
     <style>
         :root {
             --primary-bg: #000000;
             --secondary-bg: #121212;
-            --accent-yellow: #FFD700;
-            --accent-light: #FFF8E1;
-            --text-primary: #FFFFFF;
-            --text-secondary: #FFD700;
+            --accent: #FFD700;
+            --text: #FFFFFF;
         }
-        
         body {
+            background: var(--primary-bg);
+            color: var(--text);
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--primary-bg);
-            color: var(--text-primary);
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        header {
-            background-color: var(--secondary-bg);
-            padding: 20px 0;
-            border-bottom: 3px solid var(--accent-yellow);
-        }
-        
         .logo-container {
             text-align: center;
-            padding: 40px 0;
+            padding: 30px 0;
         }
-        
         .logo {
-            max-width: 350px;
-            height: auto;
-            filter: drop-shadow(0 0 15px var(--accent-yellow));
+            height: 120px;
+            width: auto;
         }
-        
-        .language-selector {
-            text-align: right;
-            padding: 10px 0;
-        }
-        
-        .language-btn {
-            background: none;
-            border: 1px solid var(--accent-yellow);
-            color: var(--accent-yellow);
-            padding: 5px 10px;
-            margin: 0 5px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-        
-        .language-btn:hover {
-            background-color: var(--accent-yellow);
-            color: var(--primary-bg);
-        }
-        
-        .hero {
-            text-align: center;
-            padding: 50px 0;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://i.imgur.com/JQ7y3Wn.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-        
-        h1 {
-            font-size: 3.5rem;
-            color: var(--accent-yellow);
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-        
-        h2 {
-            font-size: 2.5rem;
-            color: var(--accent-yellow);
-            margin-bottom: 30px;
-        }
-        
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .countdown-item {
-            background-color: var(--secondary-bg);
-            padding: 15px 25px;
-            border-radius: 10px;
-            border: 1px solid var(--accent-yellow);
-        }
-        
-        .countdown-number {
-            font-size: 2rem;
-            color: var(--accent-yellow);
-            font-weight: bold;
-        }
-        
-        .presale-info {
-            background-color: var(--secondary-bg);
-            padding: 40px;
-            border-radius: 15px;
-            margin: 40px 0;
-            border: 2px solid var(--accent-yellow);
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .info-card {
-            background-color: rgba(0,0,0,0.5);
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
             padding: 20px;
+        }
+        .card {
+            background: var(--secondary-bg);
+            border: 1px solid var(--accent);
             border-radius: 10px;
-            border-left: 4px solid var(--accent-yellow);
+            padding: 25px;
+            margin-bottom: 20px;
         }
-        
-        .info-card h3 {
-            color: var(--accent-yellow);
-            margin-top: 0;
-        }
-        
         .progress-container {
             width: 100%;
-            background-color: #333;
+            background: #333;
             border-radius: 10px;
-            margin: 20px 0;
-            height: 30px;
+            height: 20px;
+            margin: 15px 0;
         }
-        
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent-yellow), #FFA500);
+            background: var(--accent);
             border-radius: 10px;
             width: 0%;
-            transition: width 1s;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 10px;
-            color: var(--primary-bg);
-            font-weight: bold;
+            transition: width 0.5s;
         }
-        
-        .buy-section {
-            text-align: center;
-            padding: 40px 0;
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #222;
+            border: 1px solid var(--accent);
+            color: var(--text);
+            border-radius: 8px;
+            font-size: 16px;
         }
-        
-        .buy-btn {
-            background-color: var(--accent-yellow);
-            color: var(--primary-bg);
+        button {
+            background: var(--accent);
+            color: #000;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
+            padding: 12px 24px;
+            border-radius: 8px;
             font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 0 15px var(--accent-yellow);
-        }
-        
-        .buy-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px var(--accent-yellow);
-        }
-        
-        .contract-address {
-            background-color: var(--secondary-bg);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px auto;
-            max-width: 800px;
-            word-break: break-all;
-            border: 1px solid var(--accent-yellow);
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .social-icon {
-            width: 50px;
-            height: 50px;
-            background-color: var(--secondary-bg);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent-yellow);
-            font-size: 1.5rem;
-            transition: all 0.3s;
-            border: 1px solid var(--accent-yellow);
-        }
-        
-        .social-icon:hover {
-            background-color: var(--accent-yellow);
-            color: var(--primary-bg);
-            transform: translateY(-5px);
-        }
-        
-        .whitepaper-section {
-            text-align: center;
-            padding: 40px 0;
-        }
-        
-        .whitepaper-btn {
-            background-color: transparent;
-            color: var(--accent-yellow);
-            border: 2px solid var(--accent-yellow);
-            padding: 12px 30px;
-            font-size: 1.1rem;
-            border-radius: 5px;
             cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+            font-size: 16px;
             transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
         }
-        
-        .whitepaper-btn:hover {
-            background-color: var(--accent-yellow);
-            color: var(--primary-bg);
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 10px var(--accent);
         }
-        
-        footer {
-            background-color: var(--secondary-bg);
-            padding: 30px 0;
-            text-align: center;
-            border-top: 1px solid var(--accent-yellow);
-            margin-top: 50px;
+        .address {
+            background: #222;
+            padding: 12px;
+            border-radius: 8px;
+            word-break: break-all;
+            margin: 15px 0;
+            font-size: 14px;
+            cursor: pointer;
         }
-        
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            h2 {
-                font-size: 2rem;
-            }
-            
-            .countdown {
-                flex-wrap: wrap;
-            }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="language-selector">
-                <button class="language-btn">EN</button>
-                <button class="language-btn">TR</button>
-                <button class="language-btn">中文</button>
-                <button class="language-btn">日本語</button>
-                <button class="language-btn">РУС</button>
+    <div class="logo-container">
+        <img src="logo.png" alt="FreeDogeAI Logo" class="logo">
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Ön Satış Katılım</h2>
+            
+            <div id="walletNotConnected">
+                <p>Cüzdanınızı bağlayarak ön satışa katılabilirsiniz</p>
+                <button id="connectWalletBtn">Cüzdan Bağla</button>
+            </div>
+
+            <div id="walletConnected" class="hidden">
+                <p>Bağlı Cüzdan: <span id="walletAddress"></span></p>
+                
+                <input type="number" id="bnbAmount" placeholder="BNB Miktarı" min="0" step="0.01">
+                
+                <div>
+                    <p>Alacağınız FDAI: <span id="tokenAmount">0</span></p>
+                </div>
+                
+                <button id="buyBtn">SATIN AL</button>
             </div>
         </div>
-    </header>
-    
-    <section class="hero">
-        <div class="container">
-            <div class="logo-container">
-                <img src="freedogeai-logo.png" alt="FreeDogeAI Logo" class="logo">
-            </div>
-            <h1>FreeDogeAI</h1>
-            <h2>The Future of AI-Powered Meme Coins</h2>
-            <p>Join the revolution with FDAI - where meme culture meets artificial intelligence</p>
-            
-            <div class="countdown">
-                <div class="countdown-item">
-                    <div class="countdown-number" id="days">00</div>
-                    <div>Days</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-number" id="hours">00</div>
-                    <div>Hours</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-number" id="minutes">00</div>
-                    <div>Minutes</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-number" id="seconds">00</div>
-                    <div>Seconds</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <section class="container">
-        <div class="presale-info">
-            <h2>Pre-Sale Information</h2>
-            <p>Don't miss your chance to be part of the FreeDogeAI revolution. Our pre-sale offers exclusive early access to FDAI tokens at a special price.</p>
-            
+
+        <div class="card">
+            <h2>Ön Satış Bilgileri</h2>
             <div class="progress-container">
-                <div class="progress-bar" id="progress">0%</div>
+                <div class="progress-bar" id="progressBar"></div>
             </div>
-            
-            <div class="info-grid">
-                <div class="info-card">
-                    <h3>Token Details</h3>
-                    <p><strong>Name:</strong> FreeDogeAI</p>
-                    <p><strong>Symbol:</strong> FDAI</p>
-                    <p><strong>Total Supply:</strong> 2,000,000,000,000,000 (2 Quadrillion)</p>
-                    <p><strong>Pre-Sale Supply:</strong> 125,000,000,000,000 (125 Trillion)</p>
-                </div>
-                
-                <div class="info-card">
-                    <h3>Pricing</h3>
-                    <p><strong>1 FDAI =</strong> 0.00000000000833 BNB</p>
-                    <p><strong>1 BNB =</strong> 120,000,000,000 FDAI</p>
-                    <p><strong>Total Target:</strong> 625 BNB</p>
-                    <p><strong>No Minimum/Maximum Buy</strong></p>
-                </div>
-                
-                <div class="info-card">
-                    <h3>Official Contracts</h3>
-                    <p><strong>FDAI Token Contract:</strong></p>
-                    <p>0x8161698A74F2ea0035B9912ED60140893Ac0f39C</p>
-                    <p><strong>BNB Receiver Wallet:</strong></p>
-                    <p>0xd924e01c7d319c5b23708cd622bd1143cd4fb360</p>
-                </div>
+            <p>Toplanan: <span id="raisedBNB">0</span> / 1041.66 BNB</p>
+        </div>
+
+        <div class="card">
+            <h2>BNB Gönderim Adresi</h2>
+            <div class="address" id="receiverAddress">
+                0xd924e01c7d319c5b23708cd622bd1143cd4fb360
             </div>
+            <button onclick="copyAddress()">Adresi Kopyala</button>
         </div>
-    </section>
-    
-    <section class="buy-section">
-        <div class="container">
-            <h2>How to Participate</h2>
-            <p>Send BNB to the receiver wallet address and receive your FDAI tokens automatically</p>
-            <button class="buy-btn">BUY FDAI NOW</button>
-            
-            <div class="contract-address">
-                <strong>BNB Receiver Wallet:</strong> 0xd924e01c7d319c5b23708cd622bd1143cd4fb360
-            </div>
-        </div>
-    </section>
-    
-    <section class="whitepaper-section">
-        <div class="container">
-            <h2>Learn More About FreeDogeAI</h2>
-            <p>Download our whitepaper to understand the full vision and technology behind FDAI</p>
-            <button class="whitepaper-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M5.523 10.424c.14-.082.293-.162.459-.238a7.878 7.878 0 0 1-.45.606c-.28.337-.498.516-.635.572a.266.266 0 0 1-.035.012.282.282 0 0 1-.026-.044c-.056-.11-.054-.216.04-.36.106-.165.319-.354.647-.548zm2.455-1.647c-.119.025-.237.05-.356.078a21.035 21.035 0 0 0 .5-1.05 11.96 11.96 0 0 0 .51.858c-.217.032-.436.07-.654.114zm2.525.939a3.888 3.888 0 0 1-.435-.41c.228.005.434.022.612.054.317.057.466.147.518.209a.095.095 0 0 1 .026.064.436.436 0 0 1-.06.2.307.307 0 0 1-.094.124.107.107 0 0 1-.069.015c-.09-.003-.258-.066-.498-.256zM8.278 4.97c-.04.244-.108.524-.2.829a4.86 4.86 0 0 1-.089-.346c-.076-.353-.087-.63-.046-.822.038-.177.11-.248.196-.283a.517.517 0 0 1 .145-.04c.013.03.028.092.032.198.005.122-.007.277-.038.465z"/>
-                    <path fill-rule="evenodd" d="M4 0h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm.165 11.668c.09.18.23.343.438.419.207.075.412.04.58-.03.318-.13.635-.436.926-.786.333-.401.683-.927 1.021-1.51a11.64 11.64 0 0 1 1.997-.406c.3.383.61.713.91.95.28.22.603.403.934.417a.856.856 0 0 0 .51-.138c.155-.101.27-.247.354-.416.09-.181.145-.37.138-.563a.844.844 0 0 0-.2-.518c-.226-.27-.596-.4-.96-.465a5.76 5.76 0 0 0-1.335-.05 10.954 10.954 0 0 1-.98-1.686c.25-.66.437-1.284.52-1.794.036-.218.055-.426.048-.614a1.238 1.238 0 0 0-.127-.538.7.7 0 0 0-.477-.365c-.202-.043-.41 0-.601.077-.377.15-.576.47-.651.823-.073.34-.04.736.046 1.136.088.406.238.848.43 1.295a19.707 19.707 0 0 1-1.062 2.227 7.662 7.662 0 0 0-1.482.645c-.37.22-.699.48-.897.787-.21.326-.275.714-.08 1.103z"/>
-                </svg>
-                DOWNLOAD WHITEPAPER (FreeDogeAI_Whitepaper.pdf)
-            </button>
-        </div>
-    </section>
-    
-    <section class="container">
-        <div class="social-links">
-            <a href="https://t.me/freedogeaiFDAI" class="social-icon">TG</a>
-            <a href="https://x.com/FreeDogeAI_FDAI?t=fCPod6nzGGLShFrr_EmW7Q&s=09" class="social-icon">X</a>
-            <a href="https://freedogeai.com" class="social-icon">WEB</a>
-        </div>
-    </section>
-    
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 FreeDogeAI. All rights reserved.</p>
-            <p>The future of AI-powered meme coins is here.</p>
-        </div>
-    </footer>
-    
+    </div>
+
     <script>
-        // Countdown Timer
-        function updateCountdown() {
-            const endDate = new Date("2023-12-31T23:59:59").getTime();
-            const now = new Date().getTime();
-            const distance = endDate - now;
-            
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
-            document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
-            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
-            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
-        }
+        // Sabitler
+        const TOKENS_PER_BNB = 120000000000; // 1 BNB = 120 milyar FDAI
+        const PRESALE_TARGET_BNB = 1041.66;
+        const RECEIVER_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
         
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-        
-        // Progress Bar Simulation (replace with real data)
-        let progress = 0;
-        const progressBar = document.getElementById("progress");
-        const progressInterval = setInterval(() => {
-            progress += Math.random() * 5;
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(progressInterval);
+        // DOM Elementleri
+        const connectWalletBtn = document.getElementById('connectWalletBtn');
+        const walletNotConnected = document.getElementById('walletNotConnected');
+        const walletConnected = document.getElementById('walletConnected');
+        const walletAddress = document.getElementById('walletAddress');
+        const bnbAmountInput = document.getElementById('bnbAmount');
+        const tokenAmount = document.getElementById('tokenAmount');
+        const buyBtn = document.getElementById('buyBtn');
+        const progressBar = document.getElementById('progressBar');
+        const raisedBNB = document.getElementById('raisedBNB');
+        const receiverAddress = document.getElementById('receiverAddress');
+
+        // Cüzdan Bağlama
+        async function connectWallet() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    
+                    if (accounts.length > 0) {
+                        // Cüzdan bağlandı
+                        const address = accounts[0];
+                        const shortenedAddress = `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+                        
+                        walletAddress.textContent = shortenedAddress;
+                        walletNotConnected.classList.add('hidden');
+                        walletConnected.classList.remove('hidden');
+                        
+                        // BNB miktarı değiştiğinde token hesapla
+                        bnbAmountInput.addEventListener('input', calculateTokens);
+                        
+                        // Wallet events
+                        window.ethereum.on('accountsChanged', (newAccounts) => {
+                            if (newAccounts.length === 0) {
+                                // Cüzdan bağlantısı kesildi
+                                disconnectWallet();
+                            } else {
+                                // Cüzdan değişti
+                                const newAddress = newAccounts[0];
+                                const newShortenedAddress = `${newAddress.substring(0, 6)}...${newAddress.substring(newAddress.length - 4)}`;
+                                walletAddress.textContent = newShortenedAddress;
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error("Cüzdan bağlanırken hata:", error);
+                    alert(`Cüzdan bağlanırken hata: ${error.message}`);
+                }
+            } else {
+                // MetaMask yüklü değil
+                alert("Lütfen MetaMask veya Trust Wallet gibi bir cüzdan uygulaması yükleyin!");
+                window.open("https://metamask.io/download.html", "_blank");
             }
-            progressBar.style.width = progress + "%";
-            progressBar.innerHTML = Math.floor(progress) + "%";
-        }, 1000);
-        
-        // Language Selector (basic implementation)
-        const languageBtns = document.querySelectorAll(".language-btn");
-        languageBtns.forEach(btn => {
-            btn.addEventListener("click", () => {
-                // In a real implementation, this would change the page language
-                alert("Language changed to " + btn.textContent);
+        }
+
+        function disconnectWallet() {
+            walletNotConnected.classList.remove('hidden');
+            walletConnected.classList.add('hidden');
+            bnbAmountInput.value = '';
+            tokenAmount.textContent = '0';
+        }
+
+        // Token Hesaplama
+        function calculateTokens() {
+            const bnbAmount = parseFloat(bnbAmountInput.value);
+            
+            if (!isNaN(bnbAmount) && bnbAmount > 0) {
+                const tokens = bnbAmount * TOKENS_PER_BNB;
+                tokenAmount.textContent = tokens.toLocaleString('en-US');
+            } else {
+                tokenAmount.textContent = '0';
+            }
+        }
+
+        // Satın Alma İşlemi
+        async function buyTokens() {
+            const bnbAmount = parseFloat(bnbAmountInput.value);
+            
+            if (isNaN(bnbAmount) {
+                alert("Lütfen geçerli bir BNB miktarı girin!");
+                return;
+            }
+            
+            if (bnbAmount <= 0) {
+                alert("BNB miktarı 0'dan büyük olmalıdır!");
+                return;
+            }
+            
+            try {
+                // BNB miktarını wei'ye çevir
+                const weiAmount = (bnbAmount * 1e18).toString(16);
+                
+                // Transaction gönder
+                const txHash = await window.ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params: [{
+                        from: (await window.ethereum.request({ method: 'eth_accounts' }))[0],
+                        to: RECEIVER_ADDRESS,
+                        value: `0x${weiAmount}`,
+                        gas: '50000'
+                    }]
+                });
+                
+                alert(`İşlem başarıyla gönderildi!\nİşlem Hash: ${txHash}\n\nFDAI token'ları otomatik olarak cüzdanınıza gönderilecektir.`);
+                
+                // Satış istatistiklerini güncelle (gerçekte backend'den alınmalı)
+                updateProgress(bnbAmount);
+                
+            } catch (error) {
+                console.error("Satın alma işleminde hata:", error);
+                alert(`Satın alma işleminde hata: ${error.message}`);
+            }
+        }
+
+        // İlerleme çubuğunu güncelle
+        let totalRaised = 0;
+        function updateProgress(amount) {
+            totalRaised += amount;
+            const progress = (totalRaised / PRESALE_TARGET_BNB) * 100;
+            
+            progressBar.style.width = `${Math.min(progress, 100)}%`;
+            raisedBNB.textContent = totalRaised.toFixed(2);
+        }
+
+        // Adres kopyalama
+        function copyAddress() {
+            navigator.clipboard.writeText(RECEIVER_ADDRESS).then(() => {
+                alert("BNB gönderim adresi kopyalandı!");
+            }).catch(err => {
+                console.error("Adres kopyalanırken hata:", err);
             });
+        }
+
+        // Otomatik cüzdan bağlama denemesi
+        window.addEventListener('load', async () => {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                    if (accounts.length > 0) {
+                        connectWallet();
+                    }
+                } catch (error) {
+                    console.error("Otomatik bağlantı hatası:", error);
+                }
+            }
+            
+            // Simüle edilmiş satış verileri (gerçekte backend'den alınmalı)
+            setInterval(() => {
+                if (totalRaised < PRESALE_TARGET_BNB) {
+                    const randomAmount = Math.random() * 5;
+                    updateProgress(randomAmount);
+                }
+            }, 5000);
         });
+
+        // Event Listeners
+        connectWalletBtn.addEventListener('click', connectWallet);
+        buyBtn.addEventListener('click', buyTokens);
+        receiverAddress.addEventListener('click', copyAddress);
     </script>
 </body>
 </html>
