@@ -1,305 +1,167 @@
-// Main JavaScript for FreeDogeAI Pre-Sale Website
-document.addEventListener('DOMContentLoaded', function() {
-    // ========== COUNTDOWN TIMER ==========
-    const countdownDate = new Date();
-    countdownDate.setDate(countdownDate.getDate() + 30); // Set 30 days from now
-    
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = countdownDate - now;
-        
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-        document.getElementById("days").textContent = days.toString().padStart(2, '0');
-        document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
-        document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
-        document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
-        
-        if (distance < 0) {
-            clearInterval(countdownInterval);
-            document.querySelector(".countdown").innerHTML = "<div class='countdown-ended'>PRÉVENTE TERMINÉE!</div>";
-        }
+const translations = {
+    en: {
+        presale_title: "Presale Ends Soon",
+        presale_desc: "Don't miss your chance to join FreeDogeAI! Buy FDAI tokens now.",
+        connect_wallet: "Connect Wallet",
+        wallet_address: "Wallet Address",
+        bnb_balance: "BNB Balance",
+        purchased_amount: "Purchased FDAI",
+        select_wallet: "Select Wallet",
+        metamask: "MetaMask",
+        trust_wallet: "Trust Wallet",
+        close: "Close",
+        buy_tokens: "Buy FDAI Tokens",
+        bnb_amount: "Enter BNB Amount",
+        receive_fdai: "You will receive <span id='fdaiAmount'>0</span> FDAI",
+        your_tokens: "Your Tokens",
+        you_own: "You Own",
+        token_note: "Your tokens will be reflected in your wallet after the presale ends.",
+        whitepaper: "Whitepaper",
+        download_whitepaper: "Download Whitepaper",
+        community: "Join Our Community",
+        community_desc: "Stay updated and connected with the FreeDogeAI community",
+        telegram: "Telegram",
+        twitter: "Twitter",
+        error_connect: "Wallet connection failed!",
+        install_metamask: "Please install MetaMask or another Web3 wallet!",
+        invalid_amount: "Enter a valid BNB amount!",
+        success: "Purchase successful! FDAI tokens will be reflected in your wallet after the presale.",
+        error_transaction: "Transaction failed"
+    },
+    tr: {
+        presale_title: "Ön Satış Yakında Bitiyor",
+        presale_desc: "FreeDogeAI'a katılma şansınızı kaçırmayın! FDAI tokenlarını şimdi satın alın.",
+        connect_wallet: "Cüzdanı Bağla",
+        wallet_address: "Cüzdan Adresi",
+        bnb_balance: "BNB Bakiyesi",
+        purchased_amount: "Satın Alınan FDAI",
+        select_wallet: "Cüzdan Seç",
+        metamask: "MetaMask",
+        trust_wallet: "Trust Wallet",
+        close: "Kapat",
+        buy_tokens: "FDAI Token Satın Al",
+        bnb_amount: "BNB Miktarı Girin",
+        receive_fdai: "Alacağınız miktar: <span id='fdaiAmount'>0</span> FDAI",
+        your_tokens: "Tokenlarınız",
+        you_own: "Sahip Olduğunuz",
+        token_note: "Tokenlarınız ön satış sona erdikten sonra cüzdanınıza yansıyacaktır.",
+        whitepaper: "Beyaz Kitap",
+        download_whitepaper: "Beyaz Kitabı İndir",
+        community: "Topluluğumuza Katılın",
+        community_desc: "FreeDogeAI topluluğu ile güncel kalın ve bağlantıda olun",
+        telegram: "Telegram",
+        twitter: "Twitter",
+        error_connect: "Cüzdan bağlantısı başarısız!",
+        install_metamask: "Lütfen MetaMask veya başka bir Web3 cüzdanı yükleyin!",
+        invalid_amount: "Geçerli bir BNB miktarı girin!",
+        success: "Satın alma başarılı! FDAI tokenlar ön satış sonrası cüzdanınıza yansıyacak.",
+        error_transaction: "İşlem başarısız"
+    },
+    ja: {
+        presale_title: "プレセールが間もなく終了します",
+        presale_desc: "FreeDogeAIに参加するチャンスを逃さないで！今すぐFDAIトークンを購入してください。",
+        connect_wallet: "ウォレットを接続",
+        wallet_address: "ウォレットアドレス",
+        bnb_balance: "BNB残高",
+        purchased_amount: "購入済みFDAI",
+        select_wallet: "ウォレットを選択",
+        metamask: "MetaMask",
+        trust_wallet: "Trust Wallet",
+        close: "閉じる",
+        buy_tokens: "FDAIトークンを購入",
+        bnb_amount: "BNB数量を入力",
+        receive_fdai: "受け取るFDAI: <span id='fdaiAmount'>0</span> FDAI",
+        your_tokens: "あなたのトークン",
+        you_own: "所有トークン",
+        token_note: "トークンはプレセール終了後にウォレットに反映されます。",
+        whitepaper: "ホワイトペーパー",
+        download_whitepaper: "ホワイトペーパーをダウンロード",
+        community: "コミュニティに参加",
+        community_desc: "FreeDogeAIコミュニティで最新情報を入手し、つながりを保ちましょう",
+        telegram: "Telegram",
+        twitter: "Twitter",
+        error_connect: "ウォレット接続に失敗しました！",
+        install_metamask: "MetaMaskまたは他のWeb3ウォレットをインストールしてください！",
+        invalid_amount: "有効なBNB数量を入力してください！",
+        success: "購入成功！FDAIトークンはプレセール後にウォレットに反映されます。",
+        error_transaction: "取引に失敗しました"
+    },
+    zh: {
+        presale_title: "预售即将结束",
+        presale_desc: "不要错过加入FreeDogeAI的机会！现在购买FDAI代币。",
+        connect_wallet: "连接钱包",
+        wallet_address: "钱包地址",
+        bnb_balance: "BNB余额",
+        purchased_amount: "已购买FDAI",
+        select_wallet: "选择钱包",
+        metamask: "MetaMask",
+        trust_wallet: "Trust Wallet",
+        close: "关闭",
+        buy_tokens: "购买FDAI代币",
+        bnb_amount: "输入BNB数量",
+        receive_fdai: "您将收到 <span id='fdaiAmount'>0</span> FDAI",
+        your_tokens: "您的代币",
+        you_own: "您拥有",
+        token_note: "您的代币将在预售结束后反映在您的钱包中。",
+        whitepaper: "白皮书",
+        download_whitepaper: "下载白皮书",
+        community: "加入我们的社区",
+        community_desc: "与FreeDogeAI社区保持更新和联系",
+        telegram: "Telegram",
+        twitter: "Twitter",
+        error_connect: "钱包连接失败！",
+        install_metamask: "请安装MetaMask或其他Web3钱包！",
+        invalid_amount: "请输入有效的BNB数量！",
+        success: "购买成功！FDAI代币将在预售后反映在您的钱包中。",
+        error_transaction: "交易失败"
+    },
+    ru: {
+        presale_title: "Предпродажа скоро закончится",
+        presale_desc: "Не упустите шанс присоединиться к FreeDogeAI! Покупайте токены FDAI прямо сейчас.",
+        connect_wallet: "Подключить кошелек",
+        wallet_address: "Адрес кошелька",
+        bnb_balance: "Баланс BNB",
+        purchased_amount: "Купленные FDAI",
+        select_wallet: "Выберите кошелек",
+        metamask: "MetaMask",
+        trust_wallet: "Trust Wallet",
+        close: "Закрыть",
+        buy_tokens: "Купить токены FDAI",
+        bnb_amount: "Введите сумму BNB",
+        receive_fdai: "Вы получите <span id='fdaiAmount'>0</span> FDAI",
+        your_tokens: "Ваши токены",
+        you_own: "У вас есть",
+        token_note: "Ваши токены будут отражены в вашем кошельке после окончания предпродажи.",
+        whitepaper: "Белая книга",
+        download_whitepaper: "Скачать белую книгу",
+        community: "Присоединяйтесь к нашему сообществу",
+        community_desc: "Оставайтесь в курсе и на связи с сообществом FreeDogeAI",
+        telegram: "Telegram",
+        twitter: "Twitter",
+        error_connect: "Ошибка подключения кошелька!",
+        install_metamask: "Пожалуйста, установите MetaMask или другой кошелек Web3!",
+        invalid_amount: "Введите действительное количество BNB!",
+        success: "Покупка успешна! Токены FDAI появятся в вашем кошельке после предпродажи.",
+        error_transaction: "Ошибка транзакции"
     }
-    
-    const countdownInterval = setInterval(updateCountdown, 1000);
-    updateCountdown();
+};
 
-    // ========== PROGRESS BAR ==========
-    let currentProgress = 0;
-    const targetBNB = 625;
-    let raisedBNB = 125; // Example starting value - replace with real data
-    
-    function updateProgressBar() {
-        // In a real implementation, you would fetch this from your backend
-        raisedBNB += Math.random() * 5; // Simulate progress - remove in production
-        
-        if (raisedBNB > targetBNB) raisedBNB = targetBNB;
-        currentProgress = (raisedBNB / targetBNB) * 100;
-        
-        const progressBar = document.getElementById("progress");
-        progressBar.style.width = currentProgress + "%";
-        progressBar.textContent = Math.round(currentProgress) + "%";
-        
-        // Update raised amount display
-        document.getElementById("raised-bnb").textContent = raisedBNB.toFixed(2);
-        document.getElementById("target-bnb").textContent = targetBNB;
-        
-        // Calculate remaining time based on progress rate (simulation)
-        const remainingBNB = targetBNB - raisedBNB;
-        if (remainingBNB > 0 && currentProgress > 0) {
-            const rate = raisedBNB / (30 - (countdownDate - new Date()) / (1000 * 60 * 60 * 24));
-            const daysRemaining = remainingBNB / rate;
-            document.getElementById("time-remaining").textContent = Math.ceil(daysRemaining) + " jours";
-        }
-    }
-    
-    setInterval(updateProgressBar, 5000);
-    updateProgressBar();
-
-    // ========== TOKEN CALCULATOR ==========
-    const tokenPrice = 0.00000000000833; // 1 FDAI = 0.00000000000833 BNB
-    const tokensPerBNB = 120000000000; // 1 BNB = 120,000,000,000 FDAI
-    
-    document.getElementById("bnb-amount").addEventListener("input", function() {
-        const bnbAmount = parseFloat(this.value) || 0;
-        const tokensReceived = bnbAmount * tokensPerBNB;
-        
-        document.getElementById("tokens-received").value = tokensReceived.toLocaleString('fr-FR');
-        
-        // Update USD equivalent (example conversion rate)
-        const bnbToUsdRate = 300; // Example rate - fetch real rate in production
-        const usdAmount = bnbAmount * bnbToUsdRate;
-        document.getElementById("usd-equivalent").textContent = usdAmount.toLocaleString('fr-FR', {
-            style: 'currency',
-            currency: 'USD'
-        });
-    });
-
-    // ========== LANGUAGE SELECTOR ==========
-    const languageBtns = document.querySelectorAll(".language-btn");
-    
-    languageBtns.forEach(btn => {
-        btn.addEventListener("click", function() {
-            // Remove active class from all buttons
-            languageBtns.forEach(b => b.classList.remove("active"));
-            
-            // Add active class to clicked button
-            this.classList.add("active");
-            
-            // In a real implementation, you would load translations here
-            const lang = this.dataset.lang;
-            alert("Changement de langue vers: " + lang);
-            
-            // Example of how you might handle translations
-            // loadTranslations(lang);
-        });
-    });
-
-    // ========== COPY CONTRACT ADDRESS ==========
-    const contractAddresses = document.querySelectorAll(".contract-address");
-    
-    contractAddresses.forEach(address => {
-        address.addEventListener("click", function() {
-            const textToCopy = this.textContent.trim();
-            
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const originalText = this.textContent;
-                this.textContent = "Copié!";
-                
-                setTimeout(() => {
-                    this.textContent = originalText;
-                }, 2000);
-            });
-        });
-    });
-
-    // ========== CONNECT WALLET ==========
-    document.getElementById("connect-wallet").addEventListener("click", async function() {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                const walletAddress = accounts[0];
-                
-                // Shorten address for display
-                const shortenedAddress = walletAddress.substring(0, 6) + "..." + walletAddress.substring(walletAddress.length - 4);
-                this.textContent = shortenedAddress;
-                this.classList.add("connected");
-                
-                // Enable buy button
-                document.getElementById("buy-btn").disabled = false;
-                
-            } catch (error) {
-                console.error("Erreur de connexion:", error);
-                alert("Erreur de connexion au wallet: " + error.message);
-            }
+function changeLang(lang) {
+    document.querySelectorAll('[data-lang]').forEach(element => {
+        const key = element.getAttribute('data-lang');
+        if (key === 'receive_fdai') {
+            const amount = document.getElementById('fdaiAmount').textContent;
+            element.innerHTML = translations[lang][key].replace('<span id="fdaiAmount">0</span>', `<span id="fdaiAmount">${amount}</span>`);
         } else {
-            alert("Veuillez installer MetaMask ou un wallet compatible!");
+            element.textContent = translations[lang][key] || element.textContent;
         }
     });
+    document.documentElement.lang = lang;
+    localStorage.setItem('lang', lang);
+}
 
-    // ========== BUY BUTTON FUNCTIONALITY ==========
-    document.getElementById("buy-btn").addEventListener("click", async function() {
-        const bnbAmount = parseFloat(document.getElementById("bnb-amount").value);
-        
-        if (!bnbAmount || bnbAmount <= 0) {
-            alert("Veuillez entrer un montant valide");
-            return;
-        }
-        
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                // Convert BNB amount to wei
-                const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
-                
-                // Send transaction
-                const txHash = await window.ethereum.request({
-                    method: 'eth_sendTransaction',
-                    params: [{
-                        from: (await window.ethereum.request({ method: 'eth_accounts' }))[0],
-                        to: '0xd924e01c7d319c5b23708cd622bd1143cd4fb360', // Your BNB receiver address
-                        value: weiAmount,
-                    }]
-                });
-                
-                alert(`Transaction envoyée! Hash: ${txHash}\nVous recevrez vos tokens FDAI automatiquement.`);
-                
-            } catch (error) {
-                console.error("Erreur de transaction:", error);
-                alert("Erreur de transaction: " + error.message);
-            }
-        } else {
-            alert("Wallet non détecté! Veuillez vous connecter d'abord.");
-        }
-    });
-
-    // ========== ANIMATIONS ==========
-    // Logo animation
-    const logo = document.querySelector(".logo");
-    if (logo) {
-        logo.addEventListener("mouseover", () => {
-            logo.style.transform = "scale(1.05) rotate(-5deg)";
-            logo.style.filter = "drop-shadow(0 0 20px var(--or))";
-        });
-        
-        logo.addEventListener("mouseout", () => {
-            logo.style.transform = "scale(1)";
-            logo.style.filter = "drop-shadow(0 0 15px var(--or))";
-        });
-    }
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    // ========== REAL-TIME UPDATES ==========
-    // This would be replaced with actual Web3 or API calls in production
-    function fetchRealTimeData() {
-        // Simulate fetching token price
-        const priceVariation = (Math.random() * 0.2) - 0.1; // -10% to +10%
-        const currentPrice = tokenPrice * (1 + priceVariation);
-        
-        document.getElementById("current-price").textContent = currentPrice.toExponential(2);
-        document.getElementById("price-change").textContent = (priceVariation * 100).toFixed(2) + "%";
-        
-        // Color code the change
-        const priceChangeElement = document.getElementById("price-change");
-        if (priceVariation > 0) {
-            priceChangeElement.style.color = "#4CAF50"; // Green
-            priceChangeElement.textContent = "+" + priceChangeElement.textContent;
-        } else {
-            priceChangeElement.style.color = "#F44336"; // Red
-        }
-    }
-    
-    setInterval(fetchRealTimeData, 10000);
-    fetchRealTimeData();
-
-    // ========== MOBILE MENU ==========
-    const mobileMenuButton = document.getElementById("mobile-menu-button");
-    const mobileMenu = document.getElementById("mobile-menu");
-    
-    if (mobileMenuButton && mobileMenu) {
-        mobileMenuButton.addEventListener("click", function() {
-            mobileMenu.classList.toggle("hidden");
-        });
-    }
+window.addEventListener('load', () => {
+    const savedLang = localStorage.getItem('lang') || 'en';
+    changeLang(savedLang);
+    document.querySelector('.lang-toggle select').value = savedLang;
 });
-
-// ========== WEB3 INTEGRATION ==========
-// Check if Web3 is injected (MetaMask)
-if (typeof window.ethereum !== 'undefined') {
-    console.log('MetaMask est installé!');
-    
-    // Handle chain changes
-    window.ethereum.on('chainChanged', (chainId) => {
-        // Handle the new chain
-        console.log('Chain changed:', chainId);
-        window.location.reload();
-    });
-    
-    // Handle account changes
-    window.ethereum.on('accountsChanged', (accounts) => {
-        console.log('Account changed:', accounts);
-        if (accounts.length === 0) {
-            // Wallet disconnected
-            document.getElementById("connect-wallet").textContent = "Connecter Wallet";
-            document.getElementById("connect-wallet").classList.remove("connected");
-            document.getElementById("buy-btn").disabled = true;
-        } else {
-            // Wallet changed
-            const shortenedAddress = accounts[0].substring(0, 6) + "..." + accounts[0].substring(accounts[0].length - 4);
-            document.getElementById("connect-wallet").textContent = shortenedAddress;
-        }
-    });
-} else {
-    console.log('MetaMask non détecté');
-    document.getElementById("connect-wallet").textContent = "Installer MetaMask";
-    document.getElementById("connect-wallet").addEventListener("click", function() {
-        window.open("https://metamask.io/download.html", "_blank");
-    });
-}
-
-// ========== LOAD TRANSLATIONS ==========
-// This would be expanded with actual translation files
-function loadTranslations(lang) {
-    const translations = {
-        'en': {
-            'presale-title': "FreeDogeAI Pre-Sale",
-            'connect-wallet': "Connect Wallet"
-        },
-        'fr': {
-            'presale-title': "Prévente FreeDogeAI",
-            'connect-wallet': "Connecter Wallet"
-        },
-        // Add other languages...
-    };
-    
-    if (translations[lang]) {
-        Object.keys(translations[lang]).forEach(key => {
-            const elements = document.querySelectorAll(`[data-translate="${key}"]`);
-            elements.forEach(el => {
-                el.textContent = translations[lang][key];
-            });
-        });
-    }
-}
-
-// ========== INITIALIZE TOOLTIPS ==========
-// Initialize tooltips using Tippy.js (you would need to include the library)
-if (typeof tippy !== 'undefined') {
-    tippy('[data-tippy-content]', {
-        placement: 'top',
-        animation: 'scale',
-        duration: 200,
-        arrow: true
-    });
-                    }
