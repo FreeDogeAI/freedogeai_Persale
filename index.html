@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI Presale</title>
+    <title>FreeDogeAI Ön Satış</title>
     <style>
         :root {
             --primary: #25D366;
@@ -40,7 +40,7 @@
         }
         
         .logo {
-            max-width: 250px;
+            max-width: 150px; /* Logoyu küçük yaptım */
             margin-bottom: 1.5rem;
             filter: drop-shadow(0 0 10px rgba(37, 211, 102, 0.3));
         }
@@ -290,6 +290,29 @@
             transition: width 1s ease;
         }
         
+        /* Wallpaper İndirme Butonu Stili */
+        .wallpaper-section {
+            text-align: center;
+            margin: 3rem 0;
+        }
+        
+        .wallpaper-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .wallpaper-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        
         @media (max-width: 768px) {
             .presale-container {
                 grid-template-columns: 1fr;
@@ -388,51 +411,51 @@
 <body>
     <div class="container">
         <div class="header">
-            <!-- Replace the GitHub logo URL with a placeholder or a publicly accessible logo -->
-            <img src="https://via.placeholder.com/250x100?text=FreeDogeAI+Logo" alt="FreeDogeAI Logo" class="logo">
+            <!-- Logoyu küçük ve ortada yaptım. Senin GitHub'a yüklediğin logonun raw URL'sini buraya koy -->
+            <img src="https://via.placeholder.com/150x50?text=FreeDogeAI+Logo" alt="FreeDogeAI Logo" class="logo">
             <h1 class="title">FreeDogeAI</h1>
-            <p class="subtitle">The Future of AI-Powered Meme Coins<br>Join the revolution with FDAI - where meme culture meets artificial intelligence</p>
+            <p class="subtitle">Yapay Zeka Destekli Meme Coin’lerin Geleceği<br>FDAI ile devrime katıl - meme kültürü yapay zekayla buluşuyor</p>
             
             <div class="countdown">
                 <div class="countdown-item">
-                    <div class="countdown-value" id="days">492</div>
-                    <div class="countdown-label">Days</div>
+                    <div class="countdown-value" id="days">90</div>
+                    <div class="countdown-label">Gün</div>
                 </div>
                 <div class="countdown-item">
-                    <div class="countdown-value" id="hours">14</div>
-                    <div class="countdown-label">Hours</div>
+                    <div class="countdown-value" id="hours">0</div>
+                    <div class="countdown-label">Saat</div>
                 </div>
                 <div class="countdown-item">
-                    <div class="countdown-value" id="minutes">54</div>
-                    <div class="countdown-label">Minutes</div>
+                    <div class="countdown-value" id="minutes">0</div>
+                    <div class="countdown-label">Dakika</div>
                 </div>
                 <div class="countdown-item">
-                    <div class="countdown-value" id="seconds">19</div>
-                    <div class="countdown-label">Seconds</div>
+                    <div class="countdown-value" id="seconds">0</div>
+                    <div class="countdown-label">Saniye</div>
                 </div>
             </div>
         </div>
         
         <div class="presale-container">
             <div class="token-info">
-                <h2>Pre-Sale Information</h2>
-                <p style="margin-bottom: 1.5rem; color: #ccc;">Don't miss your chance to be part of the FreeDogeAI revolution. Our pre-sale offers exclusive early access to FDAI tokens at a special price.</p>
+                <h2>Ön Satış Bilgileri</h2>
+                <p style="margin-bottom: 1.5rem; color: #ccc;">FreeDogeAI devriminin bir parçası olma şansını kaçırmayın. Ön satışımız FDAI token’larına özel bir fiyata erken erişim sunuyor.</p>
                 
                 <div class="token-details">
                     <div class="token-row">
-                        <span class="token-label">Name:</span>
+                        <span class="token-label">İsim:</span>
                         <span class="token-value">FreeDogeAI</span>
                     </div>
                     <div class="token-row">
-                        <span class="token-label">Symbol:</span>
+                        <span class="token-label">Sembol:</span>
                         <span class="token-value">FDAI</span>
                     </div>
                     <div class="token-row">
-                        <span class="token-label">Total Supply:</span>
+                        <span class="token-label">Toplam Arz:</span>
                         <span class="token-value">2,000,000,000,000,000</span>
                     </div>
                     <div class="token-row">
-                        <span class="token-label">Pre-Sale Supply:</span>
+                        <span class="token-label">Ön Satış Arzı:</span>
                         <span class="token-value">125,000,000,000,000</span>
                     </div>
                     <div class="token-row">
@@ -444,15 +467,15 @@
                         <span class="token-value">120,000,000,000 FDAI</span>
                     </div>
                     <div class="token-row">
-                        <span class="token-label">Total Target:</span>
+                        <span class="token-label">Toplam Hedef:</span>
                         <span class="token-value">625 BNB</span>
                     </div>
                 </div>
                 
                 <div class="progress-container">
                     <div class="progress-info">
-                        <span>Progress: 35%</span>
-                        <span>Raised: 218.75 BNB / 625 BNB</span>
+                        <span>İlerleme: 35%</span>
+                        <span>Toplanan: 218.75 BNB / 625 BNB</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 35%;"></div>
@@ -464,7 +487,7 @@
                 <div class="wallet-connect">
                     <button class="connect-btn" id="connectWalletBtn">
                         <span>🔗</span>
-                        <span>Connect Wallet</span>
+                        <span>Cüzdan Bağla</span>
                     </button>
                     <div class="wallet-info" id="walletInfo">
                         <div class="wallet-address" id="walletAddress"></div>
@@ -473,28 +496,33 @@
                 </div>
                 
                 <div class="input-group">
-                    <label for="bnbAmount" class="input-label">Enter BNB Amount:</label>
+                    <label for="bnbAmount" class="input-label">BNB Miktarı Girin:</label>
                     <input type="number" id="bnbAmount" class="input-field" placeholder="0.0" step="any" min="0">
                     <div class="calculation" id="calculationResult">
-                        You will receive: <span id="fdaiAmount">0</span> FDAI
+                        Alacağınız: <span id="fdaiAmount">0</span> FDAI
                     </div>
                 </div>
                 
-                <button class="buy-btn" id="buyBtn" disabled>Buy FDAI Tokens</button>
+                <button class="buy-btn" id="buyBtn" disabled>FDAI Token Satın Al</button>
                 
                 <div class="token-ownership" id="tokenOwnership">
-                    <p>You Own:</p>
+                    <p>Sahip Olduğunuz:</p>
                     <div class="token-amount" id="ownedTokens">0 FDAI</div>
-                    <p style="color: #aaa; font-size: 0.9rem;">Your tokens will be reflected in your wallet after the presale ends.</p>
+                    <p style="color: #aaa; font-size: 0.9rem;">Token’larınız ön satış sona erdikten sonra hesabınıza yansıtılacak.</p>
                 </div>
             </div>
+        </div>
+        
+        <!-- Wallpaper İndirme Bölümü -->
+        <div class="wallpaper-section">
+            <button class="wallpaper-btn" id="downloadWallpaperBtn">Topluluk Wallpaper’ını İndir</button>
         </div>
     </div>
     
     <div class="modal" id="walletModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Connect Wallet</h3>
+                <h3 class="modal-title">Cüzdan Bağla</h3>
                 <button class="close-btn" id="closeModalBtn">×</button>
             </div>
             <div class="wallet-option" id="metamaskOption">
@@ -509,11 +537,14 @@
     </div>
 
     <script>
-        // Constants
-        const FDAI_PER_BNB = 120000000000; // 120 billion FDAI per 1 BNB
-        const PRESALE_END_DATE = new Date('2025-12-31T23:59:59').getTime();
+        // Sabitler
+        const FDAI_PER_BNB = 120000000000; // 1 BNB = 120 milyar FDAI
+        const PRESALE_DURATION = 90 * 24 * 60 * 60 * 1000; // 90 gün (milisaniye cinsinden)
         
-        // DOM Elements
+        // Senin BNB adresin (örnek olarak koydum, kendi adresini buraya yaz)
+        const OWNER_BNB_ADDRESS = "0x1234567890abcdef1234567890abcdef12345678";
+        
+        // DOM Elemanları
         const connectWalletBtn = document.getElementById('connectWalletBtn');
         const walletInfo = document.getElementById('walletInfo');
         const walletAddress = document.getElementById('walletAddress');
@@ -528,23 +559,32 @@
         const closeModalBtn = document.getElementById('closeModalBtn');
         const metamaskOption = document.getElementById('metamaskOption');
         const trustwalletOption = document.getElementById('trustwalletOption');
+        const downloadWallpaperBtn = document.getElementById('downloadWallpaperBtn');
         
-        // Countdown Elements
+        // Geri Sayım Elemanları
         const daysEl = document.getElementById('days');
         const hoursEl = document.getElementById('hours');
         const minutesEl = document.getElementById('minutes');
         const secondsEl = document.getElementById('seconds');
         
-        // State
-        let isWallet繋がConnected = false;
+        // Durum
+        let isWalletConnected = false;
         let userAddress = '';
         let userBnbBalance = 0;
         let userFdaiBalance = 0;
         
-        // Initialize Countdown
+        // Geri Sayım Başlangıç Zamanını localStorage'dan Al veya Ayar Yap
+        let presaleStartTime = localStorage.getItem('presaleStartTime');
+        if (!presaleStartTime) {
+            presaleStartTime = new Date().getTime();
+            localStorage.setItem('presaleStartTime', presaleStartTime);
+        }
+        const presaleEndTime = parseInt(presaleStartTime) + PRESALE_DURATION;
+        
+        // Geri Sayımı Güncelle
         function updateCountdown() {
             const now = new Date().getTime();
-            const distance = PRESALE_END_DATE - now;
+            const distance = presaleEndTime - now;
             
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -553,43 +593,4 @@
             
             daysEl.textContent = days;
             hoursEl.textContent = hours;
-            minutesEl.textContent = minutes;
-            secondsEl.textContent = seconds;
-            
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                daysEl.textContent = '0';
-                hoursEl.textContent = '0';
-                minutesEl.textContent = '0';
-                secondsEl.textContent = '0';
-            }
-        }
-        
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-        
-        // Format number with commas
-        function formatNumber(number) {
-            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        }
-        
-        // Calculate FDAI tokens based on BNB input
-        function calculateFdaiTokens(bnbAmount) {
-            const fdaiTokens = bnbAmount * FDAI_PER_BNB;
-            return fdaiTokens;
-        }
-        
-        // Update FDAI amount display
-        bnbAmountInput.addEventListener('input', () => {
-            const bnbAmount = parseFloat(bnbAmountInput.value) || 0;
-            const fdaiTokens = calculateFdaiTokens(bnbAmount);
-            fdaiAmount.textContent = formatNumber(fdaiTokens.toFixed(0));
-            calculationResult.style.display = bnbAmount > 0 ? 'block' : 'none';
-            
-            // Enable Buy button if wallet is connected and BNB amount is valid
-            buyBtn.disabled = !(isWalletConnected && bnbAmount > 0 && bnbAmount <= userBnbBalance);
-        });
-        
-        // Wallet Connection Logic
-        async function connectWallet(walletType) {
-            if 
+            minutes
