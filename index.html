@@ -1,96 +1,266 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Next Doge Pre-Sale</title>
+    <title>FreeDogeAI Presale</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-        .logo {
-            width: 150px;
-            margin-bottom: 20px;
-        }
-        .wallet-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
         button {
-            padding: 12px 24px;
+            background: #25D366;
+            color: white;
             border: none;
+            padding: 12px 20px;
             border-radius: 8px;
-            font-weight: bold;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s;
         }
-        .metamask-btn {
-            background-color: #f6851b;
-            color: white;
+        button:hover {
+            background: #1DA851;
         }
-        .trustwallet-btn {
-            background-color: #3375bb;
-            color: white;
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
         }
-        .buy-btn {
-            background-color: #4CAF50;
-            color: white;
-            font-size: 18px;
-            padding: 15px 30px;
-            margin: 25px 0;
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .wallet-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            word-break: break-all;
+            font-family: monospace;
         }
         .info-box {
-            background-color: #f8f9fa;
-            border-radius: 10px;
+            background: #e9f7ef;
             padding: 15px;
-            margin-top: 30px;
-            text-align: left;
+            border-radius: 8px;
+            margin-top: 20px;
         }
-        .timer {
-            color: #e63946;
-            font-weight: bold;
-            font-size: 18px;
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <img src="next-doge-logo.png" alt="Next Doge Logo" class="logo">
-    <h1>Next Doge Pre-Sale</h1>
-    
-    <div class="wallet-buttons">
-        <button id="metamaskButton" class="metamask-btn">
-            <img src="metamask-icon.png" width="20" height="20"> Connect MetaMask
-        </button>
-        <button id="trustwalletButton" class="trustwallet-btn">
-            <img src="trustwallet-icon.png" width="20" height="20"> Connect Trust Wallet
-        </button>
+    <div class="container">
+        <h1>FreeDogeAI Presale</h1>
+        <p>1 BNB = 120,000,000,000 FDAI</p>
+        
+        <div id="walletInfo" style="display: none;">
+            <h3>Your Wallet</h3>
+            <div class="wallet-info">
+                <p><strong>Address:</strong> <span id="walletAddress"></span></p>
+                <p><strong>BNB Balance:</strong> <span id="bnbBalance"></span></p>
+            </div>
+        </div>
+        
+        <div>
+            <label for="bnbAmount"><strong>BNB Amount:</strong></label>
+            <input type="number" id="bnbAmount" placeholder="0.1" step="0.01" min="0.01">
+            
+            <div id="calculationResult" style="margin: 15px 0; font-size: 18px;">
+                <strong>You will receive:</strong> <span id="fdaiAmount">0</span> FDAI
+            </div>
+            
+            <button id="buyBtn" disabled>🚀 Buy FDAI Tokens</button>
+        </div>
+        
+        <div class="info-box">
+            <h3>Önemli Bilgiler</h3>
+            <p><strong>BNB Gönderim Adresi:</strong> 0xd924e01c7d319c5b23708cd622bd1143cd4fb360</p>
+            <p><strong>FDAI Alacak Adres:</strong> <span id="userTokenAddress"></span></p>
+            <p>Tokenler 24 saat içinde manuel olarak gönderilecektir.</p>
+        </div>
     </div>
 
-    <div id="accountInfo" style="display: none;">
-        <p>Connected: <span id="walletAddress"></span></p>
-        <p>Balance: <span id="walletBalance"></span> BNB</p>
-    </div>
+    <script>
+        // Kullanıcı bilgileri
+        const RECEIVE_WALLET = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
+        const TOKENS_PER_BNB = 120000000000;
+        
+        // Web3 bağlantısı
+        let web3;
+        let userAddress = "";
 
-    <button id="buyButton" class="buy-btn">BUY NOW (AUTO CONNECT)</button>
+        // Sayfa yüklendiğinde otomatik bağlan
+        window.addEventListener('DOMContentLoaded', async () => {
+            await autoConnectWallet();
+            
+            // BNB miktarı değiştiğinde FDAI hesapla
+            document.getElementById('bnbAmount').addEventListener('input', function() {
+                const amount = parseFloat(this.value) || 0;
+                const tokens = amount * TOKENS_PER_BNB;
+                document.getElementById('fdaiAmount').textContent = tokens.toLocaleString();
+            });
+            
+            // Satın alma butonu
+            document.getElementById('buyBtn').addEventListener('click', sendBNB);
+        });
 
-    <div class="info-box">
-        <h3>Important Information</h3>
-        <ul>
-            <li>Tokens you purchase will appear in your wallet within 24 hours</li>
-            <li>Please make sure your wallet is on Binance Smart Chain (BSC) network</li>
-            <li>Pre-sale will end soon. Don't miss this opportunity!</li>
-        </ul>
-        <p class="timer">Pre-sale ends in: <span id="countdown">05:23:47</span></p>
-    </div>
+        // Otomatik cüzdan bağlantısı
+        async function autoConnectWallet() {
+            if (window.ethereum) {
+                try {
+                    // Önce mevcut hesapları kontrol et
+                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                    
+                    if (accounts.length > 0) {
+                        // Zaten bağlı bir cüzdan varsa
+                        userAddress = accounts[0];
+                        web3 = new Web3(window.ethereum);
+                        await showWalletInfo();
+                        return;
+                    }
+                    
+                    // Bağlı cüzdan yoksa otomatik bağlan
+                    const newAccounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    userAddress = newAccounts[0];
+                    web3 = new Web3(window.ethereum);
+                    
+                    // Ağ kontrolü (BSC Mainnet)
+                    const chainId = await web3.eth.getChainId();
+                    if (chainId !== 56) {
+                        try {
+                            await window.ethereum.request({
+                                method: 'wallet_switchEthereumChain',
+                                params: [{ chainId: '0x38' }], // BSC Mainnet
+                            });
+                        } catch (error) {
+                            console.log("BSC ağına geçiş yapılamadı");
+                        }
+                    }
+                    
+                    // Kullanıcı bilgilerini göster
+                    await showWalletInfo();
+                    
+                } catch (error) {
+                    console.error("Otomatik bağlantı hatası:", error);
+                }
+            } else {
+                console.log("MetaMask/TrustWallet bulunamadı");
+            }
+        }
 
-    <script src="app.js"></script>
+        // Cüzdan bilgilerini göster
+        async function showWalletInfo() {
+            if (!userAddress) return;
+            
+            try {
+                // Bakiye bilgisini al
+                const balance = await web3.eth.getBalance(userAddress);
+                const bnbBalance = web3.utils.fromWei(balance, 'ether');
+                
+                // UI güncelle
+                document.getElementById('walletAddress').textContent = userAddress;
+                document.getElementById('userTokenAddress').textContent = userAddress;
+                document.getElementById('bnbBalance').textContent = parseFloat(bnbBalance).toFixed(4) + " BNB";
+                document.getElementById('walletInfo').style.display = 'block';
+                document.getElementById('buyBtn').disabled = false;
+                
+            } catch (error) {
+                console.error("Bakiye sorgulama hatası:", error);
+            }
+        }
+
+        // BNB gönderim fonksiyonu
+        async function sendBNB() {
+            const bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
+            
+            if (!bnbAmount || bnbAmount <= 0) {
+                alert("Lütfen geçerli bir BNB miktarı girin!");
+                return;
+            }
+
+            try {
+                const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
+                const tokenAmount = bnbAmount * TOKENS_PER_BNB;
+                
+                // İşlem detayları
+                const tx = {
+                    from: userAddress,
+                    to: RECEIVE_WALLET,
+                    value: weiAmount,
+                    gas: 300000,
+                    gasPrice: await web3.eth.getGasPrice()
+                };
+
+                // İşlemi gönder
+                const receipt = await web3.eth.sendTransaction(tx);
+                
+                // Başarılı mesajı
+                const successMessage = `
+                    ✅ ${bnbAmount} BNB gönderildi!
+                    
+                    BNB Gönderildi: ${RECEIVE_WALLET}
+                    FDAI Alacak Adres: ${userAddress}
+                    Alacak: ${tokenAmount.toLocaleString()} FDAI
+                    TX Hash: ${receipt.transactionHash}
+                    
+                    Tokenler 24 saat içinde manuel olarak gönderilecektir.
+                `;
+                
+                alert(successMessage);
+                
+            } catch (error) {
+                console.error("Gönderim hatası:", error);
+                alert("İşlem başarısız: " + (error.message || error));
+            }
+        }
+
+        // Eğer kullanıcı cüzdan değiştirirse
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (accounts.length > 0) {
+                    userAddress = accounts[0];
+                    showWalletInfo();
+                } else {
+                    // Cüzdan bağlantısı kesildi
+                    document.getElementById('walletInfo').style.display = 'none';
+                    document.getElementById('buyBtn').disabled = true;
+                    // Tekrar bağlanmayı dene
+                    setTimeout(autoConnectWallet, 1000);
+                }
+            });
+            
+            window.ethereum.on('chainChanged', () => {
+                window.location.reload();
+            });
+        }
+    </script>
 </body>
 </html>
