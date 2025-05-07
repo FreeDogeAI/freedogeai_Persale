@@ -1,271 +1,612 @@
-<script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
-<script>
-    // Sabitler
-    const PRESALE_END_DATE = new Date();
-    PRESALE_END_DATE.setDate(PRESALE_END_DATE.getDate() + 90);
-    const PRESALE_WALLET_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // Sizin cüzdan adresiniz
-    const BSC_CHAIN_ID = "0x38"; // BSC Mainnet (Testnet için 0x61 kullan)
-    const FDAI_PER_BNB = 120000000000; // 1 BNB = 120 milyar FDAI
-    const FDAI_PRICE_BNB = 0.00000000000833; // 1 FDAI = 0.00000000000833 BNB
-
-    // DOM Elemanları
-    const languageBtn = document.getElementById('languageBtn');
-    const currentLanguage = document.getElementById('currentLanguage');
-    const languageDropdown = document.getElementById('languageDropdown');
-    const connectWalletBtn = document.getElementById('connectWalletBtn');
-    const walletInfo = document.getElementById('walletInfo');
-    const walletAddress = document.getElementById('walletAddress');
-    const bnbBalance = document.getElementById('bnbBalance');
-    const bnbAmountInput = document.getElementById('bnbAmount');
-    const calculationResult = document.getElementById('calculationResult');
-    const fdaiAmount = document.getElementById('fdaiAmount');
-    const buyBtn = document.getElementById('buyBtn');
-    const walletModal = document.getElementById('walletModal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const metamaskOption = document.getElementById('metamaskOption');
-    const trustwalletOption = document.getElementById('trustwalletOption');
-    const progressText = document.getElementById('progressText');
-    const raisedText = document.getElementById('raisedText');
-    const progressFill = document.querySelector('.progress-fill');
-
-    // Ethers.js kurulumu
-    let provider, signer, userAddress;
-
-    // Dil yönetimi
-    const translations = {
-        en: {
-            mainTitle: "FreeDogeAI",
-            mainSubtitle: "The Future of AI-Powered Meme Coins<br>Join the revolution with FDAI - where meme culture meets artificial intelligence",
-            presaleTitle: "Presale Information",
-            presaleDesc: "Don't miss your chance to be part of the FreeDogeAI revolution. Send BNB to the address below, and FDAI tokens will be sent to you manually.",
-            connectText: "Connect Wallet",
-            bnbLabel: "Enter BNB Amount:",
-            buyText: "Send BNB",
-            receiveText: "You will receive (approx.):",
-            telegramText: "Telegram",
-            twitterText: "Twitter",
-            whitepaperText: "Download Whitepaper",
-            modalTitle: "Connect Wallet",
-            daysLabel: "Days",
-            hoursLabel: "Hours",
-            minutesLabel: "Minutes",
-            secondsLabel: "Seconds"
-        },
-        tr: {
-            mainTitle: "FreeDogeAI",
-            mainSubtitle: "Yapay Zeka Destekli Meme Coin’lerin Geleceği<br>FDAI ile devrime katıl - meme kültürü yapay zeka ile buluşuyor",
-            presaleTitle: "Ön Satış Bilgisi",
-            presaleDesc: "FreeDogeAI devriminin bir parçası olma şansını kaçırma. Aşağıdaki adrese BNB gönder, FDAI tokenları manuel olarak gönderilecektir.",
-            connectText: "Cüzdanı Bağla",
-            bnbLabel: "BNB Miktarı Gir:",
-            buyText: "BNB Gönder",
-            receiveText: "Alacağın miktar (yaklaşık):",
-            telegramText: "Telegram",
-            twitterText: "Twitter",
-            whitepaperText: "Beyaz Kağıdı İndir",
-            modalTitle: "Cüzdanı Bağla",
-            daysLabel: "Gün",
-            hoursLabel: "Saat",
-            minutesLabel: "Dakika",
-            secondsLabel: "Saniye"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeDogeAI Presale</title>
+    <style>
+        :root {
+            --primary: #25D366;
+            --secondary: #6e48aa;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --gray: #6c757d;
         }
-        // Diğer diller için çeviriler ekle (ru, ja, zh, ur)
-    };
-
-    function updateLanguage(lang) {
-        currentLanguage.textContent = languageDropdown.querySelector(`[data-lang="${lang}"]`).textContent;
-        document.getElementById('mainTitle').innerHTML = translations[lang].mainTitle;
-        document.getElementById('mainSubtitle').innerHTML = translations[lang].mainSubtitle;
-        document.getElementById('presaleTitle').textContent = translations[lang].presaleTitle;
-        document.getElementById('presaleDesc').textContent = translations[lang].presaleDesc;
-        document.getElementById('connectText').textContent = translations[lang].connectText;
-        document.getElementById('bnbLabel').textContent = translations[lang].bnbLabel;
-        document.getElementById('buyText').textContent = translations[lang].buyText;
-        document.getElementById('receiveText').textContent = translations[lang].receiveText;
-        document.getElementById('telegramText').textContent = translations[lang].telegramText;
-        document.getElementById('twitterText').textContent = translations[lang].twitterText;
-        document.getElementById('whitepaperText').textContent = translations[lang].whitepaperText;
-        document.getElementById('modalTitle').textContent = translations[lang].modalTitle;
-        document.getElementById('daysLabel').textContent = translations[lang].daysLabel;
-        document.getElementById('hoursLabel').textContent = translations[lang].hoursLabel;
-        document.getElementById('minutesLabel').textContent = translations[lang].minutesLabel;
-        document.getElementById('secondsLabel').textContent = translations[lang].secondsLabel;
-    }
-
-    languageBtn.addEventListener('click', () => {
-        languageDropdown.classList.toggle('show');
-    });
-
-    languageDropdown.addEventListener('click', (e) => {
-        if (e.target.classList.contains('language-option')) {
-            const lang = e.target.dataset.lang;
-            updateLanguage(lang);
-            languageDropdown.classList.remove('show');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
-    });
-
-    // Geri sayım zamanlayıcısı
-    function updateCountdown() {
-        const now = new Date();
-        const timeLeft = PRESALE_END_DATE - now;
-        if (timeLeft <= 0) {
-            document.getElementById('days').textContent = '00';
-            document.getElementById('hours').textContent = '00';
-            document.getElementById('minutes').textContent = '00';
-            document.getElementById('seconds').textContent = '00';
-            buyBtn.disabled = true;
-            buyBtn.textContent = "Ön Satış Sona Erdi";
-            return;
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
         }
-        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-        document.getElementById('days').textContent = days.toString().padStart(2, '0');
-        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-    }
-    setInterval(updateCountdown, 1000);
-
-    // BSC ağına geçiş
-    async function switchToBSC() {
-        try {
-            await window.ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: BSC_CHAIN_ID }]
-            });
-        } catch (switchError) {
-            // Ağ yoksa ekle
-            if (switchError.code === 4902) {
-                await window.ethereum.request({
-                    method: 'wallet_addEthereumChain',
-                    params: [{
-                        chainId: BSC_CHAIN_ID,
-                        chainName: 'Binance Smart Chain Mainnet',
-                        rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                        nativeCurrency: {
-                            name: 'BNB',
-                            symbol: 'BNB',
-                            decimals: 18
-                        },
-                        blockExplorerUrls: ['https://bscscan.com']
-                    }]
-                });
-            } else {
-                throw switchError;
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .logo {
+            max-width: 250px;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 10px rgba(37, 211, 102, 0.3));
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #25D366, #6e48aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #ccc;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Language Selector */
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .language-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            min-width: 150px;
+        }
+        
+        .language-dropdown.show {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 8px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        .language-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Countdown */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .countdown-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            min-width: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+        
+        /* Presale Content */
+        .presale-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .presale-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .language-selector {
+                position: static;
+                margin-bottom: 1rem;
+                display: flex;
+                justify-content: center;
+            }
+            
+            .language-dropdown {
+                left: 0;
+                right: auto;
             }
         }
-    }
-
-    // Cüzdan bağlantısı
-    async function connectWallet() {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                await switchToBSC(); // BSC ağına geçiş
-                await provider.send("eth_requestAccounts", []);
-                signer = provider.getSigner();
-                userAddress = await signer.getAddress();
-
-                // Arayüzü güncelle
-                walletAddress.textContent = `Adres: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
-                const balance = await provider.getBalance(userAddress);
-                bnbBalance.textContent = `Bakiye: ${ethers.utils.formatEther(balance)} BNB`;
-                walletInfo.style.display = 'block';
-                connectWalletBtn.textContent = 'Bağlandı';
-                connectWalletBtn.disabled = true;
-                buyBtn.disabled = false;
-                walletModal.style.display = 'none';
-
-                // Ön satış cüzdan adresini göster
-                document.getElementById('presaleDesc').innerHTML += `<br><br>BNB Gönderilecek Adres: <strong>${PRESALE_WALLET_ADDRESS}</strong> <button onclick="copyAddress()">Kopyala</button>`;
-            } catch (error) {
-                console.error("Cüzdan bağlantısı başarısız:", error);
-                alert("Cüzdan bağlanamadı. Lütfen BSC ağında olduğunuzdan emin olun ve tekrar deneyin.");
-            }
-        } else {
-            alert("Lütfen MetaMask veya Trust Wallet kurun.");
+        
+        /* Token Info */
+        .token-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-    }
-
-    // Cüzdan adresini kopyala
-    function copyAddress() {
-        navigator.clipboard.writeText(PRESALE_WALLET_ADDRESS);
-        alert("Cüzdan adresi kopyalandı!");
-    }
-
-    connectWalletBtn.addEventListener('click', () => {
-        walletModal.style.display = 'flex';
-    });
-
-    metamaskOption.addEventListener('click', connectWallet);
-    trustwalletOption.addEventListener('click', connectWallet);
-    closeModalBtn.addEventListener('click', () => {
-        walletModal.style.display = 'none';
-    });
-
-    // BNB miktarına göre FDAI tahmini (otomatik hesaplama)
-    bnbAmountInput.addEventListener('input', () => {
-        const bnbAmount = parseFloat(bnbAmountInput.value);
-        if (bnbAmount > 0) {
-            const fdai = bnbAmount * FDAI_PER_BNB;
-            fdaiAmount.textContent = fdai.toLocaleString();
-            calculationResult.style.display = 'block';
-            buyBtn.disabled = false;
-        } else {
-            calculationResult.style.display = 'none';
-            buyBtn.disabled = true;
+        
+        .token-info h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
         }
-    });
-
-    // BNB gönderme işlemi
-    buyBtn.addEventListener('click', async () => {
-        const bnbAmount = parseFloat(bnbAmountInput.value);
-        if (!bnbAmount || bnbAmount <= 0) {
-            alert("Lütfen geçerli bir BNB miktarı girin.");
-            return;
+        
+        .token-details {
+            margin-bottom: 1.5rem;
         }
-
-        try {
-            const bnbValue = ethers.utils.parseEther(bnbAmount.toString());
-            const tx = await signer.sendTransaction({
-                to: PRESALE_WALLET_ADDRESS,
-                value: bnbValue
-            });
-            buyBtn.disabled = true;
-            buyBtn.textContent = "Gönderiliyor...";
-            await tx.wait();
-            alert(`BNB başarıyla gönderildi! Tx Hash: ${tx.hash}\nFDAI tokenları manuel olarak gönderilecektir.`);
-            bnbAmountInput.value = '';
-            calculationResult.style.display = 'none';
-            buyBtn.disabled = false;
-            buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText || "BNB Gönder";
-
-            // Bakiyeyi güncelle
-            const balance = await provider.getBalance(userAddress);
-            bnbBalance.textContent = `Bakiye: ${ethers.utils.formatEther(balance)} BNB`;
-        } catch (error) {
-            console.error("BNB gönderimi başarısız:", error);
-            alert("BNB gönderimi başarısız. Lütfen bakiyenizi kontrol edin veya tekrar deneyin.");
-            buyBtn.disabled = false;
-            buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText || "BNB Gönder";
+        
+        .token-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-    });
+        
+        .token-row:last-child {
+            border-bottom: none;
+        }
+        
+        .token-label {
+            color: #ccc;
+        }
+        
+        .token-value {
+            font-weight: bold;
+        }
+        
+        /* Community Links */
+        .community-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .community-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        
+        .community-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .telegram-btn {
+            background-color: #0088cc;
+        }
+        
+        .twitter-btn {
+            background-color: #1DA1F2;
+        }
+        
+        /* Purchase Section */
+        .purchase-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .wallet-connect {
+            margin-bottom: 1.5rem;
+        }
+        
+        .connect-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        
+        .wallet-info {
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .wallet-address {
+            font-family: monospace;
+            word-break: break-all;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .bnb-balance {
+            margin-top: 0.5rem;
+            color: #ccc;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: #ccc;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .calculation {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(37, 211, 102, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            border: 1px solid rgba(37, 211, 102, 0.2);
+        }
+        
+        .buy-btn {
+            width: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        
+        .buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+        
+        .buy-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin: 2rem 0;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 5px;
+            width: 35%;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: #1a1a2e;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .wallet-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .wallet-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .wallet-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 1rem;
+        }
+        
+        .wallet-name {
+            font-weight: bold;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <button class="language-btn" id="languageBtn">
+            <span id="currentLanguage">English</span>
+            <span>▼</span>
+        </button>
+        <div class="language-dropdown" id="languageDropdown">
+            <div class="language-option" data-lang="en">English</div>
+            <div class="language-option" data-lang="tr">Türkçe</div>
+            <div class="language-option" data-lang="ru">Русский</div>
+            <div class="language-option" data-lang="ja">日本語</div>
+            <div class="language-option" data-lang="zh">中文</div>
+            <div class="language-option" data-lang="ur">اردو</div>
+        </div>
+    </div>
 
-    // Ön satış ilerlemesi (statik, manuel güncelleme için)
-    function updatePresaleProgress() {
-        const raisedBNB = 364.44; // Manuel olarak güncellenecek
-        const targetBNB = 1041.26;
-        const progress = (raisedBNB / targetBNB) * 100;
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="logo.png" alt="FreeDogeAI Logo" class="logo">
+            <h1 class="title" id="mainTitle">FreeDogeAI</h1>
+            <p class="subtitle" id="mainSubtitle">The Future of AI-Powered Meme Coins<br>Join the revolution with FDAI - where meme culture meets artificial intelligence</p>
+            
+            <!-- Countdown -->
+            <div class="countdown">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="days">90</div>
+                    <div class="countdown-label" id="daysLabel">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="hours">00</div>
+                    <div class="countdown-label" id="hoursLabel">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="minutes">00</div>
+                    <div class="countdown-label" id="minutesLabel">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="seconds">00</div>
+                    <div class="countdown-label" id="secondsLabel">Seconds</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Presale Content -->
+        <div class="presale-content">
+            <!-- Token Info -->
+            <div class="token-info">
+                <h2 id="presaleTitle">Presale Information</h2>
+                <p style="margin-bottom: 1.5rem; color: #ccc;" id="presaleDesc">Don't miss your chance to be part of the FreeDogeAI revolution. Our presale offers exclusive early access to FDAI tokens at a special price.</p>
+                
+                <div class="token-details">
+                    <div class="token-row">
+                        <span class="token-label" id="nameLabel">Name:</span>
+                        <span class="token-value">FreeDogeAI</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label" id="symbolLabel">Symbol:</span>
+                        <span class="token-value">FDAI</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label" id="targetLabel">Total Target:</span>
+                        <span class="token-value">1041.26 BNB</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label">1 BNB =</span>
+                        <span class="token-value">120,000,000,000 FDAI</span>
+                    </div>
+                </div>
+                
+                <!-- Community Links -->
+                <div class="community-links">
+                    <a href="https://t.me/freedogeaiFDAI" class="community-btn telegram-btn" target="_blank">
+                        <span>📨</span>
+                        <span id="telegramText">Telegram</span>
+                    </a>
+                    <a href="https://x.com/FreeDogeAI_FDAI?t=pfYOwiY7gW8LypJ_wVMaZQ&s=09" class="community-btn twitter-btn" target="_blank">
+                        <span>🐦</span>
+                        <span id="twitterText">Twitter</span>
+                    </a>
+                </div>
+                
+                <!-- Whitepaper Button -->
+                <button class="connect-btn" style="margin-top: 2rem;" id="whitepaperBtn">
+                    <span>📄</span>
+                    <span id="whitepaperText">Download Whitepaper</span>
+                </button>
+            </div>
+            
+            <!-- Purchase Section -->
+            <div class="purchase-section">
+                <div class="wallet-connect">
+                    <button class="connect-btn" id="connectWalletBtn">
+                        <span>🔗</span>
+                        <span id="connectText">Connect Wallet</span>
+                    </button>
+                    <div class="wallet-info" id="walletInfo">
+                        <div class="wallet-address" id="walletAddress"></div>
+                        <div class="bnb-balance" id="bnbBalance"></div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="bnbAmount" class="input-label" id="bnbLabel">Enter BNB Amount:</label>
+                    <input type="number" id="bnbAmount" class="input-field" placeholder="0.0" step="any" min="0">
+                    <div class="calculation" id="calculationResult" style="display: none;">
+                        <span id="receiveText">You will receive:</span> <span id="fdaiAmount">0</span> FDAI
+                    </div>
+                </div>
+                
+                <button class="buy-btn" id="buyBtn" disabled><span id="buyText">Buy FDAI Tokens</span></button>
+                
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span id="progressText">Progress: 35%</span>
+                        <span id="raisedText">Raised: 364.44 BNB / 1041.26 BNB</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Wallet Connection Modal -->
+    <div class="modal" id="walletModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Connect Wallet</h3>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="wallet-option" id="metamaskOption">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" class="wallet-icon">
+                <span class="wallet-name">MetaMask</span>
+            </div>
+            <div class="wallet-option" id="trustwalletOption">
+                <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet" class="wallet-icon">
+                <span class="wallet-name">Trust Wallet</span>
+            </div>
+        </div>
+    </div>
 
-        progressText.textContent = `Progress: ${progress.toFixed(2)}%`;
-        raisedText.textContent = `Raised: ${raisedBNB.toFixed(2)} BNB / ${targetBNB.toFixed(2)} BNB`;
-        progressFill.style.width = `${progress}%`;
-    }
-
-    // Başlat
-    updateLanguage('tr');
-    updateCountdown();
-    updatePresaleProgress();
-</script>
+    <script>
+        // Constants
+        const FDAI_PER_BNB = 120000000000; // 120 billion FDAI per 1 BNB
+        const PRESALE_END_DATE = new Date();
+        PRESALE_END_DATE.setDate(PRESALE_END_DATE.getDate() + 90); // 90 days from now
+        
+        // DOM Elements
+        const languageBtn = document.getElementById('languageBtn');
+        const currentLanguage = document.getElementById('currentLanguage');
+        const languageDropdown = document.getElementById('languageDropdown');
+        const connectWalletBtn = document.getElementById('connectWalletBtn');
+        const walletInfo = document.getElementById('walletInfo');
+        const walletAddress = document.getElementById('walletAddress');
+        const bnbBalance = document.getElementById('bnbBalance');
+        const bnbAmountInput = document.getElementById('bnbAmount');
+        const calculationResult = document.getElementById('calculationResult');
+        const fdaiAmount = document.getElementById('fdaiAmount');
+        const buyBtn = document.getElementById('buyBtn');
+        const walletModal = document.getElementById('walletModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const metamaskOption = document.getElementById('metamaskOption');
+        const trustwalletOption = document.getElementById('trustwalletOption');
+        co
