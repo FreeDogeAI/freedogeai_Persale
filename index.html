@@ -3,407 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI Presale</title>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <title>Token Presale</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f0f2f5;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
             margin: 0;
             padding: 20px;
-            color: #333;
+            min-height: 100vh;
         }
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        .logo {
-            width: 200px;
-            display: block;
-            margin: 0 auto 20px;
-        }
-        button {
-            background: #25D366;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            margin-top: 10px;
-            transition: background 0.3s;
-            font-weight: bold;
-        }
-        button:hover {
-            background: #1DA851;
-        }
-        button:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-        .wallet-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            word-break: break-all;
-        }
-        .info-box {
-            background: #e9f7ef;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         .countdown {
-            color: #e63946;
-            font-weight: bold;
-            font-size: 18px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            margin: 15px 0;
+            margin: 20px 0;
+            font-size: 1.5rem;
         }
-        .token-rate {
-            text-align: center;
-            font-size: 18px;
-            margin: 10px 0;
+        .countdown-numbers {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+        .countdown-box {
+            background: rgba(255, 255, 255, 0.15);
             padding: 10px;
-            background: #f0f8ff;
             border-radius: 8px;
+            min-width: 70px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="https://freedogeai.com/logo.png" alt="FreeDogeAI Logo" class="logo">
-        <h1 style="text-align: center;">FreeDogeAI Presale</h1>
-        
-        <div class="token-rate">
-            <strong>1 BNB = 120,000,000,000 FDAI</strong>
-        </div>
+        <h1 style="text-align: center;">TOKEN PRESALE</h1>
         
         <div class="countdown">
-            Ön Satış Bitiş: <span id="countdown">24:00:00</span>
-        </div>
-        
-        <button id="connectWalletBtn">
-            <span id="connectBtnText">🔗 Connect Wallet</span>
-            <span id="connectBtnSpinner" class="loading-spinner" style="display: none;"></span>
-        </button>
-        
-        <div id="walletInfo" style="display: none;">
-            <h3>Your Wallet</h3>
-            <div class="wallet-info">
-                <p><strong>Address:</strong> <span id="walletAddress"></span></p>
-                <p><strong>BNB Balance:</strong> <span id="bnbBalance"></span></p>
+            <h2>PRESALE BİTİŞİNE KALAN SÜRE</h2>
+            <div class="countdown-numbers">
+                <div class="countdown-box">
+                    <div id="days">90</div>
+                    <div>GÜN</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="hours">00</div>
+                    <div>SAAT</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="minutes">00</div>
+                    <div>DAKİKA</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="seconds">00</div>
+                    <div>SANİYE</div>
+                </div>
             </div>
-        </div>
-        
-        <div>
-            <label for="bnbAmount"><strong>BNB Amount:</strong></label>
-            <input type="number" id="bnbAmount" placeholder="0.1" step="0.01" min="0.01">
-            
-            <div id="calculationResult" style="margin: 15px 0; font-size: 18px; text-align: center;">
-                <strong>You will receive:</strong> <span id="fdaiAmount">0</span> FDAI
-            </div>
-            
-            <button id="buyBtn" disabled>🚀 Buy FDAI Tokens</button>
-        </div>
-        
-        <div class="info-box">
-            <h3>📌 Önemli Bilgiler</h3>
-            <ul>
-                <li><strong>BNB Gönderim Adresi:</strong> 0xd924e01c7d319c5b23708cd622bd1143cd4fb360</li>
-                <li><strong>FDAI Alacak Adres:</strong> <span id="userTokenAddress">-</span></li>
-                <li>Tokenler 24 saat içinde manuel olarak gönderilecektir</li>
-                <li>Lütfen cüzdanınızın BSC ağında olduğundan emin olun</li>
-            </ul>
         </div>
     </div>
 
     <script>
-        // FreeDogeAI Presale - Tam Sürüm
-        class FreeDogeAIPresale {
-            constructor() {
-                this.web3 = null;
-                this.userAddress = null;
-                this.contractAddress = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
-                this.tokenRate = 120000000000; // 1 BNB = 120,000,000,000 FDAI
-                this.presaleEndTime = new Date().getTime() + 24 * 60 * 60 * 1000; // 24 saat sonra
-            }
-
-            async init() {
-                await this.initWallet();
-                this.setupEventListeners();
-                this.startCountdown();
-                this.setupAutoConnect();
-            }
-
-            // Cüzdan bağlantısını başlat
-            async initWallet() {
-                if (window.ethereum) {
-                    try {
-                        this.web3 = new Web3(window.ethereum);
-                        await this.checkNetwork();
-                    } catch (error) {
-                        console.error("Wallet init error:", error);
-                    }
-                }
-            }
-
-            // Ağ kontrolü (BSC)
-            async checkNetwork() {
-                const chainId = await this.web3.eth.getChainId();
-                if (chainId !== 56) {
-                    try {
-                        await window.ethereum.request({
-                            method: 'wallet_switchEthereumChain',
-                            params: [{ chainId: '0x38' }] // BSC Mainnet
-                        });
-                    } catch (switchError) {
-                        if (switchError.code === 4902) {
-                            await this.addBSCNetwork();
-                        }
-                    }
-                }
-            }
-
-            // BSC ağı ekleme
-            async addBSCNetwork() {
-                try {
-                    await window.ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [{
-                            chainId: '0x38',
-                            chainName: 'Binance Smart Chain',
-                            nativeCurrency: {
-                                name: 'BNB',
-                                symbol: 'BNB',
-                                decimals: 18
-                            },
-                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                            blockExplorerUrls: ['https://bscscan.com/']
-                        }]
-                    });
-                } catch (addError) {
-                    throw new Error("BSC ağı eklenemedi");
-                }
-            }
-
-            // Otomatik bağlantı
-            async setupAutoConnect() {
-                if (window.ethereum && window.ethereum.selectedAddress) {
-                    this.userAddress = window.ethereum.selectedAddress;
-                    await this.updateWalletInfo();
-                }
-            }
-
-            // Cüzdan bağlantısı
-            async connectWallet() {
-                if (!window.ethereum) {
-                    return this.showWalletInstallPrompt();
-                }
-
-                try {
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    this.userAddress = accounts[0];
-                    await this.updateWalletInfo();
-                    return true;
-                } catch (error) {
-                    console.error("Connection error:", error);
-                    this.showError("Bağlantı hatası: " + error.message);
-                    return false;
-                }
-            }
-
-            // Cüzdan bilgilerini güncelle
-            async updateWalletInfo() {
-                if (!this.userAddress) return;
-
-                const balance = await this.web3.eth.getBalance(this.userAddress);
-                const bnbBalance = this.web3.utils.fromWei(balance, 'ether');
-
-                // UI Güncellemeleri
-                document.getElementById('walletAddress').textContent = 
-                    `${this.userAddress.substring(0, 6)}...${this.userAddress.substring(this.userAddress.length - 4)}`;
-                document.getElementById('userTokenAddress').textContent = this.userAddress;
-                document.getElementById('bnbBalance').textContent = `${parseFloat(bnbBalance).toFixed(4)} BNB`;
-                document.getElementById('walletInfo').style.display = 'block';
-                document.getElementById('buyBtn').disabled = false;
-                
-                const connectBtn = document.getElementById('connectWalletBtn');
-                connectBtn.innerHTML = '✅ Connected';
-                connectBtn.style.backgroundColor = '#4CAF50';
-            }
-
-            // Token satın alma
-            async buyTokens() {
-                if (!this.userAddress) {
-                    const connected = await this.connectWallet();
-                    if (!connected) return;
-                }
-
-                const bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
-                if (!bnbAmount || bnbAmount <= 0) {
-                    return this.showError("Lütfen geçerli bir BNB miktarı girin!");
-                }
-
-                try {
-                    const weiAmount = this.web3.utils.toWei(bnbAmount.toString(), 'ether');
-                    
-                    const tx = {
-                        from: this.userAddress,
-                        to: this.contractAddress,
-                        value: weiAmount,
-                        gas: 300000
-                    };
-
-                    // Butonu devre dışı bırak ve yükleme göster
-                    const buyBtn = document.getElementById('buyBtn');
-                    const originalText = buyBtn.innerHTML;
-                    buyBtn.innerHTML = '<span class="loading-spinner"></span> İşlem Gönderiliyor...';
-                    buyBtn.disabled = true;
-
-                    // İşlemi gönder
-                    const receipt = await this.web3.eth.sendTransaction(tx);
-                    
-                    // Başarılı mesajı göster
-                    this.showSuccess(`
-                        ✅ ${bnbAmount} BNB başarıyla gönderildi!
-                        
-                        Alacaklarınız: ${(bnbAmount * this.tokenRate).toLocaleString()} FDAI
-                        TX Hash: ${receipt.transactionHash}
-                        
-                        Tokenler 24 saat içinde cüzdanınıza gönderilecektir.
-                    `);
-
-                } catch (error) {
-                    console.error("Transaction error:", error);
-                    this.showError(`İşlem başarısız: ${error.message}`);
-                } finally {
-                    // Butonu eski haline getir
-                    const buyBtn = document.getElementById('buyBtn');
-                    buyBtn.innerHTML = originalText;
-                    buyBtn.disabled = false;
-                }
-            }
-
-            // Geri sayım sayacı
-            startCountdown() {
-                const countdownElement = document.getElementById('countdown');
-                const updateCountdown = () => {
-                    const now = new Date().getTime();
-                    const distance = this.presaleEndTime - now;
-
-                    if (distance <= 0) {
-                        countdownElement.textContent = "ÖN SATIŞ SONA ERDİ!";
-                        document.getElementById('buyBtn').disabled = true;
-                        return;
-                    }
-
-                    const hours = Math.floor(distance / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                    countdownElement.textContent = `${hours}sa ${minutes}dk ${seconds}sn`;
-                };
-
-                updateCountdown();
-                setInterval(updateCountdown, 1000);
-            }
-
-            // Event listener'ları kur
-            setupEventListeners() {
-                // Cüzdan bağlantı butonu
-                document.getElementById('connectWalletBtn').addEventListener('click', async () => {
-                    const btn = document.getElementById('connectWalletBtn');
-                    const originalText = btn.innerHTML;
-                    btn.innerHTML = '<span class="loading-spinner"></span> Bağlanıyor...';
-                    btn.disabled = true;
-                    
-                    await this.connectWallet();
-                    
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                });
-
-                // Satın alma butonu
-                document.getElementById('buyBtn').addEventListener('click', () => this.buyTokens());
-
-                // BNB miktarı değiştiğinde FDAI hesapla
-                document.getElementById('bnbAmount').addEventListener('input', () => {
-                    const amount = parseFloat(document.getElementById('bnbAmount').value) || 0;
-                    document.getElementById('fdaiAmount').textContent = (amount * this.tokenRate).toLocaleString();
-                });
-
-                // Cüzdan değişikliklerini dinle
-                if (window.ethereum) {
-                    window.ethereum.on('accountsChanged', (accounts) => {
-                        if (accounts.length > 0) {
-                            this.userAddress = accounts[0];
-                            this.updateWalletInfo();
-                        } else {
-                            this.userAddress = null;
-                            document.getElementById('walletInfo').style.display = 'none';
-                            document.getElementById('connectWalletBtn').innerHTML = '🔗 Connect Wallet';
-                            document.getElementById('connectWalletBtn').style.backgroundColor = '#25D366';
-                            document.getElementById('buyBtn').disabled = true;
-                        }
-                    });
-
-                    window.ethereum.on('chainChanged', () => window.location.reload());
-                }
-            }
-
-            // Hata mesajı göster
-            showError(message) {
-                alert(`HATA: ${message}`);
-            }
-
-            // Başarı mesajı göster
-            showSuccess(message) {
-                alert(message);
-            }
-
-            // Cüzdan kurulumu iste
-            showWalletInstallPrompt() {
-                const install = confirm("MetaMask/TrustWallet bulunamadı. Yüklemek ister misiniz?");
-                if (install) {
-                    window.open('https://metamask.io/download.html', '_blank');
-                }
-            }
+        // 1. Başlangıç zamanını localStorage'da sakla (sadece ilk defa)
+        if (!localStorage.getItem('countdownStart')) {
+            const startDate = new Date();
+            localStorage.setItem('countdownStart', startDate.getTime());
         }
 
-        // Uygulamayı başlat
-        window.addEventListener('DOMContentLoaded', () => {
-            const presaleApp = new FreeDogeAIPresale();
-            presaleApp.init();
-        });
+        // 2. 90 günlük geri sayım (başlangıç zamanına göre)
+        function updateCountdown() {
+            const startTime = parseInt(localStorage.getItem('countdownStart'));
+            const endDate = new Date(startTime);
+            endDate.setDate(endDate.getDate() + 90); // 90 gün ekle
+            
+            const now = new Date();
+            const diff = endDate - now;
+            
+            if (diff <= 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                localStorage.removeItem('countdownStart'); // Süre dolduysa temizle
+                return;
+            }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // 3. Her saniye güncelle + ilk çalıştırma
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
     </script>
 </body>
 </html>
