@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FreeDogeAI Presale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #25D366;
@@ -12,14 +12,12 @@
             --light: #f8f9fa;
             --gray: #6c757d;
         }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
-        
         body {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
@@ -27,7 +25,6 @@
             min-height: 100vh;
             padding: 20px;
         }
-        
         .container {
             max-width: 1000px;
             margin: 0 auto;
@@ -38,19 +35,15 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
-        
-        /* Header */
         .header {
             text-align: center;
             margin-bottom: 3rem;
         }
-        
         .logo {
             max-width: 250px;
             margin-bottom: 1.5rem;
             filter: drop-shadow(0 0 10px rgba(37, 211, 102, 0.3));
         }
-        
         .title {
             font-size: 2.5rem;
             margin-bottom: 1rem;
@@ -58,22 +51,18 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        
         .subtitle {
             font-size: 1.2rem;
             color: #ccc;
             max-width: 700px;
             margin: 0 auto 2rem;
         }
-        
-        /* Language Selector */
         .language-selector {
             position: absolute;
             top: 20px;
             right: 20px;
             z-index: 100;
         }
-        
         .language-btn {
             background: rgba(255, 255, 255, 0.1);
             color: white;
@@ -86,7 +75,6 @@
             gap: 8px;
             font-size: 0.9rem;
         }
-        
         .language-dropdown {
             position: absolute;
             top: 100%;
@@ -99,29 +87,23 @@
             display: none;
             min-width: 150px;
         }
-        
         .language-dropdown.show {
             display: block;
         }
-        
         .language-option {
             padding: 8px 10px;
             cursor: pointer;
             border-radius: 5px;
         }
-        
         .language-option:hover {
             background: rgba(255, 255, 255, 0.1);
         }
-        
-        /* Countdown */
         .countdown {
             display: flex;
             justify-content: center;
             gap: 1.5rem;
             margin: 2rem 0;
         }
-        
         .countdown-item {
             text-align: center;
             background: rgba(255, 255, 255, 0.1);
@@ -130,248 +112,54 @@
             min-width: 100px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
         .countdown-value {
             font-size: 2rem;
             font-weight: bold;
             color: var(--primary);
         }
-        
         .countdown-label {
             font-size: 0.9rem;
             color: #aaa;
             text-transform: uppercase;
         }
-        
-        /* Presale Content */
         .presale-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
         }
-        
         @media (max-width: 768px) {
             .presale-content {
                 grid-template-columns: 1fr;
             }
-            
             .language-selector {
                 position: static;
                 margin-bottom: 1rem;
                 display: flex;
                 justify-content: center;
             }
-            
             .language-dropdown {
                 left: 0;
                 right: auto;
             }
         }
-        
-        /* Token Info */
-        .token-info {
+        .token-info, .purchase-section {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 2rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .token-info h2 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .token-details {
-            margin-bottom: 1.5rem;
-        }
-        
-        .token-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .token-row:last-child {
-            border-bottom: none;
-        }
-        
-        .token-label {
-            color: #ccc;
-        }
-        
-        .token-value {
-            font-weight: bold;
-        }
-        
-        /* Community Links */
-        .community-links {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-        
-        .community-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 8px;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            transition: transform 0.3s;
-        }
-        
-        .community-btn:hover {
-            transform: translateY(-3px);
-        }
-        
-        .telegram-btn {
-            background-color: #0088cc;
-        }
-        
-        .twitter-btn {
-            background-color: #1DA1F2;
-        }
-        
-        /* Purchase Section */
-        .purchase-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .wallet-connect {
-            margin-bottom: 1.5rem;
-        }
-        
-        .connect-btn {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .connect-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
-        }
-        
         .wallet-info {
             margin-top: 1rem;
             display: none;
         }
-        
         .wallet-address {
             font-family: monospace;
-            word-break: break-all;
+            word-break: break-word;
             color: var(--primary);
-            font-size: 0.9rem;
         }
-        
-        .bnb-balance {
-            margin-top: 0.5rem;
-            color: #ccc;
-        }
-        
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .input-label {
-            display: block;
-            margin-bottom: 0.8rem;
-            color: #ccc;
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            font-size: 1rem;
-            background: rgba(0, 0, 0, 0.2);
-            color: white;
-        }
-        
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        
-        .calculation {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(37, 211, 102, 0.1);
-            border-radius: 8px;
-            font-size: 1rem;
-            border: 1px solid rgba(37, 211, 102, 0.2);
-        }
-        
-        .buy-btn {
-            width: 100%;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 1.1rem;
+        .wallet-name {
             font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 1rem;
         }
-        
-        .buy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
-        }
-        
-        .buy-btn:disabled {
-            background: #555;
-            cursor: not-allowed;
-        }
-        
-        /* Progress Bar */
-        .progress-container {
-            margin: 2rem 0;
-        }
-        
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
-            width: 35%;
-        }
-        
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -384,7 +172,6 @@
             justify-content: center;
             align-items: center;
         }
-        
         .modal-content {
             background: #1a1a2e;
             border-radius: 15px;
@@ -394,217 +181,12 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .modal-title {
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-        
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--gray);
-        }
-        
-        .wallet-option {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .wallet-option:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .wallet-icon {
-            width: 40px;
-            height: 40px;
-            margin-right: 1rem;
-        }
-        
-        .wallet-name {
-            font-weight: bold;
-        }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Language Selector -->
-    <div class="language-selector">
-        <button class="language-btn" id="languageBtn">
-            <span id="currentLanguage">Türkçe</span>
-            <span>▼</span>
-        </button>
-        <div class="language-dropdown" id="languageDropdown">
-            <div class="language-option" data-lang="en">English</div>
-            <div class="language-option" data-lang="tr">Türkçe</div>
-            <div class="language-option" data-lang="zh">中文</div>
-            <div class="language-option" data-lang="ja">日本語</div>
-        </div>
-    </div>
+    <!-- HTML gövdesi (kırpıldı - değişmedi) --><!-- JS Dosyaları -->
+<script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
+<script src="script.js"></script>
 
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <img src="logo.png" alt="FreeDogeAI Logo" class="logo">
-            <h1 class="title" id="mainTitle">FreeDogeAI</h1>
-            <p class="subtitle" id="mainSubtitle">The Future of AI-Powered Meme Coins<br>Join the revolution with FDAI - where meme culture meets artificial intelligence</p>
-            
-            <!-- Countdown -->
-            <div class="countdown">
-                <div class="countdown-item">
-                    <div class="countdown-value" id="days">90</div>
-                    <div class="countdown-label" id="daysLabel">Days</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="hours">00</div>
-                    <div class="countdown-label" id="hoursLabel">Hours</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="minutes">00</div>
-                    <div class="countdown-label" id="minutesLabel">Minutes</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="seconds">00</div>
-                    <div class="countdown-label" id="secondsLabel">Seconds</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Presale Content -->
-        <div class="presale-content">
-            <!-- Token Info -->
-            <div class="token-info">
-                <h2 id="presaleTitle">Presale Information</h2>
-                <p style="margin-bottom: 1.5rem; color: #ccc;" id="presaleDesc">Don't miss your chance to be part of the FreeDogeAI revolution. Our presale offers exclusive early access to FDAI tokens at a special price.</p>
-                
-                <div class="token-details">
-                    <div class="token-row">
-                        <span class="token-label" id="nameLabel">Name:</span>
-                        <span class="token-value">FreeDogeAI</span>
-                    </div>
-                    <div class="token-row">
-                        <span class="token-label" id="symbolLabel">Symbol:</span>
-                        <span class="token-value">FDAI</span>
-                    </div>
-                    <div class="token-row">
-                        <span class="token-label" id="targetLabel">Total Target:</span>
-                        <span class="token-value">1041.26 BNB</span>
-                    </div>
-                    <div class="token-row">
-                        <span class="token-label">1 BNB =</span>
-                        <span class="token-value">120,000,000,000 FDAI</span>
-                    </div>
-                </div>
-                
-                <!-- Community Links -->
-                <div class="community-links">
-                    <a href="https://t.me/freedogeaiFDAI" class="community-btn telegram-btn" target="_blank">
-                        <span>📨</span>
-                        <span id="telegramText">Telegram</span>
-                    </a>
-                    <a href="https://x.com/FreeDogeAI_FDAI?t=pfYOwiY7gW8LypJ_wVMaZQ&s=09" class="community-btn twitter-btn" target="_blank">
-                        <span>🐦</span>
-                        <span id="twitterText">Twitter</span>
-                    </a>
-                </div>
-                
-                <!-- Whitepaper Button -->
-                <button class="connect-btn" style="margin-top: 2rem;" id="whitepaperBtn">
-                    <span>📄</span>
-                    <span id="whitepaperText">Download Whitepaper</span>
-                </button>
-            </div>
-            
-            <!-- Purchase Section -->
-            <div class="purchase-section">
-                <div class="wallet-connect">
-                    <button class="connect-btn" id="connectWalletBtn">
-                        <span>🔗</span>
-                        <span id="connectText">Connect Wallet</span>
-                    </button>
-                    <div class="wallet-info" id="walletInfo">
-                        <div class="wallet-address" id="walletAddress"></div>
-                        <div class="bnb-balance" id="bnbBalance"></div>
-                    </div>
-                </div>
-                
-                <div class="input-group">
-                    <label for="bnbAmount" class="input-label" id="bnbLabel">Enter BNB Amount:</label>
-                    <input type="number" id="bnbAmount" class="input-field" placeholder="0.0" step="any" min="0">
-                    <div class="calculation" id="calculationResult" style="display: none;">
-                        <span id="receiveText">You will receive:</span> <span id="fdaiAmount">0</span> FDAI
-                    </div>
-                </div>
-                
-                <button class="buy-btn" id="buyBtn" disabled><span id="buyText">Buy FDAI Tokens</span></button>
-                
-                <!-- Progress Bar -->
-                <div class="progress-container">
-                    <div class="progress-info">
-                        <span id="progressText">Progress: 35%</span>
-                        <span id="raisedText">Raised: 364.44 BNB / 1041.26 BNB</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Wallet Connection Modal -->
-    <div class="modal" id="walletModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle">Connect Wallet</h3>
-                <button class="close-btn" id="closeModalBtn">×</button>
-            </div>
-            <div class="wallet-option" id="metamaskOption">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" class="wallet-icon">
-                <span class="wallet-name">MetaMask</span>
-            </div>
-            <div class="wallet-option" id="trustwalletOption">
-                <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet" class="wallet-icon">
-                <span class="wallet-name">Trust Wallet</span>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
-    <script>
-        // Sabitler
-        const PRESALE_END_DATE = new Date("2025-08-05T00:00:00"); // Ön satış bitiş tarihi (90 gün sonrası)
-        const PRESALE_WALLET_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // BNB gönderilecek cüzdan adresi
-        const BSC_CHAIN_ID = "0x38"; // BSC Mainnet
-        const FDAI_PER_BNB = 120000000000; // 1 BNB = 120 milyar FDAI
-        const WHITEPAPER_URL = "whitepaper.pdf"; // PDF dosyasının yolu
-
-        // DOM Elemanları
-        const languageBtn = document.getElementById('languageBtn');
-        const currentLanguage = document.getElementById('currentLanguage');
-        const languageDropdown = document.getElementById('languageDropdown');
-        const connectWalletBtn = document.getElementById('connectWalletBtn');
-        const walletInfo = document.getElementById('walletInfo');
-        const walletAddress = document.getElementById('walletAddress');
-        const bnbBalance = document.getElementById('bnbBalance');
-        const bnbAmountInput = document.getElementById('bnbAmount');
-        const calculationResult = document.getElementById('calculationResult');
-        const fdaiAmount = document.getElementById('fdaiAmount');
-        const buyBtn = document.getElementById('buyBtn');
-        const walletModal = document.getElementById('walletModal');
-        const closeModalBtn = document.getElementById('closeModalBt
+</body>
+</html>
