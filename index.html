@@ -4,73 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FreeDogeAI Presale</title>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
+        /* Gelişmiş CSS Stilleri */
+        .wallet-connect-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4eff8 100%);
+            border-radius: 16px;
             padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.3);
         }
-        button {
-            background: #25D366;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
+        
+        .wallet-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
             cursor: pointer;
-            font-size: 16px;
+            transition: all 0.3s ease;
             width: 100%;
-            margin-top: 10px;
-            transition: background 0.3s;
+            margin-bottom: 15px;
+            border: none;
+            color: white;
         }
-        button:hover {
-            background: #1DA851;
+        
+        .wallet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
-        button:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
+        
+        .wallet-btn.metamask {
+            background: linear-gradient(135deg, #F6851B 0%, #E2761B 100%);
         }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
+        
+        .wallet-btn.trustwallet {
+            background: linear-gradient(135deg, #3375BB 0%, #2A5F9E 100%);
         }
-        .wallet-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            word-break: break-all;
-            font-family: monospace;
+        
+        .wallet-btn.connected {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
         }
-        .info-box {
-            background: #e9f7ef;
-            padding: 15px;
-            border-radius: 8px;
+        
+        .wallet-btn .wallet-icon {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .wallet-status {
+            display: none;
             margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: rgba(255,255,255,0.7);
         }
-        .loading {
+        
+        .wallet-details {
+            margin-top: 15px;
+        }
+        
+        .wallet-details p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        
+        .loading-spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255,255,255,0.3);
             border-radius: 50%;
-            border-top-color: #fff;
+            border-top-color: white;
             animation: spin 1s ease-in-out infinite;
         }
+        
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
@@ -78,189 +88,237 @@
 </head>
 <body>
     <div class="container">
-        <h1>FreeDogeAI Presale</h1>
-        <p>1 BNB = 120,000,000,000 FDAI</p>
-        
-        <div id="walletInfo" style="display: none;">
-            <h3>Your Wallet</h3>
-            <div class="wallet-info">
-                <p><strong>Address:</strong> <span id="walletAddress"></span></p>
-                <p><strong>BNB Balance:</strong> <span id="bnbBalance"></span></p>
+        <div class="wallet-connect-section">
+            <h2 style="margin-bottom: 20px; text-align: center;">Cüzdan Bağlantısı</h2>
+            
+            <button id="metamaskBtn" class="wallet-btn metamask">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" class="wallet-icon">
+                <span id="metamaskBtnText">MetaMask ile Bağlan</span>
+                <span id="metamaskSpinner" class="loading-spinner" style="display: none;"></span>
+            </button>
+            
+            <button id="trustwalletBtn" class="wallet-btn trustwallet">
+                <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" class="wallet-icon">
+                <span id="trustwalletBtnText">Trust Wallet ile Bağlan</span>
+                <span id="trustwalletSpinner" class="loading-spinner" style="display: none;"></span>
+            </button>
+            
+            <div id="walletStatus" class="wallet-status">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0;">Bağlantı Başarılı</h3>
+                    <span id="networkIndicator" style="padding: 4px 8px; border-radius: 12px; font-size: 12px; background: #4CAF50; color: white;">BSC</span>
+                </div>
+                
+                <div class="wallet-details">
+                    <p><strong>Cüzdan Adresi:</strong> <span id="connectedAddress"></span></p>
+                    <p><strong>BNB Bakiyesi:</strong> <span id="connectedBalance">0</span></p>
+                    <p><strong>Ağ:</strong> <span id="connectedNetwork">Binance Smart Chain</span></p>
+                </div>
+                
+                <button id="disconnectBtn" style="margin-top: 10px; background: #f44336; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer;">
+                    Bağlantıyı Kes
+                </button>
             </div>
         </div>
         
-        <div>
-            <label for="bnbAmount"><strong>BNB Amount:</strong></label>
-            <input type="number" id="bnbAmount" placeholder="0.1" step="0.01" min="0.01">
-            
-            <div id="calculationResult" style="margin: 15px 0; font-size: 18px;">
-                <strong>You will receive:</strong> <span id="fdaiAmount">0</span> FDAI
-            </div>
-            
-            <button id="buyBtn" disabled>🚀 Buy FDAI Tokens</button>
-        </div>
-        
-        <div class="info-box">
-            <h3>Önemli Bilgiler</h3>
-            <p><strong>BNB Gönderim Adresi:</strong> 0xd924e01c7d319c5b23708cd622bd1143cd4fb360</p>
-            <p><strong>FDAI Alacak Adres:</strong> <span id="userTokenAddress"></span></p>
-            <p>Tokenler 24 saat içinde manuel olarak gönderilecektir.</p>
-        </div>
+        <!-- Diğer içerikler -->
     </div>
 
     <script>
-        // Kullanıcı bilgileri
-        const RECEIVE_WALLET = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
-        const TOKENS_PER_BNB = 120000000000;
-        
-        // Web3 bağlantısı
-        let web3;
-        let userAddress = "";
-
-        // Sayfa yüklendiğinde otomatik bağlan
-        window.addEventListener('DOMContentLoaded', async () => {
-            await autoConnectWallet();
+        // Gelişmiş Cüzdan Yönetimi
+        const WalletManager = {
+            web3: null,
+            userAddress: null,
+            networkId: null,
             
-            // BNB miktarı değiştiğinde FDAI hesapla
-            document.getElementById('bnbAmount').addEventListener('input', function() {
-                const amount = parseFloat(this.value) || 0;
-                const tokens = amount * TOKENS_PER_BNB;
-                document.getElementById('fdaiAmount').textContent = tokens.toLocaleString();
-            });
+            init: async function() {
+                await this.autoConnect();
+                this.setupEventListeners();
+            },
             
-            // Satın alma butonu
-            document.getElementById('buyBtn').addEventListener('click', sendBNB);
-        });
-
-        // Otomatik cüzdan bağlantısı
-        async function autoConnectWallet() {
-            if (window.ethereum) {
-                try {
-                    // Önce mevcut hesapları kontrol et
-                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                    
-                    if (accounts.length > 0) {
-                        // Zaten bağlı bir cüzdan varsa
-                        userAddress = accounts[0];
-                        web3 = new Web3(window.ethereum);
-                        await showWalletInfo();
-                        return;
-                    }
-                    
-                    // Bağlı cüzdan yoksa otomatik bağlan
-                    const newAccounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    userAddress = newAccounts[0];
-                    web3 = new Web3(window.ethereum);
-                    
-                    // Ağ kontrolü (BSC Mainnet)
-                    const chainId = await web3.eth.getChainId();
-                    if (chainId !== 56) {
-                        try {
-                            await window.ethereum.request({
-                                method: 'wallet_switchEthereumChain',
-                                params: [{ chainId: '0x38' }], // BSC Mainnet
-                            });
-                        } catch (error) {
-                            console.log("BSC ağına geçiş yapılamadı");
+            autoConnect: async function() {
+                if (window.ethereum) {
+                    try {
+                        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                        if (accounts.length > 0) {
+                            await this.connectWallet();
                         }
+                    } catch (error) {
+                        console.error("Auto-connect error:", error);
                     }
+                }
+            },
+            
+            connectWallet: async function() {
+                if (!window.ethereum) {
+                    this.showWalletModal();
+                    return;
+                }
+                
+                try {
+                    // Hesapları iste
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    this.userAddress = accounts[0];
+                    this.web3 = new Web3(window.ethereum);
                     
-                    // Kullanıcı bilgilerini göster
-                    await showWalletInfo();
+                    // Ağ bilgilerini al
+                    this.networkId = await this.web3.eth.net.getId();
+                    await this.checkNetwork();
+                    
+                    // Kullanıcı arayüzünü güncelle
+                    this.updateUI();
+                    
+                    // Olay dinleyicilerini ayarla
+                    this.setupWalletEvents();
                     
                 } catch (error) {
-                    console.error("Otomatik bağlantı hatası:", error);
+                    console.error("Connection error:", error);
+                    this.showError("Bağlantı hatası: " + (error.message || error));
                 }
-            } else {
-                console.log("MetaMask/TrustWallet bulunamadı");
-            }
-        }
-
-        // Cüzdan bilgilerini göster
-        async function showWalletInfo() {
-            if (!userAddress) return;
+            },
             
-            try {
+            checkNetwork: async function() {
+                // BSC Mainnet kontrolü (Chain ID: 56)
+                if (this.networkId !== 56) {
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: '0x38' }] // BSC Mainnet
+                        });
+                    } catch (switchError) {
+                        // Zincir eklenmemişse ekle
+                        if (switchError.code === 4902) {
+                            try {
+                                await window.ethereum.request({
+                                    method: 'wallet_addEthereumChain',
+                                    params: [{
+                                        chainId: '0x38',
+                                        chainName: 'Binance Smart Chain',
+                                        nativeCurrency: {
+                                            name: 'BNB',
+                                            symbol: 'BNB',
+                                            decimals: 18
+                                        },
+                                        rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                                        blockExplorerUrls: ['https://bscscan.com/']
+                                    }]
+                                });
+                            } catch (addError) {
+                                throw new Error("BSC ağına geçilemedi");
+                            }
+                        }
+                    }
+                }
+            },
+            
+            updateUI: async function() {
+                if (!this.userAddress) return;
+                
+                // Cüzdan bilgilerini göster
+                document.getElementById('walletStatus').style.display = 'block';
+                document.getElementById('connectedAddress').textContent = 
+                    `${this.userAddress.substring(0, 6)}...${this.userAddress.substring(this.userAddress.length - 4)}`;
+                
                 // Bakiye bilgisini al
-                const balance = await web3.eth.getBalance(userAddress);
-                const bnbBalance = web3.utils.fromWei(balance, 'ether');
+                const balance = await this.web3.eth.getBalance(this.userAddress);
+                const bnbBalance = this.web3.utils.fromWei(balance, 'ether');
+                document.getElementById('connectedBalance').textContent = 
+                    parseFloat(bnbBalance).toFixed(4) + " BNB";
                 
-                // UI güncelle
-                document.getElementById('walletAddress').textContent = userAddress;
-                document.getElementById('userTokenAddress').textContent = userAddress;
-                document.getElementById('bnbBalance').textContent = parseFloat(bnbBalance).toFixed(4) + " BNB";
-                document.getElementById('walletInfo').style.display = 'block';
-                document.getElementById('buyBtn').disabled = false;
-                
-            } catch (error) {
-                console.error("Bakiye sorgulama hatası:", error);
-            }
-        }
-
-        // BNB gönderim fonksiyonu
-        async function sendBNB() {
-            const bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
+                // Buton durumlarını güncelle
+                document.getElementById('metamaskBtnText').textContent = "Bağlandı";
+                document.getElementById('trustwalletBtnText').textContent = "Bağlandı";
+                document.getElementById('metamaskBtn').classList.add('connected');
+                document.getElementById('trustwalletBtn').classList.add('connected');
+            },
             
-            if (!bnbAmount || bnbAmount <= 0) {
-                alert("Lütfen geçerli bir BNB miktarı girin!");
-                return;
-            }
-
-            try {
-                const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
-                const tokenAmount = bnbAmount * TOKENS_PER_BNB;
+            disconnectWallet: function() {
+                this.userAddress = null;
+                this.web3 = null;
+                this.networkId = null;
                 
-                // İşlem detayları
-                const tx = {
-                    from: userAddress,
-                    to: RECEIVE_WALLET,
-                    value: weiAmount,
-                    gas: 300000,
-                    gasPrice: await web3.eth.getGasPrice()
-                };
-
-                // İşlemi gönder
-                const receipt = await web3.eth.sendTransaction(tx);
+                // UI'yı sıfırla
+                document.getElementById('walletStatus').style.display = 'none';
+                document.getElementById('metamaskBtnText').textContent = "MetaMask ile Bağlan";
+                document.getElementById('trustwalletBtnText').textContent = "Trust Wallet ile Bağlan";
+                document.getElementById('metamaskBtn').classList.remove('connected');
+                document.getElementById('trustwalletBtn').classList.remove('connected');
                 
-                // Başarılı mesajı
-                const successMessage = `
-                    ✅ ${bnbAmount} BNB gönderildi!
+                console.log("Wallet disconnected");
+            },
+            
+            setupWalletEvents: function() {
+                // Hesap değişikliklerini dinle
+                window.ethereum.on('accountsChanged', (accounts) => {
+                    if (accounts.length === 0) {
+                        this.disconnectWallet();
+                    } else {
+                        this.userAddress = accounts[0];
+                        this.updateUI();
+                    }
+                });
+                
+                // Ağ değişikliklerini dinle
+                window.ethereum.on('chainChanged', (chainId) => {
+                    window.location.reload();
+                });
+            },
+            
+            setupEventListeners: function() {
+                // MetaMask butonu
+                document.getElementById('metamaskBtn').addEventListener('click', async () => {
+                    document.getElementById('metamaskBtnText').style.display = 'none';
+                    document.getElementById('metamaskSpinner').style.display = 'inline-block';
                     
-                    BNB Gönderildi: ${RECEIVE_WALLET}
-                    FDAI Alacak Adres: ${userAddress}
-                    Alacak: ${tokenAmount.toLocaleString()} FDAI
-                    TX Hash: ${receipt.transactionHash}
+                    try {
+                        await this.connectWallet();
+                    } catch (error) {
+                        this.showError(error.message);
+                    } finally {
+                        document.getElementById('metamaskBtnText').style.display = 'inline';
+                        document.getElementById('metamaskSpinner').style.display = 'none';
+                    }
+                });
+                
+                // Trust Wallet butonu
+                document.getElementById('trustwalletBtn').addEventListener('click', async () => {
+                    document.getElementById('trustwalletBtnText').style.display = 'none';
+                    document.getElementById('trustwalletSpinner').style.display = 'inline-block';
                     
-                    Tokenler 24 saat içinde manuel olarak gönderilecektir.
-                `;
+                    try {
+                        await this.connectWallet();
+                    } catch (error) {
+                        this.showError(error.message);
+                    } finally {
+                        document.getElementById('trustwalletBtnText').style.display = 'inline';
+                        document.getElementById('trustwalletSpinner').style.display = 'none';
+                    }
+                });
                 
-                alert(successMessage);
-                
-            } catch (error) {
-                console.error("Gönderim hatası:", error);
-                alert("İşlem başarısız: " + (error.message || error));
-            }
-        }
-
-        // Eğer kullanıcı cüzdan değiştirirse
-        if (window.ethereum) {
-            window.ethereum.on('accountsChanged', (accounts) => {
-                if (accounts.length > 0) {
-                    userAddress = accounts[0];
-                    showWalletInfo();
-                } else {
-                    // Cüzdan bağlantısı kesildi
-                    document.getElementById('walletInfo').style.display = 'none';
-                    document.getElementById('buyBtn').disabled = true;
-                    // Tekrar bağlanmayı dene
-                    setTimeout(autoConnectWallet, 1000);
+                // Bağlantıyı kes butonu
+                document.getElementById('disconnectBtn').addEventListener('click', () => {
+                    this.disconnectWallet();
+                });
+            },
+            
+            showWalletModal: function() {
+                // Cüzdan yüklü değilse kurulum modalı göster
+                const installWallet = confirm("Cüzdan uzantısı bulunamadı. MetaMask yüklemek ister misiniz?");
+                if (installWallet) {
+                    window.open('https://metamask.io/download.html', '_blank');
                 }
-            });
+            },
             
-            window.ethereum.on('chainChanged', () => {
-                window.location.reload();
-            });
-        }
+            showError: function(message) {
+                // Hata mesajını göster
+                alert(message);
+            }
+        };
+
+        // Uygulamayı başlat
+        window.addEventListener('DOMContentLoaded', () => {
+            WalletManager.init();
+        });
     </script>
 </body>
 </html>
