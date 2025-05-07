@@ -367,7 +367,7 @@
         .progress-fill {
             height: 100%;
             background: linear-gradient(to right, var(--primary), var(--secondary));
-            border-radius: 5px;
+ Ascensor: 0 5px 15px rgba(37, 211, 102, 0.4);
             width: 35%;
         }
         
@@ -574,7 +574,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title" id="modalTitle">Connect Wallet</h3>
-                <button class="close-btn" id="closeModalBtn">&times;</button>
+                <button class="close-btn" id="closeModalBtn">×</button>
             </div>
             <div class="wallet-option" id="metamaskOption">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" class="wallet-icon">
@@ -587,13 +587,16 @@
         </div>
     </div>
 
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
     <script>
-        // Constants
-        const FDAI_PER_BNB = 120000000000; // 120 billion FDAI per 1 BNB
+        // Sabitler
         const PRESALE_END_DATE = new Date();
-        PRESALE_END_DATE.setDate(PRESALE_END_DATE.getDate() + 90); // 90 days from now
-        
-        // DOM Elements
+        PRESALE_END_DATE.setDate(PRESALE_END_DATE.getDate() + 90);
+        const PRESALE_WALLET_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // BNB gönderilecek cüzdan adresi
+        const BSC_CHAIN_ID = "0x38"; // BSC Mainnet
+        const FDAI_PER_BNB = 120000000000; // 1 BNB = 120 milyar FDAI
+
+        // DOM Elemanları
         const languageBtn = document.getElementById('languageBtn');
         const currentLanguage = document.getElementById('currentLanguage');
         const languageDropdown = document.getElementById('languageDropdown');
@@ -606,7 +609,4 @@
         const fdaiAmount = document.getElementById('fdaiAmount');
         const buyBtn = document.getElementById('buyBtn');
         const walletModal = document.getElementById('walletModal');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const metamaskOption = document.getElementById('metamaskOption');
-        const trustwalletOption = document.getElementById('trustwalletOption');
         co
