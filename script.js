@@ -1,371 +1,304 @@
 // Constants
 const FDAI_PER_BNB = 120000000000; // 120 billion FDAI per 1 BNB
-const FDAI_TOKEN_ADDRESS = "0x8161698A74F2ea0035B9912ED60140893Ac0f39C";
-const BNB_RECEIVER_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
+const PRESALE_END_DATE = new Date();
+PRESALE_END_DATE.setDate(PRESALE_END_DATE.getDate() + 90); // 90 days from now
 
 // DOM Elements
 const languageBtn = document.getElementById('languageBtn');
-const languageDropdown = document.getElementById('languageDropdown');
 const currentLanguage = document.getElementById('currentLanguage');
+const languageDropdown = document.getElementById('languageDropdown');
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const walletInfo = document.getElementById('walletInfo');
 const walletAddress = document.getElementById('walletAddress');
 const bnbBalance = document.getElementById('bnbBalance');
-const purchasedFdai = document.getElementById('purchasedFdai');
 const bnbAmountInput = document.getElementById('bnbAmount');
 const calculationResult = document.getElementById('calculationResult');
 const fdaiAmount = document.getElementById('fdaiAmount');
 const buyBtn = document.getElementById('buyBtn');
-const tokenOwnership = document.getElementById('tokenOwnership');
-const ownedTokens = document.getElementById('ownedTokens');
-const whitepaperBtn = document.getElementById('whitepaperBtn');
 const walletModal = document.getElementById('walletModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const metamaskOption = document.getElementById('metamaskOption');
 const trustwalletOption = document.getElementById('trustwalletOption');
-
-// State
-let isWalletConnected = false;
-let userAddress = '';
-let userFdaiBalance = 0;
+const daysElement = document.getElementById('days');
+const hoursElement = document.getElementById('hours');
+const minutesElement = document.getElementById('minutes');
+const secondsElement = document.getElementById('seconds');
+const daysLabel = document.getElementById('daysLabel');
+const hoursLabel = document.getElementById('hoursLabel');
+const minutesLabel = document.getElementById('minutesLabel');
+const secondsLabel = document.getElementById('secondsLabel');
 
 // Language translations
 const translations = {
     en: {
-        title: "Presale Ends Soon",
-        subtitle: "Don't miss your chance to participate in the FreeDogeAI presale",
-        connectWallet: "Connect Wallet",
-        walletInfo: "Wallet Information",
-        enterBnb: "Enter BNB Amount:",
-        youWillReceive: "You will receive:",
-        buyTokens: "Buy Tokens",
-        youOwn: "You Own:",
-        tokenNote: "Your tokens will be reflected in your wallet after the presale ends.",
-        downloadWhitepaper: "Download Whitepaper",
-        joinCommunity: "Join Our Community",
-        communityDesc: "Stay updated and connected with the FreeDogeAI community",
-        connectModalTitle: "Connect Wallet"
+        mainTitle: "FreeDogeAI",
+        mainSubtitle: "The Future of AI-Powered Meme Coins<br>Join the revolution with FDAI - where meme culture meets artificial intelligence",
+        presaleTitle: "Presale Information",
+        presaleDesc: "Don't miss your chance to be part of the FreeDogeAI revolution. Our presale offers exclusive early access to FDAI tokens at a special price.",
+        nameLabel: "Name:",
+        symbolLabel: "Symbol:",
+        targetLabel: "Total Target:",
+        telegramText: "Telegram",
+        twitterText: "Twitter",
+        whitepaperText: "Download Whitepaper",
+        connectText: "Connect Wallet",
+        bnbLabel: "Enter BNB Amount:",
+        receiveText: "You will receive:",
+        buyText: "Buy FDAI Tokens",
+        progressText: "Progress: 35%",
+        raisedText: "Raised: 364.44 BNB / 1041.26 BNB",
+        modalTitle: "Connect Wallet",
+        daysLabel: "Days",
+        hoursLabel: "Hours",
+        minutesLabel: "Minutes",
+        secondsLabel: "Seconds"
     },
     tr: {
-        title: "Ön Satış Yakında Bitiyor",
-        subtitle: "FreeDogeAI ön satışına katılma şansını kaçırma",
-        connectWallet: "Cüzdan Bağla",
-        walletInfo: "Cüzdan Bilgisi",
-        enterBnb: "BNB Miktarı Girin:",
-        youWillReceive: "Alacaksınız:",
-        buyTokens: "Token Satın Al",
-        youOwn: "Sahip Olduğunuz:",
-        tokenNote: "Tokenleriniz ön satış sona erdikten sonra cüzdanınıza yansıtılacaktır.",
-        downloadWhitepaper: "Whitepaper İndir",
-        joinCommunity: "Topluluğumuza Katılın",
-        communityDesc: "FreeDogeAI topluluğuyla güncel kalın ve bağlantıda olun",
-        connectModalTitle: "Cüzdan Bağla"
-    },
-    ja: {
-        title: "プレセール終了間近",
-        subtitle: "FreeDogeAIプレセールに参加するチャンスをお見逃しなく",
-        connectWallet: "ウォレットを接続",
-        walletInfo: "ウォレット情報",
-        enterBnb: "BNB数量を入力:",
-        youWillReceive: "受け取ります:",
-        buyTokens: "トークンを購入",
-        youOwn: "所有している:",
-        tokenNote: "トークンはプレセール終了後にウォレットに反映されます。",
-        downloadWhitepaper: "ホワイトペーパーをダウンロード",
-        joinCommunity: "コミュニティに参加",
-        communityDesc: "FreeDogeAIコミュニティとつながり、最新情報を入手しましょう",
-        connectModalTitle: "ウォレットを接続"
-    },
-    zh: {
-        title: "预售即将结束",
-        subtitle: "不要错过参与FreeDogeAI预售的机会",
-        connectWallet: "连接钱包",
-        walletInfo: "钱包信息",
-        enterBnb: "输入BNB数量:",
-        youWillReceive: "你将收到:",
-        buyTokens: "购买代币",
-        youOwn: "你拥有:",
-        tokenNote: "预售结束后，代币将反映在你的钱包中。",
-        downloadWhitepaper: "下载白皮书",
-        joinCommunity: "加入我们的社区",
-        communityDesc: "与FreeDogeAI社区保持联系并获取最新信息",
-        connectModalTitle: "连接钱包"
+        mainTitle: "FreeDogeAI",
+        mainSubtitle: "AI Destekli Meme Coinlerin Geleceği<br>FDAI ile devrime katılın - meme kültürü ile yapay zekanın buluşma noktası",
+        presaleTitle: "Ön Satış Bilgileri",
+        presaleDesc: "FreeDogeAI devriminin bir parçası olma şansını kaçırmayın. Ön satışımız, FDAI token'larına özel bir fiyatla erken erişim sağlar.",
+        nameLabel: "İsim:",
+        symbolLabel: "Sembol:",
+        targetLabel: "Toplam Hedef:",
+        telegramText: "Telegram",
+        twitterText: "Twitter",
+        whitepaperText: "Whitepaper İndir",
+        connectText: "Cüzdan Bağla",
+        bnbLabel: "BNB Miktarı Girin:",
+        receiveText: "Alacaksınız:",
+        buyText: "FDAI Token Satın Al",
+        progressText: "İlerleme: %35",
+        raisedText: "Toplanan: 364.44 BNB / 1041.26 BNB",
+        modalTitle: "Cüzdan Bağla",
+        daysLabel: "Gün",
+        hoursLabel: "Saat",
+        minutesLabel: "Dakika",
+        secondsLabel: "Saniye"
     },
     ru: {
-        title: "Предпродажа скоро закончится",
-        subtitle: "Не упустите шанс принять участие в предпродаже FreeDogeAI",
-        connectWallet: "Подключить кошелек",
-        walletInfo: "Информация о кошельке",
-        enterBnb: "Введите количество BNB:",
-        youWillReceive: "Вы получите:",
-        buyTokens: "Купить токены",
-        youOwn: "В вашем владении:",
-        tokenNote: "Ваши токены будут отражены в вашем кошельке после окончания предпродажи.",
-        downloadWhitepaper: "Скачать Whitepaper",
-        joinCommunity: "Присоединяйтесь к нашему сообществу",
-        communityDesc: "Будьте в курсе и оставайтесь на связи с сообществом FreeDogeAI",
-        connectModalTitle: "Подключить кошелек"
+        mainTitle: "FreeDogeAI",
+        mainSubtitle: "Будущее мемных монет с ИИ<br>Присоединяйтесь к революции с FDAI - где мем-культура встречает искусственный интеллект",
+        presaleTitle: "Информация о предпродаже",
+        presaleDesc: "Не упустите шанс стать частью революции FreeDogeAI. Наша предпродажа предлагает эксклюзивный ранний доступ к токенам FDAI по специальной цене.",
+        nameLabel: "Название:",
+        symbolLabel: "Символ:",
+        targetLabel: "Общая цель:",
+        telegramText: "Telegram",
+        twitterText: "Twitter",
+        whitepaperText: "Скачать Whitepaper",
+        connectText: "Подключить кошелек",
+        bnbLabel: "Введите сумму BNB:",
+        receiveText: "Вы получите:",
+        buyText: "Купить токены FDAI",
+        progressText: "Прогресс: 35%",
+        raisedText: "Собрано: 364.44 BNB / 1041.26 BNB",
+        modalTitle: "Подключить кошелек",
+        daysLabel: "Дней",
+        hoursLabel: "Часов",
+        minutesLabel: "Минут",
+        secondsLabel: "Секунд"
+    },
+    ja: {
+        mainTitle: "FreeDogeAI",
+        mainSubtitle: "AI搭載ミームコインの未来<br>FDAIで革命に参加しましょう - ミーム文化と人工知能の出会い",
+        presaleTitle: "プレセール情報",
+        presaleDesc: "FreeDogeAI革命の一員になるチャンスをお見逃しなく。私たちのプレセールでは、特別価格でFDAIトークンに早期アクセスできます。",
+        nameLabel: "名前:",
+        symbolLabel: "シンボル:",
+        targetLabel: "総目標:",
+        telegramText: "Telegram",
+        twitterText: "Twitter",
+        whitepaperText: "ホワイトペーパーをダウンロード",
+        connectText: "ウォレットを接続",
+        bnbLabel: "BNB数量を入力:",
+        receiveText: "受け取る数量:",
+        buyText: "FDAIトークンを購入",
+        progressText: "進捗: 35%",
+        raisedText: "調達済み: 364.44 BNB / 1041.26 BNB",
+        modalTitle: "ウォレットを接続",
+        daysLabel: "日",
+        hoursLabel: "時間",
+        minutesLabel: "分",
+        secondsLabel: "秒"
+    },
+    zh: {
+        mainTitle: "FreeDogeAI",
+        mainSubtitle: "AI驱动的模因币的未来<br>加入FDAI革命 - 模因文化与人工智能的相遇",
+        presaleTitle: "预售信息",
+        presaleDesc: "不要错过成为FreeDogeAI革命一部分的机会。我们的预售以特殊价格提供FDAI代币的独家早期访问权限。",
+        nameLabel: "名称:",
+        symbolLabel: "符号:",
+        targetLabel: "总目标:",
+        telegramText: "电报",
+        twitterText: "推特",
+        whitepaperText: "下载白皮书",
+        connectText: "连接钱包",
+        bnbLabel: "输入BNB数量:",
+        receiveText: "您将获得:",
+        buyText: "购买FDAI代币",
+        progressText: "进度: 35%",
+        raisedText: "已筹集: 364.44 BNB / 1041.26 BNB",
+        modalTitle: "连接钱包",
+        daysLabel: "天",
+        hoursLabel: "小时",
+        minutesLabel: "分钟",
+        secondsLabel: "秒"
+    },
+    ur: {
+        mainTitle: "FreeDogeAI",
+        mainSubtitle: "AI سے چلنے والے میم سکوں کا مستقبل<br>FDAI کے ساتھ انقلاب میں شامل ہوں - جہاں میم کلچر اور مصنوعی ذہانت ملتے ہیں",
+        presaleTitle: "پری سیل معلومات",
+        presaleDesc: "FreeDogeAI انقلاب کا حصہ بننے کا موقع مت چھوڑیں۔ ہماری پری سیل FDAI ٹوکنز تک خصوصی قیمت پر خصوصی ابتدائی رسائی فراہم کرتی ہے۔",
+        nameLabel: "نام:",
+        symbolLabel: "علامت:",
+        targetLabel: "کل ہدف:",
+        telegramText: "ٹیلی گرام",
+        twitterText: "ٹویٹر",
+        whitepaperText: "وائٹ پیپر ڈاؤن لوڈ کریں",
+        connectText: "والیٹ سے رابطہ کریں",
+        bnbLabel: "BNB رقم درج کریں:",
+        receiveText: "آپ کو ملے گا:",
+        buyText: "FDAI ٹوکنز خریدیں",
+        progressText: "ترقی: 35%",
+        raisedText: "جمع شدہ: 364.44 BNB / 1041.26 BNB",
+        modalTitle: "والیٹ سے رابطہ کریں",
+        daysLabel: "دن",
+        hoursLabel: "گھنٹے",
+        minutesLabel: "منٹ",
+        secondsLabel: "سیکنڈ"
     }
 };
 
-// Set initial language
+// Current language
 let currentLang = 'en';
-updateLanguage(currentLang);
 
-// Event Listeners
-languageBtn.addEventListener('click', () => {
-    languageDropdown.classList.toggle('show');
-});
-
-document.querySelectorAll('.language-option').forEach(option => {
-    option.addEventListener('click', () => {
-        const lang = option.getAttribute('data-lang');
-        currentLang = lang;
-        currentLanguage.textContent = option.textContent;
-        languageDropdown.classList.remove('show');
-        updateLanguage(lang);
+// Initialize the page
+function init() {
+    // Set up event listeners
+    languageBtn.addEventListener('click', toggleLanguageDropdown);
+    document.querySelectorAll('.language-option').forEach(option => {
+        option.addEventListener('click', () => changeLanguage(option.dataset.lang));
     });
-});
-
-// Close language dropdown when clicking outside
-document.addEventListener('click', (e) => {
-    if (!languageBtn.contains(e.target) && !languageDropdown.contains(e.target)) {
-        languageDropdown.classList.remove('show');
-    }
-});
-
-connectWalletBtn.addEventListener('click', () => {
-    walletModal.style.display = 'flex';
-});
-
-closeModalBtn.addEventListener('click', () => {
-    walletModal.style.display = 'none';
-});
-
-window.addEventListener('click', (e) => {
-    if (e.target === walletModal) {
-        walletModal.style.display = 'none';
-    }
-});
-
-metamaskOption.addEventListener('click', connectMetaMask);
-trustwalletOption.addEventListener('click', connectTrustWallet);
-
-bnbAmountInput.addEventListener('input', calculateFdai);
-
-buyBtn.addEventListener('click', buyTokens);
-
-whitepaperBtn.addEventListener('click', () => {
-    // In a real implementation, this would link to your actual whitepaper PDF
-    alert('Downloading Whitepaper...');
-    // window.location.href = 'path/to/whitepaper.pdf';
-});
-
-// Functions
-function updateLanguage(lang) {
-    const texts = translations[lang];
     
-    document.getElementById('mainTitle').textContent = texts.title;
-    document.getElementById('mainSubtitle').textContent = texts.subtitle;
-    connectWalletBtn.textContent = texts.connectWallet;
-    document.querySelector('.wallet-info h3').textContent = texts.walletInfo;
-    document.getElementById('bnbAmountLabel').textContent = texts.enterBnb;
-    document.getElementById('buyBtn').textContent = texts.buyTokens;
-    document.getElementById('ownershipText').textContent = texts.youOwn;
-    document.getElementById('tokenNote').textContent = texts.tokenNote;
-    document.getElementById('whitepaperText').textContent = texts.downloadWhitepaper;
-    document.getElementById('communityTitle').textContent = texts.joinCommunity;
-    document.getElementById('communityDesc').textContent = texts.communityDesc;
-    document.getElementById('modalTitle').textContent = texts.connectModalTitle;
+    connectWalletBtn.addEventListener('click', openWalletModal);
+    closeModalBtn.addEventListener('click', closeWalletModal);
+    metamaskOption.addEventListener('click', () => connectWallet('metamask'));
+    trustwalletOption.addEventListener('click', () => connectWallet('trustwallet'));
     
-    // Update calculation text
-    if (calculationResult.style.display !== 'none') {
-        calculationResult.innerHTML = `${texts.youWillReceive} <span id="fdaiAmount">0</span> FDAI`;
-    }
+    bnbAmountInput.addEventListener('input', calculateFDAI);
+    buyBtn.addEventListener('click', buyFDAI);
+    
+    // Start countdown
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target === walletModal) {
+            closeWalletModal();
+        }
+    });
 }
 
-async function connectMetaMask() {
-    if (typeof window.ethereum === 'undefined') {
-        alert('MetaMask is not installed! Please install it first.');
-        return;
-    }
+// Toggle language dropdown
+function toggleLanguageDropdown() {
+    languageDropdown.classList.toggle('show');
+}
+
+// Change language
+function changeLanguage(lang) {
+    currentLang = lang;
+    currentLanguage.textContent = document.querySelector(`.language-option[data-lang="${lang}"]`).textContent;
     
-    try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        userAddress = accounts[0];
-        handleWalletConnection(userAddress);
-        
-        // Listen for account changes
-        window.ethereum.on('accountsChanged', (newAccounts) => {
-            if (newAccounts.length === 0) {
-                // Wallet disconnected
-                handleWalletDisconnection();
+    // Update all text elements
+    for (const [key, value] of Object.entries(translations[lang])) {
+        const element = document.getElementById(key);
+        if (element) {
+            if (key === 'mainSubtitle') {
+                element.innerHTML = value;
             } else {
-                // Account changed
-                userAddress = newAccounts[0];
-                updateWalletInfo(userAddress);
+                element.textContent = value;
             }
-        });
-        
-        // Listen for chain changes
-        window.ethereum.on('chainChanged', () => {
-            window.location.reload();
-        });
-        
-        walletModal.style.display = 'none';
-    } catch (error) {
-        console.error('Error connecting to MetaMask:', error);
-        alert('Failed to connect to MetaMask: ' + error.message);
-    }
-}
-
-async function connectTrustWallet() {
-    if (window.trustwallet) {
-        // Trust Wallet browser
-        try {
-            const accounts = await window.trustwallet.request({ method: 'eth_requestAccounts' });
-            userAddress = accounts[0];
-            handleWalletConnection(userAddress);
-            walletModal.style.display = 'none';
-        } catch (error) {
-            console.error('Error connecting to Trust Wallet:', error);
-            alert('Failed to connect to Trust Wallet: ' + error.message);
         }
-    } else if (window.ethereum) {
-        // Trust Wallet mobile (via WalletConnect)
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            userAddress = accounts[0];
-            handleWalletConnection(userAddress);
-            walletModal.style.display = 'none';
-        } catch (error) {
-            console.error('Error connecting to Trust Wallet:', error);
-            alert('Failed to connect to Trust Wallet: ' + error.message);
-        }
-    } else {
-        alert('Trust Wallet is not detected!');
     }
+    
+    // Close dropdown
+    languageDropdown.classList.remove('show');
 }
 
-function handleWalletConnection(address) {
-    isWalletConnected = true;
-    userAddress = address;
-    
-    // Update UI
-    connectWalletBtn.textContent = translations[currentLang].connectWallet + ' ✔';
-    walletInfo.style.display = 'block';
-    walletAddress.textContent = address;
-    buyBtn.disabled = false;
-    
-    // In a real implementation, you would fetch these from the blockchain
-    bnbBalance.textContent = '0.0 BNB';
-    purchasedFdai.textContent = '0 FDAI';
-    
-    // Show token ownership if they have any
-    if (userFdaiBalance > 0) {
-        tokenOwnership.style.display = 'block';
-        ownedTokens.textContent = `${userFdaiBalance} FDAI`;
-    }
+// Open wallet modal
+function openWalletModal() {
+    walletModal.style.display = 'flex';
 }
 
-function handleWalletDisconnection() {
-    isWalletConnected = false;
-    userAddress = '';
-    
-    // Update UI
-    connectWalletBtn.textContent = translations[currentLang].connectWallet;
-    walletInfo.style.display = 'none';
-    buyBtn.disabled = true;
-    calculationResult.style.display = 'none';
-    bnbAmountInput.value = '';
+// Close wallet modal
+function closeWalletModal() {
+    walletModal.style.display = 'none';
 }
 
-function updateWalletInfo(address) {
-    walletAddress.textContent = address;
-    // In a real implementation, you would update the balance here
-}
-
-function calculateFdai() {
-    const bnbAmount = parseFloat(bnbAmountInput.value);
+// Connect wallet (simulated)
+function connectWallet(walletType) {
+    // In a real implementation, this would connect to the actual wallet
+    console.log(`Connecting to ${walletType}...`);
     
-    if (isNaN(bnbAmount)) {
-        calculationResult.style.display = 'none';
-        return;
-    }
-    
-    const fdai = bnbAmount * FDAI_PER_BNB;
-    fdaiAmount.textContent = formatNumber(fdai);
-    calculationResult.style.display = 'block';
-}
-
-function formatNumber(num) {
-    if (num >= 1000000000) {
-        return (num / 1000000000).toFixed(2) + 'B';
-    }
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(2) + 'M';
-    }
-    if (num >= 1000) {
-        return (num / 1000).toFixed(2) + 'K';
-    }
-    return num.toFixed(2);
-}
-
-async function buyTokens() {
-    if (!isWalletConnected) {
-        alert('Please connect your wallet first!');
-        return;
-    }
-    
-    const bnbAmount = parseFloat(bnbAmountInput.value);
-    
-    if (isNaN(bnbAmount)) {
-        alert('Please enter a valid BNB amount');
-        return;
-    }
-    
-    // In a real implementation, this would send a transaction to your smart contract
-    try {
-        buyBtn.disabled = true;
-        buyBtn.textContent = 'Processing...';
-        
-        // Simulate transaction delay
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        // Calculate purchased FDAI
-        const purchased = bnbAmount * FDAI_PER_BNB;
-        userFdaiBalance += purchased;
-        
-        // Update UI
-        purchasedFdai.textContent = `${userFdaiBalance} FDAI`;
-        tokenOwnership.style.display = 'block';
-        ownedTokens.textContent = `${userFdaiBalance} FDAI`;
-        
-        // Reset form
-        bnbAmountInput.value = '';
-        calculationResult.style.display = 'none';
-        
-        alert(`Successfully purchased ${purchased} FDAI tokens!`);
-    } catch (error) {
-        console.error('Error purchasing tokens:', error);
-        alert('Failed to purchase tokens: ' + error.message);
-    } finally {
+    // Simulate connection
+    setTimeout(() => {
+        walletAddress.textContent = '0x71C7...3e5A';
+        bnbBalance.textContent = 'BNB Balance: 1.25';
+        walletInfo.style.display = 'block';
+        connectWalletBtn.textContent = translations[currentLang].connectText + ' ✔';
         buyBtn.disabled = false;
-        buyBtn.textContent = translations[currentLang].buyTokens;
+        closeWalletModal();
+    }, 1000);
+}
+
+// Calculate FDAI amount
+function calculateFDAI() {
+    const bnbAmount = parseFloat(bnbAmountInput.value);
+    
+    if (bnbAmount && bnbAmount > 0) {
+        const fdai = bnbAmount * FDAI_PER_BNB;
+        fdaiAmount.textContent = fdai.toLocaleString();
+        calculationResult.style.display = 'block';
+    } else {
+        calculationResult.style.display = 'none';
     }
 }
 
-// Check if wallet is already connected on page load
-window.addEventListener('load', async () => {
-    if (typeof window.ethereum !== 'undefined') {
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-            if (accounts.length > 0) {
-                userAddress = accounts[0];
-                handleWalletConnection(userAddress);
-            }
-        } catch (error) {
-            console.error('Error checking connected accounts:', error);
-        }
+// Buy FDAI (simulated)
+function buyFDAI() {
+    const bnbAmount = parseFloat(bnbAmountInput.value);
+    
+    if (bnbAmount && bnbAmount > 0) {
+        alert(`${translations[currentLang].buyText} ${bnbAmount} BNB! (Simulated transaction)`);
     }
-});
+}
+
+// Update countdown
+function updateCountdown() {
+    const now = new Date();
+    const diff = PRESALE_END_DATE - now;
+    
+    if (diff <= 0) {
+        // Presale has ended
+        daysElement.textContent = '00';
+        hoursElement.textContent = '00';
+        minutesElement.textContent = '00';
+        secondsElement.textContent = '00';
+        return;
+    }
+    
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    daysElement.textContent = days.toString().padStart(2, '0');
+    hoursElement.textContent = hours.toString().padStart(2, '0');
+    minutesElement.textContent = minutes.toString().padStart(2, '0');
+    secondsElement.textContent = seconds.toString().padStart(2, '0');
+}
+
+// Initialize the page when loaded
+window.addEventListener('DOMContentLoaded', init);
