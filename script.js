@@ -68,7 +68,6 @@
             minutesLabel: "Dakika",
             secondsLabel: "Saniye"
         }
-        // Diğer diller için çeviriler eklenebilir (ru, ja, zh, ur)
     };
 
     function updateLanguage(lang) {
@@ -136,61 +135,72 @@
             });
         } catch (switchError) {
             if (switchError.code === 4902) {
-                await window.ethereum.request({
-                    method: 'wallet_addEthereumChain',
-                    params: [{
-                        chainId: BSC_CHAIN_ID,
-                        chainName: 'Binance Smart Chain Mainnet',
-                        rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                        nativeCurrency: {
-                            name: 'BNB',
-                            symbol: 'BNB',
-                            decimals: 18
-                        },
-                        blockExplorerUrls: ['https://bscscan.com']
-                    }]
-                });
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: BSC_CHAIN_ID,
+                            chainName: 'Binance Smart Chain Mainnet',
+                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                            nativeCurrency: {
+                                name: 'BNB',
+                                symbol: 'BNB',
+                                decimals: 18
+                            },
+                            blockExplorerUrls: ['https://bscscan.com']
+                        }]
+                    });
+                } catch (addError) {
+                    console.error("Ağ ekleme başarısız:", addError);
+                    alert("BSC Mainnet ağı eklenemedi. Lütfen manuel olarak ekleyin.");
+                }
             } else {
-                throw switchError;
+                console.error("Ağ değiştirme hatası:", switchError);
+                alert("Ağ değiştirme başarısız. Lütfen BSC Mainnet'e manuel olarak geçin.");
             }
         }
     }
 
     // Cüzdan bağlantısı (MetaMask ve Trust Wallet)
     async function connectWallet() {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                await switchToBSC(); // BSC Mainnet'e geçiş
-                await provider.send("eth_requestAccounts", []);
-                signer = provider.getSigner();
-                userAddress = await signer.getAddress();
-
-                // Arayüzü güncelle
-                walletAddress.textContent = `Adres: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
-                const balance = await provider.getBalance(userAddress);
-                bnbBalance.textContent = `Bakiye: ${ethers.utils.formatEther(balance)} BNB`;
-                walletInfo.style.display = 'block';
-                connectWalletBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.connectText === "Cüzdanı Bağla" ? "Bağlandı" : "Connected";
-                connectWalletBtn.disabled = true;
-                buyBtn.disabled = false;
-                walletModal.style.display = 'none';
-
-                // Ön satış cüzdan adresini göster
-                document.getElementById('presaleDesc').innerHTML += `<br><br>BNB Gönderilecek Adres: <strong>${PRESALE_WALLET_ADDRESS}</strong> <button onclick="copyAddress()">Kopyala</button>`;
-            } catch (error) {
-                console.error("Cüzdan bağlantısı başarısız:", error);
-                alert("Cüzdan bağlanamadı. Lütfen BSC Mainnet ağında olduğunuzdan emin olun ve tekrar deneyin.");
-            }
-        } else {
+        if (typeof window.ethereum === 'undefined') {
             alert("Lütfen MetaMask veya Trust Wallet kurun.");
+            return;
+        }
+
+        try {
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            await switchToBSC(); // BSC Mainnet'e geçiş
+            signer = provider.getSigner();
+            userAddress = await signer.getAddress();
+
+            // Arayüzü güncelle
+            walletAddress.textContent = `Adres: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+            const balance = await provider.getBalance(userAddress);
+            bnbBalance.textContent = `Bakiye: ${ethers.utils.formatEther(balance)} BNB`;
+            walletInfo.style.display = 'block';
+            connectWalletBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.connectText === "Cüzdanı Bağla" ? "Bağlandı" : "Connected";
+            connectWalletBtn.disabled = true;
+            buyBtn.disabled = false;
+            walletModal.style.display = 'none';
+
+            // Ön satış cüzdan adresini göster
+            const presaleDesc = document.getElementById('presaleDesc');
+            presaleDesc.innerHTML += `<br><br>BNB Gönderilecek Adres: <strong>${PRESALE_WALLET_ADDRESS}</strong> <button onclick="copyAddress()">Kopyala</button>`;
+        } catch (error) {
+            console.error("Cüzdan bağlantısı başarısız:", error);
+            alert("Cüzdan bağlanamadı: " + (error.message || "Bilinmeyen bir hata oluştu. Lütfen BSC Mainnet ağında olduğunuzdan emin olun."));
         }
     }
 
     // Cüzdan adresini kopyala
     function copyAddress() {
-        navigator.clipboard.writeText(PRESALE_WALLET_ADDRESS);
-        alert("Cüzdan adresi kopyalandı!");
+        navigator.clipboard.writeText(PRESALE_WALLET_ADDRESS).then(() => {
+            alert("Cüzdan adresi kopyalandı!");
+        }).catch(() => {
+            alert("Adres kopyalanamadı, lütfen manuel olarak kopyalayın.");
+        });
     }
 
     connectWalletBtn.addEventListener('click', () => {
@@ -206,48 +216,76 @@
     // BNB miktarına göre FDAI tahmini
     bnbAmountInput.addEventListener('input', () => {
         const bnbAmount = parseFloat(bnbAmountInput.value);
-        if (bnbAmount > 0) {
-            const fdai = bnbAmount * FDAI_PER_BNB;
-            fdaiAmount.textContent = fdai.toLocaleString();
-            calculationResult.style.display = 'block';
-            buyBtn.disabled = false;
-        } else {
+        if (isNaN(bnbAmount) || bnbAmount <= 0) {
             calculationResult.style.display = 'none';
             buyBtn.disabled = true;
+            return;
         }
+        const fdai = bnbAmount * FDAI_PER_BNB;
+        fdaiAmount.textContent = fdai.toLocaleString();
+        calculationResult.style.display = 'block';
+        buyBtn.disabled = false;
     });
 
     // BNB gönderme işlemi
     buyBtn.addEventListener('click', async () => {
+        if (!signer || !userAddress) {
+            alert("Lütfen önce cüzdanınızı bağlayın.");
+            return;
+        }
+
         const bnbAmount = parseFloat(bnbAmountInput.value);
-        if (!bnbAmount || bnbAmount <= 0) {
+        if (isNaN(bnbAmount) || bnbAmount <= 0) {
             alert("Lütfen geçerli bir BNB miktarı girin.");
             return;
         }
 
         try {
+            const balance = await provider.getBalance(userAddress);
+            const balanceInEther = ethers.utils.formatEther(balance);
+            if (parseFloat(balanceInEther) < bnbAmount) {
+                alert("Yetersiz BNB bakiyesi! Mevcut bakiye: " + balanceInEther + " BNB");
+                return;
+            }
+
             const bnbValue = ethers.utils.parseEther(bnbAmount.toString());
+            const gasPrice = await provider.getGasPrice();
+            const gasLimit = 21000; // Basit transfer için standart gas limiti
+
             const tx = await signer.sendTransaction({
                 to: PRESALE_WALLET_ADDRESS,
-                value: bnbValue
+                value: bnbValue,
+                gasPrice: gasPrice,
+                gasLimit: gasLimit
             });
+
             buyBtn.disabled = true;
-            buyBtn.textContent = "Gönderiliyor...";
-            await tx.wait();
-            alert(`BNB başarıyla gönderildi! Tx Hash: ${tx.hash}\nFDAI tokenları manuel olarak gönderilecektir.`);
+            buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText === "BNB Gönder" ? "Gönderiliyor..." : "Sending...";
+            
+            const receipt = await tx.wait();
+            alert(`BNB başarıyla gönderildi!\nTx Hash: ${receipt.transactionHash}\nFDAI tokenları manuel olarak gönderilecektir.`);
+
             bnbAmountInput.value = '';
             calculationResult.style.display = 'none';
             buyBtn.disabled = false;
-            buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText || "BNB Gönder";
+            buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText || "Send BNB";
 
             // Bakiyeyi güncelle
-            const balance = await provider.getBalance(userAddress);
-            bnbBalance.textContent = `Bakiye: ${ethers.utils.formatEther(balance)} BNB`;
+            const updatedBalance = await provider.getBalance(userAddress);
+            bnbBalance.textContent = `Bakiye: ${ethers.utils.formatEther(updatedBalance)} BNB`;
         } catch (error) {
             console.error("BNB gönderimi başarısız:", error);
-            alert("BNB gönderimi başarısız. Lütfen bakiyenizi kontrol edin veya tekrar deneyin.");
+            let errorMessage = "BNB gönderimi başarısız.";
+            if (error.code === 4001) {
+                errorMessage = "İşlem kullanıcı tarafından reddedildi.";
+            } else if (error.message.includes("insufficient funds")) {
+                errorMessage = "Yetersiz bakiye. Lütfen cüzdanınızda yeterli BNB olduğundan emin olun.";
+            } else {
+                errorMessage += " Hata: " + (error.message || "Bilinmeyen bir hata oluştu.");
+            }
+            alert(errorMessage);
             buyBtn.disabled = false;
-            buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText || "BNB Gönder";
+            buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText || "Send BNB";
         }
     });
 
