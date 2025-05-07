@@ -1,206 +1,180 @@
-// app.js
-document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
-    const metamaskButton = document.getElementById('metamaskButton');
-    const trustwalletButton = document.getElementById('trustwalletButton');
-    const buyButton = document.getElementById('buyButton');
-    const walletAddress = document.getElementById('walletAddress');
-    const walletBalance = document.getElementById('walletBalance');
-    const accountInfo = document.getElementById('accountInfo');
-    const countdown = document.getElementById('countdown');
+// Constants
+const RECEIVE_WALLET = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
+const TOKENS_PER_BNB = 120000000000;
+let web3;
+let userAddress = "";
 
-    // Countdown Timer (24 hours from now)
-    function updateCountdown() {
-        const now = new Date();
-        const endTime = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-        
-        const interval = setInterval(() => {
-            const now = new Date();
-            const diff = endTime - now;
-            
-            if (diff <= 0) {
-                clearInterval(interval);
-                countdown.textContent = "Pre-sale ended!";
-                return;
-            }
-            
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            countdown.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }, 1000);
-    }
-
-    updateCountdown();
-
-    // Check Wallet Connection
-    async function checkWalletConnection() {
-        if (window.ethereum) {
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                if (accounts.length > 0) {
-                    showAccountInfo(accounts[0]);
-                    return true;
-                }
-            } catch (error) {
-                console.error("Error checking wallet connection:", error);
-            }
-        }
-        return false;
-    }
-
-    // Show Account Info
-    async function showAccountInfo(account) {
-        walletAddress.textContent = `${account.substring(0, 6)}...${account.substring(account.length - 4)}`;
-        
-        try {
-            const balance = await window.ethereum.request({
-                method: 'eth_getBalance',
-                params: [account, 'latest']
-            });
-            const balanceInBNB = parseInt(balance) / Math.pow(10, 18);
-            walletBalance.textContent = balanceInBNB.toFixed(4);
-        } catch (error) {
-            walletBalance.textContent = "N/A";
-        }
-        
-        accountInfo.style.display = 'block';
-    }
-
-    // Connect MetaMask
-    async function connectMetaMask() {
-        if (typeof window.ethereum === 'undefined') {
-            alert('Please install MetaMask extension!');
-            window.open('https://metamask.io/download.html', '_blank');
-            return;
-        }
-
-        try {
-            // Switch to BSC Network if not already
-            await switchToBSCNetwork();
-            
-            const accounts = await window.ethereum.request({ 
-                method: 'eth_requestAccounts' 
-            });
-            
-            showAccountInfo(accounts[0]);
-            alert('Successfully connected with MetaMask!');
-        } catch (error) {
-            console.error("MetaMask connection error:", error);
-            alert(`Connection error: ${error.message}`);
-        }
-    }
-
-    // Connect Trust Wallet
-    async function connectTrustWallet() {
-        if (typeof window.ethereum === 'undefined') {
-            alert('Please install Trust Wallet app!');
-            window.open('https://trustwallet.com/', '_blank');
-            return;
-        }
-
-        try {
-            // Switch to BSC Network if not already
-            await switchToBSCNetwork();
-            
-            const accounts = await window.ethereum.request({ 
-                method: 'eth_requestAccounts' 
-            });
-            
-            showAccountInfo(accounts[0]);
-            alert('Successfully connected with Trust Wallet!');
-        } catch (error) {
-            console.error("Trust Wallet connection error:", error);
-            alert(`Connection error: ${error.message}`);
-        }
-    }
-
-    // Switch to BSC Network
-    async function switchToBSCNetwork() {
-        try {
-            await window.ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: '0x38' }] // BSC Mainnet
-            });
-        } catch (switchError) {
-            // This error code indicates that the chain has not been added to MetaMask
-            if (switchError.code === 4902) {
-                try {
-                    await window.ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [{
-                            chainId: '0x38',
-                            chainName: 'Binance Smart Chain',
-                            nativeCurrency: {
-                                name: 'BNB',
-                                symbol: 'BNB',
-                                decimals: 18
-                            },
-                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                            blockExplorerUrls: ['https://bscscan.com/']
-                        }]
-                    });
-                } catch (addError) {
-                    console.error("Error adding BSC network:", addError);
-                    throw new Error("Could not add Binance Smart Chain network");
-                }
-            } else {
-                console.error("Error switching to BSC network:", switchError);
-                throw new Error("Could not switch to Binance Smart Chain network");
-            }
-        }
-    }
-
-    // Buy Tokens Function
-    async function buyTokens() {
-        const isConnected = await checkWalletConnection();
-        
-        if (!isConnected) {
-            const useMetaMask = confirm('Connect to MetaMask or Trust Wallet to continue. Click OK for MetaMask or Cancel for Trust Wallet');
-            
-            if (useMetaMask) {
-                await connectMetaMask();
-            } else {
-                await connectTrustWallet();
-            }
-            
-            // Check again after connection attempt
-            if (!await checkWalletConnection()) {
-                return;
-            }
-        }
-
-        // Here you would add your token purchase logic
-        alert('Token purchase initiated! Your tokens will arrive within 24 hours.');
-        
-        // Example transaction (replace with your actual contract details)
-        try {
-            const transactionParameters = {
-                to: '0xYOUR_CONTRACT_ADDRESS', // Your contract address
-                from: window.ethereum.selectedAddress,
-                value: '0x' + (0.1 * Math.pow(10, 18)).toString(16), // 0.1 BNB
-                data: '0xYOUR_CONTRACT_METHOD', // Your contract method
-            };
-            
-            const txHash = await window.ethereum.request({
-                method: 'eth_sendTransaction',
-                params: [transactionParameters],
-            });
-            
-            console.log('Transaction Hash:', txHash);
-            alert(`Transaction successful! Hash: ${txHash}`);
-        } catch (error) {
-            console.error('Transaction error:', error);
-            alert(`Transaction failed: ${error.message}`);
-        }
-    }
-
-    // Event Listeners
-    metamaskButton.addEventListener('click', connectMetaMask);
-    trustwalletButton.addEventListener('click', connectTrustWallet);
-    buyButton.addEventListener('click', buyTokens);
-
-    // Check if wallet is already connected on page load
-    checkWalletConnection();
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', async () => {
+  await initWalletConnection();
+  setupEventListeners();
 });
+
+// Initialize wallet connection
+async function initWalletConnection() {
+  if (window.ethereum) {
+    try {
+      // Check if already connected
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      
+      if (accounts.length > 0) {
+        await handleConnectedWallet(accounts[0]);
+        return;
+      }
+      
+      // Auto-connect if not connected
+      await connectWallet();
+    } catch (error) {
+      console.error("Initial connection error:", error);
+    }
+  } else {
+    console.log("Wallet extension not detected");
+  }
+}
+
+// Connect wallet automatically
+async function connectWallet() {
+  try {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    userAddress = accounts[0];
+    web3 = new Web3(window.ethereum);
+    
+    await switchToBSCNetwork();
+    await updateWalletInfo();
+  } catch (error) {
+    console.error("Wallet connection failed:", error);
+  }
+}
+
+// Switch to BSC network
+async function switchToBSCNetwork() {
+  try {
+    const chainId = await web3.eth.getChainId();
+    if (chainId !== 56) {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x38' }] // BSC Mainnet
+      });
+    }
+  } catch (switchError) {
+    if (switchError.code === 4902) {
+      try {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainId: '0x38',
+            chainName: 'Binance Smart Chain',
+            nativeCurrency: {
+              name: 'BNB',
+              symbol: 'BNB',
+              decimals: 18
+            },
+            rpcUrls: ['https://bsc-dataseed.binance.org/'],
+            blockExplorerUrls: ['https://bscscan.com/']
+          }]
+        });
+      } catch (addError) {
+        console.error("Failed to add BSC network:", addError);
+      }
+    }
+  }
+}
+
+// Update wallet info in UI
+async function updateWalletInfo() {
+  if (!userAddress) return;
+
+  try {
+    const balance = await web3.eth.getBalance(userAddress);
+    const bnbBalance = web3.utils.fromWei(balance, 'ether');
+    
+    document.getElementById('walletAddress').textContent = userAddress;
+    document.getElementById('userTokenAddress').textContent = userAddress;
+    document.getElementById('bnbBalance').textContent = `${parseFloat(bnbBalance).toFixed(4)} BNB`;
+    document.getElementById('walletInfo').style.display = 'block';
+    document.getElementById('buyBtn').disabled = false;
+  } catch (error) {
+    console.error("Failed to update wallet info:", error);
+  }
+}
+
+// Handle BNB to FDAI calculation
+function setupEventListeners() {
+  document.getElementById('bnbAmount').addEventListener('input', function() {
+    const amount = parseFloat(this.value) || 0;
+    document.getElementById('fdaiAmount').textContent = (amount * TOKENS_PER_BNB).toLocaleString();
+  });
+
+  document.getElementById('buyBtn').addEventListener('click', sendTransaction);
+}
+
+// Send BNB transaction
+async function sendTransaction() {
+  const bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
+  
+  if (!bnbAmount || bnbAmount <= 0) {
+    alert("Please enter a valid BNB amount!");
+    return;
+  }
+
+  try {
+    const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
+    
+    const tx = {
+      from: userAddress,
+      to: RECEIVE_WALLET,
+      value: weiAmount,
+      gas: 300000,
+      gasPrice: await web3.eth.getGasPrice()
+    };
+
+    const receipt = await web3.eth.sendTransaction(tx);
+    showTransactionSuccess(bnbAmount, receipt.transactionHash);
+  } catch (error) {
+    console.error("Transaction failed:", error);
+    alert(`Transaction failed: ${error.message}`);
+  }
+}
+
+// Show success message
+function showTransactionSuccess(amount, txHash) {
+  const tokenAmount = amount * TOKENS_PER_BNB;
+  const message = `
+    ✅ ${amount} BNB sent successfully!
+    
+    Receiver Address: ${RECEIVE_WALLET}
+    Your FDAI Address: ${userAddress}
+    You will receive: ${tokenAmount.toLocaleString()} FDAI
+    Transaction Hash: ${txHash}
+    
+    Tokens will be manually distributed within 24 hours.
+  `;
+  alert(message);
+}
+
+// Handle wallet changes
+if (window.ethereum) {
+  window.ethereum.on('accountsChanged', (accounts) => {
+    if (accounts.length > 0) {
+      handleConnectedWallet(accounts[0]);
+    } else {
+      resetWalletConnection();
+      setTimeout(initWalletConnection, 1000);
+    }
+  });
+
+  window.ethereum.on('chainChanged', () => window.location.reload());
+}
+
+// Helper functions
+async function handleConnectedWallet(account) {
+  userAddress = account;
+  web3 = new Web3(window.ethereum);
+  await updateWalletInfo();
+}
+
+function resetWalletConnection() {
+  document.getElementById('walletInfo').style.display = 'none';
+  document.getElementById('buyBtn').disabled = true;
+  userAddress = "";
+}
