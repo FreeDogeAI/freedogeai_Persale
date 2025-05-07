@@ -27,6 +27,10 @@
     const raisedText = document.getElementById('raisedText');
     const progressFill = document.querySelector('.progress-fill');
     const whitepaperBtn = document.getElementById('whitepaperBtn');
+    const daysElement = document.getElementById('days');
+    const hoursElement = document.getElementById('hours');
+    const minutesElement = document.getElementById('minutes');
+    const secondsElement = document.getElementById('seconds');
 
     // Ethers.js kurulumu
     let provider, signer, userAddress;
@@ -68,6 +72,42 @@
             hoursLabel: "Saat",
             minutesLabel: "Dakika",
             secondsLabel: "Saniye"
+        },
+        zh: {
+            mainTitle: "FreeDogeAI",
+            mainSubtitle: "人工智能驱动的迷因币的未来<br>加入FDAI革命 - 迷因文化与人工智能的结合",
+            presaleTitle: "预售信息",
+            presaleDesc: "不要错过加入FreeDogeAI革命的机会。向下面的地址发送BNB，FDAI代币将手动发送给您。",
+            connectText: "连接钱包",
+            bnbLabel: "输入BNB数量：",
+            buyText: "发送BNB",
+            receiveText: "您将收到（约）：",
+            telegramText: "Telegram",
+            twitterText: "Twitter",
+            whitepaperText: "下载白皮书",
+            modalTitle: "连接钱包",
+            daysLabel: "天",
+            hoursLabel: "小时",
+            minutesLabel: "分钟",
+            secondsLabel: "秒"
+        },
+        ja: {
+            mainTitle: "FreeDogeAI",
+            mainSubtitle: "AIを活用したミームコインの未来<br>FDAIで革命に参加しよう - ミーム文化と人工知能が融合",
+            presaleTitle: "プレセール情報",
+            presaleDesc: "FreeDogeAI革命に参加するチャンスを逃さないでください。以下のアドレスにBNBを送ると、FDAIトークンが手動で送られます。",
+            connectText: "ウォレットを接続",
+            bnbLabel: "BNB数量を入力：",
+            buyText: "BNBを送る",
+            receiveText: "受け取る数量（約）：",
+            telegramText: "Telegram",
+            twitterText: "Twitter",
+            whitepaperText: "ホワイトペーパーをダウンロード",
+            modalTitle: "ウォレットを接続",
+            daysLabel: "日",
+            hoursLabel: "時間",
+            minutesLabel: "分",
+            secondsLabel: "秒"
         }
     };
 
@@ -108,10 +148,10 @@
         const now = new Date();
         const timeLeft = PRESALE_END_DATE.getTime() - now.getTime();
         if (timeLeft <= 0) {
-            document.getElementById('days').textContent = '00';
-            document.getElementById('hours').textContent = '00';
-            document.getElementById('minutes').textContent = '00';
-            document.getElementById('seconds').textContent = '00';
+            daysElement.textContent = '00';
+            hoursElement.textContent = '00';
+            minutesElement.textContent = '00';
+            secondsElement.textContent = '00';
             buyBtn.disabled = true;
             buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText === "BNB Gönder" ? "Ön Satış Sona Erdi" : "Presale Ended";
             return;
@@ -120,10 +160,10 @@
         const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-        document.getElementById('days').textContent = days.toString().padStart(2, '0');
-        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        daysElement.textContent = days.toString().padStart(2, '0');
+        hoursElement.textContent = hours.toString().padStart(2, '0');
+        minutesElement.textContent = minutes.toString().padStart(2, '0');
+        secondsElement.textContent = seconds.toString().padStart(2, '0');
     }
     setInterval(updateCountdown, 1000);
     updateCountdown(); // İlk çalıştırmada hemen güncelle
@@ -215,7 +255,7 @@
         walletModal.style.display = 'none';
     });
 
-    // BNB miktarına göre FDAI tahmini
+    // BNB miktarına göre FDAI tahmini (Otomatik Hesaplama)
     bnbAmountInput.addEventListener('input', () => {
         const bnbAmount = parseFloat(bnbAmountInput.value);
         if (isNaN(bnbAmount) || bnbAmount <= 0) {
@@ -229,7 +269,7 @@
         buyBtn.disabled = false;
     });
 
-    // BNB gönderme işlemi (Gerçek İşlem)
+    // BNB gönderme işlemi (Gerçek İşlem - Satın Al Butonu)
     buyBtn.addEventListener('click', async () => {
         if (!signer || !userAddress) {
             alert("Lütfen önce cüzdanınızı bağlayın.");
