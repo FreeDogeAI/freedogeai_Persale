@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,6 +66,54 @@
             margin: 0 auto 2rem;
         }
         
+        /* Language Selector */
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .language-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            min-width: 150px;
+        }
+        
+        .language-dropdown.show {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 8px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        .language-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
         /* Countdown */
         .countdown {
             display: flex;
@@ -105,6 +153,18 @@
         @media (max-width: 768px) {
             .presale-content {
                 grid-template-columns: 1fr;
+            }
+            
+            .language-selector {
+                position: static;
+                margin-bottom: 1rem;
+                display: flex;
+                justify-content: center;
+            }
+            
+            .language-dropdown {
+                left: 0;
+                right: auto;
             }
         }
         
@@ -383,30 +443,46 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <button class="language-btn" id="languageBtn">
+            <span id="currentLanguage">English</span>
+            <span>▼</span>
+        </button>
+        <div class="language-dropdown" id="languageDropdown">
+            <div class="language-option" data-lang="en">English</div>
+            <div class="language-option" data-lang="tr">Türkçe</div>
+            <div class="language-option" data-lang="ru">Русский</div>
+            <div class="language-option" data-lang="ja">日本語</div>
+            <div class="language-option" data-lang="zh">中文</div>
+            <div class="language-option" data-lang="ur">اردو</div>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <div class="header">
             <img src="logo.png" alt="FreeDogeAI Logo" class="logo">
-            <h1 class="title">FreeDogeAI</h1>
-            <p class="subtitle">Yapay Zeka Destekli Meme Coin'lerin Geleceği<br>FDAI ile devrime katıl - meme kültürü yapay zekayla buluşuyor</p>
+            <h1 class="title" id="mainTitle">FreeDogeAI</h1>
+            <p class="subtitle" id="mainSubtitle">The Future of AI-Powered Meme Coins<br>Join the revolution with FDAI - where meme culture meets artificial intelligence</p>
             
             <!-- Countdown -->
             <div class="countdown">
                 <div class="countdown-item">
                     <div class="countdown-value" id="days">90</div>
-                    <div class="countdown-label">Gün</div>
+                    <div class="countdown-label" id="daysLabel">Days</div>
                 </div>
                 <div class="countdown-item">
-                    <div class="countdown-value" id="hours">0</div>
-                    <div class="countdown-label">Saat</div>
+                    <div class="countdown-value" id="hours">00</div>
+                    <div class="countdown-label" id="hoursLabel">Hours</div>
                 </div>
                 <div class="countdown-item">
-                    <div class="countdown-value" id="minutes">0</div>
-                    <div class="countdown-label">Dakika</div>
+                    <div class="countdown-value" id="minutes">00</div>
+                    <div class="countdown-label" id="minutesLabel">Minutes</div>
                 </div>
                 <div class="countdown-item">
-                    <div class="countdown-value" id="seconds">0</div>
-                    <div class="countdown-label">Saniye</div>
+                    <div class="countdown-value" id="seconds">00</div>
+                    <div class="countdown-label" id="secondsLabel">Seconds</div>
                 </div>
             </div>
         </div>
@@ -415,20 +491,20 @@
         <div class="presale-content">
             <!-- Token Info -->
             <div class="token-info">
-                <h2>Ön Satış Bilgileri</h2>
-                <p style="margin-bottom: 1.5rem; color: #ccc;">FreeDogeAI devriminin bir parçası olma şansını kaçırmayın. Ön satışımız FDAI token'larına özel bir fiyata erken erişim sunuyor.</p>
+                <h2 id="presaleTitle">Presale Information</h2>
+                <p style="margin-bottom: 1.5rem; color: #ccc;" id="presaleDesc">Don't miss your chance to be part of the FreeDogeAI revolution. Our presale offers exclusive early access to FDAI tokens at a special price.</p>
                 
                 <div class="token-details">
                     <div class="token-row">
-                        <span class="token-label">İsim:</span>
+                        <span class="token-label" id="nameLabel">Name:</span>
                         <span class="token-value">FreeDogeAI</span>
                     </div>
                     <div class="token-row">
-                        <span class="token-label">Sembol:</span>
+                        <span class="token-label" id="symbolLabel">Symbol:</span>
                         <span class="token-value">FDAI</span>
                     </div>
                     <div class="token-row">
-                        <span class="token-label">Toplam Hedef:</span>
+                        <span class="token-label" id="targetLabel">Total Target:</span>
                         <span class="token-value">1041.26 BNB</span>
                     </div>
                     <div class="token-row">
@@ -441,18 +517,18 @@
                 <div class="community-links">
                     <a href="https://t.me/freedogeaiFDAI" class="community-btn telegram-btn" target="_blank">
                         <span>📨</span>
-                        <span>Telegram</span>
+                        <span id="telegramText">Telegram</span>
                     </a>
                     <a href="https://x.com/FreeDogeAI_FDAI?t=pfYOwiY7gW8LypJ_wVMaZQ&s=09" class="community-btn twitter-btn" target="_blank">
                         <span>🐦</span>
-                        <span>Twitter</span>
+                        <span id="twitterText">Twitter</span>
                     </a>
                 </div>
                 
                 <!-- Whitepaper Button -->
-                <button class="connect-btn" style="margin-top: 2rem;" onclick="window.open('FreeDogeAI_Whitepaper.pdf', '_blank')">
+                <button class="connect-btn" style="margin-top: 2rem;" id="whitepaperBtn">
                     <span>📄</span>
-                    <span>Whitepaper İndir</span>
+                    <span id="whitepaperText">Download Whitepaper</span>
                 </button>
             </div>
             
@@ -461,7 +537,7 @@
                 <div class="wallet-connect">
                     <button class="connect-btn" id="connectWalletBtn">
                         <span>🔗</span>
-                        <span>Cüzdan Bağla</span>
+                        <span id="connectText">Connect Wallet</span>
                     </button>
                     <div class="wallet-info" id="walletInfo">
                         <div class="wallet-address" id="walletAddress"></div>
@@ -470,20 +546,20 @@
                 </div>
                 
                 <div class="input-group">
-                    <label for="bnbAmount" class="input-label">BNB Miktarı Girin:</label>
+                    <label for="bnbAmount" class="input-label" id="bnbLabel">Enter BNB Amount:</label>
                     <input type="number" id="bnbAmount" class="input-field" placeholder="0.0" step="any" min="0">
                     <div class="calculation" id="calculationResult" style="display: none;">
-                        Alacağınız: <span id="fdaiAmount">0</span> FDAI
+                        <span id="receiveText">You will receive:</span> <span id="fdaiAmount">0</span> FDAI
                     </div>
                 </div>
                 
-                <button class="buy-btn" id="buyBtn" disabled>FDAI Token Satın Al</button>
+                <button class="buy-btn" id="buyBtn" disabled><span id="buyText">Buy FDAI Tokens</span></button>
                 
                 <!-- Progress Bar -->
                 <div class="progress-container">
                     <div class="progress-info">
-                        <span>İlerleme: 35%</span>
-                        <span>Toplanan: 364.44 BNB / 1041.26 BNB</span>
+                        <span id="progressText">Progress: 35%</span>
+                        <span id="raisedText">Raised: 364.44 BNB / 1041.26 BNB</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill"></div>
@@ -497,7 +573,7 @@
     <div class="modal" id="walletModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Cüzdan Bağla</h3>
+                <h3 class="modal-title" id="modalTitle">Connect Wallet</h3>
                 <button class="close-btn" id="closeModalBtn">&times;</button>
             </div>
             <div class="wallet-option" id="metamaskOption">
@@ -514,9 +590,13 @@
     <script>
         // Constants
         const FDAI_PER_BNB = 120000000000; // 120 billion FDAI per 1 BNB
-        const PRESALE_DAYS = 90; // 90 günlük geri sayım
+        const PRESALE_END_DATE = new Date();
+        PRESALE_END_DATE.setDate(PRESALE_END_DATE.getDate() + 90); // 90 days from now
         
         // DOM Elements
+        const languageBtn = document.getElementById('languageBtn');
+        const currentLanguage = document.getElementById('currentLanguage');
+        const languageDropdown = document.getElementById('languageDropdown');
         const connectWalletBtn = document.getElementById('connectWalletBtn');
         const walletInfo = document.getElementById('walletInfo');
         const walletAddress = document.getElementById('walletAddress');
@@ -529,73 +609,4 @@
         const closeModalBtn = document.getElementById('closeModalBtn');
         const metamaskOption = document.getElementById('metamaskOption');
         const trustwalletOption = document.getElementById('trustwalletOption');
-        
-        // Countdown Elements
-        const daysEl = document.getElementById('days');
-        const hoursEl = document.getElementById('hours');
-        const minutesEl = document.getElementById('minutes');
-        const secondsEl = document.getElementById('seconds');
-        
-        // State
-        let isWalletConnected = false;
-        let userAddress = '';
-        
-        // Initialize Countdown (90 days from now)
-        function updateCountdown() {
-            const now = new Date();
-            const endDate = new Date(now);
-            endDate.setDate(now.getDate() + PRESALE_DAYS);
-            
-            const distance = endDate - now;
-            
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            daysEl.textContent = days;
-            hoursEl.textContent = hours < 10 ? '0' + hours : hours;
-            minutesEl.textContent = minutes < 10 ? '0' + minutes : minutes;
-            secondsEl.textContent = seconds < 10 ? '0' + seconds : seconds;
-        }
-        
-        // Update countdown every second
-        setInterval(updateCountdown, 1000);
-        updateCountdown(); // Initial call
-        
-        // Wallet Connection
-        async function connectMetaMask() {
-            if (typeof window.ethereum === 'undefined') {
-                alert('MetaMask yüklü değil! Lütfen önce yükleyin.');
-                return;
-            }
-            
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                userAddress = accounts[0];
-                handleWalletConnection(userAddress);
-                
-                // Listen for account changes
-                window.ethereum.on('accountsChanged', (newAccounts) => {
-                    if (newAccounts.length === 0) {
-                        handleWalletDisconnection();
-                    } else {
-                        userAddress = newAccounts[0];
-                        updateWalletInfo(userAddress);
-                    }
-                });
-                
-                walletModal.style.display = 'none';
-            } catch (error) {
-                console.error('MetaMask bağlantı hatası:', error);
-                alert('MetaMask bağlantısı başarısız: ' + error.message);
-            }
-        }
-        
-        async function connectTrustWallet() {
-            if (window.trustwallet) {
-                try {
-                    const accounts = await window.trustwallet.request({ method: 'eth_requestAccounts' });
-                    userAddress = accounts[0];
-                    handleWalletConnection(userAddress);
-                    walletModal.style.display = 'none';
+        co
