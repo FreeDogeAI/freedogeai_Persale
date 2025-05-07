@@ -39,6 +39,7 @@ const bnbToFdaiLabel = tokenRows[3].querySelector('.token-label'); // "1 BNB ="
 
 // Ethers.js kurulumu
 let provider, signer, userAddress;
+let currentLang = 'tr'; // Varsayılan dil
 
 // Dil yönetimi
 const translations = {
@@ -63,8 +64,11 @@ const translations = {
         symbolLabel: "Symbol:",
         targetLabel: "Total Target:",
         bnbToFdaiLabel: "1 BNB =",
-        progressText: "Progress: 35%", // Statik olarak güncellenecek
-        raisedText: "Raised: 364.44 BNB / 1041.26 BNB" // Statik olarak güncellenecek
+        addressLabel: "Address:",
+        balanceLabel: "Balance:",
+        sendingText: "Sending...",
+        presaleEndedText: "Presale Ended",
+        copyText: "Copy"
     },
     tr: {
         mainTitle: "FreeDogeAI",
@@ -87,8 +91,11 @@ const translations = {
         symbolLabel: "Sembol:",
         targetLabel: "Toplam Hedef:",
         bnbToFdaiLabel: "1 BNB =",
-        progressText: "İlerleme: %35",
-        raisedText: "Toplanan: 364.44 BNB / 1041.26 BNB"
+        addressLabel: "Adres:",
+        balanceLabel: "Bakiye:",
+        sendingText: "Gönderiliyor...",
+        presaleEndedText: "Ön Satış Sona Erdi",
+        copyText: "Kopyala"
     },
     zh: {
         mainTitle: "FreeDogeAI",
@@ -111,8 +118,11 @@ const translations = {
         symbolLabel: "符号：",
         targetLabel: "总目标：",
         bnbToFdaiLabel: "1 BNB =",
-        progressText: "进度：35%",
-        raisedText: "已筹集：364.44 BNB / 1041.26 BNB"
+        addressLabel: "地址：",
+        balanceLabel: "余额：",
+        sendingText: "发送中...",
+        presaleEndedText: "预售已结束",
+        copyText: "复制"
     },
     ja: {
         mainTitle: "FreeDogeAI",
@@ -135,12 +145,16 @@ const translations = {
         symbolLabel: "シンボル：",
         targetLabel: "総目標：",
         bnbToFdaiLabel: "1 BNB =",
-        progressText: "進捗：35%",
-        raisedText: "調達済み：364.44 BNB / 1041.26 BNB"
+        addressLabel: "アドレス：",
+        balanceLabel: "残高：",
+        sendingText: "送信中...",
+        presaleEndedText: "プレセール終了",
+        copyText: "コピー"
     }
 };
 
 function updateLanguage(lang) {
+    currentLang = lang;
     currentLanguage.textContent = languageDropdown.querySelector(`[data-lang="${lang}"]`).textContent;
     document.getElementById('mainTitle').innerHTML = translations[lang].mainTitle;
     document.getElementById('mainSubtitle').innerHTML = translations[lang].mainSubtitle;
@@ -162,8 +176,16 @@ function updateLanguage(lang) {
     symbolLabel.textContent = translations[lang].symbolLabel;
     targetLabel.textContent = translations[lang].targetLabel;
     bnbToFdaiLabel.textContent = translations[lang].bnbToFdaiLabel;
-    progressText.textContent = translations[lang].progressText;
-    raisedText.textContent = translations[lang].raisedText;
+
+    // Cüzdan bilgileri varsa güncelle
+    if (userAddress) {
+        walletAddress.textContent = `${translations[lang].addressLabel} ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+        const balance = ethers.utils.formatEther(provider.getBalance(userAddress));
+        bnbBalance.textContent = `${translations[lang].balanceLabel} ${balance} BNB`;
+    }
+
+    // İlerleme çubuğu metinlerini güncelle
+    updatePresaleProgress();
 }
 
 languageBtn.addEventListener('click', () => {
@@ -188,7 +210,7 @@ function updateCountdown() {
         minutesElement.textContent = '00';
         secondsElement.textContent = '00';
         buyBtn.disabled = true;
-        buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText === "FDAI Token Satın Al" ? "Ön Satış Sona Erdi" : "Presale Ended";
+        buyBtn.textContent = translations[currentLang].presaleEndedText;
         return;
     }
     const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
@@ -253,18 +275,18 @@ async function connectWallet() {
         userAddress = await signer.getAddress();
 
         // Arayüzü güncelle
-        walletAddress.textContent = `Adres: ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+        walletAddress.textContent = `${translations[currentLang].addressLabel} ${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
         const balance = await provider.getBalance(userAddress);
-        bnbBalance.textContent = `Bakiye: ${ethers.utils.formatEther(balance)} BNB`;
+        bnbBalance.textContent = `${translations[currentLang].balanceLabel} ${ethers.utils.formatEther(balance)} BNB`;
         walletInfo.style.display = 'block';
-        connectWalletBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.connectText === "Cüzdanı Bağla" ? "Bağlandı" : "Connected";
+        connectWalletBtn.textContent = translations[currentLang].connectText === "Cüzdanı Bağla" ? "Bağlandı" : "Connected";
         connectWalletBtn.disabled = true;
         buyBtn.disabled = false;
         walletModal.style.display = 'none';
 
         // Ön satış cüzdan adresini göster
         const presaleDesc = document.getElementById('presaleDesc');
-        presaleDesc.innerHTML = translations[currentLanguage.textContent.toLowerCase()]?.presaleDesc + `<br><br>BNB Gönderilecek Adres: <strong>${PRESALE_WALLET_ADDRESS}</strong> <button onclick="copyAddress()">Kopyala</button>`;
+        presaleDesc.innerHTML = translations[currentLang].presaleDesc + `<br><br>BNB Gönderilecek Adres: <strong>${PRESALE_WALLET_ADDRESS}</strong> <button onclick="copyAddress()">${translations[currentLang].copyText}</button>`;
     } catch (error) {
         console.error("Cüzdan bağlantısı başarısız:", error);
         alert("Cüzdan bağlanamadı: " + (error.message || "Bilinmeyen bir hata oluştu. Lütfen BSC Mainnet ağında olduğunuzdan emin olun."));
@@ -337,7 +359,7 @@ buyBtn.addEventListener('click', async () => {
         });
 
         buyBtn.disabled = true;
-        buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText === "FDAI Token Satın Al" ? "Gönderiliyor..." : "Sending...";
+        buyBtn.textContent = translations[currentLang].sendingText;
         
         const receipt = await tx.wait();
         alert(`BNB başarıyla gönderildi!\nTx Hash: ${receipt.transactionHash}\nFDAI tokenları manuel olarak gönderilecektir.`);
@@ -345,11 +367,11 @@ buyBtn.addEventListener('click', async () => {
         bnbAmountInput.value = '';
         calculationResult.style.display = 'none';
         buyBtn.disabled = false;
-        buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText || "Buy FDAI Tokens";
+        buyBtn.textContent = translations[currentLang].buyText;
 
         // Bakiyeyi güncelle
         const updatedBalance = await provider.getBalance(userAddress);
-        bnbBalance.textContent = `Bakiye: ${ethers.utils.formatEther(updatedBalance)} BNB`;
+        bnbBalance.textContent = `${translations[currentLang].balanceLabel} ${ethers.utils.formatEther(updatedBalance)} BNB`;
     } catch (error) {
         console.error("BNB gönderimi başarısız:", error);
         let errorMessage = "BNB gönderimi başarısız.";
@@ -362,7 +384,7 @@ buyBtn.addEventListener('click', async () => {
         }
         alert(errorMessage);
         buyBtn.disabled = false;
-        buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText || "Buy FDAI Tokens";
+        buyBtn.textContent = translations[currentLang].buyText;
     }
 });
 
@@ -382,8 +404,8 @@ function updatePresaleProgress() {
     const targetBNB = 1041.26;
     const progress = (raisedBNB / targetBNB) * 100;
 
-    progressText.textContent = translations[currentLanguage.textContent.toLowerCase()]?.progressText || `Progress: ${progress.toFixed(2)}%`;
-    raisedText.textContent = translations[currentLanguage.textContent.toLowerCase()]?.raisedText || `Raised: ${raisedBNB.toFixed(2)} BNB / ${targetBNB.toFixed(2)} BNB`;
+    progressText.textContent = `${translations[currentLang].progressText || 'Progress'}: ${progress.toFixed(2)}%`;
+    raisedText.textContent = `${translations[currentLang].raisedText || 'Raised'}: ${raisedBNB.toFixed(2)} BNB / ${targetBNB.toFixed(2)} BNB`;
     progressFill.style.width = `${progress}%`;
 }
 
