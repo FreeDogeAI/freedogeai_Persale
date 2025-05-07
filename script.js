@@ -1,11 +1,11 @@
 <script src="https://cdn.ethers.io/lib/ethers-5.7.umd.min.js"></script>
 <script>
     // Sabitler
-    const PRESALE_END_DATE = new Date();
-    PRESALE_END_DATE.setDate(PRESALE_END_DATE.getDate() + 90);
+    const PRESALE_END_DATE = new Date("2025-08-05T00:00:00"); // Ön satış bitiş tarihi (90 gün sonrası)
     const PRESALE_WALLET_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // BNB gönderilecek cüzdan adresi
     const BSC_CHAIN_ID = "0x38"; // BSC Mainnet
     const FDAI_PER_BNB = 120000000000; // 1 BNB = 120 milyar FDAI
+    const WHITEPAPER_URL = "whitepaper.pdf"; // PDF dosyasının yolu (sen kendi dosyanı ekleyebilirsin)
 
     // DOM Elemanları
     const languageBtn = document.getElementById('languageBtn');
@@ -26,6 +26,7 @@
     const progressText = document.getElementById('progressText');
     const raisedText = document.getElementById('raisedText');
     const progressFill = document.querySelector('.progress-fill');
+    const whitepaperBtn = document.getElementById('whitepaperBtn');
 
     // Ethers.js kurulumu
     let provider, signer, userAddress;
@@ -105,7 +106,7 @@
     // Geri sayım zamanlayıcısı
     function updateCountdown() {
         const now = new Date();
-        const timeLeft = PRESALE_END_DATE - now;
+        const timeLeft = PRESALE_END_DATE.getTime() - now.getTime();
         if (timeLeft <= 0) {
             document.getElementById('days').textContent = '00';
             document.getElementById('hours').textContent = '00';
@@ -125,6 +126,7 @@
         document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
     }
     setInterval(updateCountdown, 1000);
+    updateCountdown(); // İlk çalıştırmada hemen güncelle
 
     // BSC Mainnet'e geçiş
     async function switchToBSC() {
@@ -187,7 +189,7 @@
 
             // Ön satış cüzdan adresini göster
             const presaleDesc = document.getElementById('presaleDesc');
-            presaleDesc.innerHTML += `<br><br>BNB Gönderilecek Adres: <strong>${PRESALE_WALLET_ADDRESS}</strong> <button onclick="copyAddress()">Kopyala</button>`;
+            presaleDesc.innerHTML = translations[currentLanguage.textContent.toLowerCase()]?.presaleDesc + `<br><br>BNB Gönderilecek Adres: <strong>${PRESALE_WALLET_ADDRESS}</strong> <button onclick="copyAddress()">Kopyala</button>`;
         } catch (error) {
             console.error("Cüzdan bağlantısı başarısız:", error);
             alert("Cüzdan bağlanamadı: " + (error.message || "Bilinmeyen bir hata oluştu. Lütfen BSC Mainnet ağında olduğunuzdan emin olun."));
@@ -227,7 +229,7 @@
         buyBtn.disabled = false;
     });
 
-    // BNB gönderme işlemi
+    // BNB gönderme işlemi (Gerçek İşlem)
     buyBtn.addEventListener('click', async () => {
         if (!signer || !userAddress) {
             alert("Lütfen önce cüzdanınızı bağlayın.");
@@ -287,6 +289,16 @@
             buyBtn.disabled = false;
             buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText || "Send BNB";
         }
+    });
+
+    // Whitepaper indirme
+    whitepaperBtn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.href = WHITEPAPER_URL;
+        link.download = 'whitepaper.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     });
 
     // Ön satış ilerlemesi (statik)
