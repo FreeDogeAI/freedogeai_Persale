@@ -1,162 +1,377 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI - Presale</title>
+    <title>FreeDogeAI Presale</title>
     <style>
+        :root {
+            --primary: #25D366;
+            --secondary: #6e48aa;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
+        
         body {
-            background-color: #1a1a1a;
-            color: #fff;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
             line-height: 1.6;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            min-height: 100vh;
             padding: 20px;
         }
-        header {
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Header */
+        .header {
             text-align: center;
-            padding: 20px 0;
+            margin-bottom: 3rem;
         }
+        
         .logo {
-            width: 150px;
+            max-width: 250px;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 10px rgba(37, 211, 102, 0.3));
         }
-        h1 {
-            font-size: 48px;
-            margin: 10px 0;
+        
+        .title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #25D366, #6e48aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #ccc;
+            max-width: 700px;
+            margin: 0 auto 2rem;
         }
-        .main-subtitle {
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
+        
+        /* Language Selector */
         .language-selector {
             position: absolute;
             top: 20px;
             right: 20px;
+            z-index: 100;
         }
+        
         .language-btn {
-            background-color: #333;
-            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
             cursor: pointer;
-            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
         }
-        .language-btn span {
-            margin-right: 5px;
-        }
+        
         .language-dropdown {
-            display: none;
             position: absolute;
-            background-color: #333;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            border-radius: 5px;
-            margin-top: 5px;
+            top: 100%;
+            right: 0;
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            min-width: 150px;
         }
+        
         .language-dropdown.show {
             display: block;
         }
+        
         .language-option {
-            padding: 10px 20px;
+            padding: 8px 10px;
             cursor: pointer;
+            border-radius: 5px;
         }
+        
         .language-option:hover {
-            background-color: #444;
+            background: rgba(255, 255, 255, 0.1);
         }
+        
+        /* Countdown */
         .countdown {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
-        .countdown div {
+        
+        .countdown-item {
             text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            min-width: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .countdown span {
-            display: block;
-            font-size: 36px;
+        
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+        
+        /* Presale Content */
+        .presale-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .presale-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .language-selector {
+                position: static;
+                margin-bottom: 1rem;
+                display: flex;
+                justify-content: center;
+            }
+            
+            .language-dropdown {
+                left: 0;
+                right: auto;
+            }
+        }
+        
+        /* Token Info */
+        .token-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .token-info h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .token-details {
+            margin-bottom: 1.5rem;
+        }
+        
+        .token-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .token-row:last-child {
+            border-bottom: none;
+        }
+        
+        .token-label {
+            color: #ccc;
+        }
+        
+        .token-value {
             font-weight: bold;
         }
-        .progress-bar {
-            background-color: #333;
-            height: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 20px 0;
+        
+        /* Community Links */
+        .community-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
         }
-        .progress-fill {
-            background-color: #00ff00;
-            height: 100%;
-            width: 0;
-            transition: width 0.5s;
-        }
-        .progress-text, .raised-text {
-            text-align: center;
-            margin: 10px 0;
-        }
-        .presale-info {
-            background-color: #222;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        .presale-info h2 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        .wallet-section, .calculation-section {
-            margin: 20px 0;
-            text-align: center;
-        }
-        .connect-btn, .buy-btn {
-            background-color: #00ff00;
-            color: #000;
-            border: none;
+        
+        .community-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 5px;
-            margin: 10px;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
         }
-        .connect-btn:disabled, .buy-btn:disabled {
-            background-color: #666;
+        
+        .community-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .telegram-btn {
+            background-color: #0088cc;
+        }
+        
+        .twitter-btn {
+            background-color: #1DA1F2;
+        }
+        
+        /* Purchase Section */
+        .purchase-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .wallet-connect {
+            margin-bottom: 1.5rem;
+        }
+        
+        .connect-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        
+        .wallet-info {
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .wallet-address {
+            font-family: monospace;
+            word-break: break-all;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+        
+        .bnb-balance {
+            margin-top: 0.5rem;
+            color: #ccc;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: #ccc;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .calculation {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(37, 211, 102, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            border: 1px solid rgba(37, 211, 102, 0.2);
+        }
+        
+        .buy-btn {
+            width: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        
+        .buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+        
+        .buy-btn:disabled {
+            background: #555;
             cursor: not-allowed;
         }
-        .wallet-info {
-            display: none;
-            margin: 10px 0;
+        
+        /* Progress Bar */
+        .progress-container {
+            margin: 2rem 0;
         }
-        .calculation-section input {
-            padding: 10px;
-            font-size: 16px;
-            margin: 10px;
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
-            border: none;
+            overflow: hidden;
         }
-        .calculation-result {
-            display: none;
-            margin: 10px 0;
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+            width: 35%;
         }
-        .social-links {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .social-links a {
-            color: #00ff00;
-            margin: 0 10px;
-            text-decoration: none;
-        }
+        
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -164,129 +379,209 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
         }
+        
         .modal-content {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 300px;
+            background: #1a1a2e;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .modal-content h3 {
-            margin-bottom: 20px;
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
         }
-        .wallet-option {
-            background-color: #444;
-            padding: 10px;
-            margin: 10px 0;
-            cursor: pointer;
-            border-radius: 5px;
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary);
         }
-        .wallet-option:hover {
-            background-color: #555;
-        }
-        .close-modal {
-            background-color: #ff0000;
-            color: #fff;
+        
+        .close-btn {
+            background: none;
             border: none;
-            padding: 5px 10px;
+            font-size: 1.5rem;
             cursor: pointer;
-            border-radius: 5px;
-            margin-top: 10px;
+            color: var(--gray);
+        }
+        
+        .wallet-option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .wallet-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .wallet-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 1rem;
+        }
+        
+        .wallet-name {
+            font-weight: bold;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="language-selector">
-            <button class="language-btn" id="languageBtn">
-                <span id="currentLanguage">Türkçe</span>
-                <span>▼</span>
-            </button>
-            <div class="language-dropdown" id="languageDropdown">
-                <div class="language-option" data-lang="en">English</div>
-                <div class="language-option" data-lang="tr">Türkçe</div>
-                <div class="language-option" data-lang="zh">中文</div>
-                <div class="language-option" data-lang="ja">日本語</div>
-            </div>
-        </div>
-
-        <header>
-            <img src="logo.png" alt="FreeDogeAI Logo" class="logo">
-            <h1 id="mainTitle">FreeDogeAI</h1>
-            <p id="mainSubtitle" class="main-subtitle">Yapay Zeka Destekli Meme Coin’lerin Geleceği<br>FDAI ile devrime katıl - meme kültürü yapay zeka ile buluşuyor</p>
-        </header>
-
-        <div class="countdown">
-            <div>
-                <span id="days">00</span>
-                <span id="daysLabel">Gün</span>
-            </div>
-            <div>
-                <span id="hours">00</span>
-                <span id="hoursLabel">Saat</span>
-            </div>
-            <div>
-                <span id="minutes">00</span>
-                <span id="minutesLabel">Dakika</span>
-            </div>
-            <div>
-                <span id="seconds">00</span>
-                <span id="secondsLabel">Saniye</span>
-            </div>
-        </div>
-
-        <div class="progress-bar">
-            <div class="progress-fill"></div>
-        </div>
-        <div class="progress-text" id="progressText">Progress: 0%</div>
-        <div class="raised-text" id="raisedText">Raised: 0 BNB / 1041.26 BNB</div>
-
-        <div class="presale-info">
-            <h2 id="presaleTitle">Ön Satış Bilgisi</h2>
-            <p id="presaleDesc">FreeDogeAI devriminin bir parçası olma şansını kaçırma. Aşağıdaki adrese BNB gönder, FDAI tokenları manuel olarak gönderilecektir.</p>
-        </div>
-
-        <div class="wallet-section">
-            <button class="connect-btn" id="connectWalletBtn">
-                <span id="connectText">Cüzdanı Bağla</span>
-            </button>
-            <div class="wallet-info" id="walletInfo">
-                <p id="walletAddress">Adres: -</p>
-                <p id="bnbBalance">Bakiye: -</p>
-            </div>
-        </div>
-
-        <div class="calculation-section">
-            <label id="bnbLabel">BNB Miktarı Gir:</label>
-            <input type="number" id="bnbAmount" step="0.01" min="0" placeholder="0.00">
-            <div class="calculation-result" id="calculationResult">
-                <p id="receiveText">Alacağın miktar (yaklaşık):</p>
-                <p><span id="fdaiAmount">0</span> FDAI</p>
-            </div>
-            <button class="buy-btn" id="buyBtn" disabled>
-                <span id="buyText">BNB Gönder</span>
-            </button>
-        </div>
-
-        <div class="social-links">
-            <a href="https://t.me/freedogeai" target="_blank" id="telegramText">Telegram</a>
-            <a href="https://twitter.com/freedogeai" target="_blank" id="twitterText">Twitter</a>
-            <button id="whitepaperBtn" class="whitepaper-btn">
-                <span id="whitepaperText">Beyaz Kağıdı İndir</span>
-            </button>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <button class="language-btn" id="languageBtn">
+            <span id="currentLanguage">Türkçe</span>
+            <span>▼</span>
+        </button>
+        <div class="language-dropdown" id="languageDropdown">
+            <div class="language-option" data-lang="en">English</div>
+            <div class="language-option" data-lang="tr">Türkçe</div>
+            <div class="language-option" data-lang="zh">中文</div>
+            <div class="language-option" data-lang="ja">日本語</div>
         </div>
     </div>
 
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="logo.png" alt="FreeDogeAI Logo" class="logo">
+            <h1 class="title" id="mainTitle">FreeDogeAI</h1>
+            <p class="subtitle" id="mainSubtitle">The Future of AI-Powered Meme Coins<br>Join the revolution with FDAI - where meme culture meets artificial intelligence</p>
+            
+            <!-- Countdown -->
+            <div class="countdown">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="days">90</div>
+                    <div class="countdown-label" id="daysLabel">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="hours">00</div>
+                    <div class="countdown-label" id="hoursLabel">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="minutes">00</div>
+                    <div class="countdown-label" id="minutesLabel">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="seconds">00</div>
+                    <div class="countdown-label" id="secondsLabel">Seconds</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Presale Content -->
+        <div class="presale-content">
+            <!-- Token Info -->
+            <div class="token-info">
+                <h2 id="presaleTitle">Presale Information</h2>
+                <p style="margin-bottom: 1.5rem; color: #ccc;" id="presaleDesc">Don't miss your chance to be part of the FreeDogeAI revolution. Our presale offers exclusive early access to FDAI tokens at a special price.</p>
+                
+                <div class="token-details">
+                    <div class="token-row">
+                        <span class="token-label" id="nameLabel">Name:</span>
+                        <span class="token-value">FreeDogeAI</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label" id="symbolLabel">Symbol:</span>
+                        <span class="token-value">FDAI</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label" id="targetLabel">Total Target:</span>
+                        <span class="token-value">1041.26 BNB</span>
+                    </div>
+                    <div class="token-row">
+                        <span class="token-label">1 BNB =</span>
+                        <span class="token-value">120,000,000,000 FDAI</span>
+                    </div>
+                </div>
+                
+                <!-- Community Links -->
+                <div class="community-links">
+                    <a href="https://t.me/freedogeaiFDAI" class="community-btn telegram-btn" target="_blank">
+                        <span>📨</span>
+                        <span id="telegramText">Telegram</span>
+                    </a>
+                    <a href="https://x.com/FreeDogeAI_FDAI?t=pfYOwiY7gW8LypJ_wVMaZQ&s=09" class="community-btn twitter-btn" target="_blank">
+                        <span>🐦</span>
+                        <span id="twitterText">Twitter</span>
+                    </a>
+                </div>
+                
+                <!-- Whitepaper Button -->
+                <button class="connect-btn" style="margin-top: 2rem;" id="whitepaperBtn">
+                    <span>📄</span>
+                    <span id="whitepaperText">Download Whitepaper</span>
+                </button>
+            </div>
+            
+            <!-- Purchase Section -->
+            <div class="purchase-section">
+                <div class="wallet-connect">
+                    <button class="connect-btn" id="connectWalletBtn">
+                        <span>🔗</span>
+                        <span id="connectText">Connect Wallet</span>
+                    </button>
+                    <div class="wallet-info" id="walletInfo">
+                        <div class="wallet-address" id="walletAddress"></div>
+                        <div class="bnb-balance" id="bnbBalance"></div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="bnbAmount" class="input-label" id="bnbLabel">Enter BNB Amount:</label>
+                    <input type="number" id="bnbAmount" class="input-field" placeholder="0.0" step="any" min="0">
+                    <div class="calculation" id="calculationResult" style="display: none;">
+                        <span id="receiveText">You will receive:</span> <span id="fdaiAmount">0</span> FDAI
+                    </div>
+                </div>
+                
+                <button class="buy-btn" id="buyBtn" disabled><span id="buyText">Buy FDAI Tokens</span></button>
+                
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span id="progressText">Progress: 35%</span>
+                        <span id="raisedText">Raised: 364.44 BNB / 1041.26 BNB</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Wallet Connection Modal -->
     <div class="modal" id="walletModal">
         <div class="modal-content">
-            <h3 id="modalTitle">Cüzdanı Bağla</h3>
-            <div class="wallet-option" id="metamaskOption">MetaMask</div>
-            <div class="wallet-option" id="trustwalletOption">Trust Wallet</div>
-            <button class="close-modal" id="closeModalBtn">Kapat</button>
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Connect Wallet</h3>
+                <button class="close-btn" id="closeModalBtn">×</button>
+            </div>
+            <div class="wallet-option" id="metamaskOption">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" class="wallet-icon">
+                <span class="wallet-name">MetaMask</span>
+            </div>
+            <div class="wallet-option" id="trustwalletOption">
+                <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet" class="wallet-icon">
+                <span class="wallet-name">Trust Wallet</span>
+            </div>
         </div>
     </div>
 
@@ -312,195 +607,4 @@
         const fdaiAmount = document.getElementById('fdaiAmount');
         const buyBtn = document.getElementById('buyBtn');
         const walletModal = document.getElementById('walletModal');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const metamaskOption = document.getElementById('metamaskOption');
-        const trustwalletOption = document.getElementById('trustwalletOption');
-        const progressText = document.getElementById('progressText');
-        const raisedText = document.getElementById('raisedText');
-        const progressFill = document.querySelector('.progress-fill');
-        const whitepaperBtn = document.getElementById('whitepaperBtn');
-        const daysElement = document.getElementById('days');
-        const hoursElement = document.getElementById('hours');
-        const minutesElement = document.getElementById('minutes');
-        const secondsElement = document.getElementById('seconds');
-
-        // Ethers.js kurulumu
-        let provider, signer, userAddress;
-
-        // Dil yönetimi
-        const translations = {
-            en: {
-                mainTitle: "FreeDogeAI",
-                mainSubtitle: "The Future of AI-Powered Meme Coins<br>Join the revolution with FDAI - where meme culture meets artificial intelligence",
-                presaleTitle: "Presale Information",
-                presaleDesc: "Don't miss your chance to be part of the FreeDogeAI revolution. Send BNB to the address below, and FDAI tokens will be sent to you manually.",
-                connectText: "Connect Wallet",
-                bnbLabel: "Enter BNB Amount:",
-                buyText: "Send BNB",
-                receiveText: "You will receive (approx.):",
-                telegramText: "Telegram",
-                twitterText: "Twitter",
-                whitepaperText: "Download Whitepaper",
-                modalTitle: "Connect Wallet",
-                daysLabel: "Days",
-                hoursLabel: "Hours",
-                minutesLabel: "Minutes",
-                secondsLabel: "Seconds"
-            },
-            tr: {
-                mainTitle: "FreeDogeAI",
-                mainSubtitle: "Yapay Zeka Destekli Meme Coin’lerin Geleceği<br>FDAI ile devrime katıl - meme kültürü yapay zeka ile buluşuyor",
-                presaleTitle: "Ön Satış Bilgisi",
-                presaleDesc: "FreeDogeAI devriminin bir parçası olma şansını kaçırma. Aşağıdaki adrese BNB gönder, FDAI tokenları manuel olarak gönderilecektir.",
-                connectText: "Cüzdanı Bağla",
-                bnbLabel: "BNB Miktarı Gir:",
-                buyText: "BNB Gönder",
-                receiveText: "Alacağın miktar (yaklaşık):",
-                telegramText: "Telegram",
-                twitterText: "Twitter",
-                whitepaperText: "Beyaz Kağıdı İndir",
-                modalTitle: "Cüzdanı Bağla",
-                daysLabel: "Gün",
-                hoursLabel: "Saat",
-                minutesLabel: "Dakika",
-                secondsLabel: "Saniye"
-            },
-            zh: {
-                mainTitle: "FreeDogeAI",
-                mainSubtitle: "人工智能驱动的迷因币的未来<br>加入FDAI革命 - 迷因文化与人工智能的结合",
-                presaleTitle: "预售信息",
-                presaleDesc: "不要错过加入FreeDogeAI革命的机会。向下面的地址发送BNB，FDAI代币将手动发送给您。",
-                connectText: "连接钱包",
-                bnbLabel: "输入BNB数量：",
-                buyText: "发送BNB",
-                receiveText: "您将收到（约）：",
-                telegramText: "Telegram",
-                twitterText: "Twitter",
-                whitepaperText: "下载白皮书",
-                modalTitle: "连接钱包",
-                daysLabel: "天",
-                hoursLabel: "小时",
-                minutesLabel: "分钟",
-                secondsLabel: "秒"
-            },
-            ja: {
-                mainTitle: "FreeDogeAI",
-                mainSubtitle: "AIを活用したミームコインの未来<br>FDAIで革命に参加しよう - ミーム文化と人工知能が融合",
-                presaleTitle: "プレセール情報",
-                presaleDesc: "FreeDogeAI革命に参加するチャンスを逃さないでください。以下のアドレスにBNBを送ると、FDAIトークンが手動で送られます。",
-                connectText: "ウォレットを接続",
-                bnbLabel: "BNB数量を入力：",
-                buyText: "BNBを送る",
-                receiveText: "受け取る数量（約）：",
-                telegramText: "Telegram",
-                twitterText: "Twitter",
-                whitepaperText: "ホワイトペーパーをダウンロード",
-                modalTitle: "ウォレットを接続",
-                daysLabel: "日",
-                hoursLabel: "時間",
-                minutesLabel: "分",
-                secondsLabel: "秒"
-            }
-        };
-
-        function updateLanguage(lang) {
-            currentLanguage.textContent = languageDropdown.querySelector(`[data-lang="${lang}"]`).textContent;
-            document.getElementById('mainTitle').innerHTML = translations[lang].mainTitle;
-            document.getElementById('mainSubtitle').innerHTML = translations[lang].mainSubtitle;
-            document.getElementById('presaleTitle').textContent = translations[lang].presaleTitle;
-            document.getElementById('presaleDesc').textContent = translations[lang].presaleDesc;
-            document.getElementById('connectText').textContent = translations[lang].connectText;
-            document.getElementById('bnbLabel').textContent = translations[lang].bnbLabel;
-            document.getElementById('buyText').textContent = translations[lang].buyText;
-            document.getElementById('receiveText').textContent = translations[lang].receiveText;
-            document.getElementById('telegramText').textContent = translations[lang].telegramText;
-            document.getElementById('twitterText').textContent = translations[lang].twitterText;
-            document.getElementById('whitepaperText').textContent = translations[lang].whitepaperText;
-            document.getElementById('modalTitle').textContent = translations[lang].modalTitle;
-            document.getElementById('daysLabel').textContent = translations[lang].daysLabel;
-            document.getElementById('hoursLabel').textContent = translations[lang].hoursLabel;
-            document.getElementById('minutesLabel').textContent = translations[lang].minutesLabel;
-            document.getElementById('secondsLabel').textContent = translations[lang].secondsLabel;
-        }
-
-        languageBtn.addEventListener('click', () => {
-            languageDropdown.classList.toggle('show');
-        });
-
-        languageDropdown.addEventListener('click', (e) => {
-            if (e.target.classList.contains('language-option')) {
-                const lang = e.target.dataset.lang;
-                updateLanguage(lang);
-                languageDropdown.classList.remove('show');
-            }
-        });
-
-        // Geri sayım zamanlayıcısı
-        function updateCountdown() {
-            const now = new Date();
-            const timeLeft = PRESALE_END_DATE.getTime() - now.getTime();
-            if (timeLeft <= 0) {
-                daysElement.textContent = '00';
-                hoursElement.textContent = '00';
-                minutesElement.textContent = '00';
-                secondsElement.textContent = '00';
-                buyBtn.disabled = true;
-                buyBtn.textContent = translations[currentLanguage.textContent.toLowerCase()]?.buyText === "BNB Gönder" ? "Ön Satış Sona Erdi" : "Presale Ended";
-                return;
-            }
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-            daysElement.textContent = days.toString().padStart(2, '0');
-            hoursElement.textContent = hours.toString().padStart(2, '0');
-            minutesElement.textContent = minutes.toString().padStart(2, '0');
-            secondsElement.textContent = seconds.toString().padStart(2, '0');
-        }
-        setInterval(updateCountdown, 1000);
-        updateCountdown(); // İlk çalıştırmada hemen güncelle
-
-        // BSC Mainnet'e geçiş
-        async function switchToBSC() {
-            try {
-                await window.ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: BSC_CHAIN_ID }]
-                });
-            } catch (switchError) {
-                if (switchError.code === 4902) {
-                    try {
-                        await window.ethereum.request({
-                            method: 'wallet_addEthereumChain',
-                            params: [{
-                                chainId: BSC_CHAIN_ID,
-                                chainName: 'Binance Smart Chain Mainnet',
-                                rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                                nativeCurrency: {
-                                    name: 'BNB',
-                                    symbol: 'BNB',
-                                    decimals: 18
-                                },
-                                blockExplorerUrls: ['https://bscscan.com']
-                            }]
-                        });
-                    } catch (addError) {
-                        console.error("Ağ ekleme başarısız:", addError);
-                        alert("BSC Mainnet ağı eklenemedi. Lütfen manuel olarak ekleyin.");
-                    }
-                } else {
-                    console.error("Ağ değiştirme hatası:", switchError);
-                    alert("Ağ değiştirme başarısız. Lütfen BSC Mainnet'e manuel olarak geçin.");
-                }
-            }
-        }
-
-        // Cüzdan bağlantısı (MetaMask ve Trust Wallet)
-        async function connectWallet() {
-            if (typeof window.ethereum === 'undefined') {
-                alert("Lütfen MetaMask veya Trust Wallet kurun.");
-                return;
-            }
-
-            try {
-      
+        const closeModalBtn = document.getElementById('closeModalBt
