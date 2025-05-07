@@ -3,8 +3,10 @@
     // Sabitler
     const PRESALE_END_DATE = new Date();
     PRESALE_END_DATE.setDate(PRESALE_END_DATE.getDate() + 90);
-    const PRESALE_WALLET_ADDRESS = "0xYourPresaleWalletAddress"; // BNB gönderilecek cüzdan adresini buraya ekle
+    const PRESALE_WALLET_ADDRESS = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // Sizin cüzdan adresiniz
     const BSC_CHAIN_ID = "0x38"; // BSC Mainnet (Testnet için 0x61 kullan)
+    const FDAI_PER_BNB = 120000000000; // 1 BNB = 120 milyar FDAI
+    const FDAI_PRICE_BNB = 0.00000000000833; // 1 FDAI = 0.00000000000833 BNB
 
     // DOM Elemanları
     const languageBtn = document.getElementById('languageBtn');
@@ -33,27 +35,27 @@
     const translations = {
         en: {
             mainTitle: "FreeDogeAI",
-            mainSubtitle: "Yapay Zeka Destekli Meme Coin’lerin Geleceği<br>FDAI ile devrime katıl - meme kültürü yapay zeka ile buluşuyor",
-            presaleTitle: "Ön Satış Bilgisi",
-            presaleDesc: "FreeDogeAI devriminin bir parçası olma şansını kaçırma. Belirtilen cüzdana BNB gönder, FDAI tokenlarını manuel olarak al.",
-            connectText: "Cüzdanı Bağla",
-            bnbLabel: "BNB Miktarı Gir:",
-            buyText: "BNB Gönder",
-            receiveText: "Alacağın miktar (yaklaşık):",
+            mainSubtitle: "The Future of AI-Powered Meme Coins<br>Join the revolution with FDAI - where meme culture meets artificial intelligence",
+            presaleTitle: "Presale Information",
+            presaleDesc: "Don't miss your chance to be part of the FreeDogeAI revolution. Send BNB to the address below, and FDAI tokens will be sent to you manually.",
+            connectText: "Connect Wallet",
+            bnbLabel: "Enter BNB Amount:",
+            buyText: "Send BNB",
+            receiveText: "You will receive (approx.):",
             telegramText: "Telegram",
             twitterText: "Twitter",
-            whitepaperText: "Beyaz Kağıdı İndir",
-            modalTitle: "Cüzdanı Bağla",
-            daysLabel: "Gün",
-            hoursLabel: "Saat",
-            minutesLabel: "Dakika",
-            secondsLabel: "Saniye"
+            whitepaperText: "Download Whitepaper",
+            modalTitle: "Connect Wallet",
+            daysLabel: "Days",
+            hoursLabel: "Hours",
+            minutesLabel: "Minutes",
+            secondsLabel: "Seconds"
         },
         tr: {
             mainTitle: "FreeDogeAI",
             mainSubtitle: "Yapay Zeka Destekli Meme Coin’lerin Geleceği<br>FDAI ile devrime katıl - meme kültürü yapay zeka ile buluşuyor",
             presaleTitle: "Ön Satış Bilgisi",
-            presaleDesc: "FreeDogeAI devriminin bir parçası olma şansını kaçırma. Belirtilen cüzdana BNB gönder, FDAI tokenlarını manuel olarak al.",
+            presaleDesc: "FreeDogeAI devriminin bir parçası olma şansını kaçırma. Aşağıdaki adrese BNB gönder, FDAI tokenları manuel olarak gönderilecektir.",
             connectText: "Cüzdanı Bağla",
             bnbLabel: "BNB Miktarı Gir:",
             buyText: "BNB Gönder",
@@ -203,8 +205,7 @@
         walletModal.style.display = 'none';
     });
 
-    // BNB miktarına göre FDAI tahmini
-    const FDAI_PER_BNB = 120000000000; // 1 BNB = 120 milyar FDAI
+    // BNB miktarına göre FDAI tahmini (otomatik hesaplama)
     bnbAmountInput.addEventListener('input', () => {
         const bnbAmount = parseFloat(bnbAmountInput.value);
         if (bnbAmount > 0) {
@@ -258,8 +259,8 @@
         const targetBNB = 1041.26;
         const progress = (raisedBNB / targetBNB) * 100;
 
-        progressText.textContent = `İlerleme: ${progress.toFixed(2)}%`;
-        raisedText.textContent = `Toplanan: ${raisedBNB.toFixed(2)} BNB / ${targetBNB.toFixed(2)} BNB`;
+        progressText.textContent = `Progress: ${progress.toFixed(2)}%`;
+        raisedText.textContent = `Raised: ${raisedBNB.toFixed(2)} BNB / ${targetBNB.toFixed(2)} BNB`;
         progressFill.style.width = `${progress}%`;
     }
 
@@ -267,4 +268,4 @@
     updateLanguage('tr');
     updateCountdown();
     updatePresaleProgress();
-                    </script>
+</script>
