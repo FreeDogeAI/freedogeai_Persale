@@ -13,19 +13,29 @@ const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 const isInMetamaskBrowser = navigator.userAgent.includes("MetaMask");
 
 const connectWallet = async () => {
-  // Eğer MetaMask tarayıcısındaysak direkt bağlan
+  // MetaMask tarayıcısındaysa direkt bağlan
   if (isInMetamaskBrowser) {
     try {
+      if (!window.ethereum) {
+        console.log("MetaMask provider bulunamadı");
+        return;
+      }
+
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       userAddress = accounts[0];
       web3 = new Web3(window.ethereum);
 
+      // Ağ kontrolü
       const chainId = await web3.eth.getChainId();
       if (chainId !== CONFIG.BSC_CHAIN_ID) {
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x38' }] // BSC Mainnet
-        });
+        try {
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x38' }]
+          });
+        } catch (switchError) {
+          console.error("Ağ değiştirme hatası:", switchError);
+        }
       }
 
       // UI güncelleme
@@ -35,25 +45,26 @@ const connectWallet = async () => {
       document.getElementById("connectWalletBtn").textContent = "✅ Connected";
       document.getElementById("buyBtn").disabled = false;
 
+      return;
     } catch (err) {
       console.error("Bağlantı hatası:", err);
-      alert("Cüzdan bağlantısı reddedildi: " + (err.message || err));
+      return;
     }
-    return;
   }
 
-  // Eğer mobil tarayıcıdaysa MetaMask'a yönlendir
+  // Mobil tarayıcıdaysa direkt MetaMask'a yönlendir
   if (isMobile) {
     window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
     return;
   }
 
-  // Desktop tarayıcı için normal bağlantı
+  // Desktop'ta MetaMask yoksa yönlendirme yap
   if (!window.ethereum) {
-    alert("Lütfen MetaMask eklentisini yükleyin!");
+    window.open("https://metamask.io/download.html", "_blank");
     return;
   }
 
+  // Desktop'ta normal bağlantı
   try {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     userAddress = accounts[0];
@@ -76,16 +87,15 @@ const connectWallet = async () => {
 
   } catch (err) {
     console.error("Bağlantı hatası:", err);
-    alert("Cüzdan bağlantısı reddedildi: " + (err.message || err));
   }
 };
 
-// Sayfa yüklendiğinde kontrol et
+// Sayfa yüklendiğinde
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
   
-  // Eğer MetaMask tarayıcısındaysa otomatik bağlanmayı dene
-  if (isInMetamaskBrowser && window.ethereum) {
+  // MetaMask tarayıcısındaysa otomatik bağlanmayı dene
+  if (isInMetamaskBrowser) {
     connectWallet();
   }
   
