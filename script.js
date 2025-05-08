@@ -45,26 +45,27 @@ const utils = {
 const wallet = {
   connect: async () => {
     try {
-      // Mobile deep link
-      if (utils.isMobile() && !utils.getProvider()) {
-        elements.mobileWarning.style.display = 'block';
-        window.location.href = `trust://browser?url=${encodeURIComponent(window.location.href)}`;
+      const isMobile = utils.isMobile();
+      const provider = utils.getProvider();
+
+      // Eğer mobildeyiz ve sağlayıcı yoksa (örneğin Chrome'da), MetaMask uygulamasına yönlendir
+      if (isMobile && !provider) {
+        window.location.href = "https://metamask.app.link/dapp/freedogeai.com";
         return;
       }
 
-      const provider = utils.getProvider();
       if (!provider) {
-        utils.showError("No provider found", utils.isMobile());
+        utils.showError("No provider found", isMobile);
         return;
       }
 
       const accounts = await provider.request({ method: 'eth_requestAccounts' });
       userAddress = accounts[0];
       web3 = new Web3(provider);
-      
+
       await wallet.checkNetwork();
       wallet.updateUI();
-      
+
     } catch (error) {
       utils.showError(error, utils.isMobile());
     }
