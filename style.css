@@ -1,305 +1,54 @@
-:root {
-    --bg-color: #0a0a0a;
-    --card-bg: #1a1a1a;
-    --primary: #0066ff;
-    --primary-hover: #0052cc;
-    --secondary: #ff6600;
-    --secondary-hover: #e65c00;
-    --text: #ffffff;
-    --text-secondary: #b3b3b3;
-    --success: #28a745;
-    --error: #dc3545;
-    --border-radius: 12px;
-    --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    font-family: 'Montserrat', sans-serif;
-    background: var(--bg-color);
-    color: var(--text);
-    line-height: 1.6;
-    padding: 20px;
-    min-height: 100vh;
+  background-color: #000000;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-/* Language Selector */
-.language-selector {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 30px;
-}
-
-.lang-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-size: 14px;
-}
-
-.lang-btn.active {
-    background: var(--primary);
-    font-weight: bold;
-}
-
-.lang-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* Main Container */
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.presale-container {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    padding: 30px;
-    box-shadow: var(--box-shadow);
-    text-align: center;
+h1, h2, h3, p, label {
+  color: #ffffff;
 }
 
-.title {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: var(--primary);
-    font-weight: 700;
+input, select, textarea {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #333333;
+  padding: 10px;
+  border-radius: 5px;
 }
 
-/* Timer */
-.timer-container {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin: 30px 0;
+button, .btn, #buyBtn, #connectWalletBtn {
+  background-color: #25D366;
+  color: #000000;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.timer-box {
-    background: rgba(0, 0, 0, 0.3);
-    padding: 15px;
-    border-radius: var(--border-radius);
-    min-width: 80px;
+button:disabled, #buyBtn:disabled {
+  background-color: #555;
+  color: #aaa;
+  cursor: not-allowed;
 }
 
-.timer-box span {
-    display: block;
+a {
+  color: #25D366;
+  text-decoration: underline;
 }
 
-.timer-box span:first-child {
-    font-size: 32px;
-    font-weight: bold;
-    color: var(--secondary);
-}
-
-.timer-label {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin-top: 5px;
-}
-
-/* Token Info */
-.token-info {
-    margin: 25px 0;
-}
-
-.info-label {
-    font-size: 16px;
-    color: var(--text-secondary);
-}
-
-.info-value {
-    font-size: 28px;
-    font-weight: bold;
-    margin-top: 5px;
-    color: var(--secondary);
-}
-
-/* Wallet Section */
-.wallet-section {
-    margin: 30px 0;
-    text-align: left;
-}
-
-.wallet-info {
-    background: rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    border-radius: var(--border-radius);
-    margin-bottom: 20px;
-}
-
-.wallet-info p {
-    margin-bottom: 10px;
-    word-break: break-all;
-}
-
-.disconnect-btn {
-    background: var(--error);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 10px;
-    transition: all 0.3s;
-}
-
-.disconnect-btn:hover {
-    background: #c82333;
-}
-
-.buy-section {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-#bnb-amount {
-    flex: 1;
-    padding: 12px 15px;
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.2);
-    color: var(--text);
-    font-size: 16px;
-}
-
-/* Buttons */
-.connect-btn, .buy-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: none;
-    border-radius: var(--border-radius);
-}
-
-.connect-btn {
-    background: var(--primary);
-    color: white;
-    padding: 15px 30px;
-    font-size: 18px;
-    margin: 20px 0;
-}
-
-.connect-btn:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-}
-
-.buy-btn {
-    background: var(--secondary);
-    color: #000;
-    padding: 15px 25px;
-    font-size: 16px;
-}
-
-.buy-btn:hover {
-    background: var(--secondary-hover);
-    transform: translateY(-2px);
-}
-
-/* Important Info */
-.important-info {
-    text-align: left;
-    margin: 30px 0;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: var(--border-radius);
-}
-
-.important-info h2 {
-    color: var(--primary);
-    margin-bottom: 15px;
-    font-size: 20px;
-}
-
-.important-info ul {
-    list-style-position: inside;
-}
-
-.important-info li {
-    margin-bottom: 10px;
-    line-height: 1.6;
-}
-
-/* Social Links */
-.social-links {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 30px;
-}
-
-.social-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    border-radius: var(--border-radius);
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.3s;
-}
-
-.twitter {
-    background: #1da1f2;
-    color: white;
-}
-
-.telegram {
-    background: #0088cc;
-    color: white;
-}
-
-.social-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .timer-container {
-        flex-wrap: wrap;
-    }
-    
-    .timer-box {
-        min-width: 70px;
-    }
-    
-    .buy-section {
-        flex-direction: column;
-    }
-}
-
-/* RTL Support for Arabic */
-[dir="rtl"] {
-    font-family: 'Tajawal', sans-serif;
-    text-align: right;
-}
-
-[dir="rtl"] .timer-container, 
-[dir="rtl"] .language-selector,
-[dir="rtl"] .social-links {
-    flex-direction: row-reverse;
-}
-
-/* Hindi Font */
-.hindi-text {
-    font-family: 'Hind', sans-serif;
+#mobileWarning {
+  background-color: #ffcc00;
+  color: #000000;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
 }
