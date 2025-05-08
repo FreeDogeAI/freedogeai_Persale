@@ -33,22 +33,18 @@ function initWeb3Modal() {
 // Cüzdan bağlantısı
 async function connectWallet() {
     try {
-        // Web3Modal ile bağlantıyı başlat
         provider = await web3Modal.connect();
         web3 = new Web3(provider);
 
-        // Kullanıcı adresini al
         const accounts = await web3.eth.getAccounts();
         userAddress = accounts[0];
 
-        // Ağ kontrolü (BSC Mainnet)
         const chainId = await web3.eth.getChainId();
         if (chainId !== 56) {
             alert("Lütfen Binance Smart Chain (BSC) ağına geçiş yapın!");
             return;
         }
 
-        // UI güncelle
         updateWalletInfo();
 
     } catch (error) {
@@ -113,36 +109,29 @@ async function buyTokens() {
 
     } catch (error) {
         console.error("Gönderim hatası:", error);
-        alert("İşlem başarısız: " + (error.message || error));
+        alert("İşlem başarısız: " + error.message);
     }
 }
 
-// Whitepaper butonu (eski kodundan uyarlandı)
+// Whitepaper butonu
 function openWhitepaper() {
-    window.open('https://your-whitepaper-url.com', '_blank'); // Whitepaper URL'sini buraya ekle
+    window.open('https://your-whitepaper-url.com', '_blank'); // Whitepaper URL'sini güncelle
 }
 
 // Sayfa yüklendiğinde
 window.addEventListener('DOMContentLoaded', () => {
     initWeb3Modal();
 
-    // Connect Wallet butonuna tıklama
     document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
-
-    // Buy butonuna tıklama
     document.getElementById('buyBtn').addEventListener('click', buyTokens);
-
-    // Whitepaper butonuna tıklama
     document.getElementById('whitepaperBtn').addEventListener('click', openWhitepaper);
 
-    // BNB miktarı değiştiğinde FDAI hesapla
     document.getElementById('bnbAmount').addEventListener('input', function() {
         const amount = parseFloat(this.value) || 0;
         const tokens = amount * TOKENS_PER_BNB;
         document.getElementById('fdaiAmount').textContent = tokens.toLocaleString();
     });
 
-    // Eğer zaten bağlı bir cüzdan varsa
     if (web3Modal.cachedProvider) {
         connectWallet();
     }
