@@ -1,153 +1,57 @@
-// Timer Fonksiyonu
-function startCountdown() {
-    // 7 gün sonrası için zaman ayarla
-    const countDownDate = new Date();
-    countDownDate.setDate(countDownDate.getDate() + 7);
-    
-    const timer = setInterval(function() {
-        const now = new Date().getTime();
-        const distance = countDownDate - now;
-        
-        // Zaman hesaplamaları
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-        // Ekrana yazdır
-        document.getElementById("days").innerHTML = days.toString().padStart(2, "0");
-        document.getElementById("hours").innerHTML = hours.toString().padStart(2, "0");
-        document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, "0");
-        document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, "0");
-        
-        // Süre dolduysa
-        if (distance < 0) {
-            clearInterval(timer);
-            document.querySelector(".timer-container").innerHTML = "<p>Ön satış sona erdi!</p>";
-        }
-    }, 1000);
-}
+// Bağlantı için gerekli global değişkenler
+let provider, signer, userAddress;
 
-// Parçacık Efekti
-function initParticles() {
-    particlesJS("particles-js", {
-        "particles": {
-            "number": {
-                "value": 80,
-                "density": {
-                    "enable": true,
-                    "value_area": 800
-                }
-            },
-            "color": {
-                "value": "#6e45e2"
-            },
-            "shape": {
-                "type": "circle",
-                "stroke": {
-                    "width": 0,
-                    "color": "#000000"
-                }
-            },
-            "opacity": {
-                "value": 0.5,
-                "random": true,
-                "anim": {
-                    "enable": true,
-                    "speed": 1,
-                    "opacity_min": 0.1,
-                    "sync": false
-                }
-            },
-            "size": {
-                "value": 3,
-                "random": true,
-                "anim": {
-                    "enable": true,
-                    "speed": 2,
-                    "size_min": 0.1,
-                    "sync": false
-                }
-            },
-            "line_linked": {
-                "enable": true,
-                "distance": 150,
-                "color": "#6e45e2",
-                "opacity": 0.4,
-                "width": 1
-            },
-            "move": {
-                "enable": true,
-                "speed": 1,
-                "direction": "none",
-                "random": true,
-                "straight": false,
-                "out_mode": "out",
-                "bounce": false,
-                "attract": {
-                    "enable": true,
-                    "rotateX": 600,
-                    "rotateY": 1200
-                }
-            }
-        },
-        "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-                "onhover": {
-                    "enable": true,
-                    "mode": "grab"
-                },
-                "onclick": {
-                    "enable": true,
-                    "mode": "push"
-                },
-                "resize": true
-            },
-            "modes": {
-                "grab": {
-                    "distance": 140,
-                    "line_linked": {
-                        "opacity": 1
-                    }
-                },
-                "push": {
-                    "particles_nb": 4
-                }
-            }
-        },
-        "retina_detect": true
-    });
-}
+// Dil açma
+document.getElementById("languageBtn").addEventListener("click", () => {
+  document.getElementById("languageDropdown").classList.toggle("show");
+});
 
-// Dil Değiştirme
-function setupLanguageSwitcher() {
-    const langButtons = document.querySelectorAll('.lang-btn');
-    
-    langButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Aktif butonu güncelle
-            langButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Dil değiştirme işlemleri burada yapılacak
-            const lang = this.getAttribute('data-lang');
-            changeLanguage(lang);
-        });
-    });
-}
+// Modal aç-kapat
+document.getElementById("connectWalletBtn").addEventListener("click", () => {
+  document.getElementById("walletModal").style.display = "flex";
+});
+document.getElementById("closeModalBtn").addEventListener("click", () => {
+  document.getElementById("walletModal").style.display = "none";
+});
 
-// Uygulama Başlatma
-document.addEventListener('DOMContentLoaded', function() {
-    // Animasyonları başlat
-    initParticles();
-    startCountdown();
-    
-    // Dil değiştiriciyi ayarla
-    setupLanguageSwitcher();
-    
-    // Cüzdan bağlantısını kontrol et
-    if (typeof window.ethereum !== 'undefined') {
-        checkWalletConnection();
+// MetaMask bağlantısı
+document.getElementById("metamaskOption").addEventListener("click", async () => {
+  if (typeof window.ethereum !== "undefined") {
+    try {
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      signer = provider.getSigner();
+      userAddress = await signer.getAddress();
+      document.getElementById("walletAddress").innerText = userAddress;
+
+      const balance = await provider.getBalance(userAddress);
+      document.getElementById("bnbBalance").innerText = `${ethers.utils.formatEther(balance)} BNB`;
+
+      document.getElementById("walletInfo").style.display = "block";
+      document.getElementById("walletModal").style.display = "none";
+    } catch (error) {
+      alert("Connection failed!");
     }
+  } else {
+    alert("MetaMask not found. Please install MetaMask.");
+  }
+});
+
+// BNB girildiğinde FDAI hesapla
+document.getElementById("bnbAmount").addEventListener("input", () => {
+  const bnb = parseFloat(document.getElementById("bnbAmount").value);
+  if (bnb > 0) {
+    const tokenAmount = bnb * 120000000000;
+    document.getElementById("fdaiAmount").innerText = tokenAmount.toLocaleString();
+    document.getElementById("calculationResult").style.display = "block";
+    document.getElementById("buyBtn").disabled = false;
+  } else {
+    document.getElementById("calculationResult").style.display = "none";
+    document.getElementById("buyBtn").disabled = true;
+  }
+});
+
+// Whitepaper indir
+document.getElementById("whitepaperBtn").addEventListener("click", () => {
+  window.open("whitepaper.pdf", "_blank");
 });
