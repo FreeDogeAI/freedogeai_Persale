@@ -47,6 +47,10 @@ const wallet = {
     try {
       const isMobile = utils.isMobile();
       // Birkaç saniye window.ethereum'un gelmesini bekle
+      if (isMobile && typeof window.ethereum === "undefined") {
+  window.location.href = "https://metamask.app.link/dapp/www.freedogeai.com";
+  return;
+      }
 let provider = null;
 for (let i = 0; i < 10; i++) {
   provider = utils.getProvider();
