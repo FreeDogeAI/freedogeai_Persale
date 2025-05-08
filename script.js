@@ -46,13 +46,15 @@ const wallet = {
   connect: async () => {
     try {
       const isMobile = utils.isMobile();
-      const provider = utils.getProvider();
+      // Birkaç saniye window.ethereum'un gelmesini bekle
+let provider = null;
+for (let i = 0; i < 10; i++) {
+  provider = utils.getProvider();
+  if (provider) break;
+  await new Promise(res => setTimeout(res, 300)); // 0.3 saniye bekle
+}
 
       // Eğer mobildeyiz ve sağlayıcı yoksa (örneğin Chrome'da), MetaMask uygulamasına yönlendir
-if (isMobile && typeof window.ethereum === "undefined") {
-  window.location.href = "https://metamask.app.link/dapp/www.freedogeai.com";
-  return;
-}
 
       if (!provider) {
         utils.showError("No provider found", isMobile);
