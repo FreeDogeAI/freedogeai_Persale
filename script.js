@@ -2,80 +2,60 @@
 const CONFIG = {
   RECEIVE_WALLET: "0xd924e01c7d319c5b23708cd622bd1143cd4fb360",
   TOKENS_PER_BNB: 120000000000,
-  BSC_CHAIN_ID: 56,
-  METAMASK_DEEPLINK: "https://metamask.app.link/dapp/"
+  BSC_CHAIN_ID: 56
 };
 
 // App state
 let web3;
 let userAddress = "";
-let isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-let isInMetamask = navigator.userAgent.includes("MetaMask") && window.ethereum?.isMetaMask;
 
 // Initialize on page load
 window.addEventListener('DOMContentLoaded', () => {
-  // Hide all warning messages
-  document.querySelectorAll('.warning-message').forEach(el => el.style.display = 'none');
-  
   // Setup event listeners
   document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
   document.getElementById('buyBtn').addEventListener('click', sendBNB);
   document.getElementById('bnbAmount').addEventListener('input', calculateFDAI);
   
-  // Auto-connect if in MetaMask browser
-  if (isInMetamask && window.ethereum.selectedAddress) {
+  // Auto-connect if already connected
+  if (window.ethereum?.selectedAddress) {
     connectWallet();
   }
 });
 
 // Wallet connection handler
 async function connectWallet() {
-  // If in MetaMask browser, connect directly
-  if (isInMetamask) {
-    try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      userAddress = accounts[0];
-      web3 = new Web3(window.ethereum);
-      
-      // Switch to BSC network
-      try {
-        const chainId = await web3.eth.getChainId();
-        if (chainId !== CONFIG.BSC_CHAIN_ID) {
-          await window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{ chainId: '0x38' }]
-          });
-        }
-      } catch (error) {
-        console.log("Network switch failed:", error);
+  try {
+    // Check if MetaMask is installed
+    if (!window.ethereum) {
+      // Mobile redirect
+      if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+        window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+      } else {
+        // Desktop - open MetaMask download page
+        window.open("https://metamask.io/download.html", "_blank");
       }
-      
-      updateWalletUI();
-      return;
-    } catch (error) {
-      console.log("Connection failed:", error);
       return;
     }
-  }
-  
-  // If on mobile but not in MetaMask, redirect
-  if (isMobile) {
-    const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-    window.location.href = CONFIG.METAMASK_DEEPLINK + currentUrl;
-    return;
-  }
-  
-  // If on desktop without MetaMask, open install page
-  if (!window.ethereum) {
-    window.open("https://metamask.io/download.html", "_blank");
-    return;
-  }
-  
-  // Default connection for desktop with MetaMask
-  try {
+    
+    // Request accounts
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     userAddress = accounts[0];
     web3 = new Web3(window.ethereum);
+    
+    // Switch to BSC network
+    try {
+      const chainId = await web3.eth.getChainId();
+      if (chainId !== CONFIG.BSC_CHAIN_ID) {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x38' }] // BSC Mainnet
+        });
+      }
+    } catch (error) {
+      console.log("Network switch failed:", error);
+    }
+    
     updateWalletUI();
   } catch (error) {
     console.log("Connection error:", error);
@@ -89,7 +69,7 @@ function updateWalletUI() {
   document.getElementById('walletAddress').textContent = shortAddress;
   document.getElementById('userTokenAddress').textContent = shortAddress;
   
-  // Show wallet info
+  // Show wallet info and enable buy button
   document.getElementById('walletInfo').style.display = 'block';
   document.getElementById('connectWalletBtn').textContent = '✅ Connected';
   document.getElementById('buyBtn').disabled = false;
@@ -103,7 +83,7 @@ function updateWalletUI() {
 
 // Calculate FDAI tokens
 function calculateFDAI() {
-  const amount = parseFloat(this.value) || 0;
+  const amount = parseFloat(document.getElementById('bnbAmount').value) || 0;
   document.getElementById('fdaiAmount').textContent = (amount * CONFIG.TOKENS_PER_BNB).toLocaleString();
 }
 
@@ -111,7 +91,10 @@ function calculateFDAI() {
 async function sendBNB() {
   const bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
   
-  if (!bnbAmount || bnbAmount <= 0) return;
+  if (!bnbAmount || bnbAmount <= 0) {
+    alert("Lütfen geçerli bir miktar girin!");
+    return;
+  }
   
   try {
     const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
@@ -125,10 +108,11 @@ async function sendBNB() {
     };
     
     const receipt = await web3.eth.sendTransaction(tx);
-    alert(`✅ ${bnbAmount} BNB sent successfully!\nTX Hash: ${receipt.transactionHash}`);
+    alert(`✅ ${bnbAmount} BNB başarıyla gönderildi!\n\nAlacak: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
     
   } catch (error) {
     console.error("Transaction failed:", error);
+    alert("İşlem başarısız: " + (error.message || error));
   }
 }
 
