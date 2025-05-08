@@ -32,10 +32,8 @@ async function connectWallet() {
         const currentUrl = window.location.href.replace(/^https?:\/\//, '');
         window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
       } else {
-        // Desktop - OPEN METAMASK DEEP LINK DIRECTLY
-        window.location.href = "https://metamask.io/download.html";
-        // Alternative for direct app opening:
-        // window.open("metamask://", "_blank"); 
+        // Desktop - open MetaMask download page
+        window.open("https://metamask.io/download.html", "_blank");
       }
       return;
     }
@@ -61,11 +59,76 @@ async function connectWallet() {
     updateWalletUI();
   } catch (error) {
     console.log("Connection error:", error);
-    // Desktop'da bağlantı hatasında tekrar yönlendirme
-    if (!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      window.location.href = "https://metamask.io/download.html";
-    }
   }
 }
 
-// ... (diğer fonksiyonlar aynı kalacak) ...
+// Update UI after connection
+function updateWalletUI() {
+  // Format address display
+  const shortAddress = `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+  document.getElementById('walletAddress').textContent = shortAddress;
+  document.getElementById('userTokenAddress').textContent = shortAddress;
+  
+  // Show wallet info and enable buy button
+  document.getElementById('walletInfo').style.display = 'block';
+  document.getElementById('connectWalletBtn').textContent = '✅ Connected';
+  document.getElementById('buyBtn').disabled = false;
+  
+  // Get and display balance
+  web3.eth.getBalance(userAddress).then(balance => {
+    const bnbBalance = web3.utils.fromWei(balance, 'ether');
+    document.getElementById('bnbBalance').textContent = `${parseFloat(bnbBalance).toFixed(6)} BNB`;
+  });
+}
+
+// Calculate FDAI tokens
+function calculateFDAI() {
+  const amount = parseFloat(document.getElementById('bnbAmount').value) || 0;
+  document.getElementById('fdaiAmount').textContent = (amount * CONFIG.TOKENS_PER_BNB).toLocaleString();
+}
+
+// Send BNB transaction
+async function sendBNB() {
+  const bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
+  
+  if (!bnbAmount || bnbAmount <= 0) {
+    alert("Lütfen geçerli bir miktar girin!");
+    return;
+  }
+  
+  try {
+    const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
+    
+    const tx = {
+      from: userAddress,
+      to: CONFIG.RECEIVE_WALLET,
+      value: weiAmount,
+      gas: 300000,
+      gasPrice: await web3.eth.getGasPrice()
+    };
+    
+    const receipt = await web3.eth.sendTransaction(tx);
+    alert(`✅ ${bnbAmount} BNB başarıyla gönderildi!\n\nAlacak: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
+    
+  } catch (error) {
+    console.error("Transaction failed:", error);
+    alert("İşlem başarısız: " + (error.message || error));
+  }
+}
+
+// Handle account changes
+if (window.ethereum) {
+  window.ethereum.on('accountsChanged', (accounts) => {
+    if (accounts.length > 0) {
+      userAddress = accounts[0];
+      updateWalletUI();
+    } else {
+      // Disconnect
+      document.getElementById('walletInfo').style.display = 'none';
+      document.getElementById('connectWalletBtn').textContent = '🔗 Connect Wallet';
+      document.getElementById('buyBtn').disabled = true;
+    }
+  });
+  
+  window.ethereum.on('chainChanged', () => window.location.reload());
+}
