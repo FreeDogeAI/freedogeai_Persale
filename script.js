@@ -107,10 +107,13 @@ for (let i = 0; i < 10; i++) {
           window.location.href = "https://metamask.app.link/dapp/www.freedogeai.com";
           return;
         } else {
-          utils.showError("No provider found", isMobile);
-          return;
-        }
-      }
+         if (!provider) {
+  if (isMobile) {
+    window.location.href = "https://metamask.app.link/dapp/www.freedogeai.com";
+    return;
+  }
+  return;
+         } 
 
       // Cüzdan bağlantısı
       const accounts = await provider.request({ method: 'eth_requestAccounts' });
