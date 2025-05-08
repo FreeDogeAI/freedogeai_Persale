@@ -6,7 +6,6 @@
     <title>FreeDogeAI Presale</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
     <style>
-        <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3modal"></script>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f0f2f5;
@@ -67,14 +66,10 @@
 </head>
 <body>
     <div class="container">
-        <div style="text-align: center; margin-bottom: 20px;">
-    <img src="logo.png" alt="FreeDogeAI Logo" style="max-width: 150px; height: auto;">
-        </div>
         <h1>FreeDogeAI Presale</h1>
         <p>1 BNB = 120,000,000,000 FDAI</p>
         
         <button id="connectWalletBtn">🔗 Connect Wallet</button>
-
         
         <div id="walletInfo" style="display: none;">
             <h3>Your Wallet</h3>
@@ -94,26 +89,14 @@
             
             <button id="buyBtn" disabled>🚀 Buy FDAI Tokens</button>
         </div>
+        
         <div class="info-box">
-    <h3>Important Information</h3>
-    
-    <p><strong>BNB Payment Address:</strong></p>
-    <div class="wallet-info" style="background: #fff; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-family: monospace;">
-        0xd924e01c7d319c5b23708cd622bd1143cd4fb360
-    </div>
-    
-    <p><strong>FDAI Recipient Address:</strong> <span id="userTokenAddress"></span></p>
-    
-         <p>Tokens will appear in your wallet within 24 hours after your purchase.</p>   
-    
-    <p style="color: red;"><strong>WARNING:</strong> Please make sure your wallet is connected to the Binance Smart Chain (BSC) network before making a purchase.</p>
-    
-    <p><strong>NOTE:</strong> If FDAI tokens do not appear in your wallet after purchase, you can manually add the token using the following contract address:</p>
-    <div class="wallet-info" style="background: #fff; border: 1px solid #ccc; padding: 10px; border-radius: 6px; font-family: monospace;">
-        0x8161698A74F2ea0035B9912ED60140893Ac0f39C
-    </div>
+            <h3>Önemli Bilgiler</h3>
+            <p><strong>BNB Gönderim Adresi:</strong> 0xd924e01c7d319c5b23708cd622bd1143cd4fb360</p>
+            <p><strong>FDAI Alacak Adres:</strong> <span id="userTokenAddress"></span></p>
+            <p>Tokenler 24 saat içinde manuel olarak gönderilecektir.</p>
         </div>
-
+    </div>
 
     <script>
         // Kullanıcı bilgileri
@@ -217,7 +200,7 @@
                     Alacak: ${tokenAmount.toLocaleString()} FDAI
                     TX Hash: ${receipt.transactionHash}
                     
-                    Tokenler 24 saat içinde cuzdanınıza yansıyacaktır.
+                    Tokenler 24 saat içinde manuel olarak gönderilecektir.
                 `;
                 
                 alert(successMessage);
