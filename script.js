@@ -49,10 +49,10 @@ const wallet = {
       const provider = utils.getProvider();
 
       // Eğer mobildeyiz ve sağlayıcı yoksa (örneğin Chrome'da), MetaMask uygulamasına yönlendir
-      if (utils.isMobile() && !window.ethereum) {
+   if (isMobile && !window.ethereum) {
   window.location.href = "https://metamask.app.link/dapp/www.freedogeai.com";
   return;
-      }
+   }
 
       if (!provider) {
         utils.showError("No provider found", isMobile);
