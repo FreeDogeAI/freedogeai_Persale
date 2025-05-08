@@ -6,20 +6,32 @@ const CONFIG = {
 
 let web3;
 let userAddress = "";
+let isRedirecting = false;
 
-// Tarayıcı kontrolü
+// Tarayıcı kontrol fonksiyonları
 const isMobile = () => /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 const isInMetamaskBrowser = () => navigator.userAgent.includes("MetaMask");
 
 // MetaMask tarayıcısına yönlendirme
 const redirectToMetamask = () => {
-  const currentUrl = encodeURIComponent(window.location.href);
+  if (isRedirecting) return;
+  isRedirecting = true;
+  
+  const currentUrl = window.location.href.replace(/^https?:\/\//, '');
   window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+  
+  // 3 saniye içinde yönlendirme olmazsa uyarı göster
+  setTimeout(() => {
+    if (!isInMetamaskBrowser()) {
+      alert("Lütfen yönlendirme sonrasında 'Open in MetaMask' butonuna basın!");
+    }
+    isRedirecting = false;
+  }, 3000);
 };
 
-// Cüzdan bağlantısı
+// Cüzdan bağlantı fonksiyonu
 const connectWallet = async () => {
-  // Eğer zaten MetaMask tarayıcısındaysak
+  // MetaMask tarayıcısı içindeysek direkt bağlan
   if (isInMetamaskBrowser()) {
     try {
       // MetaMask provider kontrolü
@@ -52,20 +64,21 @@ const connectWallet = async () => {
 
       // UI güncelleme
       updateWalletUI();
+      return;
       
     } catch (error) {
       console.log("Bağlantı hatası:", error);
+      return;
     }
-    return;
   }
 
-  // Mobil tarayıcıdaysa direkt yönlendir
+  // Mobil tarayıcıdaysa direkt yönlendir (uyarı göstermeden)
   if (isMobile()) {
     redirectToMetamask();
     return;
   }
 
-  // Desktop'ta MetaMask yoksa yönlendir
+  // Desktop'ta MetaMask yoksa indirme sayfasına yönlendir
   if (!window.ethereum) {
     window.open("https://metamask.io/download.html", "_blank");
     return;
@@ -103,7 +116,7 @@ const updateWalletUI = () => {
 
 // Sayfa yüklendiğinde
 window.addEventListener("DOMContentLoaded", () => {
-  // Bağlantı butonu
+  // Bağlantı butonu event listener
   document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
   
   // MetaMask tarayıcısındaysa otomatik bağlan
@@ -127,6 +140,9 @@ if (window.ethereum) {
       document.getElementById('walletInfo').style.display = 'none';
       document.getElementById('connectWalletBtn').textContent = '🔗 Connect Wallet';
       document.getElementById('buyBtn').disabled = true;
+    } else {
+      userAddress = accounts[0];
+      updateWalletUI();
     }
   });
   
