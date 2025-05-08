@@ -42,10 +42,7 @@ const utils = {
 };
 
 // Wallet Connection
-const wallet = {
-  connect: async () => {
-    try {
-      const isMobile = utils.isMobile();
+
       // Birkaç saniye window.ethereum'un gelmesini bekle
       let provider = null;
 for (let i = 0; i < 15; i++) {
