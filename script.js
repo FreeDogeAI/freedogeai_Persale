@@ -93,14 +93,6 @@ for (let i = 0; i < 10; i++) {
     try {
       const isMobile = utils.isMobile();
 
-      // Birkaç saniye sağlayıcıyı bekle
-      let provider = null;
-      for (let i = 0; i < 15; i++) {
-        provider = utils.getProvider();
-        if (provider && typeof provider.request === 'function') break;
-        await new Promise(res => setTimeout(res, 300));
-      }
-
       // Sağlayıcı hâlâ yoksa mobilde MetaMask uygulamasına yönlendir
       if (!provider) {
         if (isMobile) {
