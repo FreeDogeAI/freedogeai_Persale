@@ -6,50 +6,27 @@ const CONFIG = {
 
 let web3;
 let userAddress = "";
-let isRedirecting = false;
 
-// Tarayıcı kontrol fonksiyonları
+// Tarayıcı ve MetaMask kontrolü
 const isMobile = () => /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 const isInMetamaskBrowser = () => navigator.userAgent.includes("MetaMask");
 
-// MetaMask tarayıcısına yönlendirme
+// MetaMask deep link ile yönlendirme
 const redirectToMetamask = () => {
-  if (isRedirecting) return;
-  isRedirecting = true;
-  
-  const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+  const currentUrl = encodeURIComponent(window.location.href);
   window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
-  
-  // 3 saniye içinde yönlendirme olmazsa uyarı göster
-  setTimeout(() => {
-    if (!isInMetamaskBrowser()) {
-      alert("Lütfen yönlendirme sonrasında 'Open in MetaMask' butonuna basın!");
-    }
-    isRedirecting = false;
-  }, 3000);
 };
 
 // Cüzdan bağlantı fonksiyonu
 const connectWallet = async () => {
-  // MetaMask tarayıcısı içindeysek direkt bağlan
-  if (isInMetamaskBrowser()) {
+  // MetaMask tarayıcısında zaten bulunuyorsa tekrar yönlendirme yapma
+  if (isInMetamaskBrowser() && window.ethereum) {
     try {
-      // MetaMask provider kontrolü
-      if (!window.ethereum) {
-        console.log("MetaMask provider bekleniyor...");
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        if (!window.ethereum) {
-          console.log("MetaMask provider bulunamadı");
-          return;
-        }
-      }
-
-      // Hesapları iste
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       userAddress = accounts[0];
       web3 = new Web3(window.ethereum);
 
-      // Ağ kontrolü
+      // BSC ağ kontrolü ve geçiş
       const chainId = await web3.eth.getChainId();
       if (chainId !== CONFIG.BSC_CHAIN_ID) {
         try {
@@ -58,33 +35,33 @@ const connectWallet = async () => {
             params: [{ chainId: '0x38' }]
           });
         } catch (switchError) {
-          console.log("BSC ağına geçiş yapılamadı:", switchError);
+          console.error("BSC ağına geçiş yapılamadı:", switchError);
+          alert("Lütfen cüzdanınızı Binance Smart Chain (BSC) ağına geçirin.");
+          return;
         }
       }
 
-      // UI güncelleme
       updateWalletUI();
-      return;
-      
     } catch (error) {
-      console.log("Bağlantı hatası:", error);
-      return;
+      console.error("Bağlantı hatası:", error);
+      alert("Cüzdan bağlantısı sırasında bir hata oluştu.");
     }
+    return;
   }
 
-  // Mobil tarayıcıdaysa direkt yönlendir (uyarı göstermeden)
-  if (isMobile()) {
+  // Mobil cihazda MetaMask yoksa yönlendir
+  if (isMobile() && !window.ethereum) {
     redirectToMetamask();
     return;
   }
 
-  // Desktop'ta MetaMask yoksa indirme sayfasına yönlendir
+  // Desktop'ta MetaMask yoksa yönlendir
   if (!window.ethereum) {
     window.open("https://metamask.io/download.html", "_blank");
     return;
   }
 
-  // Desktop'ta normal bağlantı
+  // Desktop veya mobil tarayıcıda MetaMask varsa bağlan
   try {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     userAddress = accounts[0];
@@ -92,47 +69,57 @@ const connectWallet = async () => {
 
     const chainId = await web3.eth.getChainId();
     if (chainId !== CONFIG.BSC_CHAIN_ID) {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x38' }]
-      });
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x38' }]
+        });
+      } catch (switchError) {
+        console.error("BSC ağına geçiş yapılamadı:", switchError);
+        alert("Lütfen cüzdanınızı Binance Smart Chain (BSC) ağına geçirin.");
+        return;
+      }
     }
 
     updateWalletUI();
-    
   } catch (error) {
-    console.log("Bağlantı hatası:", error);
+    console.error("Bağlantı hatası:", error);
+    alert("Cüzdan bağlantısı sırasında bir hata oluştu.");
   }
 };
 
 // UI güncelleme fonksiyonu
 const updateWalletUI = () => {
   document.getElementById("walletAddress").textContent = 
-    `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
+    `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
   document.getElementById("walletInfo").style.display = 'block';
   document.getElementById("connectWalletBtn").textContent = "✅ Connected";
   document.getElementById("buyBtn").disabled = false;
 };
 
+// BNB miktarı değiştiğinde FDAI hesapla
+const updateFDAIAmount = () => {
+  const bnbAmountInput = document.getElementById('bnbAmount');
+  const amount = parseFloat(bnbAmountInput.value) || 0;
+  const tokens = amount * CONFIG.TOKENS_PER_BNB;
+  document.getElementById('fdaiAmount').textContent = tokens.toLocaleString();
+};
+
 // Sayfa yüklendiğinde
 window.addEventListener("DOMContentLoaded", () => {
-  // Bağlantı butonu event listener
+  // Bağlantı butonu
   document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
-  
-  // MetaMask tarayıcısındaysa otomatik bağlan
-  if (isInMetamaskBrowser()) {
+
+  // BNB miktarı değiştiğinde FDAI hesapla
+  document.getElementById('bnbAmount').addEventListener('input', updateFDAIAmount);
+
+  // MetaMask tarayıcısında otomatik bağlantı
+  if (isInMetamaskBrowser() && window.ethereum) {
     connectWallet();
   }
-  
-  // BNB miktarı değiştiğinde FDAI hesapla
-  document.getElementById('bnbAmount').addEventListener('input', function() {
-    const amount = parseFloat(this.value) || 0;
-    const tokens = amount * CONFIG.TOKENS_PER_BNB;
-    document.getElementById('fdaiAmount').textContent = tokens.toLocaleString();
-  });
 });
 
-// Cüzdan değişikliklerini dinle
+// Cüzdan ve ağ değişikliklerini dinle
 if (window.ethereum) {
   window.ethereum.on('accountsChanged', (accounts) => {
     if (accounts.length === 0) {
@@ -140,11 +127,14 @@ if (window.ethereum) {
       document.getElementById('walletInfo').style.display = 'none';
       document.getElementById('connectWalletBtn').textContent = '🔗 Connect Wallet';
       document.getElementById('buyBtn').disabled = true;
+      userAddress = "";
     } else {
       userAddress = accounts[0];
       updateWalletUI();
     }
   });
-  
-  window.ethereum.on('chainChanged', () => window.location.reload());
-}
+
+  window.ethereum.on('chainChanged', () => {
+    window.location.reload();
+  });
+  }
