@@ -1,6 +1,6 @@
 // Kullanıcı bilgileri
-const RECEIVE_WALLET = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
-const TOKENS_PER_BNB = 120000000000;
+const RECEIVE_WALLET = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // Projenize göre güncelleyin
+const TOKENS_PER_BNB = 120000000000; // Projenize göre güncelleyin
 
 // Web3 ve Web3Modal bağlantısı
 let web3;
@@ -33,23 +33,31 @@ function initWeb3Modal() {
 // Cüzdan bağlantısı
 async function connectWallet() {
     try {
+        // Web3Modal ile bağlantıyı başlat
         provider = await web3Modal.connect();
         web3 = new Web3(provider);
 
+        // Kullanıcı adresini al
         const accounts = await web3.eth.getAccounts();
         userAddress = accounts[0];
 
+        // Ağ kontrolü (BSC Mainnet)
         const chainId = await web3.eth.getChainId();
         if (chainId !== 56) {
             alert("Lütfen Binance Smart Chain (BSC) ağına geçiş yapın!");
             return;
         }
 
+        // UI güncelle
         updateWalletInfo();
 
     } catch (error) {
         console.error("Cüzdan bağlantı hatası:", error);
-        alert("Bağlantı hatası: " + error.message);
+        if (error.message.includes("User denied") || error.message.includes("User rejected")) {
+            alert("Bağlantı reddedildi. Lütfen tekrar deneyin!");
+        } else {
+            alert("Bağlantı hatası: " + error.message);
+        }
     }
 }
 
@@ -58,9 +66,11 @@ async function updateWalletInfo() {
     if (!userAddress) return;
 
     try {
+        // Bakiye bilgisini al
         const balance = await web3.eth.getBalance(userAddress);
         const bnbBalance = web3.utils.fromWei(balance, 'ether');
 
+        // UI güncelle
         document.getElementById('walletAddress').textContent = userAddress;
         document.getElementById('userTokenAddress').textContent = userAddress;
         document.getElementById('bnbBalance').textContent = parseFloat(bnbBalance).toFixed(4) + " BNB";
@@ -113,25 +123,28 @@ async function buyTokens() {
     }
 }
 
-// Whitepaper butonu
+// Whitepaper butonu (eğer HTML'de buton varsa)
 function openWhitepaper() {
-    window.open('https://your-whitepaper-url.com', '_blank'); // Whitepaper URL'sini güncelle
+    window.open('https://your-whitepaper-url.com', '_blank'); // Whitepaper URL'sini güncelleyin
 }
 
 // Sayfa yüklendiğinde
 window.addEventListener('DOMContentLoaded', () => {
     initWeb3Modal();
 
+    // Event listener'lar
     document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
     document.getElementById('buyBtn').addEventListener('click', buyTokens);
-    document.getElementById('whitepaperBtn').addEventListener('click', openWhitepaper);
+    document.getElementById('whitepaperBtn')?.addEventListener('click', openWhitepaper); // Optional chaining, buton yoksa hata vermez
 
+    // BNB miktarı değiştiğinde FDAI hesapla
     document.getElementById('bnbAmount').addEventListener('input', function() {
         const amount = parseFloat(this.value) || 0;
         const tokens = amount * TOKENS_PER_BNB;
         document.getElementById('fdaiAmount').textContent = tokens.toLocaleString();
     });
 
+    // Eğer zaten bağlı bir cüzdan varsa
     if (web3Modal.cachedProvider) {
         connectWallet();
     }
