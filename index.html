@@ -4,112 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Token Presale</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .countdown {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin: 20px 0;
-            font-size: 1.5rem;
-        }
-        .countdown-numbers {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 15px;
-        }
-        .countdown-box {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 10px;
-            border-radius: 8px;
-            min-width: 70px;
-        }
+        /* Tüm stil tanımları önceki koddaki gibi */
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 style="text-align: center;">TOKEN PRESALE</h1>
-        
-        <div class="countdown">
-            <h2>PRESALE BİTİŞİNE KALAN SÜRE</h2>
-            <div class="countdown-numbers">
-                <div class="countdown-box">
-                    <div id="days">90</div>
-                    <div>GÜN</div>
-                </div>
-                <div class="countdown-box">
-                    <div id="hours">00</div>
-                    <div>SAAT</div>
-                </div>
-                <div class="countdown-box">
-                    <div id="minutes">00</div>
-                    <div>DAKİKA</div>
-                </div>
-                <div class="countdown-box">
-                    <div id="seconds">00</div>
-                    <div>SANİYE</div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Arayüz önceki koddaki gibi -->
 
     <script>
-        // 1. Başlangıç zamanını localStorage'da sakla (sadece ilk defa)
-        if (!localStorage.getItem('countdownStart')) {
-            const startDate = new Date();
-            localStorage.setItem('countdownStart', startDate.getTime());
-        }
-
-        // 2. 90 günlük geri sayım (başlangıç zamanına göre)
-        function updateCountdown() {
-            const startTime = parseInt(localStorage.getItem('countdownStart'));
-            const endDate = new Date(startTime);
-            endDate.setDate(endDate.getDate() + 90); // 90 gün ekle
-            
-            const now = new Date();
-            const diff = endDate - now;
-            
-            if (diff <= 0) {
-                document.getElementById('days').textContent = '00';
-                document.getElementById('hours').textContent = '00';
-                document.getElementById('minutes').textContent = '00';
-                document.getElementById('seconds').textContent = '00';
-                localStorage.removeItem('countdownStart'); // Süre dolduysa temizle
+        // Gelişmiş Cüzdan Bağlantı Sistemi
+        async function connectWallet() {
+            if (!window.ethereum) {
+                // Mobil cihaz kontrolü
+                if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                    // MetaMask ve Trust Wallet için universal link
+                    window.location.href = "https://metamask.app.link/dapp/" + encodeURIComponent(window.location.href);
+                    setTimeout(() => {
+                        window.location.href = "https://link.trustwallet.com/open_url?url=" + encodeURIComponent(window.location.href);
+                    }, 200);
+                } else {
+                    alert("Lütfen MetaMask veya Trust Wallet yükleyin!");
+                    window.open("https://metamask.io/download.html", "_blank");
+                }
                 return;
             }
-            
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            document.getElementById('days').textContent = days.toString().padStart(2, '0');
-            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+            try {
+                // Düzgün bağlantı URL'si oluştur
+                const currentUrl = new URL(window.location.href);
+                currentUrl.searchParams.delete("error");
+                window.history.replaceState({}, document.title, currentUrl.toString());
+
+                // Bağlantı isteği
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts',
+                    params: [{ eth_chainId: '0x38' }] // BSC için chainId
+                });
+
+                userAddress = accounts[0];
+                web3 = new Web3(window.ethereum);
+
+                // Ağ kontrolü
+                await checkNetwork();
+                await updateWalletInfo();
+
+            } catch (error) {
+                console.error("Bağlantı hatası:", error);
+                
+                // Özel hata yönetimi
+                if (error.code === 4001) {
+                    alert("Bağlantı reddedildi. Lütfen izin verin.");
+                } else if (error.code === -32002) {
+                    alert("Zaten bekleyen bir istek var. Lütfen cüzdan uygulamanızı kontrol edin.");
+                } else {
+                    alert("Bağlantı hatası: " + error.message);
+                }
+            }
         }
-        
-        // 3. Her saniye güncelle + ilk çalıştırma
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
+
+        // Mobil uygulama açma fonksiyonu
+        function openWalletApp(walletType) {
+            if (walletType === 'metamask') {
+                // MetaMask için universal link
+                window.location.href = "https://metamask.app.link/dapp/" + encodeURIComponent(window.location.href);
+            } else {
+                // Trust Wallet için universal link
+                window.location.href = "https://link.trustwallet.com/open_url?url=" + encodeURIComponent(window.location.href);
+            }
+            
+            // 3 saniye sonra hala açılmadıysa mağazaya yönlendir
+            setTimeout(() => {
+                if (!document.hidden) {
+                    if (walletType === 'metamask') {
+                        window.open("https://metamask.io/download.html", "_blank");
+                    } else {
+                        window.open("https://trustwallet.com/download", "_blank");
+                    }
+                }
+            }, 3000);
+        }
+
+        // Ağ kontrolü (güncellendi)
+        async function checkNetwork() {
+            try {
+                const chainId = await web3.eth.getChainId();
+                if (chainId !== 56) {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0x38' }]
+                    });
+                }
+            } catch (switchError) {
+                if (switchError.code === 4902) {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: '0x38',
+                            chainName: 'Binance Smart Chain',
+                            nativeCurrency: { 
+                                name: 'BNB', 
+                                symbol: 'BNB', 
+                                decimals: 18 
+                            },
+                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                            blockExplorerUrls: ['https://bscscan.com/']
+                        }]
+                    });
+                }
+            }
+        }
     </script>
 </body>
 </html>
