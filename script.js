@@ -50,8 +50,7 @@ const wallet = {
 
       // Eğer mobildeyiz ve sağlayıcı yoksa (örneğin Chrome'da), MetaMask uygulamasına yönlendir
       if (isMobile && !provider) {
-        window.location.href = "https://metamask.app.link/dapp/freedogeai.com";
-        return;
+        window.location.href = "https://metamask.app.link/dapp/www.freedogeai.com";
       }
 
       if (!provider) {
