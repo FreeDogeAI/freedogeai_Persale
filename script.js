@@ -47,10 +47,22 @@ const wallet = {
     try {
       const isMobile = utils.isMobile();
       // Birkaç saniye window.ethereum'un gelmesini bekle
-      if (isMobile && typeof window.ethereum === "undefined") {
-  window.location.href = "https://metamask.app.link/dapp/www.freedogeai.com";
-  return;
-      }
+      let provider = null;
+for (let i = 0; i < 15; i++) {
+  provider = utils.getProvider();
+  if (provider && typeof provider.request === 'function') break;
+  await new Promise(res => setTimeout(res, 300));
+}
+
+if (!provider) {
+  if (isMobile) {
+    window.location.href = "https://metamask.app.link/dapp/www.freedogeai.com";
+    return;
+  } else {
+    utils.showError("No provider found", isMobile);
+    return;
+  }
+}
 let provider = null;
 for (let i = 0; i < 10; i++) {
   provider = utils.getProvider();
@@ -76,7 +88,42 @@ for (let i = 0; i < 10; i++) {
       utils.showError(error, utils.isMobile());
     }
   },
-  
+  const wallet = {
+  connect: async () => {
+    try {
+      const isMobile = utils.isMobile();
+
+      // Birkaç saniye sağlayıcıyı bekle
+      let provider = null;
+      for (let i = 0; i < 15; i++) {
+        provider = utils.getProvider();
+        if (provider && typeof provider.request === 'function') break;
+        await new Promise(res => setTimeout(res, 300));
+      }
+
+      // Sağlayıcı hâlâ yoksa mobilde MetaMask uygulamasına yönlendir
+      if (!provider) {
+        if (isMobile) {
+          window.location.href = "https://metamask.app.link/dapp/www.freedogeai.com";
+          return;
+        } else {
+          utils.showError("No provider found", isMobile);
+          return;
+        }
+      }
+
+      // Cüzdan bağlantısı
+      const accounts = await provider.request({ method: 'eth_requestAccounts' });
+      userAddress = accounts[0];
+      web3 = new Web3(provider);
+
+      await wallet.checkNetwork();
+      wallet.updateUI();
+
+    } catch (error) {
+      utils.showError(error, utils.isMobile());
+    }
+  },
   checkNetwork: async () => {
     const chainId = await web3.eth.getChainId();
     if (chainId !== CONFIG.BSC_CHAIN_ID) {
