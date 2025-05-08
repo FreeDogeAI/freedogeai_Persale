@@ -150,16 +150,9 @@
                 
                 // Kullanıcı bilgilerini göster
                 showWalletInfo();
-                
-            } else {
-                alert("Lütfen MetaMask veya Trust Wallet yükleyin!");
-            }
-        } catch (error) {
-            console.error("Cüzdan bağlantı hatası:", error);
-            alert("Bağlantı hatası: " + error.message);
-        }
-    }
-
+            const cleanUrl = window.location.href.replace(/^https?:\/\//, '');
+window.location.href = `https://metamask.app.link/dapp/${cleanUrl}`;    
+            
     // Cüzdan bilgilerini göster
     async function showWalletInfo() {
         if (!userAddress) return;
