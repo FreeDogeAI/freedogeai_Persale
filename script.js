@@ -1,180 +1,104 @@
-// Constants
-const RECEIVE_WALLET = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
-const TOKENS_PER_BNB = 120000000000;
-let web3;
-let userAddress = "";
-
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', async () => {
-  await initWalletConnection();
-  setupEventListeners();
+// Initialize i18next
+i18next
+  .use(i18nextHttpBackend)
+  .init({
+    lng: 'tr', // default language
+    fallbackLng: 'en',
+    debug: false,
+    backend: {
+      loadPath: 'translations/{{lng}}.json'
+    }
+  }, function(err, t) {
+    // Initial content update
+    updateContent();
+    
+    // Initialize timer
+    initializeTimer();
+    
+    // Check if wallet is already connected
+    checkConnectedWallet();
 });
 
-// Initialize wallet connection
-async function initWalletConnection() {
-  if (window.ethereum) {
-    try {
-      // Check if already connected
-      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-      
-      if (accounts.length > 0) {
-        await handleConnectedWallet(accounts[0]);
-        return;
-      }
-      
-      // Auto-connect if not connected
-      await connectWallet();
-    } catch (error) {
-      console.error("Initial connection error:", error);
-    }
-  } else {
-    console.log("Wallet extension not detected");
-  }
-}
-
-// Connect wallet automatically
-async function connectWallet() {
-  try {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    userAddress = accounts[0];
-    web3 = new Web3(window.ethereum);
+// Update all translatable content
+function updateContent() {
+    // Update all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const translationKey = el.getAttribute('data-i18n');
+        el.innerHTML = i18next.t(translationKey);
+    });
     
-    await switchToBSCNetwork();
-    await updateWalletInfo();
-  } catch (error) {
-    console.error("Wallet connection failed:", error);
-  }
-}
-
-// Switch to BSC network
-async function switchToBSCNetwork() {
-  try {
-    const chainId = await web3.eth.getChainId();
-    if (chainId !== 56) {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x38' }] // BSC Mainnet
-      });
-    }
-  } catch (switchError) {
-    if (switchError.code === 4902) {
-      try {
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [{
-            chainId: '0x38',
-            chainName: 'Binance Smart Chain',
-            nativeCurrency: {
-              name: 'BNB',
-              symbol: 'BNB',
-              decimals: 18
-            },
-            rpcUrls: ['https://bsc-dataseed.binance.org/'],
-            blockExplorerUrls: ['https://bscscan.com/']
-          }]
-        });
-      } catch (addError) {
-        console.error("Failed to add BSC network:", addError);
-      }
-    }
-  }
-}
-
-// Update wallet info in UI
-async function updateWalletInfo() {
-  if (!userAddress) return;
-
-  try {
-    const balance = await web3.eth.getBalance(userAddress);
-    const bnbBalance = web3.utils.fromWei(balance, 'ether');
-    
-    document.getElementById('walletAddress').textContent = userAddress;
-    document.getElementById('userTokenAddress').textContent = userAddress;
-    document.getElementById('bnbBalance').textContent = `${parseFloat(bnbBalance).toFixed(4)} BNB`;
-    document.getElementById('walletInfo').style.display = 'block';
-    document.getElementById('buyBtn').disabled = false;
-  } catch (error) {
-    console.error("Failed to update wallet info:", error);
-  }
-}
-
-// Handle BNB to FDAI calculation
-function setupEventListeners() {
-  document.getElementById('bnbAmount').addEventListener('input', function() {
-    const amount = parseFloat(this.value) || 0;
-    document.getElementById('fdaiAmount').textContent = (amount * TOKENS_PER_BNB).toLocaleString();
-  });
-
-  document.getElementById('buyBtn').addEventListener('click', sendTransaction);
-}
-
-// Send BNB transaction
-async function sendTransaction() {
-  const bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
-  
-  if (!bnbAmount || bnbAmount <= 0) {
-    alert("Please enter a valid BNB amount!");
-    return;
-  }
-
-  try {
-    const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
-    
-    const tx = {
-      from: userAddress,
-      to: RECEIVE_WALLET,
-      value: weiAmount,
-      gas: 300000,
-      gasPrice: await web3.eth.getGasPrice()
-    };
-
-    const receipt = await web3.eth.sendTransaction(tx);
-    showTransactionSuccess(bnbAmount, receipt.transactionHash);
-  } catch (error) {
-    console.error("Transaction failed:", error);
-    alert(`Transaction failed: ${error.message}`);
-  }
-}
-
-// Show success message
-function showTransactionSuccess(amount, txHash) {
-  const tokenAmount = amount * TOKENS_PER_BNB;
-  const message = `
-    ✅ ${amount} BNB sent successfully!
-    
-    Receiver Address: ${RECEIVE_WALLET}
-    Your FDAI Address: ${userAddress}
-    You will receive: ${tokenAmount.toLocaleString()} FDAI
-    Transaction Hash: ${txHash}
-    
-    Tokens will be manually distributed within 24 hours.
-  `;
-  alert(message);
-}
-
-// Handle wallet changes
-if (window.ethereum) {
-  window.ethereum.on('accountsChanged', (accounts) => {
-    if (accounts.length > 0) {
-      handleConnectedWallet(accounts[0]);
+    // Handle RTL languages
+    if (i18next.language === 'ar') {
+        document.body.setAttribute('dir', 'rtl');
     } else {
-      resetWalletConnection();
-      setTimeout(initWalletConnection, 1000);
+        document.body.removeAttribute('dir');
     }
-  });
-
-  window.ethereum.on('chainChanged', () => window.location.reload());
+    
+    // Apply Hindi font if needed
+    if (i18next.language === 'hi') {
+        document.body.classList.add('hindi-text');
+    } else {
+        document.body.classList.remove('hindi-text');
+    }
 }
 
-// Helper functions
-async function handleConnectedWallet(account) {
-  userAddress = account;
-  web3 = new Web3(window.ethereum);
-  await updateWalletInfo();
+// Language switcher
+document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const lang = this.getAttribute('data-lang');
+        
+        // Update active button
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Change language
+        i18next.changeLanguage(lang, (err, t) => {
+            if (err) return console.error('Language change error:', err);
+            updateContent();
+        });
+    });
+});
+
+// Check if wallet is already connected
+async function checkConnectedWallet() {
+    if (window.ethereum && window.ethereum.selectedAddress) {
+        await connectWallet();
+    } else if (window.trustwallet && window.trustwallet.isTrust) {
+        await connectWallet();
+    }
 }
 
-function resetWalletConnection() {
-  document.getElementById('walletInfo').style.display = 'none';
-  document.getElementById('buyBtn').disabled = true;
-  userAddress = "";
+// Initialize countdown timer
+function initializeTimer() {
+    // Set the date we're counting down to (7 days from now)
+    const countDownDate = new Date();
+    countDownDate.setDate(countDownDate.getDate() + 7);
+    
+    // Update the count down every 1 second
+    const x = setInterval(function() {
+        // Get today's date and time
+        const now = new Date().getTime();
+        
+        // Find the distance between now and the count down date
+        const distance = countDownDate - now;
+        
+        // Time calculations for days, hours, minutes and seconds
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        // Display the result
+        document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
+        document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+        document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
+        document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
+        
+        // If the count down is finished, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("presale-title").innerHTML = i18next.t('presale.ended');
+            document.querySelector(".timer-container").style.display = "none";
+        }
+    }, 1000);
 }
