@@ -73,6 +73,19 @@
         <p>1 BNB = 120,000,000,000 FDAI</p>
         
         <button id="connectWalletBtn">🔗 Connect Wallet</button>
+        <!-- Wallet Modal -->
+<div id="walletModal" style="display: none; position: fixed; top: 0; left: 0; 
+    width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); 
+    justify-content: center; align-items: center; z-index: 9999;">
+    
+    <div style="background: white; padding: 30px; border-radius: 12px; text-align: center; max-width: 300px;">
+        <h3>Select Wallet</h3>
+        <button id="metamaskOption" style="margin: 10px; padding: 10px 20px;">Connect with MetaMask</button>
+        <button id="trustwalletOption" style="margin: 10px; padding: 10px 20px;">Connect with Trust Wallet</button>
+        <button id="closeModalBtn" style="margin-top: 20px; background-color: #ccc;">Cancel</button>
+    </div>
+
+</div>
         
         <div id="walletInfo" style="display: none;">
             <h3>Your Wallet</h3>
