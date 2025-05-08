@@ -1,257 +1,105 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOKEN PRESALE</title>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
-    <style>
-        :root {
-            --primary: #25D366;
-            --metamask: #F6851B;
-            --trustwallet: #3375BB;
-        }
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #000;
-            color: white;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(20, 20, 20, 0.9);
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .logo {
-            width: 200px;
-            margin: 0 auto 20px;
-            display: block;
-        }
-        .countdown {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-size: 1.2rem;
-        }
-        .countdown-numbers {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 10px;
-        }
-        .countdown-box {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            border-radius: 8px;
-            min-width: 60px;
-        }
-        .wallet-buttons {
-            display: flex;
-            gap: 15px;
-            margin: 25px 0;
-        }
-        button {
-            border: none;
-            padding: 15px;
-            border-radius: 10px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
-        }
-        .metamask-btn {
-            background: var(--metamask);
-        }
-        .trustwallet-btn {
-            background: var(--trustwallet);
-        }
-        .buy-btn {
-            background: var(--primary);
-            font-size: 1.2rem;
-            padding: 18px;
-            margin: 20px 0;
-            width: 100%;
-        }
-        .wallet-info {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            word-break: break-all;
-            text-align: left;
-        }
-        input {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: none;
-            background: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            text-align: center;
-        }
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .info-box {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-align: left;
-        }
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .social-links a {
-            color: cyan;
-            text-decoration: none;
-            font-weight: bold;
-        }
-    </style>
+    <title>Global Token Presale</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Tajawal:wght@400;700&family=Hind:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Web3 Libraries -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/i18next@21.6.10/i18next.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/i18next-http-backend@1.4.1/dist/umd/i18nextHttpBackend.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    
+    <!-- Wallet Connect -->
+    <script src="https://unpkg.com/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="dark-theme">
     <div class="container">
-        <!-- LOGO -->
-        <img src="logo.png" alt="Token Logo" class="logo">
-        
-        <!-- 90 GÜNLÜK GERİ SAYIM -->
-        <div class="countdown">
-            <h2>PRESALE BİTİŞİNE KALAN SÜRE</h2>
-            <div class="countdown-numbers">
-                <div class="countdown-box">
-                    <div id="days">90</div>
-                    <div>GÜN</div>
+        <!-- Language Selector -->
+        <div class="language-selector">
+            <button class="lang-btn active" data-lang="tr"><i class="fas fa-language"></i> Türkçe</button>
+            <button class="lang-btn" data-lang="en"><i class="fas fa-language"></i> English</button>
+            <button class="lang-btn" data-lang="ar"><i class="fas fa-language"></i> العربية</button>
+            <button class="lang-btn" data-lang="hi"><i class="fas fa-language"></i> हिन्दी</button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="presale-container">
+            <h1 id="presale-title" class="title">PRESALE BİTİŞ SÜRESİ</h1>
+            
+            <div class="timer-container">
+                <div class="timer-box">
+                    <span id="days">00</span>
+                    <span class="timer-label" data-i18n="timer.days">GÜN</span>
                 </div>
-                <div class="countdown-box">
-                    <div id="hours">00</div>
-                    <div>SAAT</div>
+                <div class="timer-box">
+                    <span id="hours">00</span>
+                    <span class="timer-label" data-i18n="timer.hours">SAAT</span>
                 </div>
-                <div class="countdown-box">
-                    <div id="minutes">00</div>
-                    <div>DAKİKA</div>
+                <div class="timer-box">
+                    <span id="minutes">00</span>
+                    <span class="timer-label" data-i18n="timer.minutes">DAKİKA</span>
                 </div>
-                <div class="countdown-box">
-                    <div id="seconds">00</div>
-                    <div>SANİYE</div>
+                <div class="timer-box">
+                    <span id="seconds">00</span>
+                    <span class="timer-label" data-i18n="timer.seconds">SANİYE</span>
                 </div>
             </div>
-        </div>
-        
-        <!-- ÇİFT CÜZDAN BUTONLARI -->
-        <div class="wallet-buttons">
-            <button class="metamask-btn" id="metamaskBtn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" width="20">
-                MetaMask
-            </button>
-            <button class="trustwallet-btn" id="trustwalletBtn">
-                <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" width="20">
-                Trust Wallet
-            </button>
-        </div>
-        
-        <!-- BAĞLI CÜZDAN BİLGİLERİ -->
-        <div id="walletInfo" class="wallet-info" style="display: none;">
-            <h3>Bağlı Cüzdan</h3>
-            <p><strong>Adres:</strong> <span id="walletAddress"></span></p>
-            <p><strong>BNB Bakiyesi:</strong> <span id="bnbBalance"></span></p>
-        </div>
-        
-        <!-- SATIN ALMA FORMU -->
-        <div>
-            <label for="bnbAmount"><strong>BNB Miktarı:</strong></label>
-            <input type="number" id="bnbAmount" placeholder="Örnek: 0.1" step="0.0001" min="0">
             
-            <div style="margin: 15px 0; font-size: 1.2rem;">
-                <strong>Alacaklarınız:</strong> <span id="tokenAmount">0</span> TOKEN
+            <div class="token-info">
+                <p class="info-label" data-i18n="presale.your_tokens">Alacaklarınız:</p>
+                <p class="info-value" id="token-balance">0 TOKEN</p>
             </div>
             
-            <button id="buyBtn" class="buy-btn" disabled>
-                🚀 TOKEN SATIN AL
+            <!-- Wallet Connection Section -->
+            <div class="wallet-section" id="wallet-section" style="display: none;">
+                <div class="wallet-info">
+                    <p><span data-i18n="wallet.connected">Bağlı Cüzdan:</span> <span id="wallet-address"></span></p>
+                    <p><span data-i18n="wallet.balance">BNB Bakiyesi:</span> <span id="wallet-balance"></span></p>
+                    <button id="disconnect-btn" class="disconnect-btn" data-i18n="wallet.disconnect">Bağlantıyı Kes</button>
+                </div>
+                
+                <div class="buy-section">
+                    <input type="number" id="bnb-amount" placeholder="BNB miktarı" min="0.01" step="0.01">
+                    <button id="buy-btn" class="buy-btn" data-i18n="presale.buy_button">TOKEN SATIN AL</button>
+                </div>
+            </div>
+            
+            <button id="connect-btn" class="connect-btn" data-i18n="wallet.connect">
+                <i class="fas fa-wallet"></i> CÜZDAN BAĞLA
             </button>
-        </div>
-        
-        <!-- ÖNEMLİ BİLGİLER -->
-        <div class="info-box">
-            <h3>📢 ÖNEMLİ BİLGİLER</h3>
-            <ul>
-                <li>Satın aldığınız tokenler 24 saat içinde cüzdan adresinize yansıyacaktır</li>
-                <li>Satın alım yapmadan önce cüzdan adresinin BSC ağında olduğundan emin olun</li>
-                <li>Ön satış çok kısa süre içinde bitecektir</li>
-                <li>Ön satış bittikten sonra sürpriz bir borsada büyük bir listeleme gelecektir</li>
-            </ul>
-        </div>
-        
-        <!-- SOSYAL MEDYA LİNKLERİ -->
-        <div class="social-links">
-            <a href="https://twitter.com/tokenadresi" target="_blank">Twitter</a>
-            <a href="https://t.me/tokenadresi" target="_blank">Telegram</a>
+            
+            <!-- Important Info -->
+            <div class="important-info">
+                <h2 data-i18n="presale.important_info">ÖNEMLİ BİLGİLER</h2>
+                <ul>
+                    <li data-i18n="presale.info1">Satın aldığınız tokenler 24 saat içinde cüzdanınıza gelecek</li>
+                    <li data-i18n="presale.info2">Satın almadan önce cüzdanınızın BSC ağında olduğundan emin olun</li>
+                    <li data-i18n="presale.info3">Ön satış çok yakında bitecek</li>
+                    <li data-i18n="presale.info4">Ön satış bitince sürpriz bir borsada listelememiz olacak</li>
+                </ul>
+            </div>
+            
+            <!-- Social Links -->
+            <div class="social-links">
+                <a href="#" class="social-btn twitter" data-i18n="social.twitter"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="#" class="social-btn telegram" data-i18n="social.telegram"><i class="fab fa-telegram"></i> Telegram</a>
+            </div>
         </div>
     </div>
 
-    <script>
-        // SABİT AYARLAR
-        const PRESALE_START_DATE = new Date("2024-05-20T00:00:00"); // CANLIYA ALINCA GÜNCELLE!
-        const TOKEN_RATE = 120000000000; // 1 BNB = 120,000,000,000 TOKEN
-        const RECEIVE_WALLET = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // KENDİ ADRESİNİ YAZ
-        
-        let web3;
-        let userAddress;
-        
-        // SAYFA YÜKLENİNCE
-        document.addEventListener('DOMContentLoaded', function() {
-            initCountdown();
-            setupEventListeners();
-            checkAutoConnect();
-        });
-        
-        // 90 GÜNLÜK DEĞİŞMEZ GERİ SAYIM
-        function initCountdown() {
-            const endDate = new Date(PRESALE_START_DATE);
-            endDate.setDate(endDate.getDate() + 90);
-            
-            function update() {
-                const now = new Date();
-                const diff = endDate - now;
-                
-                if (diff <= 0) {
-                    document.getElementById('days').textContent = '00';
-                    document.getElementById('hours').textContent = '00';
-                    document.getElementById('minutes').textContent = '00';
-                    document.getElementById('seconds').textContent = '00';
-                    document.getElementById('buyBtn').disabled = true;
-                    return;
-                }
-                
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const
+    <!-- Scripts -->
+    <script src="translations.js"></script>
+    <script src="wallet.js"></script>
+    <script src="timer.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
