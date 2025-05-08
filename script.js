@@ -7,26 +7,24 @@ const CONFIG = {
 let web3;
 let userAddress = "";
 
-// Tarayıcı kontrolü (sadece MetaMask kontrolü)
+// Check if in MetaMask in-app browser
 const isInMetamaskBrowser = () => navigator.userAgent.includes("MetaMask");
 
-// Direkt MetaMask'a yönlendirme
+// Direct redirect to MetaMask
 const redirectToMetamask = () => {
-  const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-  window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+  const cleanUrl = window.location.href.replace(/^https?:\/\//, '');
+  window.location.href = `https://metamask.app.link/dapp/${cleanUrl}`;
 };
 
-// Cüzdan bağlantısı (hiçbir uyarı yok)
+// Wallet connection without any warnings
 const connectWallet = async () => {
-  // MetaMask tarayıcısı içindeysek direkt bağlan
   if (isInMetamaskBrowser()) {
     try {
-      // Hesapları direkt iste (hiçbir kontrol yok)
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       userAddress = accounts[0];
       web3 = new Web3(window.ethereum);
-
-      // Ağı otomatik değiştir (hata yönetimi yok)
+      
+      // Auto-switch to BSC without notifications
       try {
         const chainId = await web3.eth.getChainId();
         if (chainId !== CONFIG.BSC_CHAIN_ID) {
@@ -35,44 +33,47 @@ const connectWallet = async () => {
             params: [{ chainId: '0x38' }]
           });
         }
-      } catch {} // Ağ hatasını görmezden gel
-
-      // UI güncelle
-      document.getElementById("walletAddress").textContent = `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
+      } catch {}
+      
+      // Update UI
+      document.getElementById("walletAddress").textContent = 
+        `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
       document.getElementById("walletInfo").style.display = 'block';
       document.getElementById("connectWalletBtn").textContent = "✅ Connected";
       document.getElementById("buyBtn").disabled = false;
       
-    } catch {} // Bağlantı hatasını görmezden gel
+    } catch {}
     return;
   }
 
-  // MetaMask tarayıcısında değilse direkt yönlendir (hiçbir uyarı yok)
+  // If not in MetaMask browser, redirect immediately
   redirectToMetamask();
 };
 
-// Sayfa yüklendiğinde
+// Initialize
 window.addEventListener("DOMContentLoaded", () => {
-  // Tüm uyarı mesajlarını gizle
-  const warnings = document.querySelectorAll('.warning-message');
-  warnings.forEach(w => w.style.display = 'none');
+  // Remove all warning messages from DOM
+  document.querySelectorAll('.warning-message, .info-message').forEach(el => {
+    el.style.display = 'none';
+  });
   
-  // Bağlantı butonu
+  // Connect button
   document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
   
-  // MetaMask tarayıcısındaysa otomatik bağlan
+  // Auto-connect if in MetaMask browser
   if (isInMetamaskBrowser()) {
     connectWallet();
   }
   
-  // BNB miktarı değiştiğinde FDAI hesapla
+  // FDAI calculation
   document.getElementById('bnbAmount').addEventListener('input', function() {
     const amount = parseFloat(this.value) || 0;
-    document.getElementById('fdaiAmount').textContent = (amount * CONFIG.TOKENS_PER_BNB).toLocaleString();
+    document.getElementById('fdaiAmount').textContent = 
+      (amount * CONFIG.TOKENS_PER_BNB).toLocaleString();
   });
 });
 
-// Cüzdan değişikliklerini sessizce dinle
+// Wallet listeners
 if (window.ethereum) {
   window.ethereum.on('accountsChanged', (accounts) => {
     if (accounts.length === 0) {
