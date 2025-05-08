@@ -3,117 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Token Presale</title>
+    <title>TOKEN PRESALE</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
     <style>
-        /* Tüm stil tanımları önceki koddaki gibi */
+        :root {
+            --primary: #25D366;
+            --metamask: #F6851B;
+            --trustwallet: #3375BB;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(20, 20, 20, 0.9);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .logo {
+            width: 200px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+        .countdown {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.2rem;
+        }
+        .countdown-numbers {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+        .countdown-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            min-width: 60px;
+        }
+        .wallet-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        button {
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+        .metamask-btn {
+            background: var(--metamask);
+        }
+        .trustwallet-btn {
+            background: var(--trustwallet);
+        }
+        .buy-btn {
+            background: var(--primary);
+            font-size: 1.2rem;
+            padding: 18px;
+            margin: 20px 0;
+            width: 100%;
+        }
+        .wallet-info {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            word-break: break-all;
+            text-align: left;
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            text-align: center;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .info-box {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .social-links a {
+            color: cyan;
+            text-decoration: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <!-- Arayüz önceki koddaki gibi -->
+    <div class="container">
+        <!-- LOGO -->
+        <img src="logo.png" alt="Token Logo" class="logo">
+        
+        <!-- 90 GÜNLÜK GERİ SAYIM -->
+        <div class="countdown">
+            <h2>PRESALE BİTİŞİNE KALAN SÜRE</h2>
+            <div class="countdown-numbers">
+                <div class="countdown-box">
+                    <div id="days">90</div>
+                    <div>GÜN</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="hours">00</div>
+                    <div>SAAT</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="minutes">00</div>
+                    <div>DAKİKA</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="seconds">00</div>
+                    <div>SANİYE</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ÇİFT CÜZDAN BUTONLARI -->
+        <div class="wallet-buttons">
+            <button class="metamask-btn" id="metamaskBtn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" width="20">
+                MetaMask
+            </button>
+            <button class="trustwallet-btn" id="trustwalletBtn">
+                <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" width="20">
+                Trust Wallet
+            </button>
+        </div>
+        
+        <!-- BAĞLI CÜZDAN BİLGİLERİ -->
+        <div id="walletInfo" class="wallet-info" style="display: none;">
+            <h3>Bağlı Cüzdan</h3>
+            <p><strong>Adres:</strong> <span id="walletAddress"></span></p>
+            <p><strong>BNB Bakiyesi:</strong> <span id="bnbBalance"></span></p>
+        </div>
+        
+        <!-- SATIN ALMA FORMU -->
+        <div>
+            <label for="bnbAmount"><strong>BNB Miktarı:</strong></label>
+            <input type="number" id="bnbAmount" placeholder="Örnek: 0.1" step="0.0001" min="0">
+            
+            <div style="margin: 15px 0; font-size: 1.2rem;">
+                <strong>Alacaklarınız:</strong> <span id="tokenAmount">0</span> TOKEN
+            </div>
+            
+            <button id="buyBtn" class="buy-btn" disabled>
+                🚀 TOKEN SATIN AL
+            </button>
+        </div>
+        
+        <!-- ÖNEMLİ BİLGİLER -->
+        <div class="info-box">
+            <h3>📢 ÖNEMLİ BİLGİLER</h3>
+            <ul>
+                <li>Satın aldığınız tokenler 24 saat içinde cüzdan adresinize yansıyacaktır</li>
+                <li>Satın alım yapmadan önce cüzdan adresinin BSC ağında olduğundan emin olun</li>
+                <li>Ön satış çok kısa süre içinde bitecektir</li>
+                <li>Ön satış bittikten sonra sürpriz bir borsada büyük bir listeleme gelecektir</li>
+            </ul>
+        </div>
+        
+        <!-- SOSYAL MEDYA LİNKLERİ -->
+        <div class="social-links">
+            <a href="https://twitter.com/tokenadresi" target="_blank">Twitter</a>
+            <a href="https://t.me/tokenadresi" target="_blank">Telegram</a>
+        </div>
+    </div>
 
     <script>
-        // Gelişmiş Cüzdan Bağlantı Sistemi
-        async function connectWallet() {
-            if (!window.ethereum) {
-                // Mobil cihaz kontrolü
-                if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
-                    // MetaMask ve Trust Wallet için universal link
-                    window.location.href = "https://metamask.app.link/dapp/" + encodeURIComponent(window.location.href);
-                    setTimeout(() => {
-                        window.location.href = "https://link.trustwallet.com/open_url?url=" + encodeURIComponent(window.location.href);
-                    }, 200);
-                } else {
-                    alert("Lütfen MetaMask veya Trust Wallet yükleyin!");
-                    window.open("https://metamask.io/download.html", "_blank");
-                }
-                return;
-            }
-
-            try {
-                // Düzgün bağlantı URL'si oluştur
-                const currentUrl = new URL(window.location.href);
-                currentUrl.searchParams.delete("error");
-                window.history.replaceState({}, document.title, currentUrl.toString());
-
-                // Bağlantı isteği
-                const accounts = await window.ethereum.request({ 
-                    method: 'eth_requestAccounts',
-                    params: [{ eth_chainId: '0x38' }] // BSC için chainId
-                });
-
-                userAddress = accounts[0];
-                web3 = new Web3(window.ethereum);
-
-                // Ağ kontrolü
-                await checkNetwork();
-                await updateWalletInfo();
-
-            } catch (error) {
-                console.error("Bağlantı hatası:", error);
-                
-                // Özel hata yönetimi
-                if (error.code === 4001) {
-                    alert("Bağlantı reddedildi. Lütfen izin verin.");
-                } else if (error.code === -32002) {
-                    alert("Zaten bekleyen bir istek var. Lütfen cüzdan uygulamanızı kontrol edin.");
-                } else {
-                    alert("Bağlantı hatası: " + error.message);
-                }
-            }
-        }
-
-        // Mobil uygulama açma fonksiyonu
-        function openWalletApp(walletType) {
-            if (walletType === 'metamask') {
-                // MetaMask için universal link
-                window.location.href = "https://metamask.app.link/dapp/" + encodeURIComponent(window.location.href);
-            } else {
-                // Trust Wallet için universal link
-                window.location.href = "https://link.trustwallet.com/open_url?url=" + encodeURIComponent(window.location.href);
-            }
+        // SABİT AYARLAR
+        const PRESALE_START_DATE = new Date("2024-05-20T00:00:00"); // CANLIYA ALINCA GÜNCELLE!
+        const TOKEN_RATE = 120000000000; // 1 BNB = 120,000,000,000 TOKEN
+        const RECEIVE_WALLET = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // KENDİ ADRESİNİ YAZ
+        
+        let web3;
+        let userAddress;
+        
+        // SAYFA YÜKLENİNCE
+        document.addEventListener('DOMContentLoaded', function() {
+            initCountdown();
+            setupEventListeners();
+            checkAutoConnect();
+        });
+        
+        // 90 GÜNLÜK DEĞİŞMEZ GERİ SAYIM
+        function initCountdown() {
+            const endDate = new Date(PRESALE_START_DATE);
+            endDate.setDate(endDate.getDate() + 90);
             
-            // 3 saniye sonra hala açılmadıysa mağazaya yönlendir
-            setTimeout(() => {
-                if (!document.hidden) {
-                    if (walletType === 'metamask') {
-                        window.open("https://metamask.io/download.html", "_blank");
-                    } else {
-                        window.open("https://trustwallet.com/download", "_blank");
-                    }
+            function update() {
+                const now = new Date();
+                const diff = endDate - now;
+                
+                if (diff <= 0) {
+                    document.getElementById('days').textContent = '00';
+                    document.getElementById('hours').textContent = '00';
+                    document.getElementById('minutes').textContent = '00';
+                    document.getElementById('seconds').textContent = '00';
+                    document.getElementById('buyBtn').disabled = true;
+                    return;
                 }
-            }, 3000);
-        }
-
-        // Ağ kontrolü (güncellendi)
-        async function checkNetwork() {
-            try {
-                const chainId = await web3.eth.getChainId();
-                if (chainId !== 56) {
-                    await window.ethereum.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: '0x38' }]
-                    });
-                }
-            } catch (switchError) {
-                if (switchError.code === 4902) {
-                    await window.ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [{
-                            chainId: '0x38',
-                            chainName: 'Binance Smart Chain',
-                            nativeCurrency: { 
-                                name: 'BNB', 
-                                symbol: 'BNB', 
-                                decimals: 18 
-                            },
-                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                            blockExplorerUrls: ['https://bscscan.com/']
-                        }]
-                    });
-                }
-            }
-        }
-    </script>
-</body>
-</html>
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const
