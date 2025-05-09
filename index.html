@@ -11,7 +11,7 @@
             background-color: #000000; /* Black background */
             margin: 0;
             padding: 20px;
-            color: #333;
+            color: #FFD700; /* Gold text */
         }
         .container {
             max-width: 600px;
@@ -85,12 +85,19 @@
             display: block;
             text-align: center;
             margin: 15px 0;
-            color: #25D366;
+            color: #0000FF; /* Blue text for PDF link */
             font-size: 16px;
             text-decoration: none;
         }
         .download-link:hover {
             text-decoration: underline;
+        }
+        h1, h3, p, label {
+            color: #FFD700; /* Gold text for headings, paragraphs, and labels */
+        }
+        .calculation-result {
+            margin: 15px 0;
+            font-size: 18px;
         }
         .about-section, .community-section {
             margin-top: 20px;
@@ -119,7 +126,6 @@
         </div>
         <h1>FreeDogeAI Presale</h1>
         <p>1 BNB = 120,000,000,000 FDAI</p>
-        <a href="FreeDogeAI_Whitepaper.pdf" class="download-link" download>Download FreeDogeAI Whitepaper</a>
         <button id="connectWalletBtn">🔗 MetaMask ile Bağlan</button>
 
         <div id="walletInfo" style="display: none;">
@@ -134,7 +140,7 @@
             <label for="bnbAmount"><strong>BNB Amount:</strong></label>
             <input type="number" id="bnbAmount" placeholder="0.1" step="0.01" min="0.01">
             
-            <div id="calculationResult" style="margin: 15px 0; font-size: 18px;">
+            <div class="calculation-result">
                 <strong>You will receive:</strong> <span id="fdaiAmount">0</span> FDAI
             </div>
             
@@ -143,15 +149,9 @@
         
         <div class="info-box">
             <h3>Important Information</h3>
-            
-            <p><strong>BNB Payment Address:</strong></p>
-            <div class="wallet-info" style="background: #fff; border: 1px solid #ccc;">
-                0xd924e01c7d319c5b23708cd622bd1143cd4fb360
-            </div>
+            <p>After your token purchase, your tokens will be reflected in your wallet within 24 hours. To view your token balance, you may need to manually add the token contract address using the 'Add Token' option in MetaMask.</p>
             
             <p><strong>FDAI Recipient Address:</strong> <span id="userTokenAddress"></span></p>
-            
-            <p>Tokens will appear in your wallet within 24 hours after your purchase.</p>
             
             <p><strong>NOTE:</strong> If FDAI tokens do not appear in your wallet after purchase, you can manually add the token using the following contract address:</p>
             <div class="wallet-info" style="background: #fff; border: 1px solid #ccc;">
@@ -171,6 +171,8 @@
                 <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a>
             </p>
         </div>
+
+        <a href="FreeDogeAI_Whitepaper.pdf" class="download-link" download>Download FreeDogeAI Whitepaper</a>
     </div>
 
     <script>
@@ -232,7 +234,6 @@
                     console.log("Network switch failed:", error);
                 }
                 
-               _dogecoin
                 updateWalletUI();
             } catch (error) {
                 console.log("Connection error:", error);
