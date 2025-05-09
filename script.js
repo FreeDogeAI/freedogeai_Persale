@@ -8,8 +8,6 @@ const CONFIG = {
 // App state
 let web3;
 let userAddress = "";
-const translations = {
-  
 
 // Initialize on page load
 window.addEventListener('DOMContentLoaded', () => {
@@ -22,41 +20,6 @@ window.addEventListener('DOMContentLoaded', () => {
   if (window.ethereum?.selectedAddress) {
     connectWallet();
   }
-});
-// Language switcher
-document.getElementById("languageSwitcher").addEventListener("change", function () {
-  const selectedLang = this.value;
-  const t = translations[selectedLang];
-  if (!t) return;
-
-  // Başlıklar
-  document.querySelector("h1").innerText = t.headline;
-  document.querySelector(".highlight-message").innerText = t.subtitle;
-
-  // Cüzdan butonu ve bilgileri
-  document.getElementById("connectWalletBtn").innerText = t.connect;
-  document.querySelector("h3").innerText = t.walletTitle;
-  document.querySelector("label[for='bnbAmount']").innerHTML = "<strong>" + t.bnbAmount + "</strong>";
-  document.getElementById("calculationResult").innerHTML = "<strong>" + t.receive + "</strong> <span id='fdaiAmount'>0</span> FDAI";
-  document.getElementById("buyBtn").innerText = t.buy;
-
-  // Bilgilendirme kutusu
-  const infoBox = document.querySelector(".info-box");
-  infoBox.querySelector("h3").innerText = t.info;
-  const ps = infoBox.querySelectorAll("p");
-  ps[0].innerText = t.note1;
-  ps[1].innerText = t.note2;
-  ps[2].innerText = t.note3;
-  ps[3].innerHTML = "<strong>NOTE:</strong> " + t.note4;
-
-  // Hakkında ve Topluluk
-  document.querySelector("h3:nth-of-type(2)").innerText = t.about;
-  document.querySelector(".wallet-info").nextSibling.textContent = t.aboutText;
-  document.querySelector("a[href$='Whitepaper.pdf']").innerText = t.download;
-  document.querySelector("h3:nth-of-type(3)").innerText = t.community;
-  const links = document.querySelectorAll("ul li a");
-  links[0].innerText = t.telegram + ": @freedogeaiFDAI";
-  links[1].innerText = t.twitter + ": @FreeDogeAI_FDAI";
 });
 
 // Wallet connection handler
