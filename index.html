@@ -1,330 +1,327 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI Presale</title>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
-    <style>
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #000;
-        margin: 0;
-        padding: 20px;
-        color: #FFD700;
-    }
+<!DOCTYPE html>  <html lang="tr">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>FreeDogeAI Presale</title>  
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>  
+    <style>  
+    body {  
+        font-family: 'Arial', sans-serif;  
+        background-color: #000;  
+        margin: 0;  
+        padding: 20px;  
+        color: #FFD700;  
+    }  .wallet-info,
 
-    .wallet-info,
 .info-box,
 input,
 label,
 h1, h3, p, strong, span {
-    color: #FFD700 !important;
+color: #FFD700 !important;
 
-        }
-        .container {
-    max-width: 600px;
-    margin: 0 auto;
-    background: #111;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(255,255,255,0.05);
-        }
-        button {
-            background: #25D366;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            margin-top: 10px;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background: #1DA851;
-        }
-        button:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-        .wallet-info {
-    background: #222;
-    color: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    margin: 15px 0;
-    word-break: break-word;
-    font-family: monospace;
-    border: 1px solid #444;
-        }
-        }
-        .info-box {
-            background: #e9f7ef;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        .metamask-redirect {
-            display: none;
-            background: #f6851b;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div id="metamaskRedirect" class="metamask-redirect">
-  📱 <a id="openInMetamask" style="color:white; text-decoration:underline;">
-    Click to open in MetaMask app
-  </a>
-    </div
+}  
+    .container {  
+max-width: 600px;  
+margin: 0 auto;  
+background: #111;  
+padding: 25px;  
+border-radius: 10px;  
+box-shadow: 0 0 15px rgba(255,255,255,0.05);  
+    }  
+    button {  
+        background: #25D366;  
+        color: white;  
+        border: none;  
+        padding: 12px 20px;  
+        border-radius: 8px;  
+        cursor: pointer;  
+        font-size: 16px;  
+        width: 100%;  
+        margin-top: 10px;  
+        transition: background 0.3s;  
+    }  
+    button:hover {  
+        background: #1DA851;  
+    }  
+    button:disabled {  
+        background: #cccccc;  
+        cursor: not-allowed;  
+    }  
+    input {  
+        width: 100%;  
+        padding: 12px;  
+        margin: 10px 0;  
+        border: 1px solid #ddd;  
+        border-radius: 8px;  
+        font-size: 16px;  
+    }  
+    .wallet-info {  
+background: #222;  
+color: #fff;  
+padding: 15px;  
+border-radius: 8px;  
+margin: 15px 0;  
+word-break: break-word;  
+font-family: monospace;  
+border: 1px solid #444;  
+    }  
+    }  
+    .info-box {  
+        background: #e9f7ef;  
+        padding: 15px;  
+        border-radius: 8px;  
+        margin-top: 20px;  
+    }  
+    .metamask-redirect {  
+        display: none;  
+        background: #f6851b;  
+        color: white;  
+        padding: 15px;  
+        border-radius: 8px;  
+        margin: 15px 0;  
+        text-align: center;  
+    }  
+</style>
 
-    <div class="container">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <img src="logo.png" alt="FreeDogeAI Logo" style="max-width: 150px; height: auto;">
-        </div>
-        <h1>FreeDogeAI Presale</h1>
-        <p class="highlight-message">Don't miss the next Doge! This opportunity won't last long.</p>
-        <button id="connectWalletBtn">🔗 Connect with MetaMask</button>
+</head>  
+<body>  
+    <div id="metamaskRedirect" class="metamask-redirect">  
+  📱 <a id="openInMetamask" style="color:white; text-decoration:underline;">  
+    Click to open in MetaMask app  
+  </a>  
+    </div  <div class="container">  
+    <div style="text-align: center; margin-bottom: 20px;">  
+        <img src="logo.png" alt="FreeDogeAI Logo" style="max-width: 150px; height: auto;">  
+    </div>  
+    <h1>FreeDogeAI Presale</h1>  
+    <p class="highlight-message">Don't miss the next Doge! This opportunity won't last long.</p>  
+    <button id="connectWalletBtn">🔗 Connect with MetaMask</button>  
 
-        <div id="walletInfo" style="display: none;">
-            <h3>Your Wallet</h3>
-            <div class="wallet-info">
-                <p><strong>Address:</strong> <span id="walletAddress"></span></p>
-                <p><strong>BNB Balance:</strong> <span id="bnbBalance"></span></p>
-            </div>
-        </div>
-        
-        <div>
-            <label for="bnbAmount"><strong>BNB Amount:</strong></label>
-            <input type="number" id="bnbAmount" placeholder="0.1" step="0.01" min="0.01">
-            
-            <div id="calculationResult" style="margin: 15px 0; font-size: 18px;">
-                <strong>You will receive:</strong> <span id="fdaiAmount">0</span> FDAI
-            </div>
-            
-            <button id="buyBtn" disabled>🚀 Buy FDAI Tokens</button>
-        </div>
-        
-        <div class="info-box">
-            <h3>Important Information</h3>
-            
-            <p style="color: #ff4c4c;"><strong>Please use MetaMask to complete your purchase.</strong><br>
+    <div id="walletInfo" style="display: none;">  
+        <h3>Your Wallet</h3>  
+        <div class="wallet-info">  
+            <p><strong>Address:</strong> <span id="walletAddress"></span></p>  
+            <p><strong>BNB Balance:</strong> <span id="bnbBalance"></span></p>  
+        </div>  
+    </div>  
+      
+    <div>  
+        <label for="bnbAmount"><strong>BNB Amount:</strong></label>  
+        <input type="number" id="bnbAmount" placeholder="0.1" step="0.01" min="0.01">  
+          
+        <div id="calculationResult" style="margin: 15px 0; font-size: 18px;">  
+            <strong>You will receive:</strong> <span id="fdaiAmount">0</span> FDAI  
+        </div>  
+          
+        <button id="buyBtn" disabled>🚀 Buy FDAI Tokens</button>  
+    </div>  
+      
+    <div class="info-box">  
+        <h3>Important Information</h3>  
+          
+        <p style="color: #ff4c4c;"><strong>Please use MetaMask to complete your purchase.</strong><br>
+
 To see your tokens in your wallet, add the contract address manually in MetaMask after the transaction.</p>
-            
-            
-            <p>Tokens will appear in your wallet within 24 hours after your purchase.</p>
-            
-            <p><strong>NOTE:</strong> If FDAI tokens do not appear in your wallet after purchase, you can manually add the token using the following contract address:</p>
-            <div class="wallet-info" style="background: #fff; border: 1px solid #ccc;">
-                0x8161698A74F2ea0035B9912ED60140893Ac0f39C
-            </div>
-        </div>
-    </div>
 
-    <script>
-        const CONFIG = {
-            RECEIVE_WALLET: "0xd924e01c7d319c5b23708cd622bd1143cd4fb360",
-            TOKENS_PER_BNB: 120000000000,
-            BSC_CHAIN_ID: 56
-        };
+<p>Tokens will appear in your wallet within 24 hours after your purchase.</p>  
+          
+        <p><strong>NOTE:</strong> If FDAI tokens do not appear in your wallet after purchase, you can manually add the token using the following contract address:</p>  
+        <div class="wallet-info" style="background: #fff; border: 1px solid #ccc;">  
+            0x8161698A74F2ea0035B9912ED60140893Ac0f39C  
+        </div>  
+    </div>  
+</div>  
 
-        let web3;
-        let userAddress = "";
+<script>  
+    const CONFIG = {  
+        RECEIVE_WALLET: "0xd924e01c7d319c5b23708cd622bd1143cd4fb360",  
+        TOKENS_PER_BNB: 120000000000,  
+        BSC_CHAIN_ID: 56  
+    };  
 
-        // Tarayıcı kontrolü
-        const isMobile = () => /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        const isInMetamaskBrowser = () => navigator.userAgent.includes("MetaMask") && window.ethereum?.isMetaMask;
+    let web3;  
+    let userAddress = "";  
 
-        // MetaMask'a yönlendirme
-        const redirectToMetamask = () => {
-            const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-            window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
-        };
+    // Tarayıcı kontrolü  
+    const isMobile = () => /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);  
+    const isInMetamaskBrowser = () => navigator.userAgent.includes("MetaMask") && window.ethereum?.isMetaMask;  
 
-        // Cüzdan bağlantısı
-        const connectWallet = async () => {
-            // MetaMask tarayıcısındaysa direkt bağlan
-            if (isInMetamaskBrowser()) {
-                try {
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    userAddress = accounts[0];
-                    web3 = new Web3(window.ethereum);
+    // MetaMask'a yönlendirme  
+    const redirectToMetamask = () => {  
+        const currentUrl = window.location.href.replace(/^https?:\/\//, '');  
+        window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;  
+    };  
 
-                    // BSC ağına geçiş yap
-                    try {
-                        const chainId = await web3.eth.getChainId();
-                        if (chainId !== CONFIG.BSC_CHAIN_ID) {
-                            await window.ethereum.request({
-                                method: 'wallet_switchEthereumChain',
-                                params: [{ chainId: '0x38' }]
-                            });
-                        }
-                    } catch (error) {
-                        console.log("Ağ değiştirme hatası:", error);
-                    }
+    // Cüzdan bağlantısı  
+    const connectWallet = async () => {  
+        // MetaMask tarayıcısındaysa direkt bağlan  
+        if (isInMetamaskBrowser()) {  
+            try {  
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });  
+                userAddress = accounts[0];  
+                web3 = new Web3(window.ethereum);  
 
-                    updateWalletUI();
-                    return;
-                } catch (error) {
-                    console.log("Bağlantı hatası:", error);
-                    return;
-                }
-            }
+                // BSC ağına geçiş yap  
+                try {  
+                    const chainId = await web3.eth.getChainId();  
+                    if (chainId !== CONFIG.BSC_CHAIN_ID) {  
+                        await window.ethereum.request({  
+                            method: 'wallet_switchEthereumChain',  
+                            params: [{ chainId: '0x38' }]  
+                        });  
+                    }  
+                } catch (error) {  
+                    console.log("Ağ değiştirme hatası:", error);  
+                }  
 
-            // Mobil tarayıcıdaysa yönlendir
-            if (isMobile()) {
-                document.getElementById('metamaskRedirect').style.display = 'block';
-                document.getElementById('openInMetamask').addEventListener('click', redirectToMetamask);
-                return;
-            }
+                updateWalletUI();  
+                return;  
+            } catch (error) {  
+                console.log("Bağlantı hatası:", error);  
+                return;  
+            }  
+        }  
 
-            // Desktop'ta MetaMask yoksa indirme sayfasına yönlendir
-            if (!window.ethereum) {
-                window.open("https://metamask.io/download.html", "_blank");
-                return;
-            }
+        // Mobil tarayıcıdaysa yönlendir  
+        if (isMobile()) {  
+            document.getElementById('metamaskRedirect').style.display = 'block';  
+            document.getElementById('openInMetamask').addEventListener('click', redirectToMetamask);  
+            return;  
+        }  
 
-            // Desktop'ta normal bağlantı
-            try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                userAddress = accounts[0];
-                web3 = new Web3(window.ethereum);
+        // Desktop'ta MetaMask yoksa indirme sayfasına yönlendir  
+        if (!window.ethereum) {  
+            window.open("https://metamask.io/download.html", "_blank");  
+            return;  
+        }  
 
-                const chainId = await web3.eth.getChainId();
-                if (chainId !== CONFIG.BSC_CHAIN_ID) {
-                    await window.ethereum.request({
-                        method: 'wallet_switchEthereumChain',
-                        params: [{ chainId: '0x38' }]
-                    });
-                }
+        // Desktop'ta normal bağlantı  
+        try {  
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });  
+            userAddress = accounts[0];  
+            web3 = new Web3(window.ethereum);  
 
-                updateWalletUI();
-            } catch (error) {
-                console.log("Bağlantı hatası:", error);
-            }
-        };
+            const chainId = await web3.eth.getChainId();  
+            if (chainId !== CONFIG.BSC_CHAIN_ID) {  
+                await window.ethereum.request({  
+                    method: 'wallet_switchEthereumChain',  
+                    params: [{ chainId: '0x38' }]  
+                });  
+            }  
 
-        // UI güncelleme
-        const updateWalletUI = () => {
-            document.getElementById("walletAddress").textContent = `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
-            document.getElementById("userTokenAddress").textContent = `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
-            document.getElementById("walletInfo").style.display = 'block';
-            document.getElementById("connectWalletBtn").textContent = '✅ Connected';
-            document.getElementById("buyBtn").disabled = false;
+            updateWalletUI();  
+        } catch (error) {  
+            console.log("Bağlantı hatası:", error);  
+        }  
+    };  
 
-            // Bakiye güncelleme
-            web3.eth.getBalance(userAddress).then(balance => {
-                document.getElementById("bnbBalance").textContent = `${parseFloat(web3.utils.fromWei(balance, 'ether')).toFixed(6)} BNB`;
-            });
-        };
+    // UI güncelleme  
+    const updateWalletUI = () => {  
+        document.getElementById("walletAddress").textContent = `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;  
+        document.getElementById("userTokenAddress").textContent = `${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;  
+        document.getElementById("walletInfo").style.display = 'block';  
+        document.getElementById("connectWalletBtn").textContent = '✅ Connected';  
+        document.getElementById("buyBtn").disabled = false;  
 
-        // BNB gönderim fonksiyonu
-        const sendBNB = async () => {
-            const bnbAmount = parseFloat(document.getElementById("bnbAmount").value);
-            
-            if (!bnbAmount || bnbAmount <= 0) {
-                return;
-            }
+        // Bakiye güncelleme  
+        web3.eth.getBalance(userAddress).then(balance => {  
+            document.getElementById("bnbBalance").textContent = `${parseFloat(web3.utils.fromWei(balance, 'ether')).toFixed(6)} BNB`;  
+        });  
+    };  
 
-            try {
-                const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
-                
-                const tx = {
-                    from: userAddress,
-                    to: CONFIG.RECEIVE_WALLET,
-                    value: weiAmount,
-                    gas: 300000,
-                    gasPrice: await web3.eth.getGasPrice()
-                };
+    // BNB gönderim fonksiyonu  
+    const sendBNB = async () => {  
+        const bnbAmount = parseFloat(document.getElementById("bnbAmount").value);  
+          
+        if (!bnbAmount || bnbAmount <= 0) {  
+            return;  
+        }  
 
-                const receipt = await web3.eth.sendTransaction(tx);
-                
-                alert(`✅ ${bnbAmount} BNB başarıyla gönderildi!\n\nTX Hash: ${receipt.transactionHash}`);
-                
-            } catch (error) {
-                console.error("Gönderim hatası:", error);
-            }
-        };
+        try {  
+            const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');  
+              
+            const tx = {  
+                from: userAddress,  
+                to: CONFIG.RECEIVE_WALLET,  
+                value: weiAmount,  
+                gas: 300000,  
+                gasPrice: await web3.eth.getGasPrice()  
+            };  
 
-        // Sayfa yüklendiğinde
-        window.addEventListener("DOMContentLoaded", () => {
-            // Uyarıları gizle
-            document.querySelectorAll('.warning-message').forEach(el => el.style.display = 'none');
-            
-            // Buton eventleri
-            document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
-            document.getElementById("buyBtn").addEventListener("click", sendBNB);
-            
-            // BNB miktarı değiştiğinde FDAI hesapla
-            document.getElementById('bnbAmount').addEventListener('input', function() {
-                const amount = parseFloat(this.value) || 0;
-                document.getElementById('fdaiAmount').textContent = (amount * CONFIG.TOKENS_PER_BNB).toLocaleString();
-            });
+            const receipt = await web3.eth.sendTransaction(tx);  
+              
+            alert(`✅ ${bnbAmount} BNB başarıyla gönderildi!\n\nTX Hash: ${receipt.transactionHash}`);  
+              
+        } catch (error) {  
+            console.error("Gönderim hatası:", error);  
+        }  
+    };  
 
-            // MetaMask tarayıcısındaysa otomatik bağlan
-            if (isInMetamaskBrowser() && window.ethereum.selectedAddress) {
-                userAddress = window.ethereum.selectedAddress;
-                web3 = new Web3(window.ethereum);
-                updateWalletUI();
-            }
-        });
+    // Sayfa yüklendiğinde  
+    window.addEventListener("DOMContentLoaded", () => {  
+        // Uyarıları gizle  
+        document.querySelectorAll('.warning-message').forEach(el => el.style.display = 'none');  
+          
+        // Buton eventleri  
+        document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);  
+        document.getElementById("buyBtn").addEventListener("click", sendBNB);  
+          
+        // BNB miktarı değiştiğinde FDAI hesapla  
+        document.getElementById('bnbAmount').addEventListener('input', function() {  
+            const amount = parseFloat(this.value) || 0;  
+            document.getElementById('fdaiAmount').textContent = (amount * CONFIG.TOKENS_PER_BNB).toLocaleString();  
+        });  
 
-        // Cüzdan değişikliklerini dinle
-        if (window.ethereum) {
-            window.ethereum.on('accountsChanged', (accounts) => {
-                if (accounts.length > 0) {
-                    userAddress = accounts[0];
-                    updateWalletUI();
-                } else {
-                    document.getElementById('walletInfo').style.display = 'none';
-                    document.getElementById('connectWalletBtn').textContent = '🔗 MetaMask ile Bağlan';
-                    document.getElementById('buyBtn').disabled = true;
-                }
-            });
-            
-            window.ethereum.on('chainChanged', () => window.location.reload());
-        }
-    </script>
-    <!-- About + Whitepaper -->
-<div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #444; color: #B22222;">
-  <h3>About</h3>
-  <p>
-    FreeDogeAI is your next big opportunity in the crypto world. Inspired by Doge, powered by AI.  
-    Don't miss your chance to join the future of decentralized innovation.
-  </p>
-  <p>
-    <a href="FreeDogeAI_Whitepaper.pdf" target="_blank" style="color: #00BFFF; text-decoration: underline;">
-  Download Whitepaper (PDF)
-    </a>
+        // MetaMask tarayıcısındaysa otomatik bağlan  
+        if (isInMetamaskBrowser() && window.ethereum.selectedAddress) {  
+            userAddress = window.ethereum.selectedAddress;  
+            web3 = new Web3(window.ethereum);  
+            updateWalletUI();  
+        }  
+    });  
 
-  <!-- Community Links -->
-  <h3 style="margin-top: 30px;">Community</h3>
-  <ul style="list-style: none; padding-left: 0;">
-    <li>
-      <a href="https://t.me/freedogeaiFDAI" target="_blank" style="color: #B22222; text-decoration: underline;">
-        Telegram: @freedogeaiFDAI
-      </a>
-    </li>
-    <li>
-      <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" style="color: #B22222; text-decoration: underline;">
-        Twitter (X): @FreeDogeAI_FDAI
-      </a>
-    </li>
-  </ul>
-</div>
-</body>
-</html>
+    // Cüzdan değişikliklerini dinle  
+    if (window.ethereum) {  
+        window.ethereum.on('accountsChanged', (accounts) => {  
+            if (accounts.length > 0) {  
+                userAddress = accounts[0];  
+                updateWalletUI();  
+            } else {  
+                document.getElementById('walletInfo').style.display = 'none';  
+                document.getElementById('connectWalletBtn').textContent = '🔗 MetaMask ile Bağlan';  
+                document.getElementById('buyBtn').disabled = true;  
+            }  
+        });  
+          
+        window.ethereum.on('chainChanged', () => window.location.reload());  
+    }  
+</script>  
+<!-- About + Whitepaper -->
+
+<div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #444; color: #B22222;">  
+  <h3>About</h3>  
+  <p>  
+    FreeDogeAI is your next big opportunity in the crypto world. Inspired by Doge, powered by AI.    
+    Don't miss your chance to join the future of decentralized innovation.  
+  </p>  
+  <p>  
+    <a href="FreeDogeAI_Whitepaper.pdf" target="_blank" style="color: #00BFFF; text-decoration: underline;">  
+  Download Whitepaper (PDF)  
+    </a>    <!-- Community Links -->    <h3 style="margin-top: 30px;">Community</h3>  
+  <ul style="list-style: none; padding-left: 0;">  
+    <li>  
+      <a href="https://t.me/freedogeaiFDAI" target="_blank" style="color: #B22222; text-decoration: underline;">  
+        Telegram: @freedogeaiFDAI  
+      </a>  
+    </li>  
+    <li>  
+      <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" style="color: #B22222; text-decoration: underline;">  
+        Twitter (X): @FreeDogeAI_FDAI  
+      </a>  
+    </li>  
+  </ul>  
+</div>  
+</body>  
+</html>  
+Sana attığım html kodu varya hepsini İngilizce Arapça Türkçe Pakistan Hindistan Rusça dili  Bu dillerde çevirsin html'ye ne ekliyim çalışması için de js ye ne ekleyecez
+
