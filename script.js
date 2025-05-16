@@ -4,7 +4,21 @@ const CONFIG = {
   TOKENS_PER_BNB: 120000000000,
   BSC_CHAIN_ID: 56
 };
-
+const PRESALE_CONTRACT_ADDRESS = "0x5794f477619b0b5a6c57ef51847f723396d41764";
+const PRESALE_CONTRACT_ABI = [
+  {"inputs":[],"stateMutability":"nonpayable","type":"constructor"},
+  {"inputs":[],"name":"buyTokens","outputs":[],"stateMutability":"payable","type":"function"},
+  {"inputs":[],"name":"endPresale","outputs":[],"stateMutability":"nonpayable","type":"function"},
+  {"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+  {"inputs":[],"name":"presaleActive","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},
+  {"inputs":[],"name":"rate","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+  {"inputs":[],"name":"receiver","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+  {"inputs":[],"name":"tokenAddress","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
+  {"inputs":[],"name":"totalBNBReceived","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+  {"inputs":[],"name":"totalFDAISold","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+  {"inputs":[],"name":"withdrawUnsoldTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},
+  {"stateMutability":"payable","type":"receive"}
+];
 // App state
 let web3;
 let userAddress = "";
@@ -90,29 +104,23 @@ function calculateFDAI() {
 // Send BNB transaction
 async function sendBNB() {
   const bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
-  
-  if (!bnbAmount || bnbAmount <= 0) {
-    alert("Lütfen geçerli bir miktar girin!");
+  if (!bnbAmount || bnbAmount < 0.00001) {
+    alert("Please enter a valid BNB amount.");
     return;
   }
-  
+
   try {
-    const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
-    
-    const tx = {
+    const contract = new web3.eth.Contract(PRESALE_CONTRACT_ABI, PRESALE_CONTRACT_ADDRESS);
+
+    await contract.methods.buyTokens().send({
       from: userAddress,
-      to: CONFIG.RECEIVE_WALLET,
-      value: weiAmount,
-      gas: 300000,
-      gasPrice: await web3.eth.getGasPrice()
-    };
-    
-    const receipt = await web3.eth.sendTransaction(tx);
-    alert(`✅ ${bnbAmount} BNB başarıyla gönderildi!\n\nAlacak: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
-    
+      value: web3.utils.toWei(bnbAmount.toString(), 'ether')
+    });
+
+    alert("✅ Purchase successful! FDAI tokens will be sent to your wallet.");
   } catch (error) {
-    console.error("Transaction failed:", error);
-    alert("İşlem başarısız: " + (error.message || error));
+    console.error("❌ Transaction failed:", error);
+    alert("Transaction failed!");
   }
 }
 
