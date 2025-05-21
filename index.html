@@ -94,7 +94,6 @@
         a:hover, u:hover {
             background-color: rgba(255, 215, 0, 0.4);
         }
-        /* Dil seçimi için stil */
         .language-selector {
             margin-bottom: 20px;
             text-align: center;
@@ -109,10 +108,11 @@
     <div class="container">
         <!-- Dil Seçimi -->
         <div class="language-selector">
-            <label for="languageSelect"><strong data-i18n="select_language">Dil Seçin:</strong></label>
+            <label for="languageSelect"><strong data-i18n="select_language">Select Language:</strong></label>
             <select id="languageSelect" onchange="changeLanguage()">
-                <option value="tr">Türkçe</option>
+                <option value="en">English</option>
                 <option value="ru">Русский</option>
+                <option value="tr">Türkçe</option>
             </select>
         </div>
 
@@ -129,7 +129,7 @@
             </select>
         </div>
         
-        <p id="rateInfo">1 BNB = 120,000,000,000 FDAI</p>
+        <p id="rateInfo" data-i18n="rate_info_bnb">1 BNB = 120,000,000,000 FDAI</p>
         <button id="connectWalletBtn" data-i18n="connect_wallet">🔗 Connect with MetaMask</button>
 
         <div id="walletInfo" style="display: none;">
@@ -219,7 +219,7 @@
                 <tr><td data-i18n="presale">Presale</td><td>15%</td></tr>
                 <tr><td data-i18n="airdrop_campaigns">Airdrop & Campaigns</td><td>15%</td></tr>
                 <tr><td data-i18n="burn">Burn</td><td>15%</td></tr>
-                <tr><td data-i18n="dex_ce engend="DEX & CEX Listing</td><td>20%</td></tr>
+                <tr><td data-i18n="dex_cex_listing">DEX & CEX Listing</td><td>20%</td></tr>
                 <tr><td data-i18n="locked_reserve">Locked Reserve</td><td>30%</td></tr>
                 <tr><td data-i18n="team">Team</td><td>5%</td></tr>
             </table>
@@ -258,64 +258,72 @@
     </div>
 
     <script>
-        // Dil verileri
+        // Dil verileri (İngilizce, Rusça ve Türkçe)
         const translations = {
-            tr: {
-                select_language: "Dil Seçin:",
+            en: {
+                select_language: "Select Language:",
                 presale_title: "FreeDogeAI Presale",
-                payment_method: "Ödeme Yöntemi:",
-                connect_wallet: "🔗 MetaMask ile Bağlan",
-                your_wallet: "Cüzdanınız",
-                address: "Adres:",
-                bnb_balance: "BNB Bakiyesi:",
-                usdt_balance: "USDT Bakiyesi:",
-                bnb_amount: "BNB Miktarı:",
-                usdt_amount: "USDT Miktarı:",
-                you_will_receive: "Alacağınız miktar:",
-                buy_tokens: "🚀 FDAI Token Satın Al",
-                important_info: "Önemli Bilgiler",
-                tokens_reflect: "Token satın alımından sonra, token'larınız 24 saat içinde cüzdanınıza yansıyacaktır.",
-                bsc_network: "Lütfen <span style='color:#00ffff;'>BSC (Binance Smart Chain)</span> ağına bağlı olduğunuzdan emin olun.",
-                note: "NOT:",
-                add_contract: "FDAI token'ları görünmezse, şu sözleşme adresini ekleyin:",
-                about_freedogeai: "FreeDogeAI Hakkında",
-                about_description: "FreeDogeAI, yapay zekanın gücünü meme tabanlı kripto paraların viral çekiciliğiyle birleştiren yenilikçi bir projedir. Misyonumuz, yapay zekayı kullanarak kullanıcıları güçlendiren, topluluk katılımını teşvik eden ve finansal özgürlüğü destekleyen merkezi olmayan bir ekosistem oluşturmaktır. FreeDogeAI ile finansın geleceğini devrimleştirin!",
-                roadmap: "Yol Haritası",
-                phase_1: "1. Aşama: Lansman",
-                website_launched: "Resmi web sitesi yayında: ",
-                presale_launched: "Ön satış başarıyla başlatıldı",
-                phase_2: "2. Aşama: Büyüme",
-                airdrop_campaigns: "Airdrop kampanyaları ve topluluk etkinlikleri",
-                dex_visibility: "DEX görünürlüğü ve token listeleme",
-                marketing_collabs: "Stratejik pazarlama ve influencer işbirlikleri",
-                phase_3: "3. Aşama: Yapay Zeka Kullanımı",
-                ai_minigame: "Yapay zeka destekli mini oyun ve etkileşim sistemi",
-                fdai_integration: "FDAI, görev/ödül modellerine entegre edildi",
-                beta_testing: "Gerçek kullanım ile beta testi",
-                phase_4: "4. Aşama: Küresel Genişleme",
-                cex_listing: "Sürpriz merkezi borsa listelenmesi",
-                nft_integration: "NFT + yapay zeka özelliği entegrasyonu",
-                global_outreach: "Küresel erişim ve ölçeklendirme",
-                tokenomics: "Tokenomik",
-                category: "Kategori",
-                percentage: "Yüzde",
-                presale: "Ön Satış",
-                burn: "Yakım",
-                dex_cex_listing: "DEX & CEX Listeleme",
-                locked_reserve: "Kilitli Rezerv",
-                team: "Ekip",
-                total_supply: "Toplam Arz:",
-                circulating_supply: "Dolaşımdaki Arz:",
-                locked_supply: "Kilitli Arz:",
-                locked_schedule: "Kilitli Token Yayın Programı",
-                join_community: "Topluluğumuza Katıl",
-                whitepaper: "FreeDogeAI Whitepaper'ını İndir",
-                download_whitepaper: "Whitepaper'ı indirmek için tıklayın"
+                payment_method: "Payment Method:",
+                rate_info_bnb: "1 BNB = 120,000,000,000 FDAI",
+                rate_info_usdt: "1 USDT = 200,000,000 FDAI",
+                connect_wallet: "🔗 Connect with MetaMask",
+                your_wallet: "Your Wallet",
+                address: "Address:",
+                bnb_balance: "BNB Balance:",
+                usdt_balance: "USDT Balance:",
+                bnb_amount: "BNB Amount:",
+                usdt_amount: "USDT Amount:",
+                you_will_receive: "You will receive:",
+                buy_tokens: "🚀 Buy FDAI Tokens",
+                important_info: "Important Information",
+                tokens_reflect: "After your token purchase, your tokens will be reflected in your wallet within 24 hours.",
+                bsc_network: "Please make sure you are connected to the <span style='color:#00ffff;'>BSC (Binance Smart Chain)</span> network.",
+                note: "NOTE:",
+                add_contract: "If FDAI tokens do not appear, add this contract address:",
+                about_freedogeai: "About FreeDogeAI",
+                about_description: "FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!",
+                roadmap: "Roadmap",
+                phase_1: "Phase 1: Launch",
+                website_launched: "Official website launched: ",
+                presale_launched: "Presale was successfully launched",
+                phase_2: "Phase 2: Growth",
+                airdrop_campaigns: "Airdrop campaigns and community events",
+                dex_visibility: "DEX visibility and token listings",
+                marketing_collabs: "Strategic marketing and influencer collaborations",
+                phase_3: "Phase 3: AI Utility",
+                ai_minigame: "AI-powered mini-game and interaction system",
+                fdai_integration: "FDAI integrated into task/reward models",
+                beta_testing: "Beta testing with real utility",
+                phase_4: "Phase 4: Global Expansion",
+                cex_listing: "Surprise centralized exchange listing",
+                nft_integration: "NFT + AI feature integration",
+                global_outreach: "Global outreach and scaling",
+                tokenomics: "Tokenomics",
+                category: "Category",
+                percentage: "Percentage",
+                presale: "Presale",
+                burn: "Burn",
+                dex_cex_listing: "DEX & CEX Listing",
+                locked_reserve: "Locked Reserve",
+                team: "Team",
+                total_supply: "Total Supply:",
+                circulating_supply: "Circulating Supply:",
+                locked_supply: "Locked Supply:",
+                locked_schedule: "Locked Token Release Schedule",
+                join_community: "Join Our Community",
+                whitepaper: "Download FreeDogeAI Whitepaper",
+                download_whitepaper: "Click here to download the whitepaper",
+                invalid_amount: "Please enter a valid amount!",
+                bnb_success: "✅ BNB successfully sent!",
+                usdt_success: "✅ USDT successfully sent!",
+                transaction_failed: "Transaction failed:"
             },
             ru: {
-                select_language: "Выберите язык:",
+                select_language: "Select Language:",
                 presale_title: "Предпродажа FreeDogeAI",
                 payment_method: "Способ оплаты:",
+                rate_info_bnb: "1 BNB = 120,000,000,000 FDAI",
+                rate_info_usdt: "1 USDT = 200,000,000 FDAI",
                 connect_wallet: "🔗 Подключиться через MetaMask",
                 your_wallet: "Ваш кошелек",
                 address: "Адрес:",
@@ -362,48 +370,422 @@
                 locked_schedule: "График выпуска заблокированных токенов",
                 join_community: "Присоединяйтесь к нашему сообществу",
                 whitepaper: "Скачать Whitepaper FreeDogeAI",
-                download_whitepaper: "Нажмите здесь, чтобы скачать whitepaper"
-            }
-        };
-
-        // Mevcut dil
-        let currentLanguage = 'tr';
-
-        // Dil değiştirme fonksiyonu
-        function changeLanguage() {
-            currentLanguage = document.getElementById('languageSelect').value;
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (translations[currentLanguage][key]) {
-                    // İçerikte span gibi başka HTML elemanları varsa korumak için
-                    if (element.innerHTML.includes('<span')) {
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = translations[currentLanguage][key];
-                        element.innerHTML = tempDiv.innerHTML;
-                    } else {
-                        element.textContent = translations[currentLanguage][key];
-                    }
-                }
-            });
-            // Rate info'yu güncelle
-            updateRateInfo();
+                download_whitepaper: "Нажмите здесь, чтобы скачать whitepaper",
+                invalid_amount: "Пожалуйста, введите действительную сумму!",
+                bnb_success: "✅ BNB успешно отправлен!",
+                usdt_success: "✅ USDT успешно отправлен!",
+                transaction_failed: "Транзакция не удалась:"
+            },
+            tr: {
+                select_language: "Select Language:",
+                presale_title: "FreeDogeAI Presale",
+                payment_method: "Ödeme Yöntemi:",
+                rate_info_bnb: "1 BNB = 120,000,000,000 FDAI",
+                rate_info_usdt: "1 USDT = 200,000,000 FDAI",
+                connect_wallet: "🔗 MetaMask ile Bağlan",
+                your_wallet: "Cüzdanınız",
+                address: "Adres:",
+                bnb_balance: "BNB Bakiyesi:",
+                usdt_balance: "USDT Bakiyesi:",
+                bnb_amount: "BNB Miktarı:",
+                usdt_amount: "USDT Miktarı:",
+                you_will_receive: "Alacağınız miktar:",
+                buy_tokens: "🚀 FDAI Token Satın Al",
+                important_info: "Önemli Bilgiler",
+                tokens_reflect: "Token satın alımından sonra, token'larınız 24 saat içinde cüzdanınıza yansıyacaktır.",
+                bsc_network: "Lütfen <span style='color:#00ffff;'>BSC (Binance Smart Chain)</span> ağına bağlı olduğun<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeDogeAI Presale</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            margin: 0;
+            padding: 20px;
+            color: #FFD700;
         }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #000000;
+            padding: 25px;
+            border-radius: 16px;
+            border: 2px solid #00FF66;
+            box-shadow: 0 0 10px 3px #00FF66;
+        }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        button {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #1DA851;
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #222;
+            color: #FFD700;
+        }
+        .wallet-info {
+            background-color: #000000;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            word-break: break-word;
+            font-family: monospace;
+            border: 1px solid #FFD700;
+            color: #FFD700;
+        }
+        .info-box {
+            background-color: #000000;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #FFD700;
+            color: #FFD700;
+            margin-top: 20px;
+        }
+        .payment-method {
+            margin: 15px 0;
+        }
+        a, u {
+            text-decoration: none !important;
+            color: #FFD700 !important;
+            background-color: rgba(255, 215, 0, 0.2);
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        a:hover, u:hover {
+            background-color: rgba(255, 215, 0, 0.4);
+        }
+        .language-selector {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="metamaskRedirect" class="metamask-redirect">
+        <a id="openInMetamask" style="color: #FFD700; text-decoration: none;"></a>
+    </div>
 
-        // Configuration
-        const CONFIG = {
-            RECEIVE_WALLET: "0xd924e01c7d319c5b23708cd622bd1143cd4fb360",
-            TOKENS_PER_BNB: 120000000000,
-            TOKENS_PER_USDT: 200000000,
-            BSC_CHAIN_ID: 56,
-            USDT_CONTRACT: "0x55d398326f99059fF775485246999027B3197955"
-        };
+    <div class="container">
+        <!-- Dil Seçimi -->
+        <div class="language-selector">
+            <label for="languageSelect"><strong data-i18n="select_language">Select Language:</strong></label>
+            <select id="languageSelect" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+                <option value="tr">Türkçe</option>
+            </select>
+        </div>
 
-        let web3;
-        let userAddress = "";
-        let usdtContract;
+        <div class="logo-container">
+            <img src="logo.png" alt="FreeDogeAI Logo">
+        </div>
+        <h1 data-i18n="presale_title">FreeDogeAI Presale</h1>
+        
+        <div class="payment-method">
+            <label for="paymentMethod"><strong data-i18n="payment_method">Payment Method:</strong></label>
+            <select id="paymentMethod">
+                <option value="bnb">BNB</option>
+                <option value="usdt">USDT (BEP-20)</option>
+            </select>
+        </div>
+        
+        <p id="rateInfo" data-i18n="rate_info_bnb">1 BNB = 120,000,000,000 FDAI</p>
+        <button id="connectWalletBtn" data-i18n="connect_wallet">🔗 Connect with MetaMask</button>
 
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
-            document.getElementById('buyBtn').addEventListener('click', sendPayment);
-            document.getElementById('bnbAmount').addEventListener('input', calculateFDAI);
-            document.getElementById('usdtAmount').addEventListener('input', calc
+        <div id="walletInfo" style="display: none;">
+            <h3 data-i18n="your_wallet">Your Wallet</h3>
+            <div class="wallet-info">
+                <p><strong data-i18n="address">Address:</strong> <span id="walletAddress"></span></p>
+                <p><strong data-i18n="bnb_balance">BNB Balance:</strong> <span id="bnbBalance"></span></p>
+                <p><strong data-i18n="usdt_balance">USDT Balance:</strong> <span id="usdtBalance"></span></p>
+            </div>
+        </div>
+        
+        <div id="bnbSection">
+            <label for="bnbAmount"><strong data-i18n="bnb_amount">BNB Amount:</strong></label>
+            <input type="number" id="bnbAmount" placeholder="0.1" step="0.01" min="0.01">
+        </div>
+        
+        <div id="usdtSection">
+            <label for="usdtAmount"><strong data-i18n="usdt_amount">USDT Amount:</strong></label>
+            <input type="number" id="usdtAmount" placeholder="10" step="1" min="1">
+        </div>
+        
+        <div class="calculation-result">
+            <strong data-i18n="you_will_receive">You will receive:</strong> <span id="fdaiAmount">0</span> FDAI
+        </div>
+        
+        <button id="buyBtn" disabled data-i18n="buy_tokens">🚀 Buy FDAI Tokens</button>
+        
+        <div class="info-box">
+            <h3 data-i18n="important_info">Important Information</h3>
+            <p data-i18n="tokens_reflect">After your token purchase, your tokens will be reflected in your wallet within 24 hours.</p>
+            <div style="background-color:#001f3f; color:#00ccff; border: 2px solid #00ccff; border-radius: 10px; padding: 15px; text-align: center; font-weight: bold; margin-top: 20px;">
+                <span data-i18n="bsc_network">Please make sure you are connected to the <span style="color:#00ffff;">BSC (Binance Smart Chain)</span> network.</span>
+            </div>
+            <p><strong data-i18n="note">NOTE:</strong> <span data-i18n="add_contract">If FDAI tokens do not appear, add this contract address:</span></p>
+            <div class="wallet-info" style="background-color: #000000; border: 2px dashed #FFD700; color: #00FFCC; font-weight: bold; font-size: 16px; padding: 15px; border-radius: 10px; text-align: center;">
+                0x8161698A74F2ea0035B9912ED60140893Ac0f39C
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div class="info-box">
+            <h3 data-i18n="about_freedogeai">About FreeDogeAI</h3>
+            <p data-i18n="about_description">FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!</p>
+        </div>
+
+        <!-- Roadmap Section -->
+        <div class="info-box">
+            <h3 data-i18n="roadmap">Roadmap</h3>
+            <ul>
+                <li><strong data-i18n="phase_1">Phase 1: Launch</strong>
+                    <ul>
+                        <li data-i18n="website_launched">Official website launched: <a href="https://freedogeai.com" target="_blank">freedogeai.com</a></li>
+                        <li>Twitter: <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">@FreeDogeAI_FDAI</a></li>
+                        <li>Telegram: <a href="https://t.me/freedogeaiFDAI" target="_blank">@freedogeaiFDAI</a></li>
+                        <li data-i18n="presale_launched">Presale was successfully launched</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="phase_2">Phase 2: Growth</strong>
+                    <ul>
+                        <li data-i18n="airdrop_campaigns">Airdrop campaigns and community events</li>
+                        <li data-i18n="dex_visibility">DEX visibility and token listings</li>
+                        <li data-i18n="marketing_collabs">Strategic marketing and influencer collaborations</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="phase_3">Phase 3: AI Utility</strong>
+                    <ul>
+                        <li data-i18n="ai_minigame">AI-powered mini-game and interaction system</li>
+                        <li data-i18n="fdai_integration">FDAI integrated into task/reward models</li>
+                        <li data-i18n="beta_testing">Beta testing with real utility</li>
+                    </ul>
+                </li>
+                <li><strong data-i18n="phase_4">Phase 4: Global Expansion</strong>
+                    <ul>
+                        <li data-i18n="cex_listing">Surprise centralized exchange listing</li>
+                        <li data-i18n="nft_integration">NFT + AI feature integration</li>
+                        <li data-i18n="global_outreach">Global outreach and scaling</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Tokenomics Section -->
+        <div class="info-box">
+            <h3 data-i18n="tokenomics">Tokenomics</h3>
+            <table style="width:100%; color:#FFD700; border: 1px solid #FFD700;">
+                <tr><th data-i18n="category">Category</th><th data-i18n="percentage">Percentage</th></tr>
+                <tr><td data-i18n="presale">Presale</td><td>15%</td></tr>
+                <tr><td data-i18n="airdrop_campaigns">Airdrop & Campaigns</td><td>15%</td></tr>
+                <tr><td data-i18n="burn">Burn</td><td>15%</td></tr>
+                <tr><td data-i18n="dex_cex_listing">DEX & CEX Listing</td><td>20%</td></tr>
+                <tr><td data-i18n="locked_reserve">Locked Reserve</td><td>30%</td></tr>
+                <tr><td data-i18n="team">Team</td><td>5%</td></tr>
+            </table>
+            <p><strong data-i18n="total_supply">Total Supply:</strong> 2,000,000,000,000,000 (Two Quadrillion)</p>
+            <p><strong data-i18n="circulating_supply">Circulating Supply:</strong> 1,400,000,000,000,000</p>
+            <p><strong data-i18n="locked_supply">Locked Supply:</strong> 600,000,000,000,000 FDAI</p>
+        </div>
+
+        <!-- Locked Release Schedule -->
+        <div class="info-box">
+            <h3 data-i18n="locked_schedule">Locked Token Release Schedule</h3>
+            <ul>
+                <li>2026: 5%</li>
+                <li>2027: 5%</li>
+                <li>2028: 5%</li>
+                <li>2029: 5%</li>
+                <li>2030: 5%</li>
+                <li>2031: 5%</li>
+            </ul>
+        </div>
+
+        <!-- Community Section -->
+        <div class="info-box">
+            <h3 data-i18n="join_community">Join Our Community</h3>
+            <p>
+                <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">X (Twitter)</a> |
+                <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a>
+            </p>
+        </div>
+
+        <!-- Whitepaper Download -->
+        <div class="info-box">
+            <h3 data-i18n="whitepaper">Download FreeDogeAI Whitepaper</h3>
+            <p><a href="FreeDogeAI%20-%20Whitepaper.pdf" download data-i18n="download_whitepaper">Click here to download the whitepaper</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Dil verileri (İngilizce, Rusça ve Türkçe)
+        const translations = {
+            en: {
+                select_language: "Select Language:",
+                presale_title: "FreeDogeAI Presale",
+                payment_method: "Payment Method:",
+                rate_info_bnb: "1 BNB = 120,000,000,000 FDAI",
+                rate_info_usdt: "1 USDT = 200,000,000 FDAI",
+                connect_wallet: "🔗 Connect with MetaMask",
+                your_wallet: "Your Wallet",
+                address: "Address:",
+                bnb_balance: "BNB Balance:",
+                usdt_balance: "USDT Balance:",
+                bnb_amount: "BNB Amount:",
+                usdt_amount: "USDT Amount:",
+                you_will_receive: "You will receive:",
+                buy_tokens: "🚀 Buy FDAI Tokens",
+                important_info: "Important Information",
+                tokens_reflect: "After your token purchase, your tokens will be reflected in your wallet within 24 hours.",
+                bsc_network: "Please make sure you are connected to the <span style='color:#00ffff;'>BSC (Binance Smart Chain)</span> network.",
+                note: "NOTE:",
+                add_contract: "If FDAI tokens do not appear, add this contract address:",
+                about_freedogeai: "About FreeDogeAI",
+                about_description: "FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!",
+                roadmap: "Roadmap",
+                phase_1: "Phase 1: Launch",
+                website_launched: "Official website launched: ",
+                presale_launched: "Presale was successfully launched",
+                phase_2: "Phase 2: Growth",
+                airdrop_campaigns: "Airdrop campaigns and community events",
+                dex_visibility: "DEX visibility and token listings",
+                marketing_collabs: "Strategic marketing and influencer collaborations",
+                phase_3: "Phase 3: AI Utility",
+                ai_minigame: "AI-powered mini-game and interaction system",
+                fdai_integration: "FDAI integrated into task/reward models",
+                beta_testing: "Beta testing with real utility",
+                phase_4: "Phase 4: Global Expansion",
+                cex_listing: "Surprise centralized exchange listing",
+                nft_integration: "NFT + AI feature integration",
+                global_outreach: "Global outreach and scaling",
+                tokenomics: "Tokenomics",
+                category: "Category",
+                percentage: "Percentage",
+                presale: "Presale",
+                burn: "Burn",
+                dex_cex_listing: "DEX & CEX Listing",
+                locked_reserve: "Locked Reserve",
+                team: "Team",
+                total_supply: "Total Supply:",
+                circulating_supply: "Circulating Supply:",
+                locked_supply: "Locked Supply:",
+                locked_schedule: "Locked Token Release Schedule",
+                join_community: "Join Our Community",
+                whitepaper: "Download FreeDogeAI Whitepaper",
+                download_whitepaper: "Click here to download the whitepaper",
+                invalid_amount: "Please enter a valid amount!",
+                bnb_success: "✅ BNB successfully sent!",
+                usdt_success: "✅ USDT successfully sent!",
+                transaction_failed: "Transaction failed:"
+            },
+            ru: {
+                select_language: "Select Language:",
+                presale_title: "Предпродажа FreeDogeAI",
+                payment_method: "Способ оплаты:",
+                rate_info_bnb: "1 BNB = 120,000,000,000 FDAI",
+                rate_info_usdt: "1 USDT = 200,000,000 FDAI",
+                connect_wallet: "🔗 Подключиться через MetaMask",
+                your_wallet: "Ваш кошелек",
+                address: "Адрес:",
+                bnb_balance: "Баланс BNB:",
+                usdt_balance: "Баланс USDT:",
+                bnb_amount: "Сумма BNB:",
+                usdt_amount: "Сумма USDT:",
+                you_will_receive: "Вы получите:",
+                buy_tokens: "🚀 Купить токены FDAI",
+                important_info: "Важная информация",
+                tokens_reflect: "После покупки токенов ваши токены будут отображены в кошельке в течение 24 часов.",
+                bsc_network: "Пожалуйста, убедитесь, что вы подключены к сети <span style='color:#00ffff;'>BSC (Binance Smart Chain)</span>.",
+                note: "ПРИМЕЧАНИЕ:",
+                add_contract: "Если токены FDAI не отображаются, добавьте этот адрес контракта:",
+                about_freedogeai: "О FreeDogeAI",
+                about_description: "FreeDogeAI — это инновационный проект, сочетающий мощь искусственного интеллекта с вирусной привлекательностью мем-криптовалют. Наша миссия — создать децентрализованную экосистему, которая использует ИИ для расширения возможностей пользователей, укрепления взаимодействия с сообществом и содействия финансовой свободе. Присоединяйтесь к нам, чтобы революционизировать будущее финансов с FreeDogeAI!",
+                roadmap: "Дорожная карта",
+                phase_1: "Фаза 1: Запуск",
+                website_launched: "Официальный сайт запущен: ",
+                presale_launched: "Предпродажа успешно запущена",
+                phase_2: "Фаза 2: Рост",
+                airdrop_campaigns: "Кампании по раздаче токенов и мероприятия сообщества",
+                dex_visibility: "Видимость на DEX и листинг токенов",
+                marketing_collabs: "Стратегический маркетинг и сотрудничество с инфлюенсерами",
+                phase_3: "Фаза 3: Использование ИИ",
+                ai_minigame: "Мини-игра и система взаимодействия на базе ИИ",
+                fdai_integration: "FDAI интегрирован в модели заданий/наград",
+                beta_testing: "Бета-тестирование с реальной полезностью",
+                phase_4: "Фаза 4: Глобальное расширение",
+                cex_listing: "Сюрпризный листинг на централизованной бирже",
+                nft_integration: "Интеграция NFT + функций ИИ",
+                global_outreach: "Глобальный охват и масштабирование",
+                tokenomics: "Токеномика",
+                category: "Категория",
+                percentage: "Процент",
+                presale: "Предпродажа",
+                burn: "Сжигание",
+                dex_cex_listing: "Листинг на DEX и CEX",
+                locked_reserve: "Заблокированный резерв",
+                team: "Команда",
+                total_supply: "Общий объем:",
+                circulating_supply: "Циркулирующий объем:",
+                locked_supply: "Заблокированный объем:",
+                locked_schedule: "График выпуска заблокированных токенов",
+                join_community: "Присоединяйтесь к нашему сообществу",
+                whitepaper: "Скачать Whitepaper FreeDogeAI",
+                download_whitepaper: "Нажмите здесь, чтобы скачать whitepaper",
+                invalid_amount: "Пожалуйста, введите действительную сумму!",
+                bnb_success: "✅ BNB успешно отправлен!",
+                usdt_success: "✅ USDT успешно отправлен!",
+                transaction_failed: "Транзакция не удалась:"
+            },
+            tr: {
+                select_language: "Select Language:",
+                presale_title: "FreeDogeAI Presale",
+                payment_method: "Ödeme Yöntemi:",
+                rate_info_bnb: "1 BNB = 120,000,000,000 FDAI",
+                rate_info_usdt: "1 USDT = 200,000,000 FDAI",
+                connect_wallet: "🔗 MetaMask ile Bağlan",
+                your_wallet: "Cüzdanınız",
+                address: "Adres:",
+                bnb_balance: "BNB Bakiyesi:",
+                usdt_balance: "USDT Bakiyesi:",
+                bnb_amount: "BNB Miktarı:",
+                usdt_amount: "USDT Miktarı:",
+                you_will_receive: "Alacağınız miktar:",
+                buy_tokens: "🚀 FDAI Token Satın Al",
+                important_info: "Önemli Bilgiler",
+                tokens_reflect: "Token satın alımından sonra, token'larınız 24 saat içinde cüzdanınıza yansıyacaktır.",
+                bsc_network: "Lütfen <span style='color:#00ffff;'>BSC (Binance Smart Chain)</span> ağına bağlı olduğunuz
