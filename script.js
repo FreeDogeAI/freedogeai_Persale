@@ -17,6 +17,9 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('usdtAmount').addEventListener('input', calculateFDAI);
     document.getElementById('paymentMethod').addEventListener('change', togglePaymentMethod);
     
+    // Başlangıçta ödeme yöntemi seçilmemiş, buton pasif
+    document.getElementById('buyBtn').disabled = true;
+    
     if (window.ethereum?.selectedAddress) {
         connectWallet();
     }
@@ -100,7 +103,7 @@ async function updateWalletUI() {
     
     document.getElementById('walletInfo').style.display = 'block';
     document.getElementById('connectWalletBtn').textContent = '✅ Bağlandı';
-    document.getElementById('buyBtn').disabled = false;
+    document.getElementById('buyBtn').disabled = false; // Cüzdan bağlandığında buton aktif olabilir
     
     try {
         const bnbBalance = await web3.eth.getBalance(userAddress);
@@ -120,7 +123,7 @@ function calculateFDAI() {
     if (method === 'bnb') {
         const bnbAmount = parseFloat(document.getElementById('bnbAmount').value) || 0;
         fdai = bnbAmount * CONFIG.TOKENS_PER_BNB;
-    } else {
+    } else if (method === 'usdt') {
         const usdtAmount = parseFloat(document.getElementById('usdtAmount').value) || 0;
         fdai = usdtAmount * CONFIG.TOKENS_PER_USDT;
     }
@@ -131,6 +134,11 @@ function calculateFDAI() {
 async function sendPayment() {
     const method = document.getElementById('paymentMethod').value;
     
+    if (!method) {
+        alert("Lütfen bir ödeme yöntemi seçin!");
+        return;
+    }
+    
     if (method === 'bnb') {
         const bnbAmount = parseFloat(document.getElementById('bnbAmount').value) || 0;
         if (!bnbAmount || bnbAmount <= 0) {
@@ -138,7 +146,7 @@ async function sendPayment() {
             return;
         }
         await sendBNB();
-    } else {
+    } else if (method === 'usdt') {
         const usdtAmount = parseFloat(document.getElementById('usdtAmount').value) || 0;
         if (!usdtAmount || usdtAmount <= 0) {
             alert("Lütfen geçerli bir USDT miktarı girin!");
