@@ -115,14 +115,14 @@ async function updateWalletUI() {
 
 function calculateFDAI() {
     const method = document.getElementById('paymentMethod').value;
-    let amount, fdai;
+    let fdai = 0;
     
     if (method === 'bnb') {
-        amount = parseFloat(document.getElementById('bnbAmount').value) || 0;
-        fdai = amount * CONFIG.TOKENS_PER_BNB;
+        const bnbAmount = parseFloat(document.getElementById('bnbAmount').value) || 0;
+        fdai = bnbAmount * CONFIG.TOKENS_PER_BNB;
     } else {
-        amount = parseFloat(document.getElementById('usdtAmount').value) || 0;
-        fdai = amount * CONFIG.TOKENS_PER_USDT;
+        const usdtAmount = parseFloat(document.getElementById('usdtAmount').value) || 0;
+        fdai = usdtAmount * CONFIG.TOKENS_PER_USDT;
     }
     
     document.getElementById('fdaiAmount').textContent = fdai.toLocaleString();
@@ -132,14 +132,14 @@ async function sendPayment() {
     const method = document.getElementById('paymentMethod').value;
     
     if (method === 'bnb') {
-        const bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
+        const bnbAmount = parseFloat(document.getElementById('bnbAmount').value) || 0;
         if (!bnbAmount || bnbAmount <= 0) {
             alert("Lütfen geçerli bir BNB miktarı girin!");
             return;
         }
         await sendBNB();
     } else {
-        const usdtAmount = parseFloat(document.getElementById('usdtAmount').value);
+        const usdtAmount = parseFloat(document.getElementById('usdtAmount').value) || 0;
         if (!usdtAmount || usdtAmount <= 0) {
             alert("Lütfen geçerli bir USDT miktarı girin!");
             return;
@@ -170,8 +170,8 @@ async function sendBNB() {
         const receipt = await web3.eth.sendTransaction(tx);
         alert(`✅ ${bnbAmount} BNB başarıyla gönderildi!\n\nAlacağınız miktar: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
     } catch (error) {
-        console.error("İşlem hatası:", error);
-        alert("İşlem başarısız oldu: " + (error.message || error));
+        console.error("BNB gönderim hatası:", error);
+        alert("BNB gönderimi başarısız oldu: " + (error.message || error));
     }
 }
 
@@ -198,7 +198,7 @@ async function sendUSDT() {
         alert(`✅ ${usdtAmount} USDT başarıyla gönderildi!\n\nAlacağınız miktar: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
     } catch (error) {
         console.error("USDT gönderim hatası:", error);
-        alert("İşlem başarısız oldu: " + (error.message || error));
+        alert("USDT gönderimi başarısız oldu: " + (error.message || error));
     }
 }
 
@@ -215,4 +215,4 @@ if (window.ethereum) {
     });
     
     window.ethereum.on('chainChanged', () => window.location.reload());
-    }
+}
