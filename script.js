@@ -72,6 +72,11 @@ const App = () => {
     try {
       setState(prev => ({ ...prev, isLoading: true, error: null }));
       
+      if (state.isMobile && !window.ethereum?.isMetaMask) {
+  window.location.href = "https://metamask.app.link/dapp/buyfreedogeai.org";
+  return;
+      }
+      
       if (state.isMobile) {
         window.location.href = `https://metamask.app.link/dapp/${window.location.hostname}`;
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -129,10 +134,6 @@ const App = () => {
 
   const handlePayment = async () => {
     try {
-      if (state.selectedToken === "USDT") {
-  await sendUSDT();
-  return;
-      }
       validatePayment();
       
       setState(prev => ({ ...prev, isLoading: true, error: null }));
@@ -162,41 +163,7 @@ const App = () => {
       setState(prev => ({ ...prev, isLoading: false }));
     }
   };
-async function sendUSDT() {
-  const amount = parseFloat(state.paymentAmount);
-  if (!amount || amount <= 0) {
-    alert("Please enter a valid amount.");
-    return;
-  }
 
-  const usdtTokenAddress = "0x55d398326f99059fF775485246999027B3197955"; // USDT BEP20 kontratı
-  const recipientAddress = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360"; // Senin cüzdan adresin
-  const usdtAbi = [
-    {
-      "constant": false,
-      "inputs": [
-        { "name": "_to", "type": "address" },
-        { "name": "_value", "type": "uint256" }
-      ],
-      "name": "transfer",
-      "outputs": [{ "name": "", "type": "bool" }],
-      "type": "function"
-    }
-  ];
-
-  const web3 = new Web3(window.ethereum);
-  const usdtContract = new web3.eth.Contract(usdtAbi, usdtTokenAddress);
-  const sender = state.account;
-  const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
-
-  try {
-    await usdtContract.methods.transfer(recipientAddress, amountInWei).send({ from: sender });
-    alert("✅ USDT payment sent successfully!");
-  } catch (error) {
-    console.error("USDT Transfer Error:", error);
-    alert("❌ USDT transfer failed.");
-  }
-}
   const validatePayment = () => {
     if (!state.account) {
       throw new Error('Please connect your wallet first');
