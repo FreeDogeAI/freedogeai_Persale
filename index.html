@@ -271,6 +271,26 @@
     <script>
         // Configuration
         const CONFIG = {
+         let selectedToken = 'BNB';
+const BNB_RATE = 120_000_000_000;
+const USDT_RATE = 100_000_000_000;
+
+function onTokenChange() {
+  selectedToken = document.getElementById("tokenSelect").value;
+  calculateFDAI();
+}
+
+function calculateFDAI() {
+  const amount = parseFloat(document.getElementById("bnbAmount").value);
+  if (!amount || amount <= 0) {
+    document.getElementById("fdaiAmount").innerText = "0";
+    return;
+  }
+
+  const rate = selectedToken === 'BNB' ? BNB_RATE : USDT_RATE;
+  const tokenAmount = amount * rate;
+  document.getElementById("fdaiAmount").innerText = tokenAmount.toLocaleString();
+}
             RECEIVE_WALLET: "0xd924e01c7d319c5b23708cd622bd1143cd4fb360",
             TOKENS_PER_BNB: 120000000000,
             BSC_CHAIN_ID: 56
@@ -282,6 +302,7 @@
 
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
+         document.getElementById("tokenSelect").addEventListener("change", onTokenChange);
             // Setup event listeners
             document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
             document.getElementById('buyBtn').addEventListener('click', sendBNB);
