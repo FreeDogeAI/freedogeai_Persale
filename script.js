@@ -46,19 +46,36 @@ function togglePaymentMethod() {
 async function connectWallet() {
     try {
         if (!window.ethereum) {
+            console.log("No wallet provider detected.");
             if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                 const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-                window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+                // Trust Wallet ve MetaMask için yönlendirme
+                if (navigator.userAgent.toLowerCase().includes("trust")) {
+                    console.log("Trust Wallet detected, redirecting...");
+                    window.location.href = `https://link.trustwallet.com/open_url?coin_id=56&url=https://${currentUrl}`;
+                } else {
+                    console.log("No Trust Wallet detected, redirecting to MetaMask...");
+                    window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+                }
             } else {
+                console.log("Desktop device detected, prompting to install a wallet.");
+                alert("Please install MetaMask or Trust Wallet to proceed.");
+                window.open("https://trustwallet.com/download", "_blank");
                 window.open("https://metamask.io/download.html", "_blank");
             }
             return;
         }
-        
+
+        console.log("Attempting to connect wallet...");
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        if (!accounts || accounts.length === 0) {
+            throw new Error("No accounts returned from wallet.");
+        }
+
         userAddress = accounts[0];
         web3 = new Web3(window.ethereum);
-        
+        console.log("Wallet connected:", userAddress);
+
         const usdtAbi = [{
             "constant": true,
             "inputs": [{"name": "_owner", "type": "address"}],
@@ -76,24 +93,28 @@ async function connectWallet() {
             "type": "function"
         }];
         usdtContract = new web3.eth.Contract(usdtAbi, CONFIG.USDT_CONTRACT);
-        
+
         try {
             const chainId = Number(await web3.eth.getChainId());
+            console.log("Current chain ID:", chainId);
             if (chainId !== CONFIG.BSC_CHAIN_ID) {
+                console.log("Switching to BSC network...");
                 await window.ethereum.request({
                     method: 'wallet_switchEthereumChain',
                     params: [{ chainId: '0x38' }]
                 });
+                console.log("Switched to BSC network.");
             }
         } catch (error) {
             console.log("Ağ değiştirme hatası:", error);
-            alert("Ağ değiştirme hatası: " + (error.message || error));
+            alert("Ağ değiştirme hatası: " + (error.message || "Please switch to the Binance Smart Chain manually."));
+            return;
         }
-        
+
         await updateWalletUI();
     } catch (error) {
         console.log("Bağlantı hatası:", error);
-        alert("Bağlantı hatası: " + (error.message || error));
+        alert("Bağlantı hatası: " + (error.message || "Please ensure your wallet is installed and unlocked."));
     }
 }
 
@@ -217,10 +238,10 @@ if (window.ethereum) {
             updateWalletUI();
         } else {
             document.getElementById('walletInfo').style.display = 'none';
-            document.getElementById('connectWalletBtn').textContent = '🔗 MetaMask ile Bağlan';
+            document.getElementById('connectWalletBtn').textContent = '🔗 MetaMask veya Trust Wallet ile Bağlan';
             document.getElementById('buyBtn').disabled = true;
         }
     });
     
     window.ethereum.on('chainChanged', () => window.location.reload());
-}
+                    }
