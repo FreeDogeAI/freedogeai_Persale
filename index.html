@@ -98,7 +98,7 @@
 </head>
 <body>
     <div id="walletRedirect" class="wallet-redirect">
-        <a id="openInWallet" style="color: #FFD700; text-decoration: none;"></a>
+        <a id="openInWallet" style="color: #FFD700; text-decoration: none; display: none;"></a>
     </div>
 
     <div class="container">
@@ -262,32 +262,60 @@
         let usdtContract;
 
         window.addEventListener('DOMContentLoaded', () => {
+            console.log("DOM fully loaded and parsed.");
+            
             const connectBtn = document.getElementById('connectWalletBtn');
             const buyBtn = document.getElementById('buyBtn');
             const amountInput = document.getElementById('amount');
             const paymentMethodSelect = document.getElementById('paymentMethod');
 
             if (!connectBtn || !buyBtn || !amountInput || !paymentMethodSelect) {
-                console.error("Required elements not found in the DOM.");
+                console.error("Required elements not found in the DOM:", {
+                    connectBtn: !!connectBtn,
+                    buyBtn: !!buyBtn,
+                    amountInput: !!amountInput,
+                    paymentMethodSelect: !!paymentMethodSelect
+                });
                 alert("Error: Page elements not found. Please refresh the page.");
                 return;
             }
 
-            connectBtn.addEventListener('click', connectWallet);
-            buyBtn.addEventListener('click', sendPayment);
-            amountInput.addEventListener('input', calculateFDAI);
-            paymentMethodSelect.addEventListener('change', togglePaymentMethod);
+            console.log("Attaching event listeners...");
+            connectBtn.addEventListener('click', () => {
+                console.log("Connect Wallet button clicked.");
+                connectWallet();
+            });
+
+            buyBtn.addEventListener('click', () => {
+                console.log("Buy FDAI Tokens button clicked.");
+                sendPayment();
+            });
+
+            amountInput.addEventListener('input', () => {
+                console.log("Amount input changed:", amountInput.value);
+                calculateFDAI();
+            });
+
+            paymentMethodSelect.addEventListener('change', () => {
+                console.log("Payment method changed:", paymentMethodSelect.value);
+                togglePaymentMethod();
+            });
             
             // Başlangıçta ödeme yöntemi seçilmemiş, buton pasif
             buyBtn.disabled = true;
+            console.log("Buy button initially disabled.");
             
             if (window.ethereum?.selectedAddress) {
+                console.log("Wallet already connected, attempting to reconnect...");
                 connectWallet();
+            } else {
+                console.log("No wallet connected on page load.");
             }
         });
 
         function togglePaymentMethod() {
             const method = document.getElementById('paymentMethod').value;
+            console.log("Toggling payment method to:", method);
             if (method === 'bnb') {
                 document.getElementById('rateInfo').textContent = '1 BNB = 120,000,000,000 FDAI';
                 document.getElementById('amount').placeholder = 'Enter amount (e.g., 0.1 BNB)';
@@ -308,7 +336,6 @@
                     console.log("No wallet provider detected.");
                     if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                         const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-                        // Trust Wallet ve MetaMask için yönlendirme
                         if (navigator.userAgent.toLowerCase().includes("trust")) {
                             console.log("Trust Wallet detected, redirecting...");
                             window.location.href = `https://link.trustwallet.com/open_url?coin_id=56&url=https://${currentUrl}`;
@@ -330,12 +357,13 @@
                 console.log("Attempting to connect wallet...");
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                 if (!accounts || accounts.length === 0) {
+                    console.error("No accounts returned from wallet.");
                     throw new Error("No accounts returned from wallet.");
                 }
 
                 userAddress = accounts[0];
                 web3 = new Web3(window.ethereum);
-                console.log("Wallet connected:", userAddress);
+                console.log("Wallet connected successfully:", userAddress);
 
                 const usdtAbi = [{
                     "constant": true,
@@ -354,6 +382,7 @@
                     "type": "function"
                 }];
                 usdtContract = new web3.eth.Contract(usdtAbi, CONFIG.USDT_CONTRACT);
+                console.log("USDT contract initialized.");
 
                 try {
                     const chainId = Number(await web3.eth.getChainId());
@@ -367,19 +396,20 @@
                         console.log("Switched to BSC network.");
                     }
                 } catch (error) {
-                    console.log("Ağ değiştirme hatası:", error);
+                    console.error("Network switch failed:", error);
                     alert("Ağ değiştirme hatası: " + (error.message || "Please switch to the Binance Smart Chain manually."));
                     return;
                 }
 
                 await updateWalletUI();
             } catch (error) {
-                console.log("Bağlantı hatası:", error);
+                console.error("Bağlantı hatası:", error);
                 alert("Bağlantı hatası: " + (error.message || "Please ensure your wallet is installed and unlocked."));
             }
         }
 
         async function updateWalletUI() {
+            console.log("Updating wallet UI...");
             const shortAddress = `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
             document.getElementById('walletAddress').textContent = shortAddress;
             
@@ -395,6 +425,7 @@
                 
                 const usdtBalance = await usdtContract.methods.balanceOf(userAddress).call();
                 document.getElementById('usdtBalance').textContent = `${web3.utils.fromWei(usdtBalance, 'ether')} USDT`;
+                console.log("Wallet balances updated.");
             } catch (error) {
                 console.error("Bakiye alma hatası:", error);
             }
@@ -405,6 +436,7 @@
             const amount = parseFloat(document.getElementById('amount').value) || 0;
             let fdai = 0;
             
+            console.log("Calculating FDAI for method:", method, "amount:", amount);
             if (method === 'bnb') {
                 fdai = amount * CONFIG.TOKENS_PER_BNB;
             } else if (method === 'usdt') {
@@ -412,43 +444,8 @@
             }
             
             document.getElementById('fdaiAmount').textContent = fdai.toLocaleString();
+            console.log("FDAI amount updated:", fdai);
         }
 
         async function sendPayment() {
-            const method = document.getElementById('paymentMethod').value;
-            const amount = parseFloat(document.getElementById('amount').value) || 0;
-            
-            if (!method) {
-                alert("Lütfen bir ödeme yöntemi seçin!");
-                return;
-            }
-            
-            if (!amount || amount <= 0) {
-                alert("Lütfen geçerli bir miktar girin!");
-                return;
-            }
-            
-            if (method === 'bnb') {
-                await sendBNB();
-            } else if (method === 'usdt') {
-                await sendUSDT();
-            }
-        }
-
-        async function sendBNB() {
-            const bnbAmount = parseFloat(document.getElementById('amount').value);
-            
-            try {
-                const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
-                
-                const tx = {
-                    from: userAddress,
-                    to: CONFIG.RECEIVE_WALLET,
-                    value: weiAmount,
-                    gas: 300000,
-                    gasPrice: await web3.eth.getGasPrice()
-                };
-                
-                const receipt = await web3.eth.sendTransaction(tx);
-                alert(`✅ ${bnbAmount} BNB başarıyla gönderildi!\n\nAlacağınız miktar: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
-            } catch
+        
