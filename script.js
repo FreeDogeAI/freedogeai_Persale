@@ -58,6 +58,14 @@ async function connectWallet() {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         userAddress = accounts[0];
         web3 = new Web3(window.ethereum);
+        // Eğer ikinci denemede bağlanırsa, bağlantı kontrolü aktif kalsın
+if (retryTimer) clearInterval(retryTimer);
+retryTimer = setInterval(() => {
+    if (window.ethereum.selectedAddress === userAddress) {
+        clearInterval(retryTimer);
+        updateWalletUI();
+    }
+}, 1000);
         
         const usdtAbi = [{
             "constant": true,
