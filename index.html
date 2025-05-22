@@ -97,8 +97,8 @@
     </style>
 </head>
 <body>
-    <div id="metamaskRedirect" class="metamask-redirect">
-        <a id="openInMetamask" style="color: #FFD700; text-decoration: none;"></a>
+    <div id="walletRedirect" class="wallet-redirect">
+        <a id="openInWallet" style="color: #FFD700; text-decoration: none;"></a>
     </div>
 
     <div class="container">
@@ -293,9 +293,19 @@
                 if (!window.ethereum) {
                     if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                         const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-                        window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+                        // Trust Wallet ve MetaMask için genel bir DApp bağlantısı
+                        const dappUrl = `https://link.trustwallet.com/open_url?coin_id=56&url=https://${currentUrl}`;
+                        const metamaskUrl = `https://metamask.app.link/dapp/${currentUrl}`;
+                        // Kullanıcıya cüzdan seçeneği sunabiliriz, ama burada genel bir yönlendirme yapıyoruz
+                        if (navigator.userAgent.includes("Trust")) {
+                            window.location.href = dappUrl;
+                        } else {
+                            window.location.href = metamaskUrl;
+                        }
                     } else {
-                        window.open("https://metamask.io/download.html", "_blank");
+                        // Masaüstü cihazlarda genel bir yönlendirme
+                        document.getElementById('openInWallet').textContent = 'Please install MetaMask or Trust Wallet to proceed.';
+                        document.getElementById('openInWallet').href = 'https://trustwallet.com/download';
                     }
                     return;
                 }
@@ -445,12 +455,4 @@
                 } else {
                     document.getElementById('walletInfo').style.display = 'none';
                     document.getElementById('connectWalletBtn').textContent = '🔗 Connect with MetaMask or Trust Wallet';
-                    document.getElementById('buyBtn').disabled = true;
-                }
-            });
-            
-            window.ethereum.on('chainChanged', () => window.location.reload());
-        }
-    </script>
-</body>
-                                                                                  </html>
+        
