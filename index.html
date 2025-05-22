@@ -465,6 +465,18 @@
   <h3 style="color:#FFD700;">Final Thoughts: Why Act Now?</h3>
   <p>The Free Doge AI presale is a golden chance to be part of a promising project at the ground level. Purchasing tokens today ensures more favorable prices and early access to future developments. With AI technology and a bold vision, Free Doge AI can become a major player in the crypto space. Don’t hesitate—buy your Free Doge AI presale tokens today and start your journey with a smart, community-powered asset.</p>
     </section>
+    <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('body *').forEach(el => {
+      if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
+        const text = el.textContent;
+        if (text.includes("Free Doge AI")) {
+          el.innerHTML = text.replace(/Free Doge AI/g, '<span translate="no">Free Doge AI</span>');
+        }
+      }
+    });
+  });
+    </script>
 </body>
 </html>
 
