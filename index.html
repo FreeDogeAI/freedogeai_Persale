@@ -116,7 +116,7 @@
         </div>
         
         <p id="rateInfo">1 BNB = 120,000,000,000 FDAI</p>
-        <button id="connectWalletBtn">🔗 Connect with MetaMask or Trust Wallet</button>
+        <button id="connectWalletBtn">🔗 MetaMask veya Trust Wallet ile Bağlan</button>
 
         <div id="walletInfo" style="display: none;">
             <h3>Your Wallet</h3>
@@ -278,6 +278,9 @@
             amountInput.addEventListener('input', calculateFDAI);
             paymentMethodSelect.addEventListener('change', togglePaymentMethod);
             
+            // Başlangıçta ödeme yöntemi seçilmemiş, buton pasif
+            buyBtn.disabled = true;
+            
             if (window.ethereum?.selectedAddress) {
                 connectWallet();
             }
@@ -307,11 +310,14 @@
                         const currentUrl = window.location.href.replace(/^https?:\/\//, '');
                         // Trust Wallet ve MetaMask için yönlendirme
                         if (navigator.userAgent.toLowerCase().includes("trust")) {
+                            console.log("Trust Wallet detected, redirecting...");
                             window.location.href = `https://link.trustwallet.com/open_url?coin_id=56&url=https://${currentUrl}`;
                         } else {
+                            console.log("No Trust Wallet detected, redirecting to MetaMask...");
                             window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
                         }
                     } else {
+                        console.log("Desktop device detected, prompting to install a wallet.");
                         const walletLink = document.getElementById('openInWallet');
                         walletLink.textContent = 'Please install MetaMask or Trust Wallet to proceed.';
                         walletLink.href = 'https://trustwallet.com/download';
@@ -361,15 +367,15 @@
                         console.log("Switched to BSC network.");
                     }
                 } catch (error) {
-                    console.error("Network switch failed:", error);
-                    alert("Network switch failed: " + (error.message || "Please switch to the Binance Smart Chain manually."));
+                    console.log("Ağ değiştirme hatası:", error);
+                    alert("Ağ değiştirme hatası: " + (error.message || "Please switch to the Binance Smart Chain manually."));
                     return;
                 }
 
                 await updateWalletUI();
             } catch (error) {
-                console.error("Connection error:", error);
-                alert("Failed to connect wallet: " + (error.message || "Please ensure your wallet is installed and unlocked."));
+                console.log("Bağlantı hatası:", error);
+                alert("Bağlantı hatası: " + (error.message || "Please ensure your wallet is installed and unlocked."));
             }
         }
 
@@ -378,7 +384,7 @@
             document.getElementById('walletAddress').textContent = shortAddress;
             
             document.getElementById('walletInfo').style.display = 'block';
-            document.getElementById('connectWalletBtn').textContent = '✅ Connected';
+            document.getElementById('connectWalletBtn').textContent = '✅ Bağlandı';
             const buyBtn = document.getElementById('buyBtn');
             buyBtn.disabled = false;
             console.log("Buy button enabled.");
@@ -390,18 +396,18 @@
                 const usdtBalance = await usdtContract.methods.balanceOf(userAddress).call();
                 document.getElementById('usdtBalance').textContent = `${web3.utils.fromWei(usdtBalance, 'ether')} USDT`;
             } catch (error) {
-                console.error("Balance fetch error:", error);
+                console.error("Bakiye alma hatası:", error);
             }
         }
 
         function calculateFDAI() {
             const method = document.getElementById('paymentMethod').value;
             const amount = parseFloat(document.getElementById('amount').value) || 0;
-            let fdai;
+            let fdai = 0;
             
             if (method === 'bnb') {
                 fdai = amount * CONFIG.TOKENS_PER_BNB;
-            } else {
+            } else if (method === 'usdt') {
                 fdai = amount * CONFIG.TOKENS_PER_USDT;
             }
             
@@ -410,16 +416,21 @@
 
         async function sendPayment() {
             const method = document.getElementById('paymentMethod').value;
-            const amount = parseFloat(document.getElementById('amount').value);
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            
+            if (!method) {
+                alert("Lütfen bir ödeme yöntemi seçin!");
+                return;
+            }
             
             if (!amount || amount <= 0) {
-                alert("Please enter a valid amount!");
+                alert("Lütfen geçerli bir miktar girin!");
                 return;
             }
             
             if (method === 'bnb') {
                 await sendBNB();
-            } else {
+            } else if (method === 'usdt') {
                 await sendUSDT();
             }
         }
@@ -439,20 +450,5 @@
                 };
                 
                 const receipt = await web3.eth.sendTransaction(tx);
-                alert(`✅ ${bnbAmount} BNB successfully sent!\n\nYou will receive: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
-                
-            } catch (error) {
-                console.error("Transaction failed:", error);
-                alert("Transaction failed: " + (error.message || error));
-            }
-        }
-
-        async function sendUSDT() {
-            const usdtAmount = parseFloat(document.getElementById('amount').value);
-            
-            try {
-                const weiAmount = web3.utils.toWei(usdtAmount.toString(), 'ether');
-                
-                const receipt = await usdtContract.methods.transfer(
-                    CONFIG.RECEIVE_WALLET,
-                  
+                alert(`✅ ${bnbAmount} BNB başarıyla gönderildi!\n\nAlacağınız miktar: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
+            } catch
