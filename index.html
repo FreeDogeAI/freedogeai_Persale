@@ -116,8 +116,7 @@
         </div>
         
         <p id="rateInfo">1 BNB = 120,000,000,000 FDAI</p>
-        <button id="connectWalletBtn">🔗 Connect with MetaMask</button>
-        <button onclick="connectTrustWallet()">🔗 Connect with Trust Wallet</button>
+        <button id="connectWalletBtn">🔗 Connect with MetaMask or Trust Wallet</button>
 
         <div id="walletInfo" style="display: none;">
             <h3>Your Wallet</h3>
@@ -149,6 +148,16 @@
             <div class="wallet-info" style="background-color: #000000; border: 2px dashed #FFD700; color: #00FFCC; font-weight: bold; font-size: 16px; padding: 15px; border-radius: 10px; text-align: center;">
                 0x8161698A74F2ea0035B9912ED60140893Ac0f39C
             </div>
+            <h4>How to Participate with Trust Wallet</h4>
+            <p>You can also participate in the FreeDogeAI presale using Trust Wallet! Follow these steps:</p>
+            <ol>
+                <li>Download and set up Trust Wallet on your mobile device from the App Store (iOS) or Google Play Store (Android).</li>
+                <li>Ensure your Trust Wallet is funded with BNB or USDT on the Binance Smart Chain (BSC) network.</li>
+                <li>Open the Trust Wallet app, go to the DApp browser, and navigate to this presale page.</li>
+                <li>Click the "Connect with MetaMask or Trust Wallet" button to connect your Trust Wallet.</li>
+                <li>Select your payment method (BNB or USDT), enter the amount, and click "Buy FDAI Tokens" to complete your purchase.</li>
+            </ol>
+            <p><strong>Contact Information:</strong> For any questions or support, join our community on <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">X (Twitter)</a> or <a href="https://t.me/freedogeaiFDAI" target="_blank">Telegram</a>.</p>
         </div>
 
         <!-- About Section -->
@@ -332,16 +341,6 @@
                 alert("Connection error: " + (error.message || error));
             }
         }
-        function connectTrustWallet() {
-  const currentUrl = window.location.href;
-  const trustWalletLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(currentUrl)}`;
-
-  if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
-    window.location.href = trustWalletLink;
-  } else {
-    alert("Please open this site on your mobile device with Trust Wallet installed.");
-  }
-        }
 
         async function updateWalletUI() {
             const shortAddress = `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
@@ -445,7 +444,7 @@
                     updateWalletUI();
                 } else {
                     document.getElementById('walletInfo').style.display = 'none';
-                    document.getElementById('connectWalletBtn').textContent = '🔗 Connect with MetaMask';
+                    document.getElementById('connectWalletBtn').textContent = '🔗 Connect with MetaMask or Trust Wallet';
                     document.getElementById('buyBtn').disabled = true;
                 }
             });
@@ -454,4 +453,4 @@
         }
     </script>
 </body>
-</html>to
+                                                                                  </html>
