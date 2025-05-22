@@ -48,7 +48,7 @@ async function connectWallet() {
         if (!window.ethereum) {
             if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                 const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-                window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+                window.location.href = "https://metamask.app.link/dapp/buyfreedogeaifdai.org";
             } else {
                 window.open("https://metamask.io/download.html", "_blank");
             }
