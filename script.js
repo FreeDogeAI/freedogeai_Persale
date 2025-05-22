@@ -66,6 +66,12 @@ retryTimer = setInterval(() => {
         updateWalletUI();
     }
 }, 1000);
+        setTimeout(() => {
+    if (!window.ethereum?.selectedAddress) {
+        const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+        window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+    }
+}, 60000);
         
         const usdtAbi = [{
             "constant": true,
