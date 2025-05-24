@@ -6,188 +6,161 @@ const CONFIG = {
     USDT_CONTRACT: "0x55d398326f99059fF775485246999027B3197955"
 };
 
-// Çeviri sözlüğü (İngilizce -> Türkçe)
-const translations = {
-    'en': {
-        'Language ▼': 'Language ▼',
-        'English': 'English',
-        'Türkçe': 'Türkçe',
-        'Free Doge AI Token Pre-sale': 'Free Doge AI Token Pre-sale',
-        'FreeDogeAI Presale': 'FreeDogeAI Presale',
-        'Payment Method:': 'Payment Method:',
-        'BNB': 'BNB',
-        'USDT (BEP-20)': 'USDT (BEP-20)',
-        '1 BNB = 120,000,000,000 FDAI': '1 BNB = 120,000,000,000 FDAI',
-        '1 USDT = 200,000,000 FDAI': '1 USDT = 200,000,000 FDAI',
-        '🔗 Connect with MetaMask': '🔗 Connect with MetaMask',
-        'Your Wallet': 'Your Wallet',
-        'Address:': 'Address:',
-        'BNB Balance:': 'BNB Balance:',
-        'USDT Balance:': 'USDT Balance:',
-        'Amount:': 'Amount:',
-        'Enter amount (BNB or USDT)': 'Enter amount (BNB or USDT)',
-        'Enter amount (e.g., 0.1 BNB)': 'Enter amount (e.g., 0.1 BNB)',
-        'Enter amount (e.g., 1 USDT)': 'Enter amount (e.g., 1 USDT)',
-        'You will receive:': 'You will receive:',
-        '0': '0',
-        '🚀 Buy FDAI Tokens': '🚀 Buy FDAI Tokens',
-        'Important Information': 'Important Information',
-        'After your token purchase, your tokens will be reflected in your wallet within 24 hours.': 'After your token purchase, your tokens will be reflected in your wallet within 24 hours.',
-        'Please make sure you are connected to the BSC (Binance Smart Chain) network.': 'Please make sure you are connected to the BSC (Binance Smart Chain) network.',
-        'NOTE:': 'NOTE:',
-        'If FDAI tokens do not appear, add this contract address:': 'If FDAI tokens do not appear, add this contract address:',
-        'About $FDAI': 'About $FDAI',
-        'FDAI Has Begun!': 'FDAI Has Begun!',
-        'This is not just another token.': 'This is not just another token.',
-        'An innovative project powered by artificial intelligence, inspired by Elon Musk\'s interest in Dogecoin.': 'An innovative project powered by artificial intelligence, inspired by Elon Musk\'s interest in Dogecoin.',
-        'Combining the energy of meme culture with the strength of AI, this is a movement you don’t want to miss.': 'Combining the energy of meme culture with the strength of AI, this is a movement you don’t want to miss.',
-        'Join the transformation before FDAI gets listed on major exchanges.': 'Join the transformation before FDAI gets listed on major exchanges.',
-        'What is Free Doge AI?': 'What is Free Doge AI?',
-        'Free Doge AI isn’t just a meme coin. It’s a utility-driven crypto project powered by artificial intelligence, designed to offer smarter, safer, and faster blockchain interactions. While it embraces the fun spirit of meme tokens, it also delivers real functionality and long-term vision—setting it apart from typical meme coins.': 'Free Doge AI isn’t just a meme coin. It’s a utility-driven crypto project powered by artificial intelligence, designed to offer smarter, safer, and faster blockchain interactions. While it embraces the fun spirit of meme tokens, it also delivers real functionality and long-term vision—setting it apart from typical meme coins.',
-        'Why Should You Join?': 'Why Should You Join?',
-        'The presale gives early supporters access to FDAI at a significantly lower price before it launches on major platforms. Early buyers receive more tokens per dollar and gain the opportunity to shape the project\'s future as part of its founding community.': 'The presale gives early supporters access to FDAI at a significantly lower price before it launches on major platforms. Early buyers receive more tokens per dollar and gain the opportunity to shape the project\'s future as part of its founding community.',
-        'How to Join the Presale': 'How to Join the Presale',
-        'Participation is simple. Connect your wallet using the MetaMask link on our official website and complete your purchase with ease.': 'Participation is simple. Connect your wallet using the MetaMask link on our official website and complete your purchase with ease.',
-        'The presale will end once the allocated token amount is fully sold. Only 15% of the total token supply is dedicated to this early phase. After the presale is complete, tokens will become tradable on decentralized exchanges (DEXs).': 'The presale will end once the allocated token amount is fully sold. Only 15% of the total token supply is dedicated to this early phase. After the presale is complete, tokens will become tradable on decentralized exchanges (DEXs).',
-        'Key Advantages': 'Key Advantages',
-        'Buy tokens at early-bird prices': 'Buy tokens at early-bird prices',
-        'Get exclusive early-stage benefits': 'Get exclusive early-stage benefits',
-        'Contribute to community growth': 'Contribute to community growth',
-        'Enjoy AI-powered smart functionality': 'Enjoy AI-powered smart functionality',
-        'FDAI Early Investor Bonus Structure:': 'FDAI Early Investor Bonus Structure:',
-        'First 100 participants: 15% extra FDAI': 'First 100 participants: 15% extra FDAI',
-        'Next 400: 10% bonus': 'Next 400: 10% bonus',
-        'Next 500: 5% bonus': 'Next 500: 5% bonus',
-        'What Makes Free Doge AI Unique?': 'What Makes Free Doge AI Unique?',
-        'Unlike typical meme coins, Free Doge AI is backed by real technology. Its AI integration ensures faster transactions, better security, and a seamless user experience. The project is built on transparency and actively shaped by community feedback—fostering long-term trust and sustainability.': 'Unlike typical meme coins, Free Doge AI is backed by real technology. Its AI integration ensures faster transactions, better security, and a seamless user experience. The project is built on transparency and actively shaped by community feedback—fostering long-term trust and sustainability.',
-        'Getting Ready': 'Getting Ready',
-        'Simply connect your MetaMask wallet via the official website, follow the steps, and claim your spot in the presale. Don’t forget to stay updated on exclusive announcements and limited-time offers.': 'Simply connect your MetaMask wallet via the official website, follow the steps, and claim your spot in the presale. Don’t forget to stay updated on exclusive announcements and limited-time offers.',
-        'Our Vision': 'Our Vision',
-        'The Free Doge AI team aims to build a powerful, tech-enabled community that blends entertainment with purpose. It’s not just about buying a token—it’s about joining a movement shaped by its users and powered by innovation.': 'The Free Doge AI team aims to build a powerful, tech-enabled community that blends entertainment with purpose. It’s not just about buying a token—it’s about joining a movement shaped by its users and powered by innovation.',
-        'Final Words': 'Final Words',
-        'FDAI presale is your chance to get in early on a bold, AI-driven meme revolution. With limited supply, exclusive bonuses, and a clear roadmap, this is your opportunity to help shape the future of crypto—don’t miss it.': 'FDAI presale is your chance to get in early on a bold, AI-driven meme revolution. With limited supply, exclusive bonuses, and a clear roadmap, this is your opportunity to help shape the future of crypto—don’t miss it.',
-        'Roadmap': 'Roadmap',
-        'Phase 1: Launch': 'Phase 1: Launch',
-        'Official website launched: freedogeai.com': 'Official website launched: freedogeai.com',
-        'Social media accounts activated:': 'Social media accounts activated:',
-        'Twitter: @FreeDogeAI_FDAI': 'Twitter: @FreeDogeAI_FDAI',
-        'Telegram: @freedogeaiFDAI': 'Telegram: @freedogeaiFDAI',
-        'Presale successfully launched.': 'Presale successfully launched.',
-        'Phase 2: Growth': 'Phase 2: Growth',
-        'Airdrop campaigns and community engagement activities': 'Airdrop campaigns and community engagement activities',
-        'DEX listings and increased token visibility': 'DEX listings and increased token visibility',
-        'Strategic influencer marketing and partnerships': 'Strategic influencer marketing and partnerships',
-        'Phase 3: AI Utility': 'Phase 3: AI Utility',
-        'Launch of FDAI-powered mini-game and interactive system': 'Launch of FDAI-powered mini-game and interactive system',
-        'Integration of token into task/reward model': 'Integration of token into task/reward model',
-        'Beta testing with real-world use cases': 'Beta testing with real-world use cases',
-        'Phase 4: Global Expansion & AI Breakthrough': 'Phase 4: Global Expansion & AI Breakthrough',
-        'Surprise centralized exchange (CEX) listings': 'Surprise centralized exchange (CEX) listings',
-        'NFT and AI integrations': 'NFT and AI integrations',
-        'Global reach and scaling objective': 'Global reach and scaling objective',
-        'Development of a community-driven and revolutionary AI system that aims to surpass models like Grok and ChatGPT.': 'Development of a community-driven and revolutionary AI system that aims to surpass models like Grok and ChatGPT.',
-        '⚠️ Important Notes': '⚠️ Important Notes',
-        'How to Join the Presale?': 'How to Join the Presale?',
-        '1. Switch to BNB Smart Chain': '1. Switch to BNB Smart Chain',
-        'Open MetaMask and switch the network to BNB Smart Chain from the top-left.': 'Open MetaMask and switch the network to BNB Smart Chain from the top-left.',
-        '2. MetaMask Only': '2. MetaMask Only',
-        'Token purchases can only be made via MetaMask.': 'Token purchases can only be made via MetaMask.',
-        'Supported trading pairs: BNB/FDAI and USDT/FDAI.': 'Supported trading pairs: BNB/FDAI and USDT/FDAI.',
-        '3. How to Connect Wallet on Mobile?': '3. How to Connect Wallet on Mobile?',
-        'When you tap the “Connect Wallet” button on mobile, you’ll be redirected to our site inside the MetaMask browser.': 'When you tap the “Connect Wallet” button on mobile, you’ll be redirected to our site inside the MetaMask browser.',
-        'Once the site loads there, you need to tap “Connect Wallet” again:': 'Once the site loads there, you need to tap “Connect Wallet” again:',
-        'First tap: redirects to MetaMask browser.': 'First tap: redirects to MetaMask browser.',
-        'Second tap: opens the mobile signature screen. Approve it to complete the connection.': 'Second tap: opens the mobile signature screen. Approve it to complete the connection.',
-        '4. What If Auto-Redirect Fails?': '4. What If Auto-Redirect Fails?',
-        'If MetaMask opens slowly or the password is entered late, the redirect might time out.': 'If MetaMask opens slowly or the password is entered late, the redirect might time out.',
-        'Make sure the MetaMask app is running in the background, return to our site, and tap “Connect Wallet” again.': 'Make sure the MetaMask app is running in the background, return to our site, and tap “Connect Wallet” again.',
-        '5. Purchasing Tokens': '5. Purchasing Tokens',
-        'Once connected, simply choose BNB or USDT, enter the amount, and complete your transaction easily.': 'Once connected, simply choose BNB or USDT, enter the amount, and complete your transaction easily.',
-        '6. Making Tokens Visible': '6. Making Tokens Visible',
-        'After purchasing, add the contract address manually to MetaMask using “Import Tokens > Custom Token” to see your FDAI tokens.': 'After purchasing, add the contract address manually to MetaMask using “Import Tokens > Custom Token” to see your FDAI tokens.',
-        '7. Limited Supply & Big Vision': '7. Limited Supply & Big Vision',
-        'Free Doge AI has a much more limited supply than other meme coins — only 2 quadrillion tokens in total.': 'Free Doge AI has a much more limited supply than other meme coins — only 2 quadrillion tokens in total.',
-        '30% of the total supply is locked and will be gradually released according to our roadmap.': '30% of the total supply is locked and will be gradually released according to our roadmap.',
-        'A surprise CEX listing is also part of our upcoming plans.': 'A surprise CEX listing is also part of our upcoming plans.',
-        'Tokenomics': 'Tokenomics',
-        'Category': 'Category',
-        'Percentage (%)': 'Percentage (%)',
-        'Presale': 'Presale',
-        'Airdrop & Campaigns': 'Airdrop & Campaigns',
-        'Burn': 'Burn',
-        'DEX & CEX Listings': 'DEX & CEX Listings',
-        'Locked Reserve': 'Locked Reserve',
-        'Team': 'Team',
-        'Total Supply:': 'Total Supply:',
-        '2,000,000,000,000,000 (Two Quadrillion)': '2,000,000,000,000,000 (Two Quadrillion)',
-        'Circulating Supply:': 'Circulating Supply:',
-        '1,400,000,000,000,000': '1,400,000,000,000,000',
-        'Locked Supply:': 'Locked Supply:',
-        '600,000,000,000,000 FDAI': '600,000,000,000,000 FDAI',
-        'Locked Token Release Schedule': 'Locked Token Release Schedule',
-        '2026: 5%': '2026: 5%',
-        '2027: 5%': '2027: 5%',
-        '2028: 5%': '2028: 5%',
-        '2029: 5%': '2029: 5%',
-        '2030: 5%': '2030: 5%',
-        '2031: 5%': '2031: 5%',
-        'Join Our Community': 'Join Our Community',
-        'X (Twitter)': 'X (Twitter)',
-        'Telegram': 'Telegram',
-        'Click here to download the whitepaper': 'Click here to download the whitepaper'
-    },
-    'tr': {
-        'Language ▼': 'Dil ▼',
-        'English': 'İngilizce',
-        'Türkçe': 'Türkçe',
-        'Free Doge AI Token Pre-sale': 'Free Doge AI Token Ön Satış',
-        'FreeDogeAI Presale': 'FreeDogeAI Ön Satış',
-        'Payment Method:': 'Ödeme Yöntemi:',
-        'BNB': 'BNB',
-        'USDT (BEP-20)': 'USDT (BEP-20)',
-        '1 BNB = 120,000,000,000 FDAI': '1 BNB = 120,000,000,000 FDAI',
-        '1 USDT = 200,000,000 FDAI': '1 USDT = 200,000,000 FDAI',
-        '🔗 Connect with MetaMask': '🔗 MetaMask ile Bağlan',
-        'Your Wallet': 'Cüzdanınız',
-        'Address:': 'Adres:',
-        'BNB Balance:': 'BNB Bakiyesi:',
-        'USDT Balance:': 'USDT Bakiyesi:',
-        'Amount:': 'Miktar:',
-        'Enter amount (BNB or USDT)': 'Miktar girin (BNB veya USDT)',
-        'Enter amount (e.g., 0.1 BNB)': 'Miktar girin (ör. 0.1 BNB)',
-        'Enter amount (e.g., 1 USDT)': 'Miktar girin (ör. 1 USDT)',
-        'You will receive:': 'Alacağınız miktar:',
-        '0': '0',
-        '🚀 Buy FDAI Tokens': '🚀 FDAI Token Satın Al',
-        'Important Information': 'Önemli Bilgiler',
-        'After your token purchase, your tokens will be reflected in your wallet within 24 hours.': 'Token satın alımından sonra tokenlarınız 24 saat içinde cüzdanınıza yansıyacak.',
-        'Please make sure you are connected to the BSC (Binance Smart Chain) network.': 'Lütfen BSC (Binance Smart Chain) ağına bağlı olduğunuzdan emin olun.',
-        'NOTE:': 'NOT:',
-        'If FDAI tokens do not appear, add this contract address:': 'FDAI tokenları görünmezse, şu sözleşme adresini ekleyin:',
-        'About $FDAI': '$FDAI Hakkında',
-        'FDAI Has Begun!': 'FDAI Başladı!',
-        'This is not just another token.': 'Bu sadece bir token değil.',
-        'An innovative project powered by artificial intelligence, inspired by Elon Musk\'s interest in Dogecoin.': 'Elon Musk\'ın Dogecoin ilgisinden ilham alan, yapay zeka destekli yenilikçi bir proje.',
-        'Combining the energy of meme culture with the strength of AI, this is a movement you don’t want to miss.': 'Meme kültürünün enerjisini yapay zekanın gücüyle birleştiren, kaçırmak istemeyeceğiniz bir hareket.',
-        'Join the transformation before FDAI gets listed on major exchanges.': 'FDAI büyük borsalarda listelenmeden önce dönüşüme katılın.',
-        'What is Free Doge AI?': 'Free Doge AI Nedir?',
-        'Free Doge AI isn’t just a meme coin. It’s a utility-driven crypto project powered by artificial intelligence, designed to offer smarter, safer, and faster blockchain interactions. While it embraces the fun spirit of meme tokens, it also delivers real functionality and long-term vision—setting it apart from typical meme coins.': 'Free Doge AI sadece bir meme coin değil. Yapay zeka destekli, daha akıllı, güvenli ve hızlı blok zinciri etkileşimleri sunmak için tasarlanmış, fayda odaklı bir kripto projesidir. Meme tokenlarının eğlenceli ruhunu benimserken, gerçek işlevsellik ve uzun vadeli vizyon sunarak sıradan meme coinlerden ayrılır.',
-        'Why Should You Join?': 'Neden Katılmalısınız?',
-        'The presale gives early supporters access to FDAI at a significantly lower price before it launches on major platforms. Early buyers receive more tokens per dollar and gain the opportunity to shape the project\'s future as part of its founding community.': 'Ön satış, erken destekçilere FDAI\'yi büyük platformlarda piyasaya sürülmeden önce çok daha düşük bir fiyata alma imkanı sunar. Erken alıcılar, dolar başına daha fazla token alır ve projenin kurucu topluluğunun bir parçası olarak geleceğini şekillendirme fırsatı elde eder.',
-        'How to Join the Presale': 'Ön Satışa Nasıl Katılırım?',
-        'Participation is simple. Connect your wallet using the MetaMask link on our official website and complete your purchase with ease.': 'Katılım basit. Resmi web sitemizdeki MetaMask bağlantısını kullanarak cüzdanınızı bağlayın ve satın alma işlemini kolayca tamamlayın.',
-        'The presale will end once the allocated token amount is fully sold. Only 15% of the total token supply is dedicated to this early phase. After the presale is complete, tokens will become tradable on decentralized exchanges (DEXs).': 'Ön satış, tahsis edilen token miktarı tamamen satıldığında sona erecek. Toplam token arzının sadece %15\'i bu erken aşamaya ayrılmıştır. Ön satış tamamlandıktan sonra tokenlar merkezi olmayan borsalarda (DEX) alınıp satılabilir hale gelecektir.',
-        'Key Advantages': 'Temel Avantajlar',
-        'Buy tokens at early-bird prices': 'Tokenları erken alım fiyatlarıyla satın alın',
-        'Get exclusive early-stage benefits': 'Özel erken aşama avantajları elde edin',
-        'Contribute to community growth': 'Topluluk büyümesine katkıda bulunun',
-        'Enjoy AI-powered smart functionality': 'Yapay zeka destekli akıllı işlevsellikten faydalanın',
-        'FDAI Early Investor Bonus Structure:': 'FDAI Erken Yatırımcı Bonus Yapısı:',
-        'First 100 participants: 15% extra FDAI': 'İlk 100 katılımcı: %15 ekstra FDAI',
-        'Next 400: 10% bonus': 'Sonraki 400: %10 bonus',
-        'Next 500: 5% bonus': 'Sonraki 500: %5 bonus',
-        'What Makes Free Doge AI Unique?': 'Free Doge AI\'yi Benzersiz Kılan Nedir?',
-        'Unlike typical meme coins, Free Doge AI is backed by real technology. Its AI integration ensures faster transactions, better security, and a seamless user experience. The project is built on transparency and actively shaped by community feedback—fostering long-term trust and sustainability.': 'Sıradan meme coinlerden farklı olarak, Free Doge AI gerçek teknolojiyle desteklenmektedir. Yapay zeka entegrasyonu, daha hızlı işlemler, daha iyi güvenlik ve sorunsuz bir kullanıcı deneyimi sağlar. Proje, şeffaflık üzerine inşa edilmiştir ve topluluk geri bildirimleriyle aktif olarak şekillenir; bu da uzun vadeli güven ve sürdürülebilirlik sağlar.',
-        'Getting Ready': 'Hazırlık',
-        'Simply connect your MetaMask wallet via the official website, follow the steps, and claim your spot in the presale. Don’t forget to stay updated on exclusive announcements and limited-time offers.': 'Resmi web sitesi üzerinden MetaMask cüzdanınızı bağlayın, adımları takip edin ve ön satışta yerinizi alın. Özel duyurular ve sınırlı süreli teklifler için güncel kalmayı unutmayın.',
-      
+let web3;
+let userAddress = "";
+let usdtContract;
+
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+    document.getElementById('buyBtn').addEventListener('click', sendPayment);
+    document.getElementById('amount').addEventListener('input', calculateFDAI);
+    document.getElementById('paymentMethod').addEventListener('change', togglePaymentMethod);
+    
+    if (window.ethereum?.selectedAddress) {
+        connectWallet();
+    }
+});
+
+function togglePaymentMethod() {
+    const method = document.getElementById('paymentMethod').value;
+    if (method === 'bnb') {
+        document.getElementById('rateInfo').textContent = '1 BNB = 120,000,000,000 FDAI';
+        document.getElementById('amount').placeholder = 'Enter amount (e.g., 0.1 BNB)';
+        document.getElementById('amount').step = '0.01';
+        document.getElementById('amount').min = '0.01';
+    } else {
+        document.getElementById('rateInfo').textContent = '1 USDT = 200,000,000 FDAI';
+        document.getElementById('amount').placeholder = 'Enter amount (e.g., 1 USDT)';
+        document.getElementById('amount').step = '1';
+        document.getElementById('amount').min = '1';
+    }
+    calculateFDAI();
+}
+
+async function connectWallet() {
+    try {
+        if (!window.ethereum) {
+            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+                window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+            } else {
+                window.open("https://metamask.io/download.html", "_blank");
+            }
+            return;
+        }
+        
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        userAddress = accounts[0];
+        web3 = new Web3(window.ethereum);
+        
+        const usdtAbi = [{
+            "constant": true,
+            "inputs": [{"name": "_owner", "type": "address"}],
+            "name": "balanceOf",
+            "outputs": [{"name": "balance", "type": "uint256"}],
+            "type": "function"
+        }, {
+            "constant": false,
+            "inputs": [
+                {"name": "_to", "type": "address"},
+                {"name": "_value", "type": "uint256"}
+            ],
+            "name": "transfer",
+            "outputs": [{"name": "success", "type": "bool"}],
+            "type": "function"
+        }];
+
+        usdtContract = new web3.eth.Contract(usdtAbi, CONFIG.USDT_CONTRACT);
+
+        const chainId = await web3.eth.getChainId();
+        if (chainId !== CONFIG.BSC_CHAIN_ID) {
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: `0x${CONFIG.BSC_CHAIN_ID.toString(16)}` }],
+                });
+            } catch (switchError) {
+                if (switchError.code === 4902) {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: `0x${CONFIG.BSC_CHAIN_ID.toString(16)}`,
+                            chainName: 'Binance Smart Chain',
+                            nativeCurrency: {
+                                name: 'BNB',
+                                symbol: 'BNB',
+                                decimals: 18
+                            },
+                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                            blockExplorerUrls: ['https://bscscan.com']
+                        }],
+                    });
+                } else {
+                    throw switchError;
+                }
+            }
+        }
+
+        const bnbBalance = await web3.eth.getBalance(userAddress);
+        const usdtBalance = await usdtContract.methods.balanceOf(userAddress).call();
+
+        document.getElementById('walletAddress').textContent = userAddress;
+        document.getElementById('bnbBalance').textContent = web3.utils.fromWei(bnbBalance, 'ether');
+        document.getElementById('usdtBalance').textContent = web3.utils.fromWei(usdtBalance, 'ether');
+        document.getElementById('walletInfo').style.display = 'block';
+
+        document.getElementById('buyBtn').disabled = false;
+    } catch (error) {
+        console.error("Error connecting wallet:", error);
+        alert("Failed to connect wallet. Please try again.");
+    }
+}
+
+function calculateFDAI() {
+    const amount = document.getElementById('amount').value;
+    const method = document.getElementById('paymentMethod').value;
+    const fdaiAmountSpan = document.getElementById('fdaiAmount');
+
+    if (!amount || amount <= 0) {
+        fdaiAmountSpan.textContent = '0';
+        return;
+    }
+
+    let fdaiAmount;
+    if (method === 'bnb') {
+        fdaiAmount = amount * CONFIG.TOKENS_PER_BNB;
+    } else {
+        fdaiAmount = amount * CONFIG.TOKENS_PER_USDT;
+    }
+
+    fdaiAmountSpan.textContent = fdaiAmount.toLocaleString();
+}
+
+async function sendPayment() {
+    const amount = document.getElementById('amount').value;
+    const method = document.getElementById('paymentMethod').value;
+
+    if (!amount || amount <= 0) {
+        alert("Please enter a valid amount.");
+        return;
+    }
+
+    try {
+        if (method === 'bnb') {
+            const weiAmount = web3.utils.toWei(amount, 'ether');
+            await web3.eth.sendTransaction({
+                from: userAddress,
+                to: CONFIG.RECEIVE_WALLET,
+                value: weiAmount
+            });
+        } else {
+            const weiAmount = web3.utils.toWei(amount, 'ether');
+            await usdtContract.methods.transfer(CONFIG.RECEIVE_WALLET, weiAmount).send({ from: userAddress });
+        }
+
+        alert("Payment successful! Your tokens will be reflected in your wallet within 24 hours.");
+    } catch (error) {
+        console.error("Payment error:", error);
+        alert("Payment failed. Please try again.");
+    }
+}
