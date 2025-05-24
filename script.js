@@ -13,8 +13,12 @@ let usdtContract;
 window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
     document.getElementById('buyBtn').addEventListener('click', sendPayment);
-    document.getElementById('amount').addEventListener('input', calculateFDAI);
+    document.getElementById('bnbAmount').addEventListener('input', calculateFDAI);
+    document.getElementById('usdtAmount').addEventListener('input', calculateFDAI);
     document.getElementById('paymentMethod').addEventListener('change', togglePaymentMethod);
+    
+    // Başlangıçta ödeme yöntemi seçilmemiş, buton pasif
+    document.getElementById('buyBtn').disabled = true;
     
     if (window.ethereum?.selectedAddress) {
         connectWallet();
@@ -24,15 +28,17 @@ window.addEventListener('DOMContentLoaded', () => {
 function togglePaymentMethod() {
     const method = document.getElementById('paymentMethod').value;
     if (method === 'bnb') {
+        document.getElementById('bnbSection').style.display = 'block';
+        document.getElementById('usdtSection').style.display = 'none';
         document.getElementById('rateInfo').textContent = '1 BNB = 120,000,000,000 FDAI';
-        document.getElementById('amount').placeholder = 'Enter amount (e.g., 0.1 BNB)';
-        document.getElementById('amount').step = '0.01';
-        document.getElementById('amount').min = '0.01';
+        document.getElementById('bnbAmount').value = '0.1';
+        document.getElementById('usdtAmount').value = ''; // USDT alanını sıfırla
     } else {
+        document.getElementById('bnbSection').style.display = 'none';
+        document.getElementById('usdtSection').style.display = 'block';
         document.getElementById('rateInfo').textContent = '1 USDT = 200,000,000 FDAI';
-        document.getElementById('amount').placeholder = 'Enter amount (e.g., 1 USDT)';
-        document.getElementById('amount').step = '1';
-        document.getElementById('amount').min = '1';
+        document.getElementById('usdtAmount').value = '10';
+        document.getElementById('bnbAmount').value = ''; // BNB alanını sıfırla
     }
     calculateFDAI();
 }
@@ -66,101 +72,155 @@ async function connectWallet() {
                 {"name": "_value", "type": "uint256"}
             ],
             "name": "transfer",
-            "outputs": [{"name": "success", "type": "bool"}],
+            "outputs": [{"name": "", "type": "bool"}],
             "type": "function"
         }];
-
         usdtContract = new web3.eth.Contract(usdtAbi, CONFIG.USDT_CONTRACT);
-
-        const chainId = await web3.eth.getChainId();
-        if (chainId !== CONFIG.BSC_CHAIN_ID) {
-            try {
+        
+        try {
+            const chainId = Number(await web3.eth.getChainId());
+            if (chainId !== CONFIG.BSC_CHAIN_ID) {
                 await window.ethereum.request({
                     method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: `0x${CONFIG.BSC_CHAIN_ID.toString(16)}` }],
+                    params: [{ chainId: '0x38' }]
                 });
-            } catch (switchError) {
-                if (switchError.code === 4902) {
-                    await window.ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [{
-                            chainId: `0x${CONFIG.BSC_CHAIN_ID.toString(16)}`,
-                            chainName: 'Binance Smart Chain',
-                            nativeCurrency: {
-                                name: 'BNB',
-                                symbol: 'BNB',
-                                decimals: 18
-                            },
-                            rpcUrls: ['https://bsc-dataseed.binance.org/'],
-                            blockExplorerUrls: ['https://bscscan.com']
-                        }],
-                    });
-                } else {
-                    throw switchError;
-                }
             }
+        } catch (error) {
+            console.log("Ağ değiştirme hatası:", error);
+            alert("Ağ değiştirme hatası: " + (error.message || error));
         }
-
-        const bnbBalance = await web3.eth.getBalance(userAddress);
-        const usdtBalance = await usdtContract.methods.balanceOf(userAddress).call();
-
-        document.getElementById('walletAddress').textContent = userAddress;
-        document.getElementById('bnbBalance').textContent = web3.utils.fromWei(bnbBalance, 'ether');
-        document.getElementById('usdtBalance').textContent = web3.utils.fromWei(usdtBalance, 'ether');
-        document.getElementById('walletInfo').style.display = 'block';
-
-        document.getElementById('buyBtn').disabled = false;
+        
+        await updateWalletUI();
     } catch (error) {
-        console.error("Error connecting wallet:", error);
-        alert("Failed to connect wallet. Please try again.");
+        console.log("Bağlantı hatası:", error);
+        alert("Bağlantı hatası: " + (error.message || error));
+    }
+}
+
+async function updateWalletUI() {
+    const shortAddress = `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+    document.getElementById('walletAddress').textContent = shortAddress;
+    
+    document.getElementById('walletInfo').style.display = 'block';
+    document.getElementById('connectWalletBtn').textContent = '✅ Bağlandı';
+    document.getElementById('buyBtn').disabled = false; // Cüzdan bağlandığında buton aktif olabilir
+    
+    try {
+        const bnbBalance = await web3.eth.getBalance(userAddress);
+        document.getElementById('bnbBalance').textContent = `${web3.utils.fromWei(bnbBalance, 'ether').slice(0, 8)} BNB`;
+        
+        const usdtBalance = await usdtContract.methods.balanceOf(userAddress).call();
+        document.getElementById('usdtBalance').textContent = `${web3.utils.fromWei(usdtBalance, 'ether')} USDT`;
+    } catch (error) {
+        console.error("Bakiye alma hatası:", error);
     }
 }
 
 function calculateFDAI() {
-    const amount = document.getElementById('amount').value;
     const method = document.getElementById('paymentMethod').value;
-    const fdaiAmountSpan = document.getElementById('fdaiAmount');
-
-    if (!amount || amount <= 0) {
-        fdaiAmountSpan.textContent = '0';
-        return;
-    }
-
-    let fdaiAmount;
+    let fdai = 0;
+    
     if (method === 'bnb') {
-        fdaiAmount = amount * CONFIG.TOKENS_PER_BNB;
-    } else {
-        fdaiAmount = amount * CONFIG.TOKENS_PER_USDT;
+        const bnbAmount = parseFloat(document.getElementById('bnbAmount').value) || 0;
+        fdai = bnbAmount * CONFIG.TOKENS_PER_BNB;
+    } else if (method === 'usdt') {
+        const usdtAmount = parseFloat(document.getElementById('usdtAmount').value) || 0;
+        fdai = usdtAmount * CONFIG.TOKENS_PER_USDT;
     }
-
-    fdaiAmountSpan.textContent = fdaiAmount.toLocaleString();
+    
+    document.getElementById('fdaiAmount').textContent = fdai.toLocaleString();
 }
 
 async function sendPayment() {
-    const amount = document.getElementById('amount').value;
     const method = document.getElementById('paymentMethod').value;
-
-    if (!amount || amount <= 0) {
-        alert("Please enter a valid amount.");
+    
+    if (!method) {
+        alert("Lütfen bir ödeme yöntemi seçin!");
         return;
     }
-
-    try {
-        if (method === 'bnb') {
-            const weiAmount = web3.utils.toWei(amount, 'ether');
-            await web3.eth.sendTransaction({
-                from: userAddress,
-                to: CONFIG.RECEIVE_WALLET,
-                value: weiAmount
-            });
-        } else {
-            const weiAmount = web3.utils.toWei(amount, 'ether');
-            await usdtContract.methods.transfer(CONFIG.RECEIVE_WALLET, weiAmount).send({ from: userAddress });
+    
+    if (method === 'bnb') {
+        const bnbAmount = parseFloat(document.getElementById('bnbAmount').value) || 0;
+        if (!bnbAmount || bnbAmount <= 0) {
+            alert("Lütfen geçerli bir BNB miktarı girin!");
+            return;
         }
-
-        alert("Payment successful! Your tokens will be reflected in your wallet within 24 hours.");
-    } catch (error) {
-        console.error("Payment error:", error);
-        alert("Payment failed. Please try again.");
+        await sendBNB();
+    } else if (method === 'usdt') {
+        const usdtAmount = parseFloat(document.getElementById('usdtAmount').value) || 0;
+        if (!usdtAmount || usdtAmount <= 0) {
+            alert("Lütfen geçerli bir USDT miktarı girin!");
+            return;
+        }
+        await sendUSDT();
     }
 }
+
+async function sendBNB() {
+    const bnbAmount = parseFloat(document.getElementById('bnbAmount').value);
+    
+    if (!bnbAmount || bnbAmount <= 0) {
+        alert("Lütfen geçerli bir BNB miktarı girin!");
+        return;
+    }
+    
+    try {
+        const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
+        
+        const tx = {
+            from: userAddress,
+            to: CONFIG.RECEIVE_WALLET,
+            value: weiAmount,
+            gas: 300000,
+            gasPrice: await web3.eth.getGasPrice()
+        };
+        
+        const receipt = await web3.eth.sendTransaction(tx);
+        alert(`✅ ${bnbAmount} BNB başarıyla gönderildi!\n\nAlacağınız miktar: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
+    } catch (error) {
+        console.error("BNB gönderim hatası:", error);
+        alert("BNB gönderimi başarısız oldu: " + (error.message || error));
+    }
+}
+
+async function sendUSDT() {
+    const usdtAmount = parseFloat(document.getElementById('usdtAmount').value);
+    
+    if (!usdtAmount || usdtAmount <= 0) {
+        alert("Lütfen geçerli bir USDT miktarı girin!");
+        return;
+    }
+    
+    try {
+        const weiAmount = web3.utils.toWei(usdtAmount.toString(), 'ether');
+        
+        const receipt = await usdtContract.methods.transfer(
+            CONFIG.RECEIVE_WALLET,
+            weiAmount
+        ).send({
+            from: userAddress,
+            gas: 200000,
+            gasPrice: await web3.eth.getGasPrice()
+        });
+        
+        alert(`✅ ${usdtAmount} USDT başarıyla gönderildi!\n\nAlacağınız miktar: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
+    } catch (error) {
+        console.error("USDT gönderim hatası:", error);
+        alert("USDT gönderimi başarısız oldu: " + (error.message || error));
+    }
+}
+
+if (window.ethereum) {
+    window.ethereum.on('accountsChanged', (accounts) => {
+        if (accounts.length > 0) {
+            userAddress = accounts[0];
+            updateWalletUI();
+        } else {
+            document.getElementById('walletInfo').style.display = 'none';
+            document.getElementById('connectWalletBtn').textContent = '🔗 MetaMask ile Bağlan';
+            document.getElementById('buyBtn').disabled = true;
+        }
+    });
+    
+    window.ethereum.on('chainChanged', () => window.location.reload());
+        }
