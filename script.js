@@ -237,4 +237,4 @@ if (window.ethereum) {
     });
     
     window.ethereum.on('chainChanged', () => window.location.reload());
-            }
+}
