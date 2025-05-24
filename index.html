@@ -388,100 +388,91 @@ A surprise <strong>CEX listing</strong> is also part of our upcoming plans.
     USDT_CONTRACT: "0x55d398326f99059fF775485246999027B3197955"
   };
 </script>
+let web3;
+let userAddress = "";
+let usdtContract;
 
-        let web3;
-        let userAddress = "";
-        let usdtContract;
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+    document.getElementById('buyBtn').addEventListener('click', sendPayment);
+    document.getElementById('amount').addEventListener('input', calculateFDAI);
+    document.getElementById('paymentMethod').addEventListener('change', togglePaymentMethod);
+    if (window.ethereum?.selectedAddress) connectWallet();
+});
 
-        window.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
-            document.getElementById('buyBtn').addEventListener('click', sendPayment);
-            document.getElementById('amount').addEventListener('input', calculateFDAI);
-            document.getElementById('paymentMethod').addEventListener('change', togglePaymentMethod);
-            
-            if (window.ethereum?.selectedAddress) {
-                connectWallet();
-            }
-        });
+function togglePaymentMethod() {
+    const method = document.getElementById('paymentMethod').value;
+    if (method === 'bnb') {
+        document.getElementById('rateInfo').textContent = '1 BNB = 120,000,000,000 FDAI';
+        document.getElementById('amount').placeholder = 'Enter amount (e.g., 0.1 BNB)';
+        document.getElementById('amount').step = '0.01';
+        document.getElementById('amount').min = '0.01';
+    } else {
+        document.getElementById('rateInfo').textContent = '1 USDT = 200,000,000 FDAI';
+        document.getElementById('amount').placeholder = 'Enter amount (e.g., 1 USDT)';
+        document.getElementById('amount').step = '1';
+        document.getElementById('amount').min = '1';
+    }
+    calculateFDAI();
+}
 
-        function togglePaymentMethod() {
-            const method = document.getElementById('paymentMethod').value;
-            if (method === 'bnb') {
-                document.getElementById('rateInfo').textContent = '1 BNB = 120,000,000,000 FDAI';
-                document.getElementById('amount').placeholder = 'Enter amount (e.g., 0.1 BNB)';
-                document.getElementById('amount').step = '0.01';
-                document.getElementById('amount').min = '0.01';
+async function connectWallet() {
+    try {
+        if (!window.ethereum) {
+            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+                window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
             } else {
-                document.getElementById('rateInfo').textContent = '1 USDT = 200,000,000 FDAI';
-                document.getElementById('amount').placeholder = 'Enter amount (e.g., 1 USDT)';
-                document.getElementById('amount').step = '1';
-                document.getElementById('amount').min = '1';
+                window.open("https://metamask.io/download.html", "_blank");
             }
-            calculateFDAI();
+            return;
         }
-
-        async function connectWallet() {
-            try {
-                if (!window.ethereum) {
-                    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                        const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-                        window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
-                    } else {
-                        window.open("https://metamask.io/download.html", "_blank");
-                    }
-                    return;
-                }
-                
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                userAddress = accounts[0];
-                web3 = new Web3(window.ethereum);
-                
-                const usdtAbi = [{
-                    "constant": true,
-                    "inputs": [{"name": "_owner", "type": "address"}],
-                    "name": "balanceOf",
-                    "outputs": [{"name": "balance", "type": "uint256"}],
-                    "type": "function"
-                }, {
-                    "constant": false,
-                    "inputs": [
-                        {"name": "_to", "type": "address"},
-                        {"name": "_value", "type": "uint256"}
-                    ],
-                    "name": "transfer",
-                    "outputs": [{"name": "", "type": "bool"}],
-                    "type": "function"
-                }];
-                usdtContract = new web3.eth.Contract(usdtAbi, CONFIG.USDT_CONTRACT);
-                
-                try {
-                    const chainId = Number(await web3.eth.getChainId());
-                    if (chainId !== CONFIG.BSC_CHAIN_ID) {
-                        await window.ethereum.request({
-                            method: 'wallet_switchEthereumChain',
-                            params: [{ chainId: '0x38' }]
-                        });
-                    }
-                } catch (error) {
-                    console.log("Network switch failed:", error);
-                    alert("Network switch failed: " + (error.message || error));
-                }
-                
-                await updateWalletUI();
-            } catch (error) {
-                console.log("Connection error:", error);
-                alert("Connection error: " + (error.message || error));
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        userAddress = accounts[0];
+        web3 = new Web3(window.ethereum);
+        const usdtAbi = [{
+            "constant": true,
+            "inputs": [{"name": "_owner", "type": "address"}],
+            "name": "balanceOf",
+            "outputs": [{"name": "balance", "type": "uint256"}],
+            "type": "function"
+        }, {
+            "constant": false,
+            "inputs": [{"name": "_to", "type": "address"}, {"name": "_value", "type": "uint256"}],
+            "name": "transfer",
+            "outputs": [{"name": "", "type": "bool"}],
+            "type": "function"
+        }];
+        usdtContract = new web3.eth.Contract(usdtAbi, CONFIG.USDT_CONTRACT);
+        try {
+            const chainId = Number(await web3.eth.getChainId());
+            if (chainId !== CONFIG.BSC_CHAIN_ID) {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: '0x38' }]
+                });
             }
+        } catch (error) {
+            console.log("Network switch failed:", error);
+            alert("Network switch failed: " + (error.message || error));
         }
+        await updateWalletUI();
+    } catch (error) {
+        console.log("Connection error:", error);
+        alert("Connection error: " + (error.message || error));
+    }
+}
 
-        async function updateWalletUI() {
-            const shortAddress = `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
-            document.getElementById('walletAddress').textContent = shortAddress;
-            
-            document.getElementById('walletInfo').style.display = 'block';
-            document.getElementById('connectWalletBtn').textContent = '✅ Connected';
-            document.getElementById('buyBtn').disabled = false;
-            
-            try {
-                const bnbBalance = await web3.eth.getBalance(userAddress);
-                document.getElementById('bnbBalance').textContent = `${web3.utils.fromWei(bnbBalance, 'ether').slice(0, 8)} BNB
+async function updateWalletUI() {
+    const shortAddress = `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+    document.getElementById('walletAddress').textContent = shortAddress;
+    document.getElementById('walletInfo').style.display = 'block';
+    document.getElementById('connectWalletBtn').textContent = '✅ Connected';
+    document.getElementById('buyBtn').disabled = false;
+    try {
+        const bnbBalance = await web3.eth.getBalance(userAddress);
+        document.getElementById('bnbBalance').textContent = `${web3.utils.fromWei(bnbBalance, 'ether').slice(0, 8)} BNB`;
+    } catch (error) {
+        console.log("Balance fetch error:", error);
+    }
+}
