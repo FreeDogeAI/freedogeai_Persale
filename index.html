@@ -96,6 +96,19 @@
         }
     </style>
 </head>
+    <div>
+  <button onclick="toggleDropdown()" id="langButton">
+    <img id="current-flag" src="https://flagcdn.com/w40/gb.png" width="24"> Language ▼
+  </button>
+  <div id="langMenu" style="display:none; background:#111; padding:5px; border:1px solid #333;">
+    <a href="#" onclick="changeLanguage('en')">
+      <img src="https://flagcdn.com/w40/gb.png" width="20"> English
+    </a><br>
+    <a href="#" onclick="changeLanguage('tr')">
+      <img src="https://flagcdn.com/w40/tr.png" width="20"> Türkçe
+    </a>
+  </div>
+    </div>
 <body>
     <div id="metamaskRedirect" class="metamask-redirect">
         <a id="openInMetamask" style="color: #FFD700; text-decoration: none;"></a>
@@ -679,6 +692,38 @@ A surprise <strong>CEX listing</strong> is also part of our upcoming plans.
             
             window.ethereum.on('chainChanged', () => window.location.reload());
         }
+    </script>
+    <script>
+function toggleDropdown() {
+  const menu = document.getElementById("langMenu");
+  menu.style.display = menu.style.display === "none" ? "block" : "none";
+}
+
+const translations = {
+  tr: {
+    header: "Hoş geldiniz",
+    buyButton: "Token Satın Al",
+    connectWallet: "Cüzdanı Bağla",
+    about: "Hakkında"
+  }
+};
+
+function changeLanguage(lang) {
+  if (lang === 'en') {
+    document.getElementById("current-flag").src = "https://flagcdn.com/w40/gb.png";
+    location.reload();
+    return;
+  }
+
+  document.getElementById("current-flag").src = "https://flagcdn.com/w40/tr.png";
+  const t = translations[lang];
+  for (const key in t) {
+    const el = document.getElementById(key);
+    if (el) el.textContent = t[key];
+  }
+
+  document.getElementById("langMenu").style.display = "none";
+}
     </script>
 </body>
 </html>
