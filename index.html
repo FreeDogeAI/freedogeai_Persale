@@ -684,13 +684,5 @@ A surprise <strong>CEX listing</strong> is also part of our upcoming plans.
             
             window.ethereum.on('chainChanged', () => window.location.reload());
         }
-        <script>
-function copyAddress() {
-    const addressText = document.getElementById("contractAddress").innerText;
-    navigator.clipboard.writeText(addressText).then(() => {
-        alert("Contract address copied!");
-    });
-}
-    </script>
 </body>
 </html>
