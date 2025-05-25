@@ -115,10 +115,15 @@
             border-color: #00FFFF;
             box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
-        <div class="wallet-info" style="background: rgba(0, 0, 0, 0.85); border: 2px dashed #00FFCC; color: #00FFCC; font-weight: bold; font-size: 16px; padding: 15px; border-radius: 10px; text-align: center;">
-    <span id="contractAddress">0x8161698A74F2ea0035B9912ED60140893Ac0f39C</span>
-    <button onclick="copyContract()" class="copy-btn">📋 Copy</button>
-</div>
+        wallet-info {
+            background-color: #000000;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            word-break: break-word;
+            font-family: monospace;
+            border: 1px solid #FFD700;
+            color: #FFD700;
         }
         .wallet-info::before {
             content: '';
