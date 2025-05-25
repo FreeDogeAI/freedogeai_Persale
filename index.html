@@ -16,7 +16,6 @@
             overflow-x: hidden;
             position: relative;
         }
-        /* Space-themed animated background */
         body::before {
             content: '';
             position: fixed;
@@ -24,7 +23,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png'), radial-gradient(circle at 50% 50%, rgba(0, 255, 204, 0.2), transparent 70%);
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
             opacity: 0.3;
             z-index: -1;
             animation: starrySky 100s linear infinite;
@@ -40,14 +39,13 @@
             padding: 25px;
             border-radius: 16px;
             border: 2px solid #00FFCC;
-            box-shadow: 0 0 20px 5px rgba(0, 255, 204, 0.5);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
             position: relative;
             z-index: 1;
         }
         .logo-container {
             text-align: center;
             margin-bottom: 20px;
-            position: relative;
         }
         .logo-container img {
             width: 150px;
@@ -74,21 +72,6 @@
             width: 100%;
             margin-top: 10px;
             transition: transform 0.3s, box-shadow 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-        button::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: 0.5s;
-        }
-        button:hover::after {
-            left: 100%;
         }
         button:hover {
             transform: translateY(-2px);
@@ -108,12 +91,11 @@
             font-size: 16px;
             background: rgba(34, 34, 34, 0.8);
             color: #FFD700;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: border-color 0.3s;
         }
         input:focus, select:focus {
             outline: none;
             border-color: #00FFFF;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
         .wallet-info {
             background: rgba(0, 0, 0, 0.85);
@@ -124,22 +106,6 @@
             font-family: 'Courier New', monospace;
             border: 1px solid #00FFCC;
             color: #FFD700;
-            position: relative;
-            overflow: hidden;
-        }
-        .wallet-info::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(0, 255, 204, 0.1), transparent);
-            animation: scan 3s linear infinite;
-        }
-        @keyframes scan {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
         }
         .info-box {
             background: rgba(0, 0, 0, 0.85);
@@ -148,11 +114,6 @@
             border: 1px solid #00FFCC;
             color: #FFD700;
             margin-top: 20px;
-            position: relative;
-            transition: transform 0.3s;
-        }
-        .info-box:hover {
-            transform: translateY(-5px);
         }
         .payment-method {
             margin: 15px 0;
@@ -163,17 +124,15 @@
             background: rgba(0, 255, 255, 0.2);
             padding: 2px 4px;
             border-radius: 3px;
-            transition: background 0.3s, color 0.3s;
+            transition: background 0.3s;
         }
         a:hover, u:hover {
             background: rgba(0, 255, 255, 0.4);
-            color: #FFFFFF !important;
         }
         h1, h3 {
             text-align: center;
             text-shadow: 0 0 10px rgba(0, 255, 204, 0.7);
         }
-        /* Floating AI particles */
         .particles {
             position: fixed;
             top: 0;
@@ -193,15 +152,14 @@
             opacity: 0.5;
         }
         @keyframes float {
-            0% { transform: translateY(0) scale(1); opacity: 0.5; }
-            50% { transform: translateY(-50vh) scale(1.5); opacity: 0.8; }
-            100% { transform: translateY(0) scale(1); opacity: 0.5; }
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-50vh); }
+            100% { transform: translateY(0); }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Floating AI Particles -->
     <div class="particles">
         <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
         <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
@@ -263,13 +221,11 @@
             </div>
         </div>
 
-        <!-- About Section -->
         <div class="info-box">
             <h3>About FreeDogeAI</h3>
             <p>FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!</p>
         </div>
 
-        <!-- Roadmap Section -->
         <div class="info-box">
             <h3>Roadmap</h3>
             <ul>
@@ -305,7 +261,6 @@
             </ul>
         </div>
 
-        <!-- Tokenomics Section -->
         <div class="info-box">
             <h3>Tokenomics</h3>
             <table style="width:100%; color:#FFD700; border: 1px solid #00FFCC;">
@@ -322,7 +277,6 @@
             <p><strong>Locked Supply:</strong> 600,000,000,000,000 FDAI</p>
         </div>
 
-        <!-- Locked Release Schedule -->
         <div class="info-box">
             <h3>Locked Token Release Schedule</h3>
             <ul>
@@ -335,7 +289,6 @@
             </ul>
         </div>
 
-        <!-- Community Section -->
         <div class="info-box">
             <h3>Join Our Community</h3>
             <p>
@@ -344,7 +297,6 @@
             </p>
         </div>
 
-        <!-- Whitepaper Download -->
         <div class="info-box">
             <h3>Download FreeDogeAI Whitepaper</h3>
             <p><a href="FreeDogeAI%20-%20Whitepaper.pdf" download>Click here to download the whitepaper</a></p>
@@ -494,4 +446,44 @@
             }
         }
 
-        async function sen
+        async function sendBNB() {
+            const bnbAmount = parseFloat(document.getElementById('amount').value);
+            
+            try {
+                const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
+                
+                const tx = {
+                    from: userAddress,
+                    to: CONFIG.RECEIVE_WALLET,
+                    value: weiAmount,
+                    gas: 300000,
+                    gasPrice: await web3.eth.getGasPrice()
+                };
+                
+                const receipt = await web3.eth.sendTransaction(tx);
+                alert(`✅ ${bnbAmount} BNB successfully sent!\n\nYou will receive: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
+                
+            } catch (error) {
+                console.error("Transaction failed:", error);
+                alert("Transaction failed: " + (error.message || error));
+            }
+        }
+
+        async function sendUSDT() {
+            const usdtAmount = parseFloat(document.getElementById('amount').value);
+            
+            try {
+                const weiAmount = web3.utils.toWei(usdtAmount.toString(), 'ether');
+                
+                const receipt = await usdtContract.methods.transfer(
+                    CONFIG.RECEIVE_WALLET,
+                    weiAmount
+                ).send({
+                    from: userAddress,
+                    gas: 200000,
+                    gasPrice: await web3.eth.getGasPrice()
+                });
+                
+                alert(`✅ ${usdtAmount} USDT successfully sent!\n\nYou will receive: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
+                
+            
