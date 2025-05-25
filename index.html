@@ -523,7 +523,7 @@ A surprise <strong>CEX listing</strong> is also part of our upcoming plans.
             try {
                 if (!window.ethereum) {
                     if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-  window.open('https://metamask.app.link/dapp/freedogeai.com', '_blank');
+  window.location.href = 'https://metamask.app.link/dapp/freedogeai.com';
   return;
   }
                     } else {
