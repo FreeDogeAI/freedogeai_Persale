@@ -674,6 +674,9 @@ A surprise <strong>CEX listing</strong> is also part of our upcoming plans.
                 if (accounts.length > 0) {
                     userAddress = accounts[0];
                     updateWalletUI();
+                    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    window.location.href = 'https://metamask.app.link/dapp/freedogeai.com';
+                    }
                 } else {
                     document.getElementById('walletInfo').style.display = 'none';
                     document.getElementById('connectWalletBtn').textContent = '🔗 Connect with MetaMask';
