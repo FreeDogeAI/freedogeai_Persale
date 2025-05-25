@@ -115,9 +115,10 @@
             border-color: #00FFFF;
             box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
-        <video autoplay muted loop id="spaceBg">
-  <source src="https://cdn.pixabay.com/vimeo/285019214/space-15034.mp4?width=640&hash=ed0dbd3ef9c1cf1b3c91d627874b06df10a308e7" type="video/mp4">
-</video>
+        <div class="wallet-info" style="background: rgba(0, 0, 0, 0.85); border: 2px dashed #00FFCC; color: #00FFCC; font-weight: bold; font-size: 16px; padding: 15px; border-radius: 10px; text-align: center;">
+    <span id="contractAddress">0x8161698A74F2ea0035B9912ED60140893Ac0f39C</span>
+    <button onclick="copyContract()" class="copy-btn">📋 Copy</button>
+</div>
         }
         .wallet-info::before {
             content: '';
