@@ -6,7 +6,6 @@
     <title>FreeDogeAI Presale</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <style>
         :root {
             --primary: #6e41e2;
@@ -50,7 +49,10 @@
         
         .logo img {
             height: 50px;
+            width: 50px;
             margin-right: 15px;
+            border-radius: 50%;
+            object-fit: cover;
         }
         
         .logo h1 {
@@ -107,6 +109,24 @@
             margin-bottom: 30px;
             line-height: 1.6;
             opacity: 0.9;
+        }
+        
+        .whitepaper-btn {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .whitepaper-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
         }
         
         .token-info {
@@ -283,88 +303,6 @@
             box-shadow: 0 8px 20px rgba(110, 65, 226, 0.6);
         }
         
-        .wallet-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .wallet-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .wallet-content {
-            background: var(--dark);
-            padding: 30px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        
-        .wallet-content h3 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .wallet-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        .wallet-option {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .wallet-option:hover {
-            background: rgba(110, 65, 226, 0.2);
-            border-color: var(--primary);
-        }
-        
-        .wallet-option img {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 10px;
-        }
-        
-        .wallet-option p {
-            font-weight: 600;
-        }
-        
         .connected-wallet {
             display: none;
             align-items: center;
@@ -391,20 +329,6 @@
             margin-right: 8px;
         }
         
-        .success-message {
-            display: none;
-            background: rgba(40, 167, 69, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-align: center;
-            border: 1px solid var(--success);
-        }
-        
-        .success-message.active {
-            display: block;
-        }
-        
         @media (max-width: 768px) {
             .hero {
                 flex-direction: column;
@@ -423,10 +347,6 @@
             .presale-options {
                 flex-direction: column;
             }
-            
-            .wallet-options {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -434,7 +354,7 @@
     <div class="container">
         <header>
             <div class="logo">
-                <img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png" alt="FreeDogeAI Logo">
+                <img src="logo.png" alt="FreeDogeAI Logo">
                 <h1>FreeDogeAI</h1>
             </div>
             <button class="connect-wallet" id="connectWallet">Connect Wallet</button>
@@ -448,6 +368,8 @@
             <div class="hero-content">
                 <h2>Join the <span>FreeDogeAI</span> Revolution</h2>
                 <p>The future of decentralized AI-powered meme tokens is here. Get in early on the presale and be part of the next big thing in crypto.</p>
+                
+                <a href="FreeDogeAI - Whitepaper.pdf" class="whitepaper-btn" download>Download Whitepaper</a>
                 
                 <div class="token-info">
                     <div class="token-card">
@@ -477,7 +399,7 @@
         <div class="presale-box">
             <div class="presale-header">
                 <h3>FDAI Presale</h3>
-                <div class="timer" id="presaleTimer">00:00:00:00</div>
+                <div class="timer" id="presaleTimer">90:00:00:00</div>
             </div>
             
             <div class="presale-options">
@@ -509,10 +431,6 @@
                 </div>
                 
                 <button class="buy-button" id="buyWithBnb">Buy FDAI with BNB</button>
-                
-                <div class="success-message" id="bnbSuccess">
-                    Transaction successful! Your FDAI tokens will be sent to your wallet shortly.
-                </div>
             </div>
             
             <div class="presale-content" id="usdt-tab">
@@ -539,35 +457,6 @@
                 </div>
                 
                 <button class="buy-button" id="buyWithUsdt">Buy FDAI with USDT</button>
-                
-                <div class="success-message" id="usdtSuccess">
-                    Transaction successful! Your FDAI tokens will be sent to your wallet shortly.
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="wallet-modal" id="walletModal">
-        <div class="wallet-content">
-            <button class="close-modal" id="closeModal">&times;</button>
-            <h3>Connect Wallet</h3>
-            <div class="wallet-options">
-                <div class="wallet-option" id="metamask">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
-                    <p>MetaMask</p>
-                </div>
-                <div class="wallet-option" id="walletconnect">
-                    <img src="https://altcoinsbox.com/wp-content/uploads/2023/03/wallet-connect-logo.png" alt="WalletConnect">
-                    <p>WalletConnect</p>
-                </div>
-                <div class="wallet-option" id="trustwallet">
-                    <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet">
-                    <p>Trust Wallet</p>
-                </div>
-                <div class="wallet-option" id="binance">
-                    <img src="https://seeklogo.com/images/B/binance-chain-logo-D87367ACD6-seeklogo.com.png" alt="Binance Chain">
-                    <p>Binance Chain</p>
-                </div>
             </div>
         </div>
     </div>
@@ -585,18 +474,126 @@
         const connectWalletBtn = document.getElementById('connectWallet');
         const connectedWallet = document.getElementById('connectedWallet');
         const walletAddress = document.getElementById('walletAddress');
-        const walletModal = document.getElementById('walletModal');
-        const closeModal = document.getElementById('closeModal');
-        const presaleTabs = document.querySelectorAll('.presale-tab');
-        const presaleContents = document.querySelectorAll('.presale-content');
         const bnbAmountInput = document.getElementById('bnb-amount');
         const usdtAmountInput = document.getElementById('usdt-amount');
         const fdaiReceiveBnb = document.getElementById('fdai-receive-bnb');
         const fdaiReceiveUsdt = document.getElementById('fdai-receive-usdt');
         const buyWithBnbBtn = document.getElementById('buyWithBnb');
         const buyWithUsdtBtn = document.getElementById('buyWithUsdt');
-        const bnbSuccess = document.getElementById('bnbSuccess');
-        const usdtSuccess = document.getElementById('usdtSuccess');
+        const presaleTabs = document.querySelectorAll('.presale-tab');
+        const presaleContents = document.querySelectorAll('.presale-content');
         
         // Tab switching
-  
+        presaleTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                presaleTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const tabId = tab.getAttribute('data-tab');
+                presaleContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === `${tabId}-tab`) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+        
+        // Calculate FDAI amounts
+        bnbAmountInput.addEventListener('input', () => {
+            const bnbAmount = parseFloat(bnbAmountInput.value) || 0;
+            const fdaiAmount = bnbAmount * bnbRate;
+            fdaiReceiveBnb.value = fdaiAmount.toLocaleString('en-US') + ' FDAI';
+        });
+        
+        usdtAmountInput.addEventListener('input', () => {
+            const usdtAmount = parseFloat(usdtAmountInput.value) || 0;
+            const fdaiAmount = usdtAmount * usdtRate;
+            fdaiReceiveUsdt.value = fdaiAmount.toLocaleString('en-US') + ' FDAI';
+        });
+        
+        // Wallet connection
+        connectWalletBtn.addEventListener('click', async () => {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const account = accounts[0];
+                    
+                    // Shorten address for display
+                    const shortenedAddress = `${account.substring(0, 6)}...${account.substring(account.length - 4)}`;
+                    walletAddress.textContent = shortenedAddress;
+                    
+                    // Update UI
+                    connectWalletBtn.style.display = 'none';
+                    connectedWallet.classList.add('active');
+                    
+                    console.log('Connected:', account);
+                } catch (error) {
+                    console.error('Error connecting:', error);
+                    alert('Connection error: ' + error.message);
+                }
+            } else {
+                alert('Please install MetaMask or another Ethereum wallet to continue.');
+            }
+        });
+        
+        // Countdown timer
+        function updateTimer() {
+            const endDate = new Date('2023-12-31T23:59:59').getTime();
+            const now = new Date().getTime();
+            const distance = endDate - now;
+            
+            if (distance < 0) {
+                document.getElementById('presaleTimer').textContent = "Presale Ended";
+                return;
+            }
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('presaleTimer').textContent = 
+                `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+        
+        setInterval(updateTimer, 1000);
+        updateTimer();
+        
+        // Buy buttons
+        buyWithBnbBtn.addEventListener('click', () => {
+            const bnbAmount = parseFloat(bnbAmountInput.value);
+            if (!bnbAmount || bnbAmount <= 0) {
+                alert('Please enter a valid BNB amount');
+                return;
+            }
+            
+            console.log(`Buying with ${bnbAmount} BNB`);
+            alert('Transaction would be processed here in a real implementation');
+        });
+        
+        buyWithUsdtBtn.addEventListener('click', () => {
+            const usdtAmount = parseFloat(usdtAmountInput.value);
+         if (!bnbAmount || bnbAmount <= 0) {
+                alert('Please enter a valid BNB amount');
+                return;
+            }
+            
+            console.log(`Buying with ${bnbAmount} BNB`);
+            alert('Transaction would be processed here in a real implementation');
+        });
+        
+        buyWithUsdtBtn.addEventListener('click', () => {
+            const usdtAmount = parseFloat(usdtAmountInput.value);
+            if (!usdtAmount || usdtAmount <= 0) {
+                alert('Please enter a valid USDT amount');
+                return;
+            }
+            
+            console.log(`Buying with ${usdtAmount} USDT`);
+            alert('Transaction would be processed here in a real implementation');
+        });
+    </script>
+</body>
+</html>
+```
