@@ -524,16 +524,30 @@ A surprise <strong>CEX listing</strong> is also part of our upcoming plans.
         if (!window.ethereum) {
             const userAgent = navigator.userAgent;
 
-            // Eğer mobilse ve sorun çıkaran tarayıcılar kullanılıyorsa
             if (/Android|iPhone|iPad|iPod/i.test(userAgent)) {
-                // MI tarayıcı, Kivi, UCBrowser gibi bozuklar
-                if (/MiuiBrowser|KiviBrowser|UCBrowser/i.test(userAgent)) {
-                    // Direkt sabit linkle yönlendir
-                    window.location.href = 'https://metamask.app.link/dapp/freedogeai.com';
+                // MI, Kivi, UC, tüm mobil tarayıcılar için geçerli
+                if (/MiuiBrowser|KiviBrowser|UCBrowser|SamsungBrowser|DuckDuckGo|OperaMini/i.test(userAgent)) {
+                    // Sorunlu tarayıcı → yönlendir
+                    window.location.href = 'https://metamask.app.link/dapp/';
                 } else {
-                    // Normal cihazlarda yönlendirme
-                    const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-                    window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+                    // Diğer mobil tarayıcılar → yönlendir
+                    window.location.href = 'https://metamask.app.link/dapp/';
+                }
+            } else {
+                // Masaüstü kullanıcıları → MetaMask indir
+                window.open("https://metamask.io/download.html", "_blank");
+            }
+
+            return;
+        }
+
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        userAddress = accounts[0];
+        web3 = new Web3(window.ethereum);
+    } catch (error) {
+        console.error("Bağlantı hatası:", error);
+    }
+        }
                 }
             } else {
                 // Masaüstü cihazsa MetaMask indir sayfası
