@@ -656,71 +656,115 @@
                     console.error('Error connecting to MetaMask:', error);
                 }
             } else {
-                alert('MetaMask is not installed. Please install it to continue.');
+                async function updateWalletUI() {
+            const shortAddress = `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
+            document.getElementById('walletAddress').textContent = shortAddress;
+            
+            document.getElementById('walletInfo').style.display = 'block';
+            document.getElementById('connectWalletBtn').textContent = '✅ Connected';
+            document.getElementById('buyBtn').disabled = false;
+            
+            try {
+                const bnbBalance = await web3.eth.getBalance(userAddress);
+                document.getElementById('bnbBalance').textContent = `${web3.utils.fromWei(bnbBalance, 'ether').slice(0, 8)} BNB`;
+                
+                const usdtBalance = await usdtContract.methods.balanceOf(userAddress).call();
+                document.getElementById('usdtBalance').textContent = `${web3.utils.fromWei(usdtBalance, 'ether')} USDT`;
+            } catch (error) {
+                console.error("Balance fetch error:", error);
             }
-        });
-        
-        // Other wallet connections would be implemented similarly
-        
-        // Countdown timer
-        function updateTimer() {
-            // Set your presale end date here
-            const endDate = new Date('2023-12-31T23:59:59').getTime();
-            const now = new Date().getTime();
-            const distance = endDate - now;
-            
-            if (distance < 0) {
-                document.getElementById('presaleTimer').textContent = "Presale Ended";
-                return;
-            }
-            
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById('presaleTimer').textContent = 
-                `${days}d ${hours}h ${minutes}m ${seconds}s`;
         }
-        
-        setInterval(updateTimer, 1000);
-        updateTimer();
-        
-        // Buy buttons - these would be connected to actual smart contract calls
-        buyWithBnbBtn.addEventListener('click', () => {
-            const bnbAmount = parseFloat(bnbAmountInput.value);
-            if (!bnbAmount || bnbAmount <= 0) {
-                alert('Please enter a valid BNB amount');
+
+        function calculateFDAI() {
+            const method = document.getElementById('paymentMethod').value;
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            let fdai;
+            
+            if (method === 'bnb') {
+                fdai = amount * CONFIG.TOKENS_PER_BNB;
+            } else {
+                fdai = amount * CONFIG.TOKENS_PER_USDT;
+            }
+            
+            document.getElementById('fdaiAmount').textContent = fdai.toLocaleString();
+        }
+
+        async function sendPayment() {
+            const method = document.getElementById('paymentMethod').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            
+            if (!amount || amount <= 0) {
+                alert("Please enter a valid amount!");
                 return;
             }
             
-            // In a real implementation, this would call the smart contract
-            console.log(`Buying with ${bnbAmount} BNB`);
-            
-            // Show success message
-            bnbSuccess.classList.add('active');
-            setTimeout(() => {
-                bnbSuccess.classList.remove('active');
-            }, 5000);
-        });
-        
-        buyWithUsdtBtn.addEventListener('click', () => {
-            const usdtAmount = parseFloat(usdtAmountInput.value);
-            if (!usdtAmount || usdtAmount <= 0) {
-                alert('Please enter a valid USDT amount');
-                return;
+            if (method === 'bnb') {
+                await sendBNB();
+            } else {
+                await sendUSDT();
             }
+        }
+
+        async function sendBNB() {
+            const bnbAmount = parseFloat(document.getElementById('amount').value);
             
-            // In a real implementation, this would call the smart contract
-            console.log(`Buying with ${usdtAmount} USDT`);
+            try {
+                const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
+                
+                const tx = {
+                    from: userAddress,
+                    to: CONFIG.RECEIVE_WALLET,
+                    value: weiAmount,
+                    gas: 300000,
+                    gasPrice: await web3.eth.getGasPrice()
+                };
+                
+                const receipt = await web3.eth.sendTransaction(tx);
+                alert(`✅ ${bnbAmount} BNB successfully sent!\n\nYou will receive: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
+                
+            } catch (error) {
+                console.error("Transaction failed:", error);
+                alert("Transaction failed: " + (error.message || error));
+            }
+        }
+
+        async function sendUSDT() {
+            const usdtAmount = parseFloat(document.getElementById('amount').value);
             
-            // Show success message
-            usdtSuccess.classList.add('active');
-            setTimeout(() => {
-                usdtSuccess.classList.remove('active');
-            }, 5000);
-        });
+            try {
+                const weiAmount = web3.utils.toWei(usdtAmount.toString(), 'ether');
+                
+                const receipt = await usdtContract.methods.transfer(
+                    CONFIG.RECEIVE_WALLET,
+                    weiAmount
+                ).send({
+                    from: userAddress,
+                    gas: 200000,
+                    gasPrice: await web3.eth.getGasPrice()
+                });
+                
+                alert(`✅ ${usdtAmount} USDT successfully sent!\n\nYou will receive: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
+                
+            } catch (error) {
+                console.error("Transaction failed:", error);
+                alert("Transaction failed: " + (error.message || error));
+            }
+        }
+
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (accounts.length > 0) {
+                    userAddress = accounts[0];
+                    updateWalletUI();
+                } else {
+                    document.getElementById('walletInfo').style.display = 'none';
+                    document.getElementById('connectWalletBtn').textContent = '🔗 Connect with MetaMask';
+                    document.getElementById('buyBtn').disabled = true;
+                }
+            });
+            
+            window.ethereum.on('chainChanged', () => window.location.reload());
+        }
     </script>
 </body>
 </html>
-  
