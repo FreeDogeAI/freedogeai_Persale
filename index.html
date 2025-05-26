@@ -579,10 +579,36 @@
                     }
                 }
             } else {
-                // MetaMask not installed, redirect to install page
-                window.open('https://metamask.io/download.html', '_blank');
-            }
-        });
+                async function connectWallet() {
+            try {
+                if (!window.ethereum) {
+                    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                        const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+                        window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+                    } else {
+                        window.open("https://metamask.io/download.html", "_blank");
+                    }
+                    return;
+                }
+                
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                userAddress = accounts[0];
+                web3 = new Web3(window.ethereum); 
+                async function connectWallet() {
+            try {
+                if (!window.ethereum) {
+                    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                        const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+                        window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+                    } else {
+                        window.open("https://metamask.io/download.html", "_blank");
+                    }
+                    return;
+                }
+                
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                userAddress = accounts[0];
+                web3 = new Web3(window.ethereum);
         
         // Auto-connect if already connected
         window.addEventListener('load', async () => {
