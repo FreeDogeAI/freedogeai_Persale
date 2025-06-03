@@ -1,40 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FreeDogeAI - Cüzdan Bağla</title>
+    <!-- Web3.js veya ethers.js ekleyebilirsiniz -->
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <!-- script.js dosyasını çağır -->
+    <script src="script.js" defer></script>
 </head>
 <body>
     <button id="connectWallet">Cüzdanı Bağla</button>
     <p id="walletAddress"></p>
-
-    <script>
-        document.getElementById("connectWallet").addEventListener("click", async () => {
-            if (window.ethereum) {
-                try {
-                    // MetaMask'e bağlan ve hesap adresini al
-                    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-                    const walletAddress = accounts[0];
-                    document.getElementById("walletAddress").textContent = `Bağlı Cüzdan: ${walletAddress}`;
-                    
-                    // İmza isteği örneği (Opsiyonel)
-                    const message = "FreeDogeAI'ye giriş için imza atın";
-                    const signature = await window.ethereum.request({
-                        method: "personal_sign",
-                        params: [message, walletAddress],
-                    });
-                    console.log("İmza alındı:", signature);
-
-                    // Başarılı bağlantı sonrası işlemler...
-                    alert("Cüzdan başarıyla bağlandı!");
-                } catch (error) {
-                    console.error("Bağlantı hatası:", error);
-                }
-            } else {
-                alert("Lütfen MetaMask yükleyin: https://metamask.io/");
-                window.open("https://metamask.io/download.html", "_blank");
-            }
-        });
-    </script>
 </body>
 </html>
