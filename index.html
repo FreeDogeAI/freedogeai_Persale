@@ -484,3 +484,106 @@ A surprise <strong>CEX listing</strong> is also part of our upcoming plans.
             try {
                 const bnbBalance = await web3.eth.getBalance(userAddress);
                 document.getElementById('bnbBalance').textContent = `${web3.utils.fromWei(bnbBalance, 'ether').slice(0, 8)} BNB
+                const bnbBalance = await web3.eth.getBalance(userAddress);
+                document.getElementById('bnbBalance').textContent = `${web3.utils.fromWei(bnbBalance, 'ether').slice(0, 8)} BNB`;
+                
+                const usdtBalance = await usdtContract.methods.balanceOf(userAddress).call();
+                document.getElementById('usdtBalance').textContent = `${web3.utils.fromWei(usdtBalance, 'ether')} USDT`;
+            } catch (error) {
+                console.error("Balance fetch error:", error);
+            }
+        }
+
+        function calculateFDAI() {
+            const method = document.getElementById('paymentMethod').value;
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            let fdai;
+            
+            if (method === 'bnb') {
+                fdai = amount * CONFIG.TOKENS_PER_BNB;
+            } else {
+                fdai = amount * CONFIG.TOKENS_PER_USDT;
+            }
+            
+            document.getElementById('fdaiAmount').textContent = fdai.toLocaleString();
+        }
+
+        async function sendPayment() {
+            const method = document.getElementById('paymentMethod').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            
+            if (!amount || amount <= 0) {
+                alert("Please enter a valid amount!");
+                return;
+            }
+            
+            if (method === 'bnb') {
+                await sendBNB();
+            } else {
+                await sendUSDT();
+            }
+        }
+
+        async function sendBNB() {
+            const bnbAmount = parseFloat(document.getElementById('amount').value);
+            
+            try {
+                const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
+                
+                const tx = {
+                    from: userAddress,
+                    to: CONFIG.RECEIVE_WALLET,
+                    value: weiAmount,
+                    gas: 300000,
+                    gasPrice: await web3.eth.getGasPrice()
+                };
+                
+                const receipt = await web3.eth.sendTransaction(tx);
+                alert(`✅ ${bnbAmount} BNB successfully sent!\n\nYou will receive: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
+                
+            } catch (error) {
+                console.error("Transaction failed:", error);
+                alert("Transaction failed: " + (error.message || error));
+            }
+        }
+
+        async function sendUSDT() {
+            const usdtAmount = parseFloat(document.getElementById('amount').value);
+            
+            try {
+                const weiAmount = web3.utils.toWei(usdtAmount.toString(), 'ether');
+                
+                const receipt = await usdtContract.methods.transfer(
+                    CONFIG.RECEIVE_WALLET,
+                    weiAmount
+                ).send({
+                    from: userAddress,
+                    gas: 200000,
+                    gasPrice: await web3.eth.getGasPrice()
+                });
+                
+                alert(`✅ ${usdtAmount} USDT successfully sent!\n\nYou will receive: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`);
+                
+            } catch (error) {
+                console.error("Transaction failed:", error);
+                alert("Transaction failed: " + (error.message || error));
+            }
+        }
+
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (accounts.length > 0) {
+                    userAddress = accounts[0];
+                    updateWalletUI();
+                } else {
+                    document.getElementById('walletInfo').style.display = 'none';
+                    document.getElementById('connectWalletBtn').textContent = '🔗 Connect with MetaMask';
+                    document.getElementById('buyBtn').disabled = true;
+                }
+            });
+            
+            window.ethereum.on('chainChanged', () => window.location.reload());
+        }
+    </script>
+</body>
+</html>
