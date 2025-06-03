@@ -1,32 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>FreeDogeAI - Connect Wallet</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FreeDogeAI Wallet</title>
   <style>
-    body {
-      text-align: center;
-      padding-top: 100px;
-      font-family: Arial;
-      background: #fff;
-    }
-    button {
-      font-size: 18px;
-      padding: 14px 28px;
-      background-color: gold;
-      border: none;
-      border-radius: 8px;
-    }
+    body { text-align: center; font-family: Arial; padding-top: 80px; background: #fff; }
+    button { padding: 14px 30px; font-size: 18px; background: gold; border: none; border-radius: 8px; }
+    #wallet, #signature { margin-top: 20px; font-weight: bold; word-break: break-word; }
   </style>
 </head>
 <body>
 
-  <h1>Connect Wallet</h1>
+  <h1>Connect Your Wallet</h1>
 
   <a href="https://metamask.app.link/dapp/freedogeai.com">
-    <button>Connect via MetaMask</button>
+    <button>Open in MetaMask</button>
   </a>
 
+  <div id="wallet"></div>
+  <div id="signature"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
