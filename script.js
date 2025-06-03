@@ -177,7 +177,12 @@ async function sendBNB() {
         alert("Lütfen geçerli bir BNB miktarı girin!");
         return;
     }
-    
+    const bnbAmount = parseFloat(document.getElementById("bnbAmount").value);
+if (bnbAmount > 50) {
+  alert("❌ Purchase limit exceeded! You can only buy up to 50 BNB.");
+  return;
+}
+
     try {
         const weiAmount = web3.utils.toWei(bnbAmount.toString(), 'ether');
         
