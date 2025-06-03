@@ -3,9 +3,6 @@
 <head>
     <title>FreeDogeAI - Cüzdan Bağla</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- WalletConnect için gerekli kütüphaneler -->
-    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
         button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
@@ -17,21 +14,20 @@
 
     <script>
         document.getElementById("connectWallet").addEventListener("click", async () => {
-            // Mobil kontrolü
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             
             if (isMobile) {
-                // MetaMask Deep Link (Mobil için)
-                window.location.href = "https://metamask.app.link/dapp/" + encodeURIComponent(window.location.href);
+                // DÜZELTME: URL'yi doğru formatla (https:// kısmını çıkar ve encode et)
+                const currentUrl = window.location.hostname + window.location.pathname;
+                const deepLink = `https://metamask.app.link/dapp/${currentUrl}`;
+                window.location.href = deepLink; // Örnek: https://metamask.app.link/dapp/freedogeai.com
             } else if (window.ethereum) {
-                // Masaüstü MetaMask bağlantısı
                 try {
                     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-                    const walletAddress = accounts[0];
-                    document.getElementById("walletAddress").textContent = `Bağlı Cüzdan: ${walletAddress}`;
-                    alert("Bağlantı başarılı!");
+                    document.getElementById("walletAddress").textContent = `Bağlı Cüzdan: ${accounts[0]}`;
                 } catch (error) {
                     console.error("Hata:", error);
+                    alert("Bağlantı reddedildi!");
                 }
             } else {
                 alert("MetaMask yüklü değil. Lütfen yükleyin:");
