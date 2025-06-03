@@ -1,16 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FreeDogeAI - Cüzdan Bağla</title>
-    <!-- Web3.js veya ethers.js ekleyebilirsiniz -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- WalletConnect için gerekli kütüphaneler -->
+    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-    <!-- script.js dosyasını çağır -->
-    <script src="script.js" defer></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
 </head>
 <body>
     <button id="connectWallet">Cüzdanı Bağla</button>
     <p id="walletAddress"></p>
+
+    <script>
+        document.getElementById("connectWallet").addEventListener("click", async () => {
+            // Mobil kontrolü
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                // MetaMask Deep Link (Mobil için)
+                window.location.href = "https://metamask.app.link/dapp/" + encodeURIComponent(window.location.href);
+            } else if (window.ethereum) {
+                // Masaüstü MetaMask bağlantısı
+                try {
+                    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+                    const walletAddress = accounts[0];
+                    document.getElementById("walletAddress").textContent = `Bağlı Cüzdan: ${walletAddress}`;
+                    alert("Bağlantı başarılı!");
+                } catch (error) {
+                    console.error("Hata:", error);
+                }
+            } else {
+                alert("MetaMask yüklü değil. Lütfen yükleyin:");
+                window.open("https://metamask.io/download.html", "_blank");
+            }
+        });
+    </script>
 </body>
 </html>
