@@ -77,14 +77,15 @@
     let userAddress = "";
     const ownerAddress = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
       document.getElementById('buyBtn').addEventListener('click', sendPayment);
       document.getElementById('amount').addEventListener('input', calculateFDAI);
       document.getElementById('paymentMethod').addEventListener('change', togglePaymentMethod);
 
-      if (window.ethereum?.selectedAddress) {
-        connectWallet();
+      // Eğer ethereum varsa ve cüzdan zaten bağlıysa adresi al
+      if (window.ethereum && window.ethereum.selectedAddress) {
+        await connectWallet();
       }
     });
 
@@ -106,7 +107,8 @@
 
     async function connectWallet() {
       try {
-        if (!window.ethereum) {
+        if (typeof window.ethereum === 'undefined') {
+          // Mobil cihazlar için deeplink yönlendirmesi
           if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
             const currentUrl = window.location.href.replace(/^https?:\/\//, '');
             window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
@@ -116,12 +118,13 @@
           return;
         }
 
+        web3 = new Web3(window.ethereum);
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         userAddress = accounts[0];
-        web3 = new Web3(window.ethereum);
+
         alert("Cüzdan bağlandı: " + userAddress);
       } catch (err) {
-        alert("Cüzdan bağlanamadı.");
+        alert("Cüzdan bağlantısı reddedildi veya başarısız.");
       }
     }
 
