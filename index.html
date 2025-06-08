@@ -88,8 +88,12 @@
 
     document.getElementById("amount").addEventListener("input", function () {
       const bnb = parseFloat(this.value);
-      const tokens = isNaN(bnb) ? 0 : bnb * tokenPerBNB;
-      document.getElementById("tokenAmount").innerText = tokens.toLocaleString('en-US');
+      if (!isNaN(bnb) && bnb > 0) {
+        const tokens = bnb * tokenPerBNB;
+        document.getElementById("tokenAmount").innerText = tokens.toLocaleString('en-US');
+      } else {
+        document.getElementById("tokenAmount").innerText = "0";
+      }
     });
 
     async function buyTokens() {
@@ -111,5 +115,6 @@
         alert("İşlem başarısız oldu: " + err.message);
       }
     }
-  </script></body>
+  </script>
+</body>
 </html>
