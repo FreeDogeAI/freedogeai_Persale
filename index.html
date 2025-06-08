@@ -4,6 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FreeDogeAI Ön Satışı</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
   <style>
     body {
       background: #000;
@@ -59,14 +60,14 @@
     <h2 id="rateInfo">1 BNB = 120,000,000,000 FDAI</h2>
     <p><strong>Bağlı Ağı:</strong> BSC (Binance Smart Chain)</p><select id="paymentMethod">
   <option value="bnb">BNB</option>
-  <option value="usdt">USDT (hazırlanıyor)</option>
+  <option value="usdt">USDT</option>
 </select>
 
 <div id="walletStatus">Cüzdan bağlanmadı</div>
 <button id="connectWalletBtn">🔗 MetaMask ile Bağlantı Kurun</button>
 
 <label for="amount">Miktar:</label>
-<input type="number" id="amount" placeholder="Tutarı girin (0.0001 - 50 BNB)">
+<input type="text" id="amount" placeholder="Tutarı girin (0.0001 - 50 BNB veya min. 1 USDT)">
 
 <p><strong>Alacağınız:</strong> <span id="tokenAmount">0</span> FDAI</p>
 
@@ -83,104 +84,86 @@
     let web3;
     let userAddress = "";
     const ownerAddress = "0xd924e01c7d319c5b23708cd622bd1143cd4fb360";
+    const usdtAddress = "0x55d398326f99059fF775485246999027B3197955";
+    const usdtAbi = [
+      {"constant":false,"inputs":[{"name":"_spender","type":"address"},{"name":"_value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"type":"function"},
+      {"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_to","type":"address"},{"name":"_value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"type":"function"}
+    ];
 
     window.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
       document.getElementById('buyBtn').addEventListener('click', sendPayment);
       document.getElementById('amount').addEventListener('input', calculateFDAI);
       document.getElementById('paymentMethod').addEventListener('change', togglePaymentMethod);
-
-      if (window.ethereum && window.ethereum.selectedAddress) {
-        await connectWallet();
-      }
+      if (window.ethereum && window.ethereum.selectedAddress) await connectWallet();
     });
 
     function togglePaymentMethod() {
       const method = document.getElementById('paymentMethod').value;
-      if (method === 'bnb') {
-        document.getElementById('rateInfo').textContent = '1 BNB = 120,000,000,000 FDAI';
-        document.getElementById('amount').placeholder = 'Tutarı girin (0.0001 - 50 BNB)';
-        document.getElementById('amount').step = '0.0001';
-        document.getElementById('amount').min = '0.0001';
-        document.getElementById('amount').max = '50';
-      } else {
-        document.getElementById('rateInfo').textContent = '1 USDT = 200,000,000 FDAI';
-        document.getElementById('amount').placeholder = 'Enter amount (e.g., 1 USDT)';
-        document.getElementById('amount').step = '1';
-        document.getElementById('amount').min = '1';
-      }
+      document.getElementById('rateInfo').textContent = method === 'bnb'
+        ? '1 BNB = 120,000,000,000 FDAI'
+        : '1 USDT = 200,000,000 FDAI';
       calculateFDAI();
     }
 
     async function connectWallet() {
       try {
-        if (typeof window.ethereum === 'undefined') {
-          if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-            const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-            window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
-          } else {
-            window.open("https://metamask.io/download.html", "_blank");
-          }
+        if (!window.ethereum) {
+          const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+          window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
           return;
         }
-
         web3 = new Web3(window.ethereum);
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         userAddress = accounts[0];
-
         document.getElementById("walletStatus").innerText = `Bağlandı: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`;
         document.getElementById("connectWalletBtn").innerText = "🔗 Bağlandı";
-
       } catch (err) {
-        alert("Cüzdan bağlantısı reddedildi veya başarısız.");
+        alert("Cüzdan bağlantısı başarısız.");
       }
     }
 
-    function calculateFDAI() {
+    function parseAmount() {
       const raw = document.getElementById('amount').value;
-      const amount = parseFloat(raw.replace(',', '.'));
+      const cleaned = raw.replace(',', '.');
+      const num = parseFloat(cleaned);
+      return isNaN(num) ? 0 : num;
+    }
+
+    function calculateFDAI() {
+      const amount = parseAmount();
       const method = document.getElementById('paymentMethod').value;
-      let tokens = 0;
-
-      if (!isNaN(amount) && amount > 0) {
-        tokens = method === 'bnb' ? amount * 120000000000 : amount * 200000000;
-      }
-
+      let tokens = amount > 0 ? (method === 'bnb' ? amount * 120000000000 : amount * 200000000) : 0;
       document.getElementById("tokenAmount").innerText = tokens.toLocaleString('en-US');
     }
 
     async function sendPayment() {
-      const raw = document.getElementById('amount').value;
-      const amount = parseFloat(raw.replace(',', '.'));
+      const amount = parseAmount();
       const method = document.getElementById('paymentMethod').value;
-
-      if (!userAddress || isNaN(amount)) {
-        alert("Lütfen cüzdan bağlayın ve geçerli bir miktar girin.");
-        return;
-      }
+      if (!userAddress || amount <= 0) return alert("Lütfen geçerli miktar girin ve cüzdan bağlayın.");
 
       if (method === 'bnb') {
-        if (amount < 0.0001 || amount > 50) {
-          alert("Minimum 0.0001 ve maksimum 50 BNB gönderebilirsiniz.");
-          return;
-        }
-
-        const valueInWei = web3.utils.toHex(web3.utils.toWei(amount.toString(), 'ether'));
+        if (amount < 0.0001 || amount > 50) return alert("0.0001 - 50 BNB aralığında girin.");
+        const value = web3.utils.toWei(amount.toString(), 'ether');
         try {
-          const tx = await window.ethereum.request({
+          const tx = await ethereum.request({
             method: 'eth_sendTransaction',
-            params: [{
-              from: userAddress,
-              to: ownerAddress,
-              value: valueInWei
-            }]
+            params: [{ from: userAddress, to: ownerAddress, value: web3.utils.toHex(value) }]
           });
-          alert("İşlem başarıyla gönderildi: " + tx);
-        } catch (error) {
-          alert("İşlem reddedildi veya başarısız: " + error.message);
+          alert("BNB ile ödeme gönderildi. Tx: " + tx);
+        } catch (err) {
+          alert("Hata: " + err.message);
         }
       } else {
-        alert("USDT ile ödeme sistemi yakında aktif edilecek.");
+        const usdt = new web3.eth.Contract(usdtAbi, usdtAddress);
+        const value = web3.utils.toWei(amount.toString(), 'mwei'); // USDT uses 6 decimals
+        try {
+          await usdt.methods.approve(ownerAddress, value).send({ from: userAddress });
+          await usdt.methods.transferFrom(userAddress, ownerAddress, value).send({ from: userAddress });
+          alert("USDT ile ödeme başarıyla gönderildi.");
+        } catch (err) {
+          alert("USDT işlemi başarısız: " + err.message);
+        }
       }
     }
   </script></body>
