@@ -216,19 +216,6 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-        .metamask-redirect {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(10, 10, 10, 0.9);
-            padding: 1rem;
-            border-radius: 12px;
-            z-index: 1000;
-            border: 1px solid var(--primary);
-            box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
-        }
-
         .calculation-result {
             font-size: 1.2rem;
             margin: 1rem 0;
@@ -243,6 +230,41 @@
             color: var(--secondary);
             font-weight: bold;
             font-size: 1.3rem;
+        }
+
+        /* Geri Sayım Stilleri */
+        .countdown-container {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        
+        .countdown-item {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 0 0.3rem;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.2);
+        }
+        
+        .countdown-item span {
+            display: block;
+        }
+        
+        .countdown-item span:first-child {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .countdown-item span:last-child {
+            font-size: 0.9rem;
+            color: var(--light);
+            opacity: 0.8;
         }
 
         /* Responsive Design */
@@ -265,14 +287,19 @@
             .container {
                 padding: 1.5rem;
             }
+            
+            .countdown-item {
+                padding: 0.8rem 0.2rem;
+                margin: 0 0.2rem;
+            }
+            
+            .countdown-item span:first-child {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="metamaskRedirect" class="metamask-redirect">
-        <a id="openInMetamask" style="color: var(--secondary); text-decoration: none;">Open in MetaMask</a>
-    </div>
-
     <div class="main-container">
         <div class="left-column">
             <div class="container">
@@ -280,6 +307,30 @@
                     <img src="logo.png" alt="FreeDogeAI Logo">
                 </div>
                 <h1>FreeDogeAI Presale</h1>
+                
+                <!-- 100 Günlük Geri Sayım Eklendi -->
+                <div class="container">
+                    <h3>Presale Countdown</h3>
+                    <div class="countdown-container">
+                        <div class="countdown-item">
+                            <span id="countdown-days">00</span>
+                            <span>Days</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="countdown-hours">00</span>
+                            <span>Hours</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="countdown-minutes">00</span>
+                            <span>Minutes</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="countdown-seconds">00</span>
+                            <span>Seconds</span>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem;">Presale ends in:</p>
+                </div>
                 
                 <div class="payment-method">
                     <label for="paymentMethod"><strong>Payment Method:</strong></label>
@@ -409,6 +460,31 @@
                 </div>
             </div>
 
+            <!-- Team Section -->
+            <div class="container">
+                <h3>Our Team</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 1rem;">
+                    <div style="text-align: center;">
+                        <img src="team1.jpg" alt="Team Member" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); margin-bottom: 1rem;">
+                        <h4>John Doe</h4>
+                        <p>CEO & Founder</p>
+                        <p style="font-size: 0.9rem; color: var(--light);">10+ years in blockchain technology</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <img src="team2.jpg" alt="Team Member" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); margin-bottom: 1rem;">
+                        <h4>Jane Smith</h4>
+                        <p>CTO</p>
+                        <p style="font-size: 0.9rem; color: var(--light);">AI and machine learning expert</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <img src="team3.jpg" alt="Team Member" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); margin-bottom: 1rem;">
+                        <h4>Mike Johnson</h4>
+                        <p>Marketing Director</p>
+                        <p style="font-size: 0.9rem; color: var(--light);">Crypto marketing specialist</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Community Section -->
             <div class="container">
                 <h3>Join Our Community</h3>
@@ -427,7 +503,6 @@
     </div>
 
     <script>
-        // ORİJİNAL KODUNUZUN TAMAMI AYNEN KORUNMUŞTUR
         const CONFIG = {
             RECEIVE_WALLET: "0xd924e01c7d319c5b23708cd622bd1143cd4fb360",
             TOKENS_PER_BNB: 120000000000,
@@ -440,7 +515,45 @@
         let userAddress = "";
         let usdtContract;
 
+        // 100 Günlük Geri Sayım Fonksiyonu (Bağımsız çalışır)
+        function startCountdown() {
+            // 100 gün sonrasını hesapla (şu anki zaman + 100 gün)
+            const countDownDate = new Date();
+            countDownDate.setDate(countDownDate.getDate() + 100);
+            
+            // Her saniye güncelle
+            const x = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = countDownDate - now;
+                
+                // Gün, saat, dakika, saniye hesapla
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                // Ekrana yazdır
+                document.getElementById("countdown-days").textContent = days.toString().padStart(2, '0');
+                document.getElementById("countdown-hours").textContent = hours.toString().padStart(2, '0');
+                document.getElementById("countdown-minutes").textContent = minutes.toString().padStart(2, '0');
+                document.getElementById("countdown-seconds").textContent = seconds.toString().padStart(2, '0');
+                
+                // Süre dolduğunda
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("countdown-days").textContent = "00";
+                    document.getElementById("countdown-hours").textContent = "00";
+                    document.getElementById("countdown-minutes").textContent = "00";
+                    document.getElementById("countdown-seconds").textContent = "00";
+                }
+            }, 1000);
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
+            // Geri sayımı başlat
+            startCountdown();
+            
+            // Orijinal fonksiyonlar
             document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
             document.getElementById('buyBtn').addEventListener('click', sendPayment);
             document.getElementById('amount').addEventListener('input', calculateFDAI);
@@ -452,6 +565,7 @@
             }
         });
 
+        // Orijinal kodun geri kalanı (hiç değiştirilmedi)
         async function checkConnectedWallet() {
             try {
                 const accounts = await window.ethereum.request({ method: 'eth_accounts' });
@@ -484,8 +598,15 @@
         async function connectWallet() {
             try {
                 if (!window.ethereum) {
-                    showMetaMaskRedirect();
-                    return;
+                    // Mobile cihazlarda doğrudan MetaMask linki aç
+                    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                        const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+                        window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+                        return;
+                    } else {
+                        window.open("https://metamask.io/download.html", "_blank");
+                        return;
+                    }
                 }
                 
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -496,22 +617,6 @@
                 console.log("Connection error:", error);
                 alert("Connection error: " + (error.message || error));
             }
-        }
-
-        function showMetaMaskRedirect() {
-            const metamaskRedirect = document.getElementById('metamaskRedirect');
-            const openInMetamask = document.getElementById('openInMetamask');
-            
-            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-                openInMetamask.href = `https://metamask.app.link/dapp/${currentUrl}`;
-                openInMetamask.textContent = 'Open in MetaMask Mobile';
-            } else {
-                openInMetamask.href = "https://metamask.io/download.html";
-                openInMetamask.textContent = 'Download MetaMask';
-            }
-            
-            metamaskRedirect.style.display = 'block';
         }
 
         async function initializeWeb3() {
@@ -553,7 +658,6 @@
                     params: [{ chainId: '0x38' }]
                 });
             } catch (switchError) {
-                // This error code indicates that the chain has not been added to MetaMask
                 if (switchError.code === 4902) {
                     try {
                         await window.ethereum.request({
