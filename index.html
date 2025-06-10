@@ -816,9 +816,12 @@
                     const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
                     
                     if (isMobile) {
-                        // Try to open MetaMask in-app browser
-                        window.location.href = "https://metamask.app.link/dapp/freedogeai.com";
-                      return;
+  // MetaMask uygulamasında site açılmasını sağlar
+  const deepLink = "https://metamask.app.link/dapp/freedogeai.com";
+  window.location.replace(deepLink);
+  return;
+}
+
                     } else {
                         // Desktop browser without MetaMask
                         const installLink = document.createElement('a');
