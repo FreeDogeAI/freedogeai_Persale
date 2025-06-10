@@ -817,7 +817,8 @@
                     
                     if (isMobile) {
                         // Try to open MetaMask in-app browser
-                        window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
+                        const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
                         return;
                     } else {
                         // Desktop browser without MetaMask
