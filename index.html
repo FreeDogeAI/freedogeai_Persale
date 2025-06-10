@@ -109,34 +109,22 @@
         }
 
         .language-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
             background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(10px);
-            padding: 10px;
+            padding: 0.5rem;
             border-radius: 12px;
             border: 1px solid var(--secondary);
-            max-width: 300px;
-            justify-content: center;
-        }
-
-        .language-btn {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--secondary);
-            color: var(--light);
-            padding: 0.5rem;
-            border-radius: 8px;
-            cursor: pointer;
             font-family: 'Orbitron', sans-serif;
             font-size: 0.9rem;
+            color: var(--light);
+            cursor: pointer;
             transition: all 0.3s ease;
-            min-width: 40px;
-            text-align: center;
         }
 
-        .language-btn:hover {
-            background: rgba(0, 184, 255, 0.3);
+        .language-selector:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
         }
 
         button {
@@ -489,14 +477,14 @@
             <div class="container">
                 <!-- Dil Seçici Kutusu -->
                 <div class="language-selector-container">
-                    <div class="language-selector">
-                        <button class="language-btn" id="lang-en">EN</button>
-                        <button class="language-btn" id="lang-tr">TR</button>
-                        <button class="language-btn" id="lang-zh">中文</button>
-                        <button class="language-btn" id="lang-ja">日本語</button>
-                        <button class="language-btn" id="lang-hi">हिन्दी</button>
-                        <button class="language-btn" id="lang-fil">Filipino</button>
-                    </div>
+                    <select class="language-selector" id="languageSelector">
+                        <option value="en">EN</option>
+                        <option value="tr">TR</option>
+                        <option value="zh">中文</option>
+                        <option value="ja">日本語</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="fil">Filipino</option>
+                    </select>
                 </div>
 
                 <div class="logo-container">
@@ -1157,12 +1145,9 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             // Language switcher
-            document.getElementById('lang-en').addEventListener('click', () => translatePage('en'));
-            document.getElementById('lang-tr').addEventListener('click', () => translatePage('tr'));
-            document.getElementById('lang-zh').addEventListener('click', () => translatePage('zh'));
-            document.getElementById('lang-ja').addEventListener('click', () => translatePage('ja'));
-            document.getElementById('lang-hi').addEventListener('click', () => translatePage('hi'));
-            document.getElementById('lang-fil').addEventListener('click', () => translatePage('fil'));
+            document.getElementById('languageSelector').addEventListener('change', (e) => {
+                translatePage(e.target.value);
+            });
             
             document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
             document.getElementById('buyBtn').addEventListener('click', sendPayment);
