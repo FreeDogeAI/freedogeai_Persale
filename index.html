@@ -817,9 +817,8 @@
                     
                     if (isMobile) {
                         // Try to open MetaMask in-app browser
-                        const currentUrl = window.location.href.replace(/^https?:\/\//, '');
-window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
-                        return;
+                        window.location.href = "https://metamask.app.link/dapp/freedogeai.com";
+                      return;
                     } else {
                         // Desktop browser without MetaMask
                         const installLink = document.createElement('a');
