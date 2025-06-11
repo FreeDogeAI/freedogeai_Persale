@@ -1,54 +1,47 @@
-body {
-  background-color: #000000;
-  color: #ffffff;
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
+.about-content {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
 }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+.about-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
 }
 
-h1, h2, h3, p, label {
-  color: #ffffff;
+.about-content::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
 }
 
-input, select, textarea {
-  background-color: #1a1a1a;
-  color: #ffffff;
-  border: 1px solid #333333;
-  padding: 10px;
-  border-radius: 5px;
+.about-content p {
+    position: relative;
+    padding-left: 30px;
+    line-height: 1.7;
 }
 
-button, .btn, #buyBtn, #connectWalletBtn {
-  background-color: #25D366;
-  color: #000000;
-  border: none;
-  padding: 10px 20px;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:disabled, #buyBtn:disabled {
-  background-color: #555;
-  color: #aaa;
-  cursor: not-allowed;
-}
-
-a {
-  color: #25D366;
-  text-decoration: underline;
-}
-
-#mobileWarning {
-  background-color: #ffcc00;
-  color: #000000;
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 5px;
+.about-content p::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 12px;
+    height: 12px;
+    background: var(--secondary);
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
