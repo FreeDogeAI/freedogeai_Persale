@@ -419,6 +419,53 @@
             opacity: 0.8;
         }
 
+        /* RTL Support for Arabic */
+        [dir="rtl"] {
+            text-align: right;
+        }
+        [dir="rtl"] .timeline {
+            padding-left: 0;
+            padding-right: 50px;
+        }
+        [dir="rtl"] .timeline::before {
+            left: auto;
+            right: 20px;
+        }
+        [dir="rtl"] .timeline-item {
+            padding-left: 0;
+            padding-right: 30px;
+        }
+        [dir="rtl"] .timeline-marker {
+            left: auto;
+            right: 0;
+        }
+        [dir="rtl"] .timeline-content h4::after {
+            left: auto;
+            right: 0;
+        }
+        [dir="rtl"] .timeline-content li {
+            padding-left: 0;
+            padding-right: 25px;
+        }
+        [dir="rtl"] .timeline-content li::before {
+            left: auto;
+            right: 0;
+        }
+        [dir="rtl"] .about-content {
+            border-left: none;
+            border-right: 4px solid var(--primary);
+            padding-left: 0;
+            padding-right: 20px;
+        }
+        [dir="rtl"] .about-content div {
+            left: auto;
+            right: -2px;
+        }
+        [dir="rtl"] .about-content p span {
+            left: auto;
+            right: -24px;
+        }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
             .main-container {
@@ -453,16 +500,19 @@
             
             .timeline {
                 padding-left: 30px;
+                padding-right: 30px;
             }
             
             .timeline::before {
                 left: 10px;
+                right: 10px;
             }
             
             .timeline-marker {
                 width: 20px;
                 height: 20px;
                 left: -5px;
+                right: -5px;
             }
             
             .timeline-content {
@@ -475,7 +525,7 @@
     <div class="main-container">
         <div class="left-column">
             <div class="container">
-                <!-- Dil Seçici Kutusu -->
+                <!-- Language Selector Box -->
                 <div class="language-selector-container">
                     <select class="language-selector" id="languageSelector">
                         <option value="en">EN</option>
@@ -484,6 +534,8 @@
                         <option value="ja">日本語</option>
                         <option value="hi">हिन्दी</option>
                         <option value="fil">Filipino</option>
+                        <option value="ru">Русский</option>
+                        <option value="ar">العربية</option>
                     </select>
                 </div>
 
@@ -563,24 +615,24 @@
         <div class="right-column">
     
             <!-- About Section -->
-<div class="container">
-    <h3 data-i18n="about_title">About FreeDogeAI</h3>
-    <div class="about-content" style="border-left: 4px solid var(--primary); padding-left: 20px; position: relative;">
-        <div style="position: absolute; left: -2px; top: 0; bottom: 0; width: 4px; background: linear-gradient(to bottom, var(--primary), var(--accent)); border-radius: 2px;"></div>
-        <p data-i18n="about_text" style="margin-bottom: 1.5rem; position: relative;">
-            <span style="position: absolute; left: -24px; top: 8px; width: 12px; height: 12px; background: var(--secondary); border-radius: 50%; border: 2px solid var(--primary);"></span>
-            FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!
-        </p>
-        <p data-i18n="about_text2" style="margin-bottom: 1.5rem; position: relative;">
-            <span style="position: absolute; left: -24px; top: 8px; width: 12px; height: 12px; background: var(--secondary); border-radius: 50%; border: 2px solid var(--primary);"></span>
-            FreeDogeAI is not just another meme coin - it's a movement. We're building a community-driven platform where AI meets decentralized finance, creating unique opportunities for everyone to participate in the crypto revolution. Our tokenomics are designed to reward long-term holders while providing liquidity for traders.
-        </p>
-        <p data-i18n="about_text3" style="position: relative;">
-            <span style="position: absolute; left: -24px; top: 8px; width: 12px; height: 12px; background: var(--secondary); border-radius: 50%; border: 2px solid var(--primary);"></span>
-            With our experienced team of blockchain developers and AI experts, we're creating innovative solutions that will bridge the gap between complex AI technologies and everyday crypto users. Our roadmap includes AI-powered features that will give FreeDogeAI real utility in the DeFi space.
-        </p>
-    </div>
-</div>
+            <div class="container">
+                <h3 data-i18n="about_title">About FreeDogeAI</h3>
+                <div class="about-content" style="border-left: 4px solid var(--primary); padding-left: 20px; position: relative;">
+                    <div style="position: absolute; left: -2px; top: 0; bottom: 0; width: 4px; background: linear-gradient(to bottom, var(--primary), var(--accent)); border-radius: 2px;"></div>
+                    <p data-i18n="about_text" style="margin-bottom: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: -24px; top: 8px; width: 12px; height: 12px; background: var(--secondary); border-radius: 50%; border: 2px solid var(--primary);"></span>
+                        FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!
+                    </p>
+                    <p data-i18n="about_text2" style="margin-bottom: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: -24px; top: 8px; width: 12px; height: 12px; background: var(--secondary); border-radius: 50%; border: 2px solid var(--primary);"></span>
+                        FreeDogeAI is not just another meme coin - it's a movement. We're building a community-driven platform where AI meets decentralized finance, creating unique opportunities for everyone to participate in the crypto revolution. Our tokenomics are designed to reward long-term holders while providing liquidity for traders.
+                    </p>
+                    <p data-i18n="about_text3" style="position: relative;">
+                        <span style="position: absolute; left: -24px; top: 8px; width: 12px; height: 12px; background: var(--secondary); border-radius: 50%; border: 2px solid var(--primary);"></span>
+                        With our experienced team of blockchain developers and AI experts, we're creating innovative solutions that will bridge the gap between complex AI technologies and everyday crypto users. Our roadmap includes AI-powered features that will give FreeDogeAI real utility in the DeFi space.
+                    </p>
+                </div>
+            </div>
 
             <!-- Roadmap Section -->
             <div class="container">
@@ -669,8 +721,6 @@
                     <div>2031: 5%</div>
                 </div>
             </div>
-
-    
 
             <!-- Community Section -->
             <div class="container">
@@ -1105,6 +1155,142 @@
                 join_community: "Sumali sa Aming Komunidad",
                 whitepaper_title: "I-download ang FreeDogeAI Whitepaper",
                 download_whitepaper: "I-click dito para i-download ang whitepaper"
+            },
+            ru: {
+                presale_title: "FreeDogeAI Предпродажа",
+                days: "Дней",
+                hours: "Часов",
+                minutes: "Минут",
+                seconds: "Секунд",
+                presale_ends: "До конца предпродажи:",
+                payment_method: "Способ оплаты:",
+                connect_wallet: "🔗 Подключить кошелёк",
+                your_wallet: "Ваш кошелёк",
+                address: "Адрес:",
+                bnb_balance: "Баланс BNB:",
+                usdt_balance: "Баланс USDT:",
+                amount: "Сумма:",
+                you_will_receive: "Вы получите:",
+                buy_tokens: "🚀 Купить токены FDAI",
+                important_info: "Важная информация",
+                token_delivery_info: "После покупки токены появятся в вашем кошельке в течение 24 часов.",
+                network_warning: "Пожалуйста, убедитесь, что вы подключены к",
+                network: "сети.",
+                note: "ПРИМЕЧАНИЕ:",
+                token_note: "Если токены FDAI не отображаются, добавьте этот контрактный адрес:",
+                about_title: "О FreeDogeAI",
+                about_text: "FreeDogeAI — это инновационный проект, сочетающий силу искусственного интеллекта с вирусной привлекательностью мемных криптовалют. Наша миссия — создать децентрализованную экосистему, которая использует ИИ для расширения возможностей пользователей, укрепления взаимодействия с сообществом и продвижения финансовой свободы. Присоединяйтесь к нам в революции будущего финансов с FreeDogeAI!",
+                about_text2: "FreeDogeAI — это не просто очередная мемная монета — это движение. Мы создаем платформу, управляемую сообществом, где ИИ встречается с децентрализованными финансами, создавая уникальные возможности для участия каждого в криптореволюции. Наша токеномика разработана для вознаграждения долгосрочных держателей при обеспечении ликвидности для трейдеров.",
+                about_text3: "С нашей опытной командой разработчиков блокчейна и экспертов по ИИ мы создаем инновационные решения, которые устранят разрыв между сложными технологиями ИИ и повседневными пользователями криптовалют. Наша дорожная карта включает функции на основе ИИ, которые придадут FreeDogeAI реальную полезность в пространстве DeFi.",
+                roadmap_title: "Дорожная карта",
+                phase1: "Фаза 1: Запуск",
+                website_launched: "Официальный сайт запущен:",
+                twitter_link: "Twitter:",
+                telegram_link: "Telegram:",
+                presale_launched: "Предпродажа успешно запущена",
+                phase2: "Фаза 2: Рост",
+                airdrop_campaigns: "Аирдроп-кампании и мероприятия для сообщества",
+                dex_listings: "Видимость на DEX и листинги токенов",
+                marketing_collabs: "Стратегический маркетинг и сотрудничество с инфлюенсерами",
+                phase3: "Фаза 3: Полезность ИИ",
+                ai_games: "Мини-игры и система взаимодействия на основе ИИ",
+                reward_models: "Интеграция FDAI в модели задач/вознаграждений",
+                beta_testing: "Бета-тестирование с реальной полезностью",
+                phase4: "Фаза 4: Глобальное расширение",
+                cex_listing: "Сюрприз: листинг на централизованной бирже",
+                nft_integration: "Интеграция функций NFT + ИИ",
+                global_outreach: "Глобальное расширение и масштабирование",
+                tokenomics_title: "Токеномика",
+                category: "Категория",
+                percentage: "Процент",
+                presale: "Предпродажа",
+                airdrop: "Аирдроп и кампании",
+                burn: "Сжигание",
+                listing: "Листинг на DEX и CEX",
+                reserve: "Заблокированный резерв",
+                team: "Команда",
+                total_supply: "Общее предложение:",
+                circulating_supply: "Обращающееся предложение:",
+                locked_supply: "Заблокированное предложение:",
+                release_schedule: "График разблокировки токенов",
+                team_title: "Наша команда",
+                ceo_title: "CEO и основатель",
+                ceo_exp: "10+ лет в блокчейне и технологиях ИИ",
+                cto_title: "CTO",
+                cto_exp: "Эксперт по смарт-контрактам и DeFi",
+                cmo_title: "CMO",
+                cmo_exp: "Специалист по цифровому маркетингу",
+                join_community: "Присоединяйтесь к нашему сообществу",
+                whitepaper_title: "Скачать WhitePaper FreeDogeAI",
+                download_whitepaper: "Нажмите здесь, чтобы скачать WhitePaper"
+            },
+            ar: {
+                presale_title: "البيع المسبق لـ FreeDogeAI",
+                days: "أيام",
+                hours: "ساعات",
+                minutes: "دقائق",
+                seconds: "ثواني",
+                presale_ends: "ينتهي البيع المسبق خلال:",
+                payment_method: "طريقة الدفع:",
+                connect_wallet: "🔗 توصيل المحفظة",
+                your_wallet: "محفظتك",
+                address: "العنوان:",
+                bnb_balance: "رصيد BNB:",
+                usdt_balance: "رصيد USDT:",
+                amount: "المبلغ:",
+                you_will_receive: "ستحصل على:",
+                buy_tokens: "🚀 شراء عملات FDAI",
+                important_info: "معلومات مهمة",
+                token_delivery_info: "بعد شراء العملات، ستظهر في محفظتك خلال 24 ساعة.",
+                network_warning: "يرجى التأكد من أنك متصل بـ",
+                network: "شبكة.",
+                note: "ملاحظة:",
+                token_note: "إذا لم تظهر عملات FDAI، أضف عنوان العقد هذا:",
+                about_title: "حول FreeDogeAI",
+                about_text: "FreeDogeAI هو مشروع مبتكر يجمع بين قوة الذكاء الاصطناعي وجاذبية العملات المشفرة القائمة على الميمز. مهمتنا هي إنشاء نظام بيئي لامركزي يستفيد من الذكاء الاصطناعي لتمكين المستخدمين وتعزيز مشاركة المجتمع ودفع الحرية المالية. انضم إلينا في ثورة مستقبل التمويل مع FreeDogeAI!",
+                about_text2: "FreeDogeAI ليس مجرد عملة ميم أخرى - إنها حركة. نحن نبني منصة يقودها المجتمع حيث يلتقي الذكاء الاصطناعي بالتمويل اللامركزي، مما يخلق فرصًا فريدة للجميع للمشاركة في ثورة العملات المشفرة. تم تصميم اقتصادياتنا الرمزية لمكافأة حاملي العملات على المدى الطويل مع توفير السيولة للتجار.",
+                about_text3: "مع فريقنا المكون من مطوري البلوكشين ذوي الخبرة وخبراء الذكاء الاصطناعي، ننشئ حلولًا مبتكرة ستعمل على سد الفجوة بين تقنيات الذكاء الاصطناعي المعقدة ومستخدمي العملات المشفرة اليومية. تتضمن خارطة طريقنا ميزات مدعومة بالذكاء الاصطناعي والتي ستمنح FreeDogeAI فائدة حقيقية في مجال التمويل اللامركزي.",
+                roadmap_title: "خارطة الطريق",
+                phase1: "المرحلة 1: الإطلاق",
+                website_launched: "تم إطلاق الموقع الرسمي:",
+                twitter_link: "تويتر:",
+                telegram_link: "تيليجرام:",
+                presale_launched: "تم إطلاق البيع المسبق بنجاح",
+                phase2: "المرحلة 2: النمو",
+                airdrop_campaigns: "حملات الإيردروب والفعاليات المجتمعية",
+                dex_listings: "الظهور في منصات التبادل اللامركزية وإدراج العملات",
+                marketing_collabs: "التسويق الاستراتيجي والتعاون مع المؤثرين",
+                phase3: "المرحلة 3: فائدة الذكاء الاصطناعي",
+                ai_games: "لعبة مصغرة مدعومة بالذكاء الاصطناعي ونظام تفاعل",
+                reward_models: "دمج FDAI في نماذج المهام/المكافآت",
+                beta_testing: "اختبار بيتا مع فائدة حقيقية",
+                phase4: "المرحلة 4: التوسع العالمي",
+                cex_listing: "مفاجأة: الإدراج في منصة تبادل مركزية",
+                nft_integration: "دمج ميزات NFT + الذكاء الاصطناعي",
+                global_outreach: "التوسع العالمي والقياس",
+                tokenomics_title: "اقتصاديات العملة",
+                category: "الفئة",
+                percentage: "النسبة المئوية",
+                presale: "البيع المسبق",
+                airdrop: "الإيردروب والحملات",
+                burn: "الحرق",
+                listing: "الإدراج في منصات التبادل اللامركزية والمركزية",
+                reserve: "الاحتياطي المغلق",
+                team: "الفريق",
+                total_supply: "إجمالي المعروض:",
+                circulating_supply: "المعروض المتداول:",
+                locked_supply: "المعروض المغلق:",
+                release_schedule: "جدول إصدار العملات المغلق",
+                team_title: "فريقنا",
+                ceo_title: "المدير التنفيذي والمؤسس",
+                ceo_exp: "10+ سنوات في تقنية البلوكشين والذكاء الاصطناعي",
+                cto_title: "المدير التقني",
+                cto_exp: "خبير في العقود الذكية والتمويل اللامركزي",
+                cmo_title: "مدير التسويق",
+                cmo_exp: "أخصائي تسويق رقمي",
+                join_community: "انضم إلى مجتمعنا",
+                whitepaper_title: "تحميل الورقة البيضاء لـ FreeDogeAI",
+                download_whitepaper: "انقر هنا لتحميل الورقة البيضاء"
             }
         };
 
@@ -1128,6 +1314,8 @@
                     lang === 'ja' ? '金額を入力 (例: 0.1 BNB)' :
                     lang === 'hi' ? 'राशि दर्ज करें (उदा: 0.1 BNB)' :
                     lang === 'fil' ? 'Ilagay ang halaga (hal: 0.1 BNB)' :
+                    lang === 'ru' ? 'Введите сумму (напр.: 0.1 BNB)' :
+                    lang === 'ar' ? 'أدخل المبلغ (مثال: 0.1 BNB)' :
                     'Enter amount (e.g., 0.1 BNB)';
             } else {
                 document.getElementById('amount').placeholder = 
@@ -1136,7 +1324,16 @@
                     lang === 'ja' ? '金額を入力 (例: 1 USDT)' :
                     lang === 'hi' ? 'राशि दर्ज करें (उदा: 1 USDT)' :
                     lang === 'fil' ? 'Ilagay ang halaga (hal: 1 USDT)' :
+                    lang === 'ru' ? 'Введите сумму (напр.: 1 USDT)' :
+                    lang === 'ar' ? 'أدخل المبلغ (مثال: 1 USDT)' :
                     'Enter amount (e.g., 1 USDT)';
+            }
+            
+            // Set RTL for Arabic
+            if (lang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+            } else {
+                document.body.removeAttribute('dir');
             }
         }
 
@@ -1223,6 +1420,8 @@
                     currentLanguage === 'ja' ? '金額を入力 (例: 0.1 BNB)' :
                     currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 0.1 BNB)' :
                     currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 0.1 BNB)' :
+                    currentLanguage === 'ru' ? 'Введите сумму (напр.: 0.1 BNB)' :
+                    currentLanguage === 'ar' ? 'أدخل المبلغ (مثال: 0.1 BNB)' :
                     'Enter amount (e.g., 0.1 BNB)';
                 document.getElementById('amount').step = '0.01';
                 document.getElementById('amount').min = '0.01';
@@ -1234,6 +1433,8 @@
                     currentLanguage === 'ja' ? '金額を入力 (例: 1 USDT)' :
                     currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 1 USDT)' :
                     currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 1 USDT)' :
+                    currentLanguage === 'ru' ? 'Введите сумму (напр.: 1 USDT)' :
+                    currentLanguage === 'ar' ? 'أدخل المبلغ (مثال: 1 USDT)' :
                     'Enter amount (e.g., 1 USDT)';
                 document.getElementById('amount').step = '1';
                 document.getElementById('amount').min = '1';
@@ -1261,6 +1462,8 @@
                         else if (currentLanguage === 'ja') errorMessage = "続行するにはウォレットを接続してください";
                         else if (currentLanguage === 'hi') errorMessage = "जारी रखने के लिए कृपया अपना वॉलेट कनेक्ट करें";
                         else if (currentLanguage === 'fil') errorMessage = "Mangyaring ikonek ang iyong wallet upang magpatuloy";
+                        else if (currentLanguage === 'ru') errorMessage = "Пожалуйста, подключите кошелёк, чтобы продолжить";
+                        else if (currentLanguage === 'ar') errorMessage = "يرجى توصيل محفظتك للمتابعة";
                         
                         alert(errorMessage);
                         return;
@@ -1292,6 +1495,8 @@
                         else if (currentLanguage === 'ja') message = "続行するにはMetaMaskなどのWeb3ウォレットをインストールしてください";
                         else if (currentLanguage === 'hi') message = "जारी रखने के लिए कृपया MetaMask जैसे Web3 वॉलेट इंस्टॉल करें";
                         else if (currentLanguage === 'fil') message = "Mangyaring i-install ang Web3 wallet tulad ng MetaMask upang magpatuloy";
+                        else if (currentLanguage === 'ru') message = "Пожалуйста, установите Web3-кошелёк, например MetaMask, чтобы продолжить";
+                        else if (currentLanguage === 'ar') message = "يرجى تثبيت محفظة ويب 3 مثل MetaMask للمتابعة";
                         
                         alert(message);
                         installLink.click();
@@ -1313,6 +1518,8 @@
                 else if (currentLanguage === 'ja') errorMessage = "ウォレット接続エラー: " + (error.message || error);
                 else if (currentLanguage === 'hi') errorMessage = "वॉलेट कनेक्शन त्रुटि: " + (error.message || error);
                 else if (currentLanguage === 'fil') errorMessage = "Error sa pagkonekta ng wallet: " + (error.message || error);
+                else if (currentLanguage === 'ru') errorMessage = "Ошибка подключения кошелька: " + (error.message || error);
+                else if (currentLanguage === 'ar') errorMessage = "خطأ في توصيل المحفظة: " + (error.message || error);
                 
                 alert(errorMessage);
             }
@@ -1354,6 +1561,8 @@
                 else if (currentLanguage === 'ja') errorMessage = "手動でBSCネットワークに切り替えてください";
                 else if (currentLanguage === 'hi') errorMessage = "कृपया मैन्युअली BSC नेटवर्क पर स्विच करें";
                 else if (currentLanguage === 'fil') errorMessage = "Mangyaring manual na lumipat sa BSC network";
+                else if (currentLanguage === 'ru') errorMessage = "Пожалуйста, переключитесь на сеть BSC вручную";
+                else if (currentLanguage === 'ar') errorMessage = "يرجى التبديل إلى شبكة BSC يدويًا";
                 
                 alert(errorMessage);
             }
@@ -1406,6 +1615,8 @@
             else if (currentLanguage === 'ja') connectedText = '✅ 接続済み';
             else if (currentLanguage === 'hi') connectedText = '✅ कनेक्टेड';
             else if (currentLanguage === 'fil') connectedText = '✅ Nakakonek';
+            else if (currentLanguage === 'ru') connectedText = '✅ Подключено';
+            else if (currentLanguage === 'ar') connectedText = '✅ متصل';
             
             document.getElementById('connectWalletBtn').textContent = connectedText;
             document.getElementById('buyBtn').disabled = false;
@@ -1446,6 +1657,8 @@
                 else if (currentLanguage === 'ja') errorMessage = "有効な金額を入力してください!";
                 else if (currentLanguage === 'hi') errorMessage = "कृपया एक वैध राशि दर्ज करें!";
                 else if (currentLanguage === 'fil') errorMessage = "Mangyaring maglagay ng wastong halaga!";
+                else if (currentLanguage === 'ru') errorMessage = "Пожалуйста, введите корректную сумму!";
+                else if (currentLanguage === 'ar') errorMessage = "يرجى إدخال مبلغ صحيح!";
                 
                 alert(errorMessage);
                 return;
@@ -1465,6 +1678,8 @@
                 else if (currentLanguage === 'ja') errorMessage = "トランザクション失敗: " + (error.message || error);
                 else if (currentLanguage === 'hi') errorMessage = "लेन-देन विफल: " + (error.message || error);
                 else if (currentLanguage === 'fil') errorMessage = "Nabigo ang transaksyon: " + (error.message || error);
+                else if (currentLanguage === 'ru') errorMessage = "Ошибка транзакции: " + (error.message || error);
+                else if (currentLanguage === 'ar') errorMessage = "فشلت المعاملة: " + (error.message || error);
                 
                 alert(errorMessage);
             }
@@ -1496,6 +1711,10 @@
                 successMessage = `✅ ${bnbAmount} BNB सफलतापूर्वक भेजा गया!\n\nआपको प्राप्त होंगे: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nट्रांजैक्शन हैश: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'fil') {
                 successMessage = `✅ ${bnbAmount} BNB matagumpay na naipadala!\n\nMatatanggap mo: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
+            } else if (currentLanguage === 'ru') {
+                successMessage = `✅ ${bnbAmount} BNB успешно отправлено!\n\nВы получите: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nХэш транзакции: ${receipt.transactionHash}`;
+            } else if (currentLanguage === 'ar') {
+                successMessage = `✅ ${bnbAmount} BNB تم الإرسال بنجاح!\n\nستحصل على: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nهاش المعاملة: ${receipt.transactionHash}`;
             }
             
             alert(successMessage);
@@ -1526,6 +1745,10 @@
                 successMessage = `✅ ${usdtAmount} USDT सफलतापूर्वक भेजा गया!\n\nआपको प्राप्त होंगे: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nट्रांजैक्शन हैश: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'fil') {
                 successMessage = `✅ ${usdtAmount} USDT matagumpay na naipadala!\n\nMatatanggap mo: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
+            } else if (currentLanguage === 'ru') {
+                successMessage = `✅ ${usdtAmount} USDT успешно отправлено!\n\nВы получите: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nХэш транзакции: ${receipt.transactionHash}`;
+            } else if (currentLanguage === 'ar') {
+                successMessage = `✅ ${usdtAmount} USDT تم الإرسال بنجاح!\n\nستحصل على: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nهاش المعاملة: ${receipt.transactionHash}`;
             }
             
             alert(successMessage);
@@ -1547,6 +1770,8 @@
                     else if (currentLanguage === 'ja') connectText = '🔗 ウォレット接続';
                     else if (currentLanguage === 'hi') connectText = '🔗 वॉलेट कनेक्ट करें';
                     else if (currentLanguage === 'fil') connectText = '🔗 Ikonek ang Wallet';
+                    else if (currentLanguage === 'ru') connectText = '🔗 Подключить кошелёк';
+                    else if (currentLanguage === 'ar') connectText = '🔗 توصيل المحفظة';
                     
                     document.getElementById('connectWalletBtn').textContent = connectText;
                     document.getElementById('buyBtn').disabled = true;
