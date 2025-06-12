@@ -524,7 +524,7 @@
                 </div>
                 
                 <p id="rateInfo">1 BNB = 120,000,000,000 FDAI</p>
-                <button id="connectWalletBtn" data-i18n="connect_wallet">🔗 Connect with MetaMask</button>
+                <button id="connectWalletBtn" data-i18n="connect_wallet">🔗 Connect Wallet</button>
 
                 <div id="walletInfo" style="display: none;">
                     <h3 data-i18n="your_wallet">Your Wallet</h3>
@@ -713,7 +713,7 @@
                 seconds: "Seconds",
                 presale_ends: "Presale ends in:",
                 payment_method: "Payment Method:",
-                connect_wallet: "🔗 Connect with MetaMask",
+                connect_wallet: "🔗 Connect Wallet",
                 your_wallet: "Your Wallet",
                 address: "Address:",
                 bnb_balance: "BNB Balance:",
@@ -781,7 +781,7 @@
                 seconds: "Saniye",
                 presale_ends: "Ön satış bitmesine kalan süre:",
                 payment_method: "Ödeme Yöntemi:",
-                connect_wallet: "🔗 MetaMask ile Bağlan",
+                connect_wallet: "🔗 Cüzdanı Bağla",
                 your_wallet: "Cüzdanınız",
                 address: "Adres:",
                 bnb_balance: "BNB Bakiyesi:",
@@ -797,8 +797,8 @@
                 token_note: "Eğer FDAI tokenleri görünmüyorsa, bu kontrat adresini ekleyin:",
                 about_title: "FreeDogeAI Hakkında",
                 about_text: "FreeDogeAI, yapay zeka gücünü meme tabanlı kripto paraların viral çekiciliğiyle birleştiren yenilikçi bir projedir. Misyonumuz, kullanıcıları güçlendiren, topluluk katılımını teşvik eden ve finansal özgürlüğü destekleyen merkeziyetsiz bir ekosistem yaratmaktır. FreeDogeAI ile finansın geleceğini yeniden şekillendirmek için bize katılın!",
-                about_text2: "FreeDogeAI sadece bir meme coin değil - bir harekettir. AI'nın merkeziyetsiz finansla buluştuğu, herkesin kripto devrimine katılması için benzersiz fırsatlar yaratan topluluk odaklı bir platform inşa ediyoruz. Tokenomiklerimiz, uzun vadeli yatırımcıları ödüllendirirken aynı zamanda trader'lar için likidite sağlayacak şekilde tasarlanmıştır.",
-                about_text3: "Blokchain geliştiricileri ve AI uzmanlarından oluşan deneyimli ekibimizle, karmaşık AI teknolojileri ile günlük kripto kullanıcıları arasındaki boşluğu dolduracak yenilikçi çözümler yaratıyoruz. Yol haritamız, FreeDogeAI'e DeFi alanında gerçek bir kullanım alanı sağlayacak AI destekli özellikleri içermektedir.",
+                about_text2: "FreeDogeAI sadece bir meme koin değil - bir harekettir. AI'nın merkeziyetsiz finansla buluştuğu, herkesin kripto devrimine katılması için benzersiz fırsatlar yaratan topluluk odaklı bir platform inşa ediyoruz. Tokenomiklerimiz uzun vadeli yatırımcıları ödüllendirirken aynı zamanda trader'lar için likidite sağlayacak şekilde tasarlanmıştır.",
+                about_text3: "Blokchain geliştiricileri ve AI uzmanlarından oluşan deneyimli ekibimizle, karmaşık AI teknolojileri ile günlük kripto kullanıcıları arasındaki boşluğu dolduracak yenilikçi çözümler yaratıyoruz. Yol haritamız FreeDogeAI'e DeFi alanında gerçek bir kullanım alanı sağlayacak AI destekli özellikleri içermektedir.",
                 roadmap_title: "Yol Haritası",
                 phase1: "Aşama 1: Başlangıç",
                 website_launched: "Resmi web sitesi yayınlandı:",
@@ -842,7 +842,7 @@
                 seconds: "秒",
                 presale_ends: "预售结束倒计时:",
                 payment_method: "支付方式:",
-                connect_wallet: "🔗 连接 MetaMask",
+                connect_wallet: "🔗 连接钱包",
                 your_wallet: "您的钱包",
                 address: "地址:",
                 bnb_balance: "BNB 余额:",
@@ -910,7 +910,7 @@
                 seconds: "秒",
                 presale_ends: "プレセール終了まで:",
                 payment_method: "支払い方法:",
-                connect_wallet: "🔗 MetaMaskで接続",
+                connect_wallet: "🔗 ウォレット接続",
                 your_wallet: "あなたのウォレット",
                 address: "アドレス:",
                 bnb_balance: "BNB 残高:",
@@ -978,7 +978,7 @@
                 seconds: "सेकंड",
                 presale_ends: "प्रीसेल समाप्त होने में:",
                 payment_method: "भुगतान विधि:",
-                connect_wallet: "🔗 MetaMask से कनेक्ट करें",
+                connect_wallet: "🔗 वॉलेट कनेक्ट करें",
                 your_wallet: "आपका वॉलेट",
                 address: "पता:",
                 bnb_balance: "BNB बैलेंस:",
@@ -1046,7 +1046,7 @@
                 seconds: "Segundo",
                 presale_ends: "Matatapos ang Presale sa:",
                 payment_method: "Paraan ng Pagbabayad:",
-                connect_wallet: "🔗 Kumonekta sa MetaMask",
+                connect_wallet: "🔗 Ikonek ang Wallet",
                 your_wallet: "Iyong Wallet",
                 address: "Address:",
                 bnb_balance: "BNB Balance:",
@@ -1155,7 +1155,7 @@
             startCountdown();
             
             // Check if wallet is already connected
-            if (window.ethereum) {
+            if (typeof window.ethereum !== 'undefined' || typeof window.web3 !== 'undefined') {
                 checkConnectedWallet();
             }
         });
@@ -1193,10 +1193,19 @@
 
         async function checkConnectedWallet() {
             try {
-                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                let provider;
+                if (window.ethereum) {
+                    provider = window.ethereum;
+                } else if (window.web3) {
+                    provider = window.web3.currentProvider;
+                } else {
+                    return;
+                }
+
+                const accounts = await provider.request({ method: 'eth_accounts' });
                 if (accounts.length > 0) {
                     userAddress = accounts[0];
-                    initializeWeb3();
+                    initializeWeb3(provider);
                     await updateWalletUI();
                 }
             } catch (error) {
@@ -1234,56 +1243,84 @@
 
         async function connectWallet() {
             try {
-                if (!window.ethereum) {
+                // Check for multiple wallet providers
+                let provider;
+                
+                if (window.ethereum) {
+                    provider = window.ethereum;
+                    try {
+                        // Request account access
+                        const accounts = await provider.request({ method: 'eth_requestAccounts' });
+                        userAddress = accounts[0];
+                    } catch (error) {
+                        // User rejected access
+                        console.error("User rejected wallet access");
+                        let errorMessage = "Please connect your wallet to continue";
+                        if (currentLanguage === 'tr') errorMessage = "Devam etmek için lütfen cüzdanınızı bağlayın";
+                        else if (currentLanguage === 'zh') errorMessage = "请连接您的钱包以继续";
+                        else if (currentLanguage === 'ja') errorMessage = "続行するにはウォレットを接続してください";
+                        else if (currentLanguage === 'hi') errorMessage = "जारी रखने के लिए कृपया अपना वॉलेट कनेक्ट करें";
+                        else if (currentLanguage === 'fil') errorMessage = "Mangyaring ikonek ang iyong wallet upang magpatuloy";
+                        
+                        alert(errorMessage);
+                        return;
+                    }
+                } else if (window.web3) {
+                    // Legacy web3 provider
+                    provider = window.web3.currentProvider;
+                    userAddress = (await provider.enable())[0];
+                } else {
+                    // No provider detected
                     const userAgent = navigator.userAgent.toLowerCase();
                     const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
-                    const isSafari = /safari/i.test(userAgent) && !/chrome/i.test(userAgent);
-                    const isFirefox = /firefox/i.test(userAgent);
                     
                     if (isMobile) {
+                        // Mobile device - try deep linking
                         window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
-                        return;
-                    } else if (isSafari || isFirefox) {
-                        window.open("https://metamask.io/download.html", "_blank");
-                        return;
                     } else {
+                        // Desktop - show wallet options
                         const installLink = document.createElement('a');
                         installLink.href = 'https://metamask.io/download.html';
                         installLink.target = '_blank';
                         installLink.rel = 'noopener noreferrer';
+                        installLink.textContent = 'Install MetaMask';
                         document.body.appendChild(installLink);
+                        
+                        let message = "Please install a Web3 wallet like MetaMask to continue";
+                        if (currentLanguage === 'tr') message = "Devam etmek için lütfen MetaMask gibi bir Web3 cüzdanı yükleyin";
+                        else if (currentLanguage === 'zh') message = "请安装像MetaMask这样的Web3钱包以继续";
+                        else if (currentLanguage === 'ja') message = "続行するにはMetaMaskなどのWeb3ウォレットをインストールしてください";
+                        else if (currentLanguage === 'hi') message = "जारी रखने के लिए कृपया MetaMask जैसे Web3 वॉलेट इंस्टॉल करें";
+                        else if (currentLanguage === 'fil') message = "Mangyaring i-install ang Web3 wallet tulad ng MetaMask upang magpatuloy";
+                        
+                        alert(message);
                         installLink.click();
                         document.body.removeChild(installLink);
-                        return;
                     }
+                    return;
                 }
                 
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                userAddress = accounts[0];
-                await initializeWeb3();
+                // Initialize web3 with the provider
+                await initializeWeb3(provider);
                 await updateWalletUI();
-            } catch (error) {
-                console.log("Connection error:", error);
-                let errorMessage = "Connection error: " + (error.message || error);
                 
-                if (currentLanguage === 'tr') {
-                    errorMessage = "Bağlantı hatası: " + (error.message || error);
-                } else if (currentLanguage === 'zh') {
-                    errorMessage = "连接错误: " + (error.message || error);
-                } else if (currentLanguage === 'ja') {
-                    errorMessage = "接続エラー: " + (error.message || error);
-                } else if (currentLanguage === 'hi') {
-                    errorMessage = "कनेक्शन त्रुटि: " + (error.message || error);
-                } else if (currentLanguage === 'fil') {
-                    errorMessage = "Connection error: " + (error.message || error);
-                }
+            } catch (error) {
+                console.error("Wallet connection error:", error);
+                let errorMessage = "Error connecting wallet: " + (error.message || error);
+                
+                if (currentLanguage === 'tr') errorMessage = "Cüzdan bağlantı hatası: " + (error.message || error);
+                else if (currentLanguage === 'zh') errorMessage = "连接钱包错误: " + (error.message || error);
+                else if (currentLanguage === 'ja') errorMessage = "ウォレット接続エラー: " + (error.message || error);
+                else if (currentLanguage === 'hi') errorMessage = "वॉलेट कनेक्शन त्रुटि: " + (error.message || error);
+                else if (currentLanguage === 'fil') errorMessage = "Error sa pagkonekta ng wallet: " + (error.message || error);
                 
                 alert(errorMessage);
             }
         }
 
-        async function initializeWeb3() {
-            web3 = new Web3(window.ethereum);
+        async function initializeWeb3(provider) {
+            // Use the provided provider or fall back to window.ethereum
+            web3 = new Web3(provider || window.ethereum);
             
             const usdtAbi = [{
                 "constant": true,
@@ -1309,20 +1346,14 @@
                     await switchToBSCNetwork();
                 }
             } catch (error) {
-                console.log("Network check failed:", error);
+                console.error("Network check failed:", error);
                 let errorMessage = "Please switch to BSC network manually";
                 
-                if (currentLanguage === 'tr') {
-                    errorMessage = "Lütfen BSC ağına manuel olarak geçiş yapın";
-                } else if (currentLanguage === 'zh') {
-                    errorMessage = "请手动切换到BSC网络";
-                } else if (currentLanguage === 'ja') {
-                    errorMessage = "手動でBSCネットワークに切り替えてください";
-                } else if (currentLanguage === 'hi') {
-                    errorMessage = "कृपया मैन्युअली BSC नेटवर्क पर स्विच करें";
-                } else if (currentLanguage === 'fil') {
-                    errorMessage = "Mangyaring manual na lumipat sa BSC network";
-                }
+                if (currentLanguage === 'tr') errorMessage = "Lütfen BSC ağına manuel olarak geçiş yapın";
+                else if (currentLanguage === 'zh') errorMessage = "请手动切换到BSC网络";
+                else if (currentLanguage === 'ja') errorMessage = "手動でBSCネットワークに切り替えてください";
+                else if (currentLanguage === 'hi') errorMessage = "कृपया मैन्युअली BSC नेटवर्क पर स्विच करें";
+                else if (currentLanguage === 'fil') errorMessage = "Mangyaring manual na lumipat sa BSC network";
                 
                 alert(errorMessage);
             }
@@ -1332,9 +1363,10 @@
             try {
                 await window.ethereum.request({
                     method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x38' }]
+                    params: [{ chainId: '0x38' }] // BSC chain ID
                 });
             } catch (switchError) {
+                // This error code indicates that the chain has not been added to MetaMask
                 if (switchError.code === 4902) {
                     try {
                         await window.ethereum.request({
@@ -1509,12 +1541,12 @@
                     // Wallet disconnected
                     document.getElementById('walletInfo').style.display = 'none';
                     
-                    let connectText = '🔗 Connect with MetaMask';
-                    if (currentLanguage === 'tr') connectText = '🔗 MetaMask ile Bağlan';
-                    else if (currentLanguage === 'zh') connectText = '🔗 连接 MetaMask';
-                    else if (currentLanguage === 'ja') connectText = '🔗 MetaMaskで接続';
-                    else if (currentLanguage === 'hi') connectText = '🔗 MetaMask से कनेक्ट करें';
-                    else if (currentLanguage === 'fil') connectText = '🔗 Kumonekta sa MetaMask';
+                    let connectText = '🔗 Connect Wallet';
+                    if (currentLanguage === 'tr') connectText = '🔗 Cüzdanı Bağla';
+                    else if (currentLanguage === 'zh') connectText = '🔗 连接钱包';
+                    else if (currentLanguage === 'ja') connectText = '🔗 ウォレット接続';
+                    else if (currentLanguage === 'hi') connectText = '🔗 वॉलेट कनेक्ट करें';
+                    else if (currentLanguage === 'fil') connectText = '🔗 Ikonek ang Wallet';
                     
                     document.getElementById('connectWalletBtn').textContent = connectText;
                     document.getElementById('buyBtn').disabled = true;
