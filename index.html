@@ -1479,10 +1479,23 @@
 
                     
                     if (isMobile) {
-                        // Mobile device - redirect to MetaMask browser with our site
-                       const dappUrl = "freedogeai.com";
-                     return;
-                    } else {
+                 const dappUrl = "freedogeai.com";
+
+               // Android cihazlar için MetaMask uygulamasını açmayı dener
+               const intentLink = `intent://dapp/${dappUrl}#Intent;package=io.metamask;scheme=metamask;end`;
+
+               // Eğer intent çalışmazsa 1.5 saniye sonra fallback linke yönlendir
+               const fallbackLink = `https://metamask.app.link/dapp/${dappUrl}`;
+
+               window.location.href = intentLink;
+
+               setTimeout(() => {
+                window.location.href = fallbackLink;
+                   }, 1500);
+
+                      return;
+                    }
+                     else {
                         // Desktop - show wallet options
                         const installLink = document.createElement('a');
                         installLink.href = 'https://metamask.io/download.html';
