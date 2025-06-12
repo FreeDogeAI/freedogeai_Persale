@@ -1478,8 +1478,9 @@
                     const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
                     
                     if (isMobile) {
-                        // Mobile device - try deep linking
+                        // Mobile device - redirect to MetaMask browser with our site
                         window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
+                        return;
                     } else {
                         // Desktop - show wallet options
                         const installLink = document.createElement('a');
@@ -1501,8 +1502,8 @@
                         alert(message);
                         installLink.click();
                         document.body.removeChild(installLink);
+                        return;
                     }
-                    return;
                 }
                 
                 // Initialize web3 with the provider
