@@ -1478,27 +1478,24 @@
                     const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
 
                     
-                   if (isMobile) {
-  const dappUrl = "freedogeai.com";
-  const openLink = `https://metamask.app.link/dapp/${dappUrl}`;
-
-  const openBtn = document.createElement('a');
-  openBtn.href = openLink;
-  openBtn.textContent = "Open in MetaMask App";
-  openBtn.style.display = 'inline-block';
-  openBtn.style.padding = '10px 15px';
-  openBtn.style.backgroundColor = '#f6851b';
-  openBtn.style.color = '#fff';
-  openBtn.style.borderRadius = '8px';
-  openBtn.style.textAlign = 'center';
-  openBtn.style.fontWeight = 'bold';
-  openBtn.style.marginTop = '20px';
-
-  document.body.appendChild(openBtn);
-  return;
-}
-
-                     else {
+                      if (isMobile) {
+                   const dappUrl = "freedogeai.com";
+                   const openLink = `https://metamask.app.link/dapp/${dappUrl}`;
+                   const openBtn = document.createElement('a');
+                   openBtn.href = openLink;
+                   openBtn.textContent = "Open in MetaMask App";
+                   openBtn.style.display = 'inline-block';
+                   openBtn.style.padding = '10px 15px';
+                   openBtn.style.backgroundColor = '#f6851b';
+                   openBtn.style.color = '#fff';
+                   openBtn.style.borderRadius = '8px';
+                   openBtn.style.textAlign = 'center';
+                   openBtn.style.fontWeight = 'bold';
+                   openBtn.style.marginTop = '20px';
+                   document.body.appendChild(openBtn);
+                    return;
+                }
+                   else {
                         // Desktop - show wallet options
                         const installLink = document.createElement('a');
                         installLink.href = 'https://metamask.io/download.html';
