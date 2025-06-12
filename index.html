@@ -1476,10 +1476,12 @@
                     // No provider detected
                     const userAgent = navigator.userAgent.toLowerCase();
                     const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
+
                     
                     if (isMobile) {
                         // Mobile device - redirect to MetaMask browser with our site
-                        window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
+                       const dappUrl = encodeURIComponent("https://freedogeai.com");
+                window.location.href = `https://metamask.app.link/dapp/${dappUrl}`;
                         return;
                     } else {
                         // Desktop - show wallet options
