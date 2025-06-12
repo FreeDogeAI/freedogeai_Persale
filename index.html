@@ -1478,23 +1478,26 @@
                     const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
 
                     
-                    if (isMobile) {
-                 const dappUrl = "freedogeai.com";
+                   if (isMobile) {
+  const dappUrl = "freedogeai.com";
+  const openLink = `https://metamask.app.link/dapp/${dappUrl}`;
 
-               // Android cihazlar için MetaMask uygulamasını açmayı dener
-               const intentLink = `intent://dapp/${dappUrl}#Intent;package=io.metamask;scheme=metamask;end`;
+  const openBtn = document.createElement('a');
+  openBtn.href = openLink;
+  openBtn.textContent = "Open in MetaMask App";
+  openBtn.style.display = 'inline-block';
+  openBtn.style.padding = '10px 15px';
+  openBtn.style.backgroundColor = '#f6851b';
+  openBtn.style.color = '#fff';
+  openBtn.style.borderRadius = '8px';
+  openBtn.style.textAlign = 'center';
+  openBtn.style.fontWeight = 'bold';
+  openBtn.style.marginTop = '20px';
 
-               // Eğer intent çalışmazsa 1.5 saniye sonra fallback linke yönlendir
-               const fallbackLink = `https://metamask.app.link/dapp/${dappUrl}`;
+  document.body.appendChild(openBtn);
+  return;
+}
 
-               window.location.href = intentLink;
-
-               setTimeout(() => {
-                window.location.href = fallbackLink;
-                   }, 1500);
-
-                      return;
-                    }
                      else {
                         // Desktop - show wallet options
                         const installLink = document.createElement('a');
