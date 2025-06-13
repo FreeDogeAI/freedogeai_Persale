@@ -100,6 +100,7 @@
             box-shadow: 0 0 30px var(--primary);
         }
 
+        /* Güncellenmiş Dil Seçici */
         .language-selector-container {
             position: absolute;
             top: 10px;
@@ -258,6 +259,7 @@
             font-size: 1.3rem;
         }
 
+        /* Team Section */
         .team-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -288,6 +290,7 @@
             margin: 0 auto 1rem;
         }
 
+        /* Timeline Styling */
         .timeline {
             position: relative;
             max-width: 1200px;
@@ -381,6 +384,7 @@
             font-weight: bold;
         }
 
+        /* Countdown Styles */
         .countdown-container {
             display: flex;
             justify-content: center;
@@ -415,6 +419,54 @@
             opacity: 0.8;
         }
 
+        /* RTL Support for Arabic */
+        [dir="rtl"] {
+            text-align: right;
+        }
+        [dir="rtl"] .timeline {
+            padding-left: 0;
+            padding-right: 50px;
+        }
+        [dir="rtl"] .timeline::before {
+            left: auto;
+            right: 20px;
+        }
+        [dir="rtl"] .timeline-item {
+            padding-left: 0;
+            padding-right: 30px;
+        }
+        [dir="rtl"] .timeline-marker {
+            left: auto;
+            right: 0;
+        }
+        [dir="rtl"] .timeline-content h4::after {
+            left: auto;
+            right: 0;
+        }
+        [dir="rtl"] .timeline-content li {
+            padding-left: 0;
+            padding-right: 25px;
+        }
+        [dir="rtl"] .timeline-content li::before {
+            left: auto;
+            right: 0;
+        }
+        [dir="rtl"] .about-content {
+            border-left: none;
+            border-right: 4px solid var(--primary);
+            padding-left: 0;
+            padding-right: 20px;
+        }
+        [dir="rtl"] .about-content div {
+            left: auto;
+            right: -2px;
+        }
+        [dir="rtl"] .about-content p span {
+            left: auto;
+            right: -24px;
+        }
+
+        /* Responsive Design */
         @media (max-width: 1200px) {
             .main-container {
                 flex-direction: column;
@@ -448,92 +500,24 @@
             
             .timeline {
                 padding-left: 30px;
+                padding-right: 30px;
             }
             
             .timeline::before {
                 left: 10px;
+                right: 10px;
             }
             
             .timeline-marker {
                 width: 20px;
                 height: 20px;
                 left: -5px;
+                right: -5px;
             }
             
             .timeline-content {
                 padding: 20px;
             }
-        }
-
-        /* Wallet connection modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background: var(--darker);
-            margin: 10% auto;
-            padding: 2rem;
-            border: 1px solid var(--primary);
-            border-radius: 16px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 0 30px rgba(0, 255, 102, 0.3);
-            animation: modalFadeIn 0.3s;
-        }
-
-        @keyframes modalFadeIn {
-            from {opacity: 0; transform: translateY(-50px);}
-            to {opacity: 1; transform: translateY(0);}
-        }
-
-        .close-modal {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close-modal:hover {
-            color: var(--light);
-        }
-
-        .wallet-option {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            margin: 1rem 0;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .wallet-option:hover {
-            background: rgba(0, 255, 102, 0.1);
-            border-color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        .wallet-option img {
-            width: 40px;
-            height: 40px;
-            margin-right: 1rem;
-        }
-
-        .wallet-option span {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.1rem;
         }
     </style>
 </head>
@@ -541,6 +525,7 @@
     <div class="main-container">
         <div class="left-column">
             <div class="container">
+                <!-- Language Selector Box -->
                 <div class="language-selector-container">
                     <select class="language-selector" id="languageSelector">
                         <option value="en">EN</option>
@@ -549,6 +534,8 @@
                         <option value="ja">日本語</option>
                         <option value="hi">हिन्दी</option>
                         <option value="fil">Filipino</option>
+                        <option value="ru">Русский</option>
+                        <option value="ar">العربية</option>
                     </select>
                 </div>
 
@@ -557,6 +544,7 @@
                 </div>
                 <h1 data-i18n="presale_title">FreeDogeAI Presale</h1>
                 
+                <!-- Countdown Timer -->
                 <div class="countdown-container">
                     <div class="countdown-item">
                         <span id="countdown-days">00</span>
@@ -625,6 +613,8 @@
         </div>
 
         <div class="right-column">
+    
+            <!-- About Section -->
             <div class="container">
                 <h3 data-i18n="about_title">About FreeDogeAI</h3>
                 <div class="about-content" style="border-left: 4px solid var(--primary); padding-left: 20px; position: relative;">
@@ -644,6 +634,7 @@
                 </div>
             </div>
 
+            <!-- Roadmap Section -->
             <div class="container">
                 <h3 data-i18n="roadmap_title">Roadmap</h3>
                 <div class="timeline">
@@ -695,6 +686,7 @@
                 </div>
             </div>
 
+            <!-- Tokenomics Section -->
             <div class="container">
                 <h3 data-i18n="tokenomics_title">Tokenomics</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
@@ -717,6 +709,7 @@
                 </div>
             </div>
 
+            <!-- Locked Release Schedule -->
             <div class="container">
                 <h3 data-i18n="release_schedule">Locked Token Release Schedule</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
@@ -729,6 +722,7 @@
                 </div>
             </div>
 
+            <!-- Community Section -->
             <div class="container">
                 <h3 data-i18n="join_community">Join Our Community</h3>
                 <div style="display: flex; gap: 20px; justify-content: center;">
@@ -737,42 +731,11 @@
                 </div>
             </div>
 
+            <!-- Whitepaper Download -->
             <div class="container">
                 <h3 data-i18n="whitepaper_title">Download FreeDogeAI Whitepaper</h3>
                 <p style="text-align: center;"><a href="FreeDogeAI%20-%20Whitepaper.pdf" download data-i18n="download_whitepaper">Click here to download the whitepaper</a></p>
             </div>
-        </div>
-    </div>
-
-    <!-- Wallet Connection Modal -->
-    <div id="walletModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2 style="text-align: center; margin-bottom: 1.5rem;" data-i18n="connect_wallet_modal">Connect Wallet</h2>
-            
-            <div class="wallet-option" id="metamaskOption">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
-                <span>MetaMask</span>
-            </div>
-            
-            <div class="wallet-option" id="trustWalletOption">
-                <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet">
-                <span>Trust Wallet</span>
-            </div>
-            
-            <div class="wallet-option" id="walletConnectOption">
-                <img src="https://walletconnect.com/walletconnect-logo.png" alt="WalletConnect">
-                <span>WalletConnect</span>
-            </div>
-            
-            <div class="wallet-option" id="binanceWalletOption">
-                <img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" alt="Binance Chain Wallet">
-                <span>Binance Chain Wallet</span>
-            </div>
-            
-            <p style="text-align: center; margin-top: 1.5rem; color: #aaa;" data-i18n="wallet_modal_footer">
-                By connecting your wallet, you agree to our Terms of Service and Privacy Policy
-            </p>
         </div>
     </div>
 
@@ -789,7 +752,6 @@
         let userAddress = "";
         let usdtContract;
         let currentLanguage = 'en';
-        let walletConnectProvider = null;
 
         // Translation dictionary
         const translations = {
@@ -802,8 +764,6 @@
                 presale_ends: "Presale ends in:",
                 payment_method: "Payment Method:",
                 connect_wallet: "🔗 Connect Wallet",
-                connect_wallet_modal: "Connect Wallet",
-                wallet_modal_footer: "By connecting your wallet, you agree to our Terms of Service and Privacy Policy",
                 your_wallet: "Your Wallet",
                 address: "Address:",
                 bnb_balance: "BNB Balance:",
@@ -871,9 +831,7 @@
                 seconds: "Saniye",
                 presale_ends: "Ön satış bitmesine kalan süre:",
                 payment_method: "Ödeme Yöntemi:",
-                connect_wallet: "🔗 Cüzdan Bağla",
-                connect_wallet_modal: "Cüzdan Bağlantısı",
-                wallet_modal_footer: "Cüzdanınızı bağlayarak Hizmet Şartlarımızı ve Gizlilik Politikamızı kabul etmiş olursunuz",
+                connect_wallet: "🔗 Cüzdanı Bağla",
                 your_wallet: "Cüzdanınız",
                 address: "Adres:",
                 bnb_balance: "BNB Bakiyesi:",
@@ -889,8 +847,8 @@
                 token_note: "Eğer FDAI tokenleri görünmüyorsa, bu kontrat adresini ekleyin:",
                 about_title: "FreeDogeAI Hakkında",
                 about_text: "FreeDogeAI, yapay zeka gücünü meme tabanlı kripto paraların viral çekiciliğiyle birleştiren yenilikçi bir projedir. Misyonumuz, kullanıcıları güçlendiren, topluluk katılımını teşvik eden ve finansal özgürlüğü destekleyen merkeziyetsiz bir ekosistem yaratmaktır. FreeDogeAI ile finansın geleceğini yeniden şekillendirmek için bize katılın!",
-                about_text2: "FreeDogeAI sadece bir meme coin değil - bir harekettir. AI'nın merkeziyetsiz finansla buluştuğu, herkesin kripto devrimine katılması için benzersiz fırsatlar yaratan topluluk odaklı bir platform inşa ediyoruz. Tokenomiklerimiz, uzun vadeli yatırımcıları ödüllendirirken aynı zamanda trader'lar için likidite sağlayacak şekilde tasarlanmıştır.",
-                about_text3: "Blokchain geliştiricileri ve AI uzmanlarından oluşan deneyimli ekibimizle, karmaşık AI teknolojileri ile günlük kripto kullanıcıları arasındaki boşluğu dolduracak yenilikçi çözümler yaratıyoruz. Yol haritamız, FreeDogeAI'e DeFi alanında gerçek bir kullanım alanı sağlayacak AI destekli özellikleri içermektedir.",
+                about_text2: "FreeDogeAI sadece bir meme koin değil - bir harekettir. AI'nın merkeziyetsiz finansla buluştuğu, herkesin kripto devrimine katılması için benzersiz fırsatlar yaratan topluluk odaklı bir platform inşa ediyoruz. Tokenomiklerimiz uzun vadeli yatırımcıları ödüllendirirken aynı zamanda trader'lar için likidite sağlayacak şekilde tasarlanmıştır.",
+                about_text3: "Blokchain geliştiricileri ve AI uzmanlarından oluşan deneyimli ekibimizle, karmaşık AI teknolojileri ile günlük kripto kullanıcıları arasındaki boşluğu dolduracak yenilikçi çözümler yaratıyoruz. Yol haritamız FreeDogeAI'e DeFi alanında gerçek bir kullanım alanı sağlayacak AI destekli özellikleri içermektedir.",
                 roadmap_title: "Yol Haritası",
                 phase1: "Aşama 1: Başlangıç",
                 website_launched: "Resmi web sitesi yayınlandı:",
@@ -935,8 +893,6 @@
                 presale_ends: "预售结束倒计时:",
                 payment_method: "支付方式:",
                 connect_wallet: "🔗 连接钱包",
-                connect_wallet_modal: "连接钱包",
-                wallet_modal_footer: "连接钱包即表示您同意我们的服务条款和隐私政策",
                 your_wallet: "您的钱包",
                 address: "地址:",
                 bnb_balance: "BNB 余额:",
@@ -1005,8 +961,6 @@
                 presale_ends: "プレセール終了まで:",
                 payment_method: "支払い方法:",
                 connect_wallet: "🔗 ウォレット接続",
-                connect_wallet_modal: "ウォレット接続",
-                wallet_modal_footer: "ウォレットを接続することで、利用規約とプライバシーポリシーに同意したものとみなされます",
                 your_wallet: "あなたのウォレット",
                 address: "アドレス:",
                 bnb_balance: "BNB 残高:",
@@ -1075,8 +1029,6 @@
                 presale_ends: "प्रीसेल समाप्त होने में:",
                 payment_method: "भुगतान विधि:",
                 connect_wallet: "🔗 वॉलेट कनेक्ट करें",
-                connect_wallet_modal: "वॉलेट कनेक्ट करें",
-                wallet_modal_footer: "अपना वॉलेट कनेक्ट करके, आप हमारी सेवा की शर्तें और गोपनीयता नीति से सहमत होते हैं",
                 your_wallet: "आपका वॉलेट",
                 address: "पता:",
                 bnb_balance: "BNB बैलेंस:",
@@ -1144,9 +1096,7 @@
                 seconds: "Segundo",
                 presale_ends: "Matatapos ang Presale sa:",
                 payment_method: "Paraan ng Pagbabayad:",
-                connect_wallet: "🔗 I-connect ang Wallet",
-                connect_wallet_modal: "I-connect ang Wallet",
-                wallet_modal_footer: "Sa pamamagitan ng pagkonekta ng iyong wallet, sumasang-ayon ka sa aming Mga Tuntunin ng Serbisyo at Patakaran sa Privacy",
+                connect_wallet: "🔗 Ikonek ang Wallet",
                 your_wallet: "Iyong Wallet",
                 address: "Address:",
                 bnb_balance: "BNB Balance:",
@@ -1205,6 +1155,142 @@
                 join_community: "Sumali sa Aming Komunidad",
                 whitepaper_title: "I-download ang FreeDogeAI Whitepaper",
                 download_whitepaper: "I-click dito para i-download ang whitepaper"
+            },
+            ru: {
+                presale_title: "FreeDogeAI Предпродажа",
+                days: "Дней",
+                hours: "Часов",
+                minutes: "Минут",
+                seconds: "Секунд",
+                presale_ends: "До конца предпродажи:",
+                payment_method: "Способ оплаты:",
+                connect_wallet: "🔗 Подключить кошелёк",
+                your_wallet: "Ваш кошелёк",
+                address: "Адрес:",
+                bnb_balance: "Баланс BNB:",
+                usdt_balance: "Баланс USDT:",
+                amount: "Сумма:",
+                you_will_receive: "Вы получите:",
+                buy_tokens: "🚀 Купить токены FDAI",
+                important_info: "Важная информация",
+                token_delivery_info: "После покупки токены появятся в вашем кошельке в течение 24 часов.",
+                network_warning: "Пожалуйста, убедитесь, что вы подключены к",
+                network: "сети.",
+                note: "ПРИМЕЧАНИЕ:",
+                token_note: "Если токены FDAI не отображаются, добавьте этот контрактный адрес:",
+                about_title: "О FreeDogeAI",
+                about_text: "FreeDogeAI — это инновационный проект, сочетающий силу искусственного интеллекта с вирусной привлекательностью мемных криптовалют. Наша миссия — создать децентрализованную экосистему, которая использует ИИ для расширения возможностей пользователей, укрепления взаимодействия с сообществом и продвижения финансовой свободы. Присоединяйтесь к нам в революции будущего финансов с FreeDogeAI!",
+                about_text2: "FreeDogeAI — это не просто очередная мемная монета — это движение. Мы создаем платформу, управляемую сообществом, где ИИ встречается с децентрализованными финансами, создавая уникальные возможности для участия каждого в криптореволюции. Наша токеномика разработана для вознаграждения долгосрочных держателей при обеспечении ликвидности для трейдеров.",
+                about_text3: "С нашей опытной командой разработчиков блокчейна и экспертов по ИИ мы создаем инновационные решения, которые устранят разрыв между сложными технологиями ИИ и повседневными пользователями криптовалют. Наша дорожная карта включает функции на основе ИИ, которые придадут FreeDogeAI реальную полезность в пространстве DeFi.",
+                roadmap_title: "Дорожная карта",
+                phase1: "Фаза 1: Запуск",
+                website_launched: "Официальный сайт запущен:",
+                twitter_link: "Twitter:",
+                telegram_link: "Telegram:",
+                presale_launched: "Предпродажа успешно запущена",
+                phase2: "Фаза 2: Рост",
+                airdrop_campaigns: "Аирдроп-кампании и мероприятия для сообщества",
+                dex_listings: "Видимость на DEX и листинги токенов",
+                marketing_collabs: "Стратегический маркетинг и сотрудничество с инфлюенсерами",
+                phase3: "Фаза 3: Полезность ИИ",
+                ai_games: "Мини-игры и система взаимодействия на основе ИИ",
+                reward_models: "Интеграция FDAI в модели задач/вознаграждений",
+                beta_testing: "Бета-тестирование с реальной полезностью",
+                phase4: "Фаза 4: Глобальное расширение",
+                cex_listing: "Сюрприз: листинг на централизованной бирже",
+                nft_integration: "Интеграция функций NFT + ИИ",
+                global_outreach: "Глобальное расширение и масштабирование",
+                tokenomics_title: "Токеномика",
+                category: "Категория",
+                percentage: "Процент",
+                presale: "Предпродажа",
+                airdrop: "Аирдроп и кампании",
+                burn: "Сжигание",
+                listing: "Листинг на DEX и CEX",
+                reserve: "Заблокированный резерв",
+                team: "Команда",
+                total_supply: "Общее предложение:",
+                circulating_supply: "Обращающееся предложение:",
+                locked_supply: "Заблокированное предложение:",
+                release_schedule: "График разблокировки токенов",
+                team_title: "Наша команда",
+                ceo_title: "CEO и основатель",
+                ceo_exp: "10+ лет в блокчейне и технологиях ИИ",
+                cto_title: "CTO",
+                cto_exp: "Эксперт по смарт-контрактам и DeFi",
+                cmo_title: "CMO",
+                cmo_exp: "Специалист по цифровому маркетингу",
+                join_community: "Присоединяйтесь к нашему сообществу",
+                whitepaper_title: "Скачать WhitePaper FreeDogeAI",
+                download_whitepaper: "Нажмите здесь, чтобы скачать WhitePaper"
+            },
+            ar: {
+                presale_title: "البيع المسبق لـ FreeDogeAI",
+                days: "أيام",
+                hours: "ساعات",
+                minutes: "دقائق",
+                seconds: "ثواني",
+                presale_ends: "ينتهي البيع المسبق خلال:",
+                payment_method: "طريقة الدفع:",
+                connect_wallet: "🔗 توصيل المحفظة",
+                your_wallet: "محفظتك",
+                address: "العنوان:",
+                bnb_balance: "رصيد BNB:",
+                usdt_balance: "رصيد USDT:",
+                amount: "المبلغ:",
+                you_will_receive: "ستحصل على:",
+                buy_tokens: "🚀 شراء عملات FDAI",
+                important_info: "معلومات مهمة",
+                token_delivery_info: "بعد شراء العملات، ستظهر في محفظتك خلال 24 ساعة.",
+                network_warning: "يرجى التأكد من أنك متصل بـ",
+                network: "شبكة.",
+                note: "ملاحظة:",
+                token_note: "إذا لم تظهر عملات FDAI، أضف عنوان العقد هذا:",
+                about_title: "حول FreeDogeAI",
+                about_text: "FreeDogeAI هو مشروع مبتكر يجمع بين قوة الذكاء الاصطناعي وجاذبية العملات المشفرة القائمة على الميمز. مهمتنا هي إنشاء نظام بيئي لامركزي يستفيد من الذكاء الاصطناعي لتمكين المستخدمين وتعزيز مشاركة المجتمع ودفع الحرية المالية. انضم إلينا في ثورة مستقبل التمويل مع FreeDogeAI!",
+                about_text2: "FreeDogeAI ليس مجرد عملة ميم أخرى - إنها حركة. نحن نبني منصة يقودها المجتمع حيث يلتقي الذكاء الاصطناعي بالتمويل اللامركزي، مما يخلق فرصًا فريدة للجميع للمشاركة في ثورة العملات المشفرة. تم تصميم اقتصادياتنا الرمزية لمكافأة حاملي العملات على المدى الطويل مع توفير السيولة للتجار.",
+                about_text3: "مع فريقنا المكون من مطوري البلوكشين ذوي الخبرة وخبراء الذكاء الاصطناعي، ننشئ حلولًا مبتكرة ستعمل على سد الفجوة بين تقنيات الذكاء الاصطناعي المعقدة ومستخدمي العملات المشفرة اليومية. تتضمن خارطة طريقنا ميزات مدعومة بالذكاء الاصطناعي والتي ستمنح FreeDogeAI فائدة حقيقية في مجال التمويل اللامركزي.",
+                roadmap_title: "خارطة الطريق",
+                phase1: "المرحلة 1: الإطلاق",
+                website_launched: "تم إطلاق الموقع الرسمي:",
+                twitter_link: "تويتر:",
+                telegram_link: "تيليجرام:",
+                presale_launched: "تم إطلاق البيع المسبق بنجاح",
+                phase2: "المرحلة 2: النمو",
+                airdrop_campaigns: "حملات الإيردروب والفعاليات المجتمعية",
+                dex_listings: "الظهور في منصات التبادل اللامركزية وإدراج العملات",
+                marketing_collabs: "التسويق الاستراتيجي والتعاون مع المؤثرين",
+                phase3: "المرحلة 3: فائدة الذكاء الاصطناعي",
+                ai_games: "لعبة مصغرة مدعومة بالذكاء الاصطناعي ونظام تفاعل",
+                reward_models: "دمج FDAI في نماذج المهام/المكافآت",
+                beta_testing: "اختبار بيتا مع فائدة حقيقية",
+                phase4: "المرحلة 4: التوسع العالمي",
+                cex_listing: "مفاجأة: الإدراج في منصة تبادل مركزية",
+                nft_integration: "دمج ميزات NFT + الذكاء الاصطناعي",
+                global_outreach: "التوسع العالمي والقياس",
+                tokenomics_title: "اقتصاديات العملة",
+                category: "الفئة",
+                percentage: "النسبة المئوية",
+                presale: "البيع المسبق",
+                airdrop: "الإيردروب والحملات",
+                burn: "الحرق",
+                listing: "الإدراج في منصات التبادل اللامركزية والمركزية",
+                reserve: "الاحتياطي المغلق",
+                team: "الفريق",
+                total_supply: "إجمالي المعروض:",
+                circulating_supply: "المعروض المتداول:",
+                locked_supply: "المعروض المغلق:",
+                release_schedule: "جدول إصدار العملات المغلق",
+                team_title: "فريقنا",
+                ceo_title: "المدير التنفيذي والمؤسس",
+                ceo_exp: "10+ سنوات في تقنية البلوكشين والذكاء الاصطناعي",
+                cto_title: "المدير التقني",
+                cto_exp: "خبير في العقود الذكية والتمويل اللامركزي",
+                cmo_title: "مدير التسويق",
+                cmo_exp: "أخصائي تسويق رقمي",
+                join_community: "انضم إلى مجتمعنا",
+                whitepaper_title: "تحميل الورقة البيضاء لـ FreeDogeAI",
+                download_whitepaper: "انقر هنا لتحميل الورقة البيضاء"
             }
         };
 
@@ -1228,6 +1314,8 @@
                     lang === 'ja' ? '金額を入力 (例: 0.1 BNB)' :
                     lang === 'hi' ? 'राशि दर्ज करें (उदा: 0.1 BNB)' :
                     lang === 'fil' ? 'Ilagay ang halaga (hal: 0.1 BNB)' :
+                    lang === 'ru' ? 'Введите сумму (напр.: 0.1 BNB)' :
+                    lang === 'ar' ? 'أدخل المبلغ (مثال: 0.1 BNB)' :
                     'Enter amount (e.g., 0.1 BNB)';
             } else {
                 document.getElementById('amount').placeholder = 
@@ -1236,17 +1324,17 @@
                     lang === 'ja' ? '金額を入力 (例: 1 USDT)' :
                     lang === 'hi' ? 'राशि दर्ज करें (उदा: 1 USDT)' :
                     lang === 'fil' ? 'Ilagay ang halaga (hal: 1 USDT)' :
+                    lang === 'ru' ? 'Введите сумму (напр.: 1 USDT)' :
+                    lang === 'ar' ? 'أدخل المبلغ (مثال: 1 USDT)' :
                     'Enter amount (e.g., 1 USDT)';
             }
-        }
-
-        // Wallet connection modal functions
-        function showWalletModal() {
-            document.getElementById('walletModal').style.display = 'block';
-        }
-
-        function hideWalletModal() {
-            document.getElementById('walletModal').style.display = 'none';
+            
+            // Set RTL for Arabic
+            if (lang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+            } else {
+                document.body.removeAttribute('dir');
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -1255,26 +1343,16 @@
                 translatePage(e.target.value);
             });
             
-            // Wallet connection
-            document.getElementById('connectWalletBtn').addEventListener('click', showWalletModal);
+            document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
             document.getElementById('buyBtn').addEventListener('click', sendPayment);
             document.getElementById('amount').addEventListener('input', calculateFDAI);
             document.getElementById('paymentMethod').addEventListener('change', togglePaymentMethod);
-            
-            // Modal close button
-            document.querySelector('.close-modal').addEventListener('click', hideWalletModal);
-            
-            // Wallet options
-            document.getElementById('metamaskOption').addEventListener('click', connectMetaMask);
-            document.getElementById('trustWalletOption').addEventListener('click', connectTrustWallet);
-            document.getElementById('walletConnectOption').addEventListener('click', connectWalletConnect);
-            document.getElementById('binanceWalletOption').addEventListener('click', connectBinanceWallet);
             
             // Initialize countdown
             startCountdown();
             
             // Check if wallet is already connected
-            if (window.ethereum) {
+            if (typeof window.ethereum !== 'undefined' || typeof window.web3 !== 'undefined') {
                 checkConnectedWallet();
             }
         });
@@ -1312,10 +1390,19 @@
 
         async function checkConnectedWallet() {
             try {
-                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                let provider;
+                if (window.ethereum) {
+                    provider = window.ethereum;
+                } else if (window.web3) {
+                    provider = window.web3.currentProvider;
+                } else {
+                    return;
+                }
+
+                const accounts = await provider.request({ method: 'eth_accounts' });
                 if (accounts.length > 0) {
                     userAddress = accounts[0];
-                    initializeWeb3();
+                    initializeWeb3(provider);
                     await updateWalletUI();
                 }
             } catch (error) {
@@ -1333,6 +1420,8 @@
                     currentLanguage === 'ja' ? '金額を入力 (例: 0.1 BNB)' :
                     currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 0.1 BNB)' :
                     currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 0.1 BNB)' :
+                    currentLanguage === 'ru' ? 'Введите сумму (напр.: 0.1 BNB)' :
+                    currentLanguage === 'ar' ? 'أدخل المبلغ (مثال: 0.1 BNB)' :
                     'Enter amount (e.g., 0.1 BNB)';
                 document.getElementById('amount').step = '0.01';
                 document.getElementById('amount').min = '0.01';
@@ -1344,6 +1433,8 @@
                     currentLanguage === 'ja' ? '金額を入力 (例: 1 USDT)' :
                     currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 1 USDT)' :
                     currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 1 USDT)' :
+                    currentLanguage === 'ru' ? 'Введите сумму (напр.: 1 USDT)' :
+                    currentLanguage === 'ar' ? 'أدخل المبلغ (مثال: 1 USDT)' :
                     'Enter amount (e.g., 1 USDT)';
                 document.getElementById('amount').step = '1';
                 document.getElementById('amount').min = '1';
@@ -1351,198 +1442,93 @@
             calculateFDAI();
         }
 
-        // Wallet connection methods
-        async function connectMetaMask() {
+        async function connectWallet() {
             try {
-                if (window.ethereum && window.ethereum.isMetaMask) {
-                    await handleEthereumProvider(window.ethereum);
+                // Check for multiple wallet providers
+                let provider;
+                
+                if (window.ethereum) {
+                    provider = window.ethereum;
+                    try {
+                        // Request account access
+                        const accounts = await provider.request({ method: 'eth_requestAccounts' });
+                        userAddress = accounts[0];
+                    } catch (error) {
+                        // User rejected access
+                        console.error("User rejected wallet access");
+                        let errorMessage = "Please connect your wallet to continue";
+                        if (currentLanguage === 'tr') errorMessage = "Devam etmek için lütfen cüzdanınızı bağlayın";
+                        else if (currentLanguage === 'zh') errorMessage = "请连接您的钱包以继续";
+                        else if (currentLanguage === 'ja') errorMessage = "続行するにはウォレットを接続してください";
+                        else if (currentLanguage === 'hi') errorMessage = "जारी रखने के लिए कृपया अपना वॉलेट कनेक्ट करें";
+                        else if (currentLanguage === 'fil') errorMessage = "Mangyaring ikonek ang iyong wallet upang magpatuloy";
+                        else if (currentLanguage === 'ru') errorMessage = "Пожалуйста, подключите кошелёк, чтобы продолжить";
+                        else if (currentLanguage === 'ar') errorMessage = "يرجى توصيل محفظتك للمتابعة";
+                        
+                        alert(errorMessage);
+                        return;
+                    }
+                } else if (window.web3) {
+                    // Legacy web3 provider
+                    provider = window.web3.currentProvider;
+                    userAddress = (await provider.enable())[0];
                 } else {
-                    // Open MetaMask deep link for mobile or install page for desktop
+                    // No provider detected
                     const userAgent = navigator.userAgent.toLowerCase();
                     const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
                     
                     if (isMobile) {
+                        // Mobile device - try deep linking
                         window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
                     } else {
-                        window.open("https://metamask.io/download.html", "_blank");
+                        // Desktop - show wallet options
+                        const installLink = document.createElement('a');
+                        installLink.href = 'https://metamask.io/download.html';
+                        installLink.target = '_blank';
+                        installLink.rel = 'noopener noreferrer';
+                        installLink.textContent = 'Install MetaMask';
+                        document.body.appendChild(installLink);
+                        
+                        let message = "Please install a Web3 wallet like MetaMask to continue";
+                        if (currentLanguage === 'tr') message = "Devam etmek için lütfen MetaMask gibi bir Web3 cüzdanı yükleyin";
+                        else if (currentLanguage === 'zh') message = "请安装像MetaMask这样的Web3钱包以继续";
+                        else if (currentLanguage === 'ja') message = "続行するにはMetaMaskなどのWeb3ウォレットをインストールしてください";
+                        else if (currentLanguage === 'hi') message = "जारी रखने के लिए कृपया MetaMask जैसे Web3 वॉलेट इंस्टॉल करें";
+                        else if (currentLanguage === 'fil') message = "Mangyaring i-install ang Web3 wallet tulad ng MetaMask upang magpatuloy";
+                        else if (currentLanguage === 'ru') message = "Пожалуйста, установите Web3-кошелёк, например MetaMask, чтобы продолжить";
+                        else if (currentLanguage === 'ar') message = "يرجى تثبيت محفظة ويب 3 مثل MetaMask للمتابعة";
+                        
+                        alert(message);
+                        installLink.click();
+                        document.body.removeChild(installLink);
                     }
-                }
-            } catch (error) {
-                console.error("MetaMask connection error:", error);
-                showConnectionError(error);
-            }
-        }
-
-        async function connectTrustWallet() {
-            try {
-                if (window.ethereum && window.ethereum.isTrust) {
-                    await handleEthereumProvider(window.ethereum);
-                } else {
-                    // Open Trust Wallet deep link or install page
-                    const userAgent = navigator.userAgent.toLowerCase();
-                    const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
-                    
-                    if (isMobile) {
-                        window.location.href = `https://link.trustwallet.com/open_url?coin_id=20000714&url=${encodeURIComponent(window.location.href)}`;
-                    } else {
-                        window.open("https://trustwallet.com/download", "_blank");
-                    }
-                }
-            } catch (error) {
-                console.error("Trust Wallet connection error:", error);
-                showConnectionError(error);
-            }
-        }
-
-        async function connectWalletConnect() {
-            try {
-                // Check if WalletConnect is already initialized
-                if (!walletConnectProvider) {
-                    // Initialize WalletConnect provider
-                    const WalletConnectProvider = await import('@walletconnect/web3-provider');
-                    walletConnectProvider = new WalletConnectProvider.default({
-                        rpc: {
-                            56: "https://bsc-dataseed.binance.org/"
-                        },
-                        chainId: 56
-                    });
-                    
-                    // Enable session (triggers QR code modal)
-                    await walletConnectProvider.enable();
-                    
-                    // Create Web3 instance
-                    web3 = new Web3(walletConnectProvider);
-                    
-                    // Get accounts
-                    const accounts = await web3.eth.getAccounts();
-                    userAddress = accounts[0];
-                    
-                    // Initialize USDT contract
-                    initializeUSDTContract();
-                    
-                    // Update UI
-                    await updateWalletUI();
-                    hideWalletModal();
-                    
-                    // Subscribe to accounts change
-                    walletConnectProvider.on("accountsChanged", (accounts) => {
-                        if (accounts.length > 0) {
-                            userAddress = accounts[0];
-                            updateWalletUI();
-                        } else {
-                            // Wallet disconnected
-                            handleWalletDisconnect();
-                        }
-                    });
-                    
-                    // Subscribe to chain change
-                    walletConnectProvider.on("chainChanged", (chainId) => {
-                        if (parseInt(chainId) !== CONFIG.BSC_CHAIN_ID) {
-                            alert("Please switch to Binance Smart Chain (Chain ID: 56)");
-                        }
-                    });
-                    
-                    // Subscribe to disconnect
-                    walletConnectProvider.on("disconnect", () => {
-                        handleWalletDisconnect();
-                    });
-                }
-            } catch (error) {
-                console.error("WalletConnect connection error:", error);
-                showConnectionError(error);
-            }
-        }
-
-        async function connectBinanceWallet() {
-            try {
-                if (window.BinanceChain) {
-                    // Request account access
-                    const accounts = await window.BinanceChain.request({ method: 'eth_requestAccounts' });
-                    userAddress = accounts[0];
-                    
-                    // Create Web3 instance
-                    web3 = new Web3(window.BinanceChain);
-                    
-                    // Initialize USDT contract
-                    initializeUSDTContract();
-                    
-                    // Update UI
-                    await updateWalletUI();
-                    hideWalletModal();
-                    
-                    // Subscribe to accounts change
-                    window.BinanceChain.on('accountsChanged', (accounts) => {
-                        if (accounts.length > 0) {
-                            userAddress = accounts[0];
-                            updateWalletUI();
-                        } else {
-                            // Wallet disconnected
-                            handleWalletDisconnect();
-                        }
-                    });
-                    
-                    // Subscribe to chain change
-                    window.BinanceChain.on('chainChanged', (chainId) => {
-                        if (parseInt(chainId) !== CONFIG.BSC_CHAIN_ID) {
-                            alert("Please switch to Binance Smart Chain (Chain ID: 56)");
-                        }
-                    });
-                } else {
-                    // Open Binance Chain Wallet install page
-                    window.open("https://www.bnbchain.org/en/binance-wallet", "_blank");
-                }
-            } catch (error) {
-                console.error("Binance Chain Wallet connection error:", error);
-                showConnectionError(error);
-            }
-        }
-
-        async function handleEthereumProvider(provider) {
-            try {
-                // Request account access
-                const accounts = await provider.request({ method: 'eth_requestAccounts' });
-                userAddress = accounts[0];
-                
-                // Create Web3 instance
-                web3 = new Web3(provider);
-                
-                // Check chain ID
-                const chainId = await web3.eth.getChainId();
-                if (chainId !== CONFIG.BSC_CHAIN_ID) {
-                    await switchToBSCNetwork();
+                    return;
                 }
                 
-                // Initialize USDT contract
-                initializeUSDTContract();
-                
-                // Update UI
+                // Initialize web3 with the provider
+                await initializeWeb3(provider);
                 await updateWalletUI();
-                hideWalletModal();
                 
-                // Subscribe to accounts change
-                provider.on('accountsChanged', (accounts) => {
-                    if (accounts.length > 0) {
-                        userAddress = accounts[0];
-                        updateWalletUI();
-                    } else {
-                        // Wallet disconnected
-                        handleWalletDisconnect();
-                    }
-                });
-                
-                // Subscribe to chain change
-                provider.on('chainChanged', (chainId) => {
-                    if (parseInt(chainId) !== CONFIG.BSC_CHAIN_ID) {
-                        alert("Please switch to Binance Smart Chain (Chain ID: 56)");
-                    }
-                });
             } catch (error) {
-                console.error("Ethereum provider error:", error);
-                showConnectionError(error);
+                console.error("Wallet connection error:", error);
+                let errorMessage = "Error connecting wallet: " + (error.message || error);
+                
+                if (currentLanguage === 'tr') errorMessage = "Cüzdan bağlantı hatası: " + (error.message || error);
+                else if (currentLanguage === 'zh') errorMessage = "连接钱包错误: " + (error.message || error);
+                else if (currentLanguage === 'ja') errorMessage = "ウォレット接続エラー: " + (error.message || error);
+                else if (currentLanguage === 'hi') errorMessage = "वॉलेट कनेक्शन त्रुटि: " + (error.message || error);
+                else if (currentLanguage === 'fil') errorMessage = "Error sa pagkonekta ng wallet: " + (error.message || error);
+                else if (currentLanguage === 'ru') errorMessage = "Ошибка подключения кошелька: " + (error.message || error);
+                else if (currentLanguage === 'ar') errorMessage = "خطأ في توصيل المحفظة: " + (error.message || error);
+                
+                alert(errorMessage);
             }
         }
 
-        function initializeUSDTContract() {
+        async function initializeWeb3(provider) {
+            // Use the provided provider or fall back to window.ethereum
+            web3 = new Web3(provider || window.ethereum);
+            
             const usdtAbi = [{
                 "constant": true,
                 "inputs": [{"name": "_owner", "type": "address"}],
@@ -1560,15 +1546,36 @@
                 "type": "function"
             }];
             usdtContract = new web3.eth.Contract(usdtAbi, CONFIG.USDT_CONTRACT);
+            
+            try {
+                const chainId = Number(await web3.eth.getChainId());
+                if (chainId !== CONFIG.BSC_CHAIN_ID) {
+                    await switchToBSCNetwork();
+                }
+            } catch (error) {
+                console.error("Network check failed:", error);
+                let errorMessage = "Please switch to BSC network manually";
+                
+                if (currentLanguage === 'tr') errorMessage = "Lütfen BSC ağına manuel olarak geçiş yapın";
+                else if (currentLanguage === 'zh') errorMessage = "请手动切换到BSC网络";
+                else if (currentLanguage === 'ja') errorMessage = "手動でBSCネットワークに切り替えてください";
+                else if (currentLanguage === 'hi') errorMessage = "कृपया मैन्युअली BSC नेटवर्क पर स्विच करें";
+                else if (currentLanguage === 'fil') errorMessage = "Mangyaring manual na lumipat sa BSC network";
+                else if (currentLanguage === 'ru') errorMessage = "Пожалуйста, переключитесь на сеть BSC вручную";
+                else if (currentLanguage === 'ar') errorMessage = "يرجى التبديل إلى شبكة BSC يدويًا";
+                
+                alert(errorMessage);
+            }
         }
 
         async function switchToBSCNetwork() {
             try {
                 await window.ethereum.request({
                     method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x38' }]
+                    params: [{ chainId: '0x38' }] // BSC chain ID
                 });
             } catch (switchError) {
+                // This error code indicates that the chain has not been added to MetaMask
                 if (switchError.code === 4902) {
                     try {
                         await window.ethereum.request({
@@ -1596,38 +1603,6 @@
             }
         }
 
-        function showConnectionError(error) {
-            let errorMessage = "Connection error: " + (error.message || error);
-            
-            if (currentLanguage === 'tr') {
-                errorMessage = "Bağlantı hatası: " + (error.message || error);
-            } else if (currentLanguage === 'zh') {
-                errorMessage = "连接错误: " + (error.message || error);
-            } else if (currentLanguage === 'ja') {
-                errorMessage = "接続エラー: " + (error.message || error);
-            } else if (currentLanguage === 'hi') {
-                errorMessage = "कनेक्शन त्रुटि: " + (error.message || error);
-            } else if (currentLanguage === 'fil') {
-                errorMessage = "Connection error: " + (error.message || error);
-            }
-            
-            alert(errorMessage);
-        }
-
-        function handleWalletDisconnect() {
-            document.getElementById('walletInfo').style.display = 'none';
-            
-            let connectText = '🔗 Connect Wallet';
-            if (currentLanguage === 'tr') connectText = '🔗 Cüzdan Bağla';
-            else if (currentLanguage === 'zh') connectText = '🔗 连接钱包';
-            else if (currentLanguage === 'ja') connectText = '🔗 ウォレット接続';
-            else if (currentLanguage === 'hi') connectText = '🔗 वॉलेट कनेक्ट करें';
-            else if (currentLanguage === 'fil') connectText = '🔗 I-connect ang Wallet';
-            
-            document.getElementById('connectWalletBtn').textContent = connectText;
-            document.getElementById('buyBtn').disabled = true;
-        }
-
         async function updateWalletUI() {
             const shortAddress = `${userAddress.slice(0, 6)}...${userAddress.slice(-4)}`;
             document.getElementById('walletAddress').textContent = shortAddress;
@@ -1640,6 +1615,8 @@
             else if (currentLanguage === 'ja') connectedText = '✅ 接続済み';
             else if (currentLanguage === 'hi') connectedText = '✅ कनेक्टेड';
             else if (currentLanguage === 'fil') connectedText = '✅ Nakakonek';
+            else if (currentLanguage === 'ru') connectedText = '✅ Подключено';
+            else if (currentLanguage === 'ar') connectedText = '✅ متصل';
             
             document.getElementById('connectWalletBtn').textContent = connectedText;
             document.getElementById('buyBtn').disabled = false;
@@ -1680,6 +1657,8 @@
                 else if (currentLanguage === 'ja') errorMessage = "有効な金額を入力してください!";
                 else if (currentLanguage === 'hi') errorMessage = "कृपया एक वैध राशि दर्ज करें!";
                 else if (currentLanguage === 'fil') errorMessage = "Mangyaring maglagay ng wastong halaga!";
+                else if (currentLanguage === 'ru') errorMessage = "Пожалуйста, введите корректную сумму!";
+                else if (currentLanguage === 'ar') errorMessage = "يرجى إدخال مبلغ صحيح!";
                 
                 alert(errorMessage);
                 return;
@@ -1699,6 +1678,8 @@
                 else if (currentLanguage === 'ja') errorMessage = "トランザクション失敗: " + (error.message || error);
                 else if (currentLanguage === 'hi') errorMessage = "लेन-देन विफल: " + (error.message || error);
                 else if (currentLanguage === 'fil') errorMessage = "Nabigo ang transaksyon: " + (error.message || error);
+                else if (currentLanguage === 'ru') errorMessage = "Ошибка транзакции: " + (error.message || error);
+                else if (currentLanguage === 'ar') errorMessage = "فشلت المعاملة: " + (error.message || error);
                 
                 alert(errorMessage);
             }
@@ -1730,6 +1711,10 @@
                 successMessage = `✅ ${bnbAmount} BNB सफलतापूर्वक भेजा गया!\n\nआपको प्राप्त होंगे: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nट्रांजैक्शन हैश: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'fil') {
                 successMessage = `✅ ${bnbAmount} BNB matagumpay na naipadala!\n\nMatatanggap mo: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
+            } else if (currentLanguage === 'ru') {
+                successMessage = `✅ ${bnbAmount} BNB успешно отправлено!\n\nВы получите: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nХэш транзакции: ${receipt.transactionHash}`;
+            } else if (currentLanguage === 'ar') {
+                successMessage = `✅ ${bnbAmount} BNB تم الإرسال بنجاح!\n\nستحصل على: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nهاش المعاملة: ${receipt.transactionHash}`;
             }
             
             alert(successMessage);
@@ -1760,9 +1745,42 @@
                 successMessage = `✅ ${usdtAmount} USDT सफलतापूर्वक भेजा गया!\n\nआपको प्राप्त होंगे: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nट्रांजैक्शन हैश: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'fil') {
                 successMessage = `✅ ${usdtAmount} USDT matagumpay na naipadala!\n\nMatatanggap mo: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
+            } else if (currentLanguage === 'ru') {
+                successMessage = `✅ ${usdtAmount} USDT успешно отправлено!\n\nВы получите: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nХэш транзакции: ${receipt.transactionHash}`;
+            } else if (currentLanguage === 'ar') {
+                successMessage = `✅ ${usdtAmount} USDT تم الإرسال بنجاح!\n\nستحصل على: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nهاش المعاملة: ${receipt.transactionHash}`;
             }
             
             alert(successMessage);
+        }
+
+        // Handle wallet and chain changes
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', (accounts) => {
+                if (accounts.length > 0) {
+                    userAddress = accounts[0];
+                    updateWalletUI();
+                } else {
+                    // Wallet disconnected
+                    document.getElementById('walletInfo').style.display = 'none';
+                    
+                    let connectText = '🔗 Connect Wallet';
+                    if (currentLanguage === 'tr') connectText = '🔗 Cüzdanı Bağla';
+                    else if (currentLanguage === 'zh') connectText = '🔗 连接钱包';
+                    else if (currentLanguage === 'ja') connectText = '🔗 ウォレット接続';
+                    else if (currentLanguage === 'hi') connectText = '🔗 वॉलेट कनेक्ट करें';
+                    else if (currentLanguage === 'fil') connectText = '🔗 Ikonek ang Wallet';
+                    else if (currentLanguage === 'ru') connectText = '🔗 Подключить кошелёк';
+                    else if (currentLanguage === 'ar') connectText = '🔗 توصيل المحفظة';
+                    
+                    document.getElementById('connectWalletBtn').textContent = connectText;
+                    document.getElementById('buyBtn').disabled = true;
+                }
+            });
+            
+            window.ethereum.on('chainChanged', () => {
+                window.location.reload();
+            });
         }
     </script>
 </body>
