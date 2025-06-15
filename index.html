@@ -19,6 +19,8 @@
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
             --shadow: 0 8px 32px rgba(0, 255, 102, 0.2);
+            --metamask: #F6851B;
+            --trustwallet: #3375BB;
         }
 
         * {
@@ -52,30 +54,33 @@
             background-color: white;
             border-radius: 50%;
             animation: twinkle var(--duration, 5s) infinite ease-in-out;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
         }
 
         @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
 
         .ai-particle {
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: var(--primary);
-            filter: blur(1px);
+            filter: blur(2px);
             animation: float var(--duration, 15s) infinite linear;
+            box-shadow: 0 0 20px 3px var(--primary);
         }
 
         .ai-circuit {
             position: absolute;
-            width: 200px;
-            height: 200px;
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
-            border: 1px solid rgba(0, 184, 255, 0.3);
+            border: 2px solid rgba(0, 184, 255, 0.5);
             animation: rotate var(--duration, 60s) infinite linear;
+            box-shadow: 0 0 30px 5px rgba(0, 184, 255, 0.3);
         }
 
         .ai-circuit::before, .ai-circuit::after {
@@ -84,7 +89,8 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 1px solid rgba(0, 255, 102, 0.3);
+            border: 2px solid rgba(0, 255, 102, 0.5);
+            box-shadow: 0 0 30px 5px rgba(0, 255, 102, 0.3);
         }
 
         .ai-circuit::before {
@@ -106,6 +112,20 @@
         @keyframes rotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .ai-connection {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(0,255,102,0.3) 0%, rgba(0,255,102,0) 70%);
+            border-radius: 50%;
+            animation: pulse 3s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
         }
 
         h1, h2, h3, h4 {
@@ -171,9 +191,46 @@
             animation: pulse 2s infinite alternate;
         }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 30px var(--primary); }
-            100% { box-shadow: 0 0 50px var(--accent); }
+        .wallet-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-direction: column;
+        }
+
+        .wallet-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            color: white;
+        }
+
+        .wallet-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .wallet-btn.metamask {
+            background-color: var(--metamask);
+        }
+
+        .wallet-btn.trustwallet {
+            background-color: var(--trustwallet);
+        }
+
+        .wallet-btn img {
+            width: 24px;
+            height: 24px;
         }
 
         /* Güncellenmiş Dil Seçici */
@@ -513,6 +570,10 @@
             .timeline-content {
                 padding: 20px;
             }
+            
+            .wallet-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -572,7 +633,18 @@
                 </div>
                 
                 <p id="rateInfo">1 BNB = 120,000,000,000 FDAI</p>
-                <button id="connectWalletBtn" data-i18n="connect_wallet">🔗 Connect with MetaMask</button>
+                
+                <!-- Wallet Connection Buttons -->
+                <div class="wallet-buttons">
+                    <button class="wallet-btn metamask" id="connectMetamaskBtn">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
+                        <span data-i18n="connect_metamask">Connect MetaMask</span>
+                    </button>
+                    <button class="wallet-btn trustwallet" id="connectTrustWalletBtn">
+                        <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet">
+                        <span data-i18n="connect_trustwallet">Connect Trust Wallet</span>
+                    </button>
+                </div>
 
                 <div id="walletInfo" style="display: none;">
                     <h3 data-i18n="your_wallet">Your Wallet</h3>
@@ -726,7 +798,9 @@
             TOKENS_PER_BNB: 120000000000,
             TOKENS_PER_USDT: 200000000,
             BSC_CHAIN_ID: 56,
-            USDT_CONTRACT: "0x55d398326f99059fF775485246999027B3197955"
+            USDT_CONTRACT: "0x55d398326f99059fF775485246999027B3197955",
+            METAMASK_DEEPLINK: "https://metamask.app.link/dapp/",
+            TRUSTWALLET_DEEPLINK: "https://link.trustwallet.com/open_url?coin_id=20000714&url="
         };
 
         let web3;
@@ -744,7 +818,8 @@
                 seconds: "Seconds",
                 presale_ends: "Presale ends in:",
                 payment_method: "Payment Method:",
-                connect_wallet: "🔗 Connect with MetaMask",
+                connect_metamask: "Connect MetaMask",
+                connect_trustwallet: "Connect Trust Wallet",
                 your_wallet: "Your Wallet",
                 address: "Address:",
                 bnb_balance: "BNB Balance:",
@@ -803,7 +878,8 @@
                 seconds: "Saniye",
                 presale_ends: "Ön satış bitmesine kalan süre:",
                 payment_method: "Ödeme Yöntemi:",
-                connect_wallet: "🔗 MetaMask ile Bağlan",
+                connect_metamask: "MetaMask'e Bağlan",
+                connect_trustwallet: "Trust Wallet'a Bağlan",
                 your_wallet: "Cüzdanınız",
                 address: "Adres:",
                 bnb_balance: "BNB Bakiyesi:",
@@ -862,7 +938,8 @@
                 seconds: "秒",
                 presale_ends: "预售结束倒计时:",
                 payment_method: "支付方式:",
-                connect_wallet: "🔗 连接 MetaMask",
+                connect_metamask: "连接MetaMask",
+                connect_trustwallet: "连接Trust Wallet",
                 your_wallet: "您的钱包",
                 address: "地址:",
                 bnb_balance: "BNB 余额:",
@@ -921,7 +998,8 @@
                 seconds: "秒",
                 presale_ends: "プレセール終了まで:",
                 payment_method: "支払い方法:",
-                connect_wallet: "🔗 MetaMaskで接続",
+                connect_metamask: "MetaMaskに接続",
+                connect_trustwallet: "Trust Walletに接続",
                 your_wallet: "あなたのウォレット",
                 address: "アドレス:",
                 bnb_balance: "BNB 残高:",
@@ -980,7 +1058,8 @@
                 seconds: "सेकंड",
                 presale_ends: "प्रीसेल समाप्त होने में:",
                 payment_method: "भुगतान विधि:",
-                connect_wallet: "🔗 MetaMask से कनेक्ट करें",
+                connect_metamask: "MetaMask से कनेक्ट करें",
+                connect_trustwallet: "Trust Wallet से कनेक्ट करें",
                 your_wallet: "आपका वॉलेट",
                 address: "पता:",
                 bnb_balance: "BNB बैलेंस:",
@@ -1039,7 +1118,8 @@
                 seconds: "Segundo",
                 presale_ends: "Matatapos ang Presale sa:",
                 payment_method: "Paraan ng Pagbabayad:",
-                connect_wallet: "🔗 Kumonekta sa MetaMask",
+                connect_metamask: "Kumonekta sa MetaMask",
+                connect_trustwallet: "Kumonekta sa Trust Wallet",
                 your_wallet: "Iyong Wallet",
                 address: "Address:",
                 bnb_balance: "BNB Balance:",
@@ -1097,20 +1177,20 @@
             const spaceBg = document.getElementById('spaceBg');
             
             // Create stars
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 150; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-                star.style.width = `${Math.random() * 3}px`;
+                star.style.width = `${Math.random() * 4}px`;
                 star.style.height = star.style.width;
                 star.style.left = `${Math.random() * 100}%`;
                 star.style.top = `${Math.random() * 100}%`;
                 star.style.opacity = Math.random();
-                star.style.setProperty('--duration', `${5 + Math.random() * 10}s`);
+                star.style.setProperty('--duration', `${3 + Math.random() * 7}s`);
                 spaceBg.appendChild(star);
             }
             
             // Create AI particles
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 30; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'ai-particle';
                 particle.style.left = `${Math.random() * 100}%`;
@@ -1120,15 +1200,24 @@
             }
             
             // Create AI circuit elements
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 8; i++) {
                 const circuit = document.createElement('div');
                 circuit.className = 'ai-circuit';
                 circuit.style.left = `${Math.random() * 100}%`;
                 circuit.style.top = `${Math.random() * 100}%`;
-                circuit.style.width = `${100 + Math.random() * 200}px`;
+                circuit.style.width = `${150 + Math.random() * 300}px`;
                 circuit.style.height = circuit.style.width;
-                circuit.style.setProperty('--duration', `${30 + Math.random() * 60}s`);
+                circuit.style.setProperty('--duration', `${40 + Math.random() * 80}s`);
                 spaceBg.appendChild(circuit);
+            }
+            
+            // Create AI connection pulses
+            for (let i = 0; i < 5; i++) {
+                const connection = document.createElement('div');
+                connection.className = 'ai-connection';
+                connection.style.left = `${Math.random() * 100}%`;
+                connection.style.top = `${Math.random() * 100}%`;
+                spaceBg.appendChild(connection);
             }
         }
 
@@ -1164,6 +1253,70 @@
             }
         }
 
+        // Check if mobile device
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Open wallet based on user choice
+        async function connectWallet(walletType) {
+            try {
+                let walletUrl;
+                const currentUrl = encodeURIComponent(window.location.href);
+                
+                if (walletType === 'metamask') {
+                    if (isMobile()) {
+                        walletUrl = `${CONFIG.METAMASK_DEEPLINK}${currentUrl}`;
+                    } else {
+                        walletUrl = 'https://metamask.io/download.html';
+                    }
+                } else if (walletType === 'trustwallet') {
+                    if (isMobile()) {
+                        walletUrl = `${CONFIG.TRUSTWALLET_DEEPLINK}${currentUrl}`;
+                    } else {
+                        walletUrl = 'https://trustwallet.com/browser-extension/';
+                    }
+                }
+                
+                // Try to connect with Web3
+                if (window.ethereum) {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    userAddress = accounts[0];
+                    await initializeWeb3();
+                    await updateWalletUI();
+                } else {
+                    // Open wallet download page if not installed
+                    window.open(walletUrl, '_blank');
+                    
+                    let errorMessage = "Please install the wallet extension first!";
+                    if (currentLanguage === 'tr') errorMessage = "Lütfen önce cüzdan eklentisini yükleyin!";
+                    else if (currentLanguage === 'zh') errorMessage = "请先安装钱包扩展!";
+                    else if (currentLanguage === 'ja') errorMessage = "まずウォレット拡張機能をインストールしてください!";
+                    else if (currentLanguage === 'hi') errorMessage = "कृपया पहले वॉलेट एक्सटेंशन इंस्टॉल करें!";
+                    else if (currentLanguage === 'fil') errorMessage = "Mangyaring i-install muna ang wallet extension!";
+                    
+                    alert(errorMessage);
+                }
+            } catch (error) {
+                console.log("Connection error:", error);
+                let errorMessage = "Connection error: " + (error.message || error);
+                
+                if (currentLanguage === 'tr') {
+                    errorMessage = "Bağlantı hatası: " + (error.message || error);
+                } else if (currentLanguage === 'zh') {
+                    errorMessage = "连接错误: " + (error.message || error);
+                } else if (currentLanguage === 'ja') {
+                    errorMessage = "接続エラー: " + (error.message || error);
+                } else if (currentLanguage === 'hi') {
+                    errorMessage = "कनेक्शन त्रुटि: " + (error.message || error);
+                } else if (currentLanguage === 'fil') {
+                    errorMessage = "Connection error: " + (error.message || error);
+                }
+                
+                alert(errorMessage);
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             // Create space and AI animations
             createSpaceAnimations();
@@ -1173,7 +1326,10 @@
                 translatePage(e.target.value);
             });
             
-            document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+            // Wallet connection buttons
+            document.getElementById('connectMetamaskBtn').addEventListener('click', () => connectWallet('metamask'));
+            document.getElementById('connectTrustWalletBtn').addEventListener('click', () => connectWallet('trustwallet'));
+            
             document.getElementById('buyBtn').addEventListener('click', sendPayment);
             document.getElementById('amount').addEventListener('input', calculateFDAI);
             document.getElementById('paymentMethod').addEventListener('change', togglePaymentMethod);
@@ -1257,56 +1413,6 @@
                 document.getElementById('amount').min = '1';
             }
             calculateFDAI();
-        }
-
-        async function connectWallet() {
-            try {
-                if (!window.ethereum) {
-                    const userAgent = navigator.userAgent.toLowerCase();
-                    const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
-                    const isSafari = /safari/i.test(userAgent) && !/chrome/i.test(userAgent);
-                    const isFirefox = /firefox/i.test(userAgent);
-                    
-                    if (isMobile) {
-                        window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
-                        return;
-                    } else if (isSafari || isFirefox) {
-                        window.open("https://metamask.io/download.html", "_blank");
-                        return;
-                    } else {
-                        const installLink = document.createElement('a');
-                        installLink.href = 'https://metamask.io/download.html';
-                        installLink.target = '_blank';
-                        installLink.rel = 'noopener noreferrer';
-                        document.body.appendChild(installLink);
-                        installLink.click();
-                        document.body.removeChild(installLink);
-                        return;
-                    }
-                }
-                
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                userAddress = accounts[0];
-                await initializeWeb3();
-                await updateWalletUI();
-            } catch (error) {
-                console.log("Connection error:", error);
-                let errorMessage = "Connection error: " + (error.message || error);
-                
-                if (currentLanguage === 'tr') {
-                    errorMessage = "Bağlantı hatası: " + (error.message || error);
-                } else if (currentLanguage === 'zh') {
-                    errorMessage = "连接错误: " + (error.message || error);
-                } else if (currentLanguage === 'ja') {
-                    errorMessage = "接続エラー: " + (error.message || error);
-                } else if (currentLanguage === 'hi') {
-                    errorMessage = "कनेक्शन त्रुटि: " + (error.message || error);
-                } else if (currentLanguage === 'fil') {
-                    errorMessage = "Connection error: " + (error.message || error);
-                }
-                
-                alert(errorMessage);
-            }
         }
 
         async function initializeWeb3() {
@@ -1402,7 +1508,8 @@
             else if (currentLanguage === 'hi') connectedText = '✅ कनेक्टेड';
             else if (currentLanguage === 'fil') connectedText = '✅ Nakakonek';
             
-            document.getElementById('connectWalletBtn').textContent = connectedText;
+            document.getElementById('connectMetamaskBtn').textContent = connectedText;
+            document.getElementById('connectTrustWalletBtn').textContent = connectedText;
             document.getElementById('buyBtn').disabled = false;
             
             try {
@@ -1536,14 +1643,27 @@
                     // Wallet disconnected
                     document.getElementById('walletInfo').style.display = 'none';
                     
-                    let connectText = '🔗 Connect with MetaMask';
-                    if (currentLanguage === 'tr') connectText = '🔗 MetaMask ile Bağlan';
-                    else if (currentLanguage === 'zh') connectText = '🔗 连接 MetaMask';
-                    else if (currentLanguage === 'ja') connectText = '🔗 MetaMaskで接続';
-                    else if (currentLanguage === 'hi') connectText = '🔗 MetaMask से कनेक्ट करें';
-                    else if (currentLanguage === 'fil') connectText = '🔗 Kumonekta sa MetaMask';
+                    let metamaskText = 'Connect MetaMask';
+                    let trustText = 'Connect Trust Wallet';
+                    if (currentLanguage === 'tr') {
+                        metamaskText = 'MetaMask\'e Bağlan';
+                        trustText = 'Trust Wallet\'a Bağlan';
+                    } else if (currentLanguage === 'zh') {
+                        metamaskText = '连接MetaMask';
+                        trustText = '连接Trust Wallet';
+                    } else if (currentLanguage === 'ja') {
+                        metamaskText = 'MetaMaskに接続';
+                        trustText = 'Trust Walletに接続';
+                    } else if (currentLanguage === 'hi') {
+                        metamaskText = 'MetaMask से कनेक्ट करें';
+                        trustText = 'Trust Wallet से कनेक्ट करें';
+                    } else if (currentLanguage === 'fil') {
+                        metamaskText = 'Kumonekta sa MetaMask';
+                        trustText = 'Kumonekta sa Trust Wallet';
+                    }
                     
-                    document.getElementById('connectWalletBtn').textContent = connectText;
+                    document.getElementById('connectMetamaskBtn').innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask"> ${metamaskText}`;
+                    document.getElementById('connectTrustWalletBtn').innerHTML = `<img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet"> ${trustText}`;
                     document.getElementById('buyBtn').disabled = true;
                 }
             });
