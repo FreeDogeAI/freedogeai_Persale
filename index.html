@@ -419,6 +419,30 @@
             opacity: 0.8;
         }
 
+        /* Doge Animation */
+        .doge-animation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 150px;
+            height: 150px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .doge-animation img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
             .main-container {
@@ -468,10 +492,22 @@
             .timeline-content {
                 padding: 20px;
             }
+
+            .doge-animation {
+                width: 100px;
+                height: 100px;
+                bottom: 10px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Doge Animation -->
+    <div class="doge-animation">
+        <img src="https://i.gifer.com/origin/4e/4e8e9f7a9b9e9b9e9b9e9b9e9b9e9b9e.gif" alt="Doge Animation">
+    </div>
+
     <div class="main-container">
         <div class="left-column">
             <div class="container">
@@ -654,8 +690,6 @@
                     <div>2031: 5%</div>
                 </div>
             </div>
-
-           
 
             <!-- Community Section -->
             <div class="container">
@@ -1213,76 +1247,79 @@
         }
 
         async function connectWallet() {
-    try {
-        // Tarayıcıda Ethereum sağlayıcısı var mı kontrol et
-        if (!window.ethereum) {
-            let installMessage = "Please install MetaMask to connect.";
-            if (currentLanguage === 'tr') installMessage = "Lütfen MetaMask'i kurun.";
-            else if (currentLanguage === 'zh') installMessage = "请安装 MetaMask 连接。";
-            else if (currentLanguage === 'ja') installMessage = "MetaMaskをインストールしてください。";
-            else if (currentLanguage === 'hi') installMessage = "कृपया MetaMask इंस्टॉल करें।";
-            else if (currentLanguage === 'fil') installMessage = "Mangyaring i-install ang MetaMask para makakonekta.";
-            alert(installMessage);
-            window.open("https://metamask.io/download.html", "_blank");
-            return;
-        }
-
-        // Yalnızca MetaMask'i hedefle ve diğer uzantıları engelle
-        if (!window.ethereum.isMetaMask) {
-            let errorMessage = "Please use MetaMask to connect. Other wallet extensions are not supported.";
-            if (currentLanguage === 'tr') errorMessage = "Lütfen MetaMask ile bağlanın. Diğer cüzdan uzantıları desteklenmemektedir.";
-            else if (currentLanguage === 'zh') errorMessage = "请使用 MetaMask 连接。其他钱包扩展不受支持。";
-            else if (currentLanguage === 'ja') errorMessage = "MetaMaskを使用して接続してください。他のウォレット拡張はサポートされていません。";
-            else if (currentLanguage === 'hi') errorMessage = "कृपया MetaMask का उपयोग करके कनेक्ट करें। अन्य वॉलेट एक्सटेंशन समर्थित नहीं हैं।";
-            else if (currentLanguage === 'fil') errorMessage = "Mangyaring gumamit ng MetaMask para kumonekta. Hindi sinusuportahan ang ibang wallet extension.";
-            alert(errorMessage);
-            return;
-        }
-
-        // Bağlantı isteğini temizle (çakışmayı önlemek için)
-        if (window.ethereum._metamask && typeof window.ethereum._metamask.isUnlocked === 'function') {
-            const isUnlocked = await window.ethereum._metamask.isUnlocked();
-            if (!isUnlocked) {
-                let unlockMessage = "Please unlock MetaMask first.";
-                if (currentLanguage === 'tr') unlockMessage = "Lütfen önce MetaMask'i açın.";
-                else if (currentLanguage === 'zh') unlockMessage = "请先解锁 MetaMask。";
-                else if (currentLanguage === 'ja') unlockMessage = "まず MetaMask をアンロックしてください。";
-                else if (currentLanguage === 'hi') unlockMessage = "कृपया पहले MetaMask को अनलॉक करें।";
-                else if (currentLanguage === 'fil') unlockMessage = "Mangyaring i-unlock muna ang MetaMask.";
-                alert(unlockMessage);
-                return;
+            try {
+                if (!window.ethereum) {
+                    const userAgent = navigator.userAgent.toLowerCase();
+                    const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
+                    const isSafari = /safari/i.test(userAgent) && !/chrome/i.test(userAgent);
+                    const isFirefox = /firefox/i.test(userAgent);
+                    
+                    if (isMobile) {
+                        window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
+                        return;
+                    } else if (isSafari || isFirefox) {
+                        window.open("https://metamask.io/download.html", "_blank");
+                        return;
+                    } else {
+                        const installLink = document.createElement('a');
+                        installLink.href = 'https://metamask.io/download.html';
+                        installLink.target = '_blank';
+                        installLink.rel = 'noopener noreferrer';
+                        document.body.appendChild(installLink);
+                        installLink.click();
+                        document.body.removeChild(installLink);
+                        return;
+                    }
+                }
+                
+                // Check if MetaMask is installed among multiple wallets
+                let isMetaMask = false;
+                if (window.ethereum.providers) {
+                    // Multiple wallets installed
+                    isMetaMask = window.ethereum.providers.some(p => p.isMetaMask);
+                } else {
+                    // Single wallet installed
+                    isMetaMask = window.ethereum.isMetaMask;
+                }
+                
+                if (!isMetaMask) {
+                    // If MetaMask is not the selected provider, try to find it
+                    if (window.ethereum.providers) {
+                        const metaMaskProvider = window.ethereum.providers.find(p => p.isMetaMask);
+                        if (metaMaskProvider) {
+                            window.ethereum = metaMaskProvider;
+                        } else {
+                            throw new Error("MetaMask not found among installed wallets");
+                        }
+                    } else {
+                        throw new Error("MetaMask is not the active wallet provider");
+                    }
+                }
+                
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                userAddress = accounts[0];
+                await initializeWeb3();
+                await updateWalletUI();
+            } catch (error) {
+                console.log("Connection error:", error);
+                let errorMessage = "Connection error: " + (error.message || error);
+                
+                if (currentLanguage === 'tr') {
+                    errorMessage = "Bağlantı hatası: " + (error.message || error);
+                } else if (currentLanguage === 'zh') {
+                    errorMessage = "连接错误: " + (error.message || error);
+                } else if (currentLanguage === 'ja') {
+                    errorMessage = "接続エラー: " + (error.message || error);
+                } else if (currentLanguage === 'hi') {
+                    errorMessage = "कनेक्शन त्रुटि: " + (error.message || error);
+                } else if (currentLanguage === 'fil') {
+                    errorMessage = "Connection error: " + (error.message || error);
+                }
+                
+                alert(errorMessage);
             }
         }
 
-        // Bağlantı isteğini gönder
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' }).catch((error) => {
-            if (error.code === 4001) {
-                let rejectedMessage = "Connection request was rejected.";
-                if (currentLanguage === 'tr') rejectedMessage = "Bağlantı isteği reddedildi.";
-                else if (currentLanguage === 'zh') rejectedMessage = "连接请求被拒绝。";
-                else if (currentLanguage === 'ja') rejectedMessage = "接続リクエストが拒否されました。";
-                else if (currentLanguage === 'hi') rejectedMessage = "कनेक्शन अनुरोध अस्वीकृत किया गया।";
-                else if (currentLanguage === 'fil') rejectedMessage = "Tinanggihan ang kahilingan ng koneksyon.";
-                alert(rejectedMessage);
-                throw error;
-            }
-            throw error;
-        });
-
-        userAddress = accounts[0];
-        await initializeWeb3();
-        await updateWalletUI();
-    } catch (error) {
-        console.error("Connection error:", error);
-        let errorMessage = "Connection error: " + (error.message || "Please try again later.");
-        if (currentLanguage === 'tr') errorMessage = "Bağlantı hatası: " + (error.message || "Lütfen daha sonra tekrar deneyin.");
-        else if (currentLanguage === 'zh') errorMessage = "连接错误: " + (error.message || "请稍后重试。");
-        else if (currentLanguage === 'ja') errorMessage = "接続エラー: " + (error.message || "後で再度お試しください。");
-        else if (currentLanguage === 'hi') errorMessage = "कनेक्शन त्रुटि: " + (error.message || "कृपया बाद में पुनः प्रयास करें।");
-        else if (currentLanguage === 'fil') errorMessage = "Connection error: " + (error.message || "Mangyaring subukang muli mamaya.");
-        alert(errorMessage);
-    }
-}
         async function initializeWeb3() {
             web3 = new Web3(window.ethereum);
             
