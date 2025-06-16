@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -792,6 +793,7 @@
         let userAddress = "";
         let usdtContract;
         let currentLanguage = 'en';
+        let isConnecting = false;
 
         const translations = {
             en: {
@@ -1211,21 +1213,25 @@
             });
             
             const method = document.getElementById('paymentMethod').value;
+            updateAmountPlaceholder(method);
+        }
+
+        function updateAmountPlaceholder(method) {
             if (method === 'bnb') {
                 document.getElementById('amount').placeholder = 
-                    lang === 'tr' ? 'Miktar girin (örn: 0.1 BNB)' :
-                    lang === 'zh' ? '输入金额 (例如: 0.1 BNB)' :
-                    lang === 'ja' ? '金額を入力 (例: 0.1 BNB)' :
-                    lang === 'hi' ? 'राशि दर्ज करें (उदा: 0.1 BNB)' :
-                    lang === 'fil' ? 'Ilagay ang halaga (hal: 0.1 BNB)' :
+                    currentLanguage === 'tr' ? 'Miktar girin (örn: 0.1 BNB)' :
+                    currentLanguage === 'zh' ? '输入金额 (例如: 0.1 BNB)' :
+                    currentLanguage === 'ja' ? '金額を入力 (例: 0.1 BNB)' :
+                    currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 0.1 BNB)' :
+                    currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 0.1 BNB)' :
                     'Enter amount (e.g., 0.1 BNB)';
             } else {
                 document.getElementById('amount').placeholder = 
-                    lang === 'tr' ? 'Miktar girin (örn: 1 USDT)' :
-                    lang === 'zh' ? '输入金额 (例如: 1 USDT)' :
-                    lang === 'ja' ? '金額を入力 (例: 1 USDT)' :
-                    lang === 'hi' ? 'राशि दर्ज करें (उदा: 1 USDT)' :
-                    lang === 'fil' ? 'Ilagay ang halaga (hal: 1 USDT)' :
+                    currentLanguage === 'tr' ? 'Miktar girin (örn: 1 USDT)' :
+                    currentLanguage === 'zh' ? '输入金额 (例如: 1 USDT)' :
+                    currentLanguage === 'ja' ? '金額を入力 (例: 1 USDT)' :
+                    currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 1 USDT)' :
+                    currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 1 USDT)' :
                     'Enter amount (e.g., 1 USDT)';
             }
         }
@@ -1234,46 +1240,72 @@
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         }
 
+        function isTrustWallet() {
+            return window.ethereum && window.ethereum.isTrust;
+        }
+
+        function isMetaMask() {
+            return window.ethereum && window.ethereum.isMetaMask;
+        }
+
         async function connectWallet(walletType) {
+            if (isConnecting) return;
+            isConnecting = true;
+            
             try {
-                // Önce bekleyen tüm istekleri temizle
+                // Clear any pending requests
                 if (window.ethereum && window.ethereum._state && window.ethereum._state.accounts) {
                     window.ethereum._state.accounts = [];
                 }
 
-                let walletUrl;
+                // Disconnect previous connections if possible
+                if (window.ethereum && window.ethereum.disconnect) {
+                    try {
+                        await window.ethereum.disconnect();
+                    } catch (disconnectError) {
+                        console.log("Disconnect error:", disconnectError);
+                    }
+                }
+
                 const currentUrl = encodeURIComponent(window.location.href);
                 
-                if (walletType === 'metamask') {
-                    if (isMobile()) {
-                        walletUrl = `${CONFIG.METAMASK_DEEPLINK}${currentUrl}`;
-                        window.location.href = walletUrl;
+                if (isMobile()) {
+                    if (walletType === 'trustwallet') {
+                        // Try direct Trust Wallet deep link first
+                        window.location.href = `trust://wc?uri=${currentUrl}`;
+                        
+                        // Fallback to Trust Wallet website if direct open fails
+                        setTimeout(() => {
+                            window.location.href = `${CONFIG.TRUSTWALLET_DEEPLINK}${currentUrl}`;
+                        }, 500);
                         return;
-                    }
-                } else if (walletType === 'trustwallet') {
-                    if (isMobile()) {
-                        walletUrl = `${CONFIG.TRUSTWALLET_DEEPLINK}${currentUrl}`;
-                        window.location.href = walletUrl;
+                    } else if (walletType === 'metamask') {
+                        // Try MetaMask direct deep link first
+                        window.location.href = `metamask://wc?uri=${currentUrl}`;
+                        
+                        // Fallback to MetaMask website if direct open fails
+                        setTimeout(() => {
+                            window.location.href = `${CONFIG.METAMASK_DEEPLINK}${currentUrl}`;
+                        }, 500);
                         return;
                     }
                 }
                 
                 if (window.ethereum) {
-                    // Mevcut izinleri kontrol et
-                    const permissions = await window.ethereum.request({
-                        method: 'wallet_getPermissions'
-                    });
+                    // Check if already connected
+                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
                     
-                    // Eğer izin yoksa yeni istek gönder
-                    if (!permissions.some(p => p.parentCapability === 'eth_accounts')) {
-                        await window.ethereum.request({
-                            method: 'wallet_requestPermissions',
+                    if (accounts.length === 0) {
+                        // Request fresh connection
+                        const newAccounts = await window.ethereum.request({ 
+                            method: 'eth_requestAccounts',
                             params: [{ eth_accounts: {} }]
                         });
+                        userAddress = newAccounts[0];
+                    } else {
+                        userAddress = accounts[0];
                     }
                     
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    userAddress = accounts[0];
                     await initializeWeb3();
                     await updateWalletUI();
                 } else {
@@ -1308,6 +1340,8 @@
                 }
                 
                 alert(errorMessage);
+            } finally {
+                isConnecting = false;
             }
         }
 
@@ -1368,7 +1402,7 @@
                 const accounts = await window.ethereum.request({ method: 'eth_accounts' });
                 if (accounts.length > 0) {
                     userAddress = accounts[0];
-                    initializeWeb3();
+                    await initializeWeb3();
                     await updateWalletUI();
                 }
             } catch (error) {
@@ -1380,27 +1414,14 @@
             const method = document.getElementById('paymentMethod').value;
             if (method === 'bnb') {
                 document.getElementById('rateInfo').textContent = '1 BNB = 120,000,000,000 FDAI';
-                document.getElementById('amount').placeholder = 
-                    currentLanguage === 'tr' ? 'Miktar girin (örn: 0.1 BNB)' :
-                    currentLanguage === 'zh' ? '输入金额 (例如: 0.1 BNB)' :
-                    currentLanguage === 'ja' ? '金額を入力 (例: 0.1 BNB)' :
-                    currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 0.1 BNB)' :
-                    currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 0.1 BNB)' :
-                    'Enter amount (e.g., 0.1 BNB)';
                 document.getElementById('amount').step = '0.01';
                 document.getElementById('amount').min = '0.01';
             } else {
                 document.getElementById('rateInfo').textContent = '1 USDT = 200,000,000 FDAI';
-                document.getElementById('amount').placeholder = 
-                    currentLanguage === 'tr' ? 'Miktar girin (örn: 1 USDT)' :
-                    currentLanguage === 'zh' ? '输入金额 (例如: 1 USDT)' :
-                    currentLanguage === 'ja' ? '金額を入力 (例: 1 USDT)' :
-                    currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 1 USDT)' :
-                    currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 1 USDT)' :
-                    'Enter amount (e.g., 1 USDT)';
                 document.getElementById('amount').step = '1';
                 document.getElementById('amount').min = '1';
             }
+            updateAmountPlaceholder(method);
             calculateFDAI();
         }
 
