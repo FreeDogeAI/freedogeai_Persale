@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,8 +19,6 @@
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
             --shadow: 0 8px 32px rgba(0, 255, 102, 0.2);
-            --metamask: #F6851B;
-            --trustwallet: #3375BB;
         }
 
         * {
@@ -34,98 +31,11 @@
             font-family: 'Roboto', sans-serif;
             background-color: var(--dark);
             color: var(--light);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 102, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(0, 184, 255, 0.1) 0%, transparent 20%);
             min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
-        }
-
-        .space-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle var(--duration, 5s) infinite ease-in-out;
-            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        .ai-particle {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--primary);
-            filter: blur(2px);
-            animation: float var(--duration, 15s) infinite linear;
-            box-shadow: 0 0 20px 3px var(--primary);
-        }
-
-        .ai-circuit {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            border: 2px solid rgba(0, 184, 255, 0.5);
-            animation: rotate var(--duration, 60s) infinite linear;
-            box-shadow: 0 0 30px 5px rgba(0, 184, 255, 0.3);
-        }
-
-        .ai-circuit::before, .ai-circuit::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 2px solid rgba(0, 255, 102, 0.5);
-            box-shadow: 0 0 30px 5px rgba(0, 255, 102, 0.3);
-        }
-
-        .ai-circuit::before {
-            transform: rotate(60deg);
-        }
-
-        .ai-circuit::after {
-            transform: rotate(120deg);
-        }
-
-        @keyframes float {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(50px, 50px) rotate(90deg); }
-            50% { transform: translate(100px, 0) rotate(180deg); }
-            75% { transform: translate(50px, -50px) rotate(270deg); }
-            100% { transform: translate(0, 0) rotate(360deg); }
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .ai-connection {
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(0,255,102,0.3) 0%, rgba(0,255,102,0) 70%);
-            border-radius: 50%;
-            animation: pulse 3s infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            100% { transform: scale(1.5); opacity: 0; }
         }
 
         h1, h2, h3, h4 {
@@ -188,51 +98,9 @@
             object-fit: cover;
             border: 4px solid var(--primary);
             box-shadow: 0 0 30px var(--primary);
-            animation: pulse 2s infinite alternate;
         }
 
-        .wallet-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            flex-direction: column;
-        }
-
-        .wallet-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 1rem;
-            border-radius: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: none;
-            color: white;
-        }
-
-        .wallet-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .wallet-btn.metamask {
-            background-color: var(--metamask);
-        }
-
-        .wallet-btn.trustwallet {
-            background-color: var(--trustwallet);
-        }
-
-        .wallet-btn img {
-            width: 24px;
-            height: 24px;
-        }
-
+        /* Güncellenmiş Dil Seçici */
         .language-selector-container {
             position: absolute;
             top: 10px;
@@ -391,6 +259,38 @@
             font-size: 1.3rem;
         }
 
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-member {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 255, 102, 0.2);
+        }
+
+        .team-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin: 0 auto 1rem;
+        }
+
+        /* Timeline Styling */
         .timeline {
             position: relative;
             max-width: 1200px;
@@ -484,6 +384,7 @@
             font-weight: bold;
         }
 
+        /* Countdown Styles */
         .countdown-container {
             display: flex;
             justify-content: center;
@@ -518,6 +419,7 @@
             opacity: 0.8;
         }
 
+        /* Responsive Design */
         @media (max-width: 1200px) {
             .main-container {
                 flex-direction: column;
@@ -566,19 +468,14 @@
             .timeline-content {
                 padding: 20px;
             }
-            
-            .wallet-buttons {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="space-bg" id="spaceBg"></div>
-
     <div class="main-container">
         <div class="left-column">
             <div class="container">
+                <!-- Dil Seçici Kutusu -->
                 <div class="language-selector-container">
                     <select class="language-selector" id="languageSelector">
                         <option value="en">EN</option>
@@ -595,6 +492,7 @@
                 </div>
                 <h1 data-i18n="presale_title">FreeDogeAI Presale</h1>
                 
+                <!-- Countdown Timer -->
                 <div class="countdown-container">
                     <div class="countdown-item">
                         <span id="countdown-days">00</span>
@@ -626,17 +524,7 @@
                 </div>
                 
                 <p id="rateInfo">1 BNB = 120,000,000,000 FDAI</p>
-                
-                <div class="wallet-buttons">
-                    <button class="wallet-btn metamask" id="connectMetamaskBtn">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
-                        <span data-i18n="connect_metamask">Connect MetaMask</span>
-                    </button>
-                    <button class="wallet-btn trustwallet" id="connectTrustWalletBtn">
-                        <img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet">
-                        <span data-i18n="connect_trustwallet">Connect Trust Wallet</span>
-                    </button>
-                </div>
+                <button id="connectWalletBtn" data-i18n="connect_wallet">🔗 Connect with MetaMask</button>
 
                 <div id="walletInfo" style="display: none;">
                     <h3 data-i18n="your_wallet">Your Wallet</h3>
@@ -673,11 +561,13 @@
         </div>
 
         <div class="right-column">
+            <!-- About Section -->
             <div class="container">
                 <h3 data-i18n="about_title">About FreeDogeAI</h3>
                 <p data-i18n="about_text">FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!</p>
             </div>
 
+            <!-- Roadmap Section -->
             <div class="container">
                 <h3 data-i18n="roadmap_title">Roadmap</h3>
                 <div class="timeline">
@@ -729,6 +619,7 @@
                 </div>
             </div>
 
+            <!-- Tokenomics Section -->
             <div class="container">
                 <h3 data-i18n="tokenomics_title">Tokenomics</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
@@ -751,6 +642,7 @@
                 </div>
             </div>
 
+            <!-- Locked Release Schedule -->
             <div class="container">
                 <h3 data-i18n="release_schedule">Locked Token Release Schedule</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
@@ -763,6 +655,9 @@
                 </div>
             </div>
 
+           
+
+            <!-- Community Section -->
             <div class="container">
                 <h3 data-i18n="join_community">Join Our Community</h3>
                 <div style="display: flex; gap: 20px; justify-content: center;">
@@ -771,6 +666,7 @@
                 </div>
             </div>
 
+            <!-- Whitepaper Download -->
             <div class="container">
                 <h3 data-i18n="whitepaper_title">Download FreeDogeAI Whitepaper</h3>
                 <p style="text-align: center;"><a href="FreeDogeAI%20-%20Whitepaper.pdf" download data-i18n="download_whitepaper">Click here to download the whitepaper</a></p>
@@ -784,17 +680,15 @@
             TOKENS_PER_BNB: 120000000000,
             TOKENS_PER_USDT: 200000000,
             BSC_CHAIN_ID: 56,
-            USDT_CONTRACT: "0x55d398326f99059fF775485246999027B3197955",
-            METAMASK_DEEPLINK: "https://metamask.app.link/dapp/",
-            TRUSTWALLET_DEEPLINK: "https://link.trustwallet.com/open_url?coin_id=20000714&url="
+            USDT_CONTRACT: "0x55d398326f99059fF775485246999027B3197955"
         };
 
         let web3;
         let userAddress = "";
         let usdtContract;
         let currentLanguage = 'en';
-        let isConnecting = false;
 
+        // Translation dictionary
         const translations = {
             en: {
                 presale_title: "FreeDogeAI Presale",
@@ -804,8 +698,7 @@
                 seconds: "Seconds",
                 presale_ends: "Presale ends in:",
                 payment_method: "Payment Method:",
-                connect_metamask: "Connect MetaMask",
-                connect_trustwallet: "Connect Trust Wallet",
+                connect_wallet: "🔗 Connect with MetaMask",
                 your_wallet: "Your Wallet",
                 address: "Address:",
                 bnb_balance: "BNB Balance:",
@@ -852,6 +745,13 @@
                 circulating_supply: "Circulating Supply:",
                 locked_supply: "Locked Supply:",
                 release_schedule: "Locked Token Release Schedule",
+                team_title: "Our Team",
+                ceo_title: "CEO & Founder",
+                ceo_exp: "10+ years in blockchain and AI technology",
+                cto_title: "CTO",
+                cto_exp: "Smart contract and DeFi expert",
+                cmo_title: "CMO",
+                cmo_exp: "Digital marketing specialist",
                 join_community: "Join Our Community",
                 whitepaper_title: "Download FreeDogeAI Whitepaper",
                 download_whitepaper: "Click here to download the whitepaper"
@@ -864,8 +764,7 @@
                 seconds: "Saniye",
                 presale_ends: "Ön satış bitmesine kalan süre:",
                 payment_method: "Ödeme Yöntemi:",
-                connect_metamask: "MetaMask'e Bağlan",
-                connect_trustwallet: "Trust Wallet'a Bağlan",
+                connect_wallet: "🔗 MetaMask ile Bağlan",
                 your_wallet: "Cüzdanınız",
                 address: "Adres:",
                 bnb_balance: "BNB Bakiyesi:",
@@ -912,6 +811,13 @@
                 circulating_supply: "Dolaşımdaki Arz:",
                 locked_supply: "Kilitli Arz:",
                 release_schedule: "Kilitli Token Çıkış Takvimi",
+                team_title: "Ekibimiz",
+                ceo_title: "CEO & Kurucu",
+                ceo_exp: "10+ yıllık blockchain ve AI teknolojisi deneyimi",
+                cto_title: "CTO",
+                cto_exp: "Akıllı kontrat ve DeFi uzmanı",
+                cmo_title: "CMO",
+                cmo_exp: "Dijital pazarlama uzmanı",
                 join_community: "Topluluğumuza Katılın",
                 whitepaper_title: "FreeDogeAI Whitepaper'ı İndirin",
                 download_whitepaper: "Whitepaper'ı indirmek için tıklayın"
@@ -924,8 +830,7 @@
                 seconds: "秒",
                 presale_ends: "预售结束倒计时:",
                 payment_method: "支付方式:",
-                connect_metamask: "连接MetaMask",
-                connect_trustwallet: "连接Trust Wallet",
+                connect_wallet: "🔗 连接 MetaMask",
                 your_wallet: "您的钱包",
                 address: "地址:",
                 bnb_balance: "BNB 余额:",
@@ -972,6 +877,13 @@
                 circulating_supply: "流通供应量:",
                 locked_supply: "锁定供应量:",
                 release_schedule: "锁定代币释放计划",
+                team_title: "我们的团队",
+                ceo_title: "CEO & 创始人",
+                ceo_exp: "10年以上区块链和AI技术经验",
+                cto_title: "CTO",
+                cto_exp: "智能合约和DeFi专家",
+                cmo_title: "CMO",
+                cmo_exp: "数字营销专家",
                 join_community: "加入我们的社区",
                 whitepaper_title: "下载 FreeDogeAI 白皮书",
                 download_whitepaper: "点击此处下载白皮书"
@@ -984,8 +896,7 @@
                 seconds: "秒",
                 presale_ends: "プレセール終了まで:",
                 payment_method: "支払い方法:",
-                connect_metamask: "MetaMaskに接続",
-                connect_trustwallet: "Trust Walletに接続",
+                connect_wallet: "🔗 MetaMaskで接続",
                 your_wallet: "あなたのウォレット",
                 address: "アドレス:",
                 bnb_balance: "BNB 残高:",
@@ -1032,6 +943,13 @@
                 circulating_supply: "流通供給量:",
                 locked_supply: "ロック済み供給量:",
                 release_schedule: "ロック済みトークンリリーススケジュール",
+                team_title: "私たちのチーム",
+                ceo_title: "CEO & 創設者",
+                ceo_exp: "10年以上のブロックチェーンとAI技術の経験",
+                cto_title: "CTO",
+                cto_exp: "スマートコントラクトとDeFiの専門家",
+                cmo_title: "CMO",
+                cmo_exp: "デジタルマーケティングの専門家",
                 join_community: "コミュニティに参加",
                 whitepaper_title: "FreeDogeAI ホワイトペーパーをダウンロード",
                 download_whitepaper: "ホワイトペーパーをダウンロードするにはこちらをクリック"
@@ -1044,8 +962,7 @@
                 seconds: "सेकंड",
                 presale_ends: "प्रीसेल समाप्त होने में:",
                 payment_method: "भुगतान विधि:",
-                connect_metamask: "MetaMask से कनेक्ट करें",
-                connect_trustwallet: "Trust Wallet से कनेक्ट करें",
+                connect_wallet: "🔗 MetaMask से कनेक्ट करें",
                 your_wallet: "आपका वॉलेट",
                 address: "पता:",
                 bnb_balance: "BNB बैलेंस:",
@@ -1092,6 +1009,13 @@
                 circulating_supply: "परिसंचारी आपूर्ति:",
                 locked_supply: "लॉक्ड आपूर्ति:",
                 release_schedule: "लॉक्ड टोकन रिलीज शेड्यूल",
+                team_title: "हमारी टीम",
+                ceo_title: "CEO और संस्थापक",
+                ceo_exp: "ब्लॉकचेन और AI प्रौद्योगिकी में 10+ वर्षों का अनुभव",
+                cto_title: "CTO",
+                cto_exp: "स्मार्ट कॉन्ट्रैक्ट और DeFi विशेषज्ञ",
+                cmo_title: "CMO",
+                cmo_exp: "डिजिटल मार्केटिंग विशेषज्ञ",
                 join_community: "हमारे समुदाय में शामिल हों",
                 whitepaper_title: "FreeDogeAI व्हाइटपेपर डाउनलोड करें",
                 download_whitepaper: "व्हाइटपेपर डाउनलोड करने के लिए यहां क्लिक करें"
@@ -1104,8 +1028,7 @@
                 seconds: "Segundo",
                 presale_ends: "Matatapos ang Presale sa:",
                 payment_method: "Paraan ng Pagbabayad:",
-                connect_metamask: "Kumonekta sa MetaMask",
-                connect_trustwallet: "Kumonekta sa Trust Wallet",
+                connect_wallet: "🔗 Kumonekta sa MetaMask",
                 your_wallet: "Iyong Wallet",
                 address: "Address:",
                 bnb_balance: "BNB Balance:",
@@ -1152,56 +1075,20 @@
                 circulating_supply: "Circulating Supply:",
                 locked_supply: "Locked Supply:",
                 release_schedule: "Locked Token Release Schedule",
+                team_title: "Ang Aming Team",
+                ceo_title: "CEO at Founder",
+                ceo_exp: "10+ taon sa blockchain at AI technology",
+                cto_title: "CTO",
+                cto_exp: "Smart contract at DeFi expert",
+                cmo_title: "CMO",
+                cmo_exp: "Digital marketing specialist",
                 join_community: "Sumali sa Aming Komunidad",
                 whitepaper_title: "I-download ang FreeDogeAI Whitepaper",
                 download_whitepaper: "I-click dito para i-download ang whitepaper"
             }
         };
 
-        function createSpaceAnimations() {
-            const spaceBg = document.getElementById('spaceBg');
-            
-            for (let i = 0; i < 150; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.width = `${Math.random() * 4}px`;
-                star.style.height = star.style.width;
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                star.style.opacity = Math.random();
-                star.style.setProperty('--duration', `${3 + Math.random() * 7}s`);
-                spaceBg.appendChild(star);
-            }
-            
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'ai-particle';
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.setProperty('--duration', `${10 + Math.random() * 20}s`);
-                spaceBg.appendChild(particle);
-            }
-            
-            for (let i = 0; i < 8; i++) {
-                const circuit = document.createElement('div');
-                circuit.className = 'ai-circuit';
-                circuit.style.left = `${Math.random() * 100}%`;
-                circuit.style.top = `${Math.random() * 100}%`;
-                circuit.style.width = `${150 + Math.random() * 300}px`;
-                circuit.style.height = circuit.style.width;
-                circuit.style.setProperty('--duration', `${40 + Math.random() * 80}s`);
-                spaceBg.appendChild(circuit);
-            }
-            
-            for (let i = 0; i < 5; i++) {
-                const connection = document.createElement('div');
-                connection.className = 'ai-connection';
-                connection.style.left = `${Math.random() * 100}%`;
-                connection.style.top = `${Math.random() * 100}%`;
-                spaceBg.appendChild(connection);
-            }
-        }
-
+        // Function to translate the page
         function translatePage(lang) {
             currentLanguage = lang;
             const elements = document.querySelectorAll('[data-i18n]');
@@ -1212,155 +1099,42 @@
                 }
             });
             
+            // Update input placeholders
             const method = document.getElementById('paymentMethod').value;
-            updateAmountPlaceholder(method);
-        }
-
-        function updateAmountPlaceholder(method) {
             if (method === 'bnb') {
                 document.getElementById('amount').placeholder = 
-                    currentLanguage === 'tr' ? 'Miktar girin (örn: 0.1 BNB)' :
-                    currentLanguage === 'zh' ? '输入金额 (例如: 0.1 BNB)' :
-                    currentLanguage === 'ja' ? '金額を入力 (例: 0.1 BNB)' :
-                    currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 0.1 BNB)' :
-                    currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 0.1 BNB)' :
+                    lang === 'tr' ? 'Miktar girin (örn: 0.1 BNB)' :
+                    lang === 'zh' ? '输入金额 (例如: 0.1 BNB)' :
+                    lang === 'ja' ? '金額を入力 (例: 0.1 BNB)' :
+                    lang === 'hi' ? 'राशि दर्ज करें (उदा: 0.1 BNB)' :
+                    lang === 'fil' ? 'Ilagay ang halaga (hal: 0.1 BNB)' :
                     'Enter amount (e.g., 0.1 BNB)';
             } else {
                 document.getElementById('amount').placeholder = 
-                    currentLanguage === 'tr' ? 'Miktar girin (örn: 1 USDT)' :
-                    currentLanguage === 'zh' ? '输入金额 (例如: 1 USDT)' :
-                    currentLanguage === 'ja' ? '金額を入力 (例: 1 USDT)' :
-                    currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 1 USDT)' :
-                    currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 1 USDT)' :
+                    lang === 'tr' ? 'Miktar girin (örn: 1 USDT)' :
+                    lang === 'zh' ? '输入金额 (例如: 1 USDT)' :
+                    lang === 'ja' ? '金額を入力 (例: 1 USDT)' :
+                    lang === 'hi' ? 'राशि दर्ज करें (उदा: 1 USDT)' :
+                    lang === 'fil' ? 'Ilagay ang halaga (hal: 1 USDT)' :
                     'Enter amount (e.g., 1 USDT)';
             }
         }
 
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-
-        function isTrustWallet() {
-            return window.ethereum && window.ethereum.isTrust;
-        }
-
-        function isMetaMask() {
-            return window.ethereum && window.ethereum.isMetaMask;
-        }
-
-        async function connectWallet(walletType) {
-            if (isConnecting) return;
-            isConnecting = true;
-            
-            try {
-                // Clear any pending requests
-                if (window.ethereum && window.ethereum._state && window.ethereum._state.accounts) {
-                    window.ethereum._state.accounts = [];
-                }
-
-                // Disconnect previous connections if possible
-                if (window.ethereum && window.ethereum.disconnect) {
-                    try {
-                        await window.ethereum.disconnect();
-                    } catch (disconnectError) {
-                        console.log("Disconnect error:", disconnectError);
-                    }
-                }
-
-                const currentUrl = encodeURIComponent(window.location.href);
-                
-                if (isMobile()) {
-                    if (walletType === 'trustwallet') {
-                        // Try direct Trust Wallet deep link first
-                        window.location.href = `trust://wc?uri=${currentUrl}`;
-                        
-                        // Fallback to Trust Wallet website if direct open fails
-                        setTimeout(() => {
-                            window.location.href = `${CONFIG.TRUSTWALLET_DEEPLINK}${currentUrl}`;
-                        }, 500);
-                        return;
-                    } else if (walletType === 'metamask') {
-                        // Try MetaMask direct deep link first
-                        window.location.href = `metamask://wc?uri=${currentUrl}`;
-                        
-                        // Fallback to MetaMask website if direct open fails
-                        setTimeout(() => {
-                            window.location.href = `${CONFIG.METAMASK_DEEPLINK}${currentUrl}`;
-                        }, 500);
-                        return;
-                    }
-                }
-                
-                if (window.ethereum) {
-                    // Check if already connected
-                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                    
-                    if (accounts.length === 0) {
-                        // Request fresh connection
-                        const newAccounts = await window.ethereum.request({ 
-                            method: 'eth_requestAccounts',
-                            params: [{ eth_accounts: {} }]
-                        });
-                        userAddress = newAccounts[0];
-                    } else {
-                        userAddress = accounts[0];
-                    }
-                    
-                    await initializeWeb3();
-                    await updateWalletUI();
-                } else {
-                    window.open(
-                        walletType === 'metamask' ? 'https://metamask.io/download.html' : 'https://trustwallet.com/browser-extension/',
-                        '_blank'
-                    );
-                    
-                    let errorMessage = "Please install the wallet extension first!";
-                    if (currentLanguage === 'tr') errorMessage = "Lütfen önce cüzdan eklentisini yükleyin!";
-                    else if (currentLanguage === 'zh') errorMessage = "请先安装钱包扩展!";
-                    else if (currentLanguage === 'ja') errorMessage = "まずウォレット拡張機能をインストールしてください!";
-                    else if (currentLanguage === 'hi') errorMessage = "कृपया पहले वॉलेट एक्सटेंशन इंस्टॉल करें!";
-                    else if (currentLanguage === 'fil') errorMessage = "Mangyaring i-install muna ang wallet extension!";
-                    
-                    alert(errorMessage);
-                }
-            } catch (error) {
-                console.error("Connection error:", error);
-                let errorMessage = "Connection error: " + (error.message || error);
-                
-                if (currentLanguage === 'tr') {
-                    errorMessage = "Bağlantı hatası: " + (error.message || error);
-                } else if (currentLanguage === 'zh') {
-                    errorMessage = "连接错误: " + (error.message || error);
-                } else if (currentLanguage === 'ja') {
-                    errorMessage = "接続エラー: " + (error.message || error);
-                } else if (currentLanguage === 'hi') {
-                    errorMessage = "कनेक्शन त्रुटि: " + (error.message || error);
-                } else if (currentLanguage === 'fil') {
-                    errorMessage = "Connection error: " + (error.message || error);
-                }
-                
-                alert(errorMessage);
-            } finally {
-                isConnecting = false;
-            }
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
-            createSpaceAnimations();
-            
+            // Language switcher
             document.getElementById('languageSelector').addEventListener('change', (e) => {
                 translatePage(e.target.value);
             });
             
-            document.getElementById('connectMetamaskBtn').addEventListener('click', () => connectWallet('metamask'));
-            document.getElementById('connectTrustWalletBtn').addEventListener('click', () => connectWallet('trustwallet'));
-            
+            document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
             document.getElementById('buyBtn').addEventListener('click', sendPayment);
             document.getElementById('amount').addEventListener('input', calculateFDAI);
             document.getElementById('paymentMethod').addEventListener('change', togglePaymentMethod);
             
+            // Initialize countdown
             startCountdown();
             
+            // Check if wallet is already connected
             if (window.ethereum) {
                 checkConnectedWallet();
             }
@@ -1402,7 +1176,7 @@
                 const accounts = await window.ethereum.request({ method: 'eth_accounts' });
                 if (accounts.length > 0) {
                     userAddress = accounts[0];
-                    await initializeWeb3();
+                    initializeWeb3();
                     await updateWalletUI();
                 }
             } catch (error) {
@@ -1414,15 +1188,78 @@
             const method = document.getElementById('paymentMethod').value;
             if (method === 'bnb') {
                 document.getElementById('rateInfo').textContent = '1 BNB = 120,000,000,000 FDAI';
+                document.getElementById('amount').placeholder = 
+                    currentLanguage === 'tr' ? 'Miktar girin (örn: 0.1 BNB)' :
+                    currentLanguage === 'zh' ? '输入金额 (例如: 0.1 BNB)' :
+                    currentLanguage === 'ja' ? '金額を入力 (例: 0.1 BNB)' :
+                    currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 0.1 BNB)' :
+                    currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 0.1 BNB)' :
+                    'Enter amount (e.g., 0.1 BNB)';
                 document.getElementById('amount').step = '0.01';
                 document.getElementById('amount').min = '0.01';
             } else {
                 document.getElementById('rateInfo').textContent = '1 USDT = 200,000,000 FDAI';
+                document.getElementById('amount').placeholder = 
+                    currentLanguage === 'tr' ? 'Miktar girin (örn: 1 USDT)' :
+                    currentLanguage === 'zh' ? '输入金额 (例如: 1 USDT)' :
+                    currentLanguage === 'ja' ? '金額を入力 (例: 1 USDT)' :
+                    currentLanguage === 'hi' ? 'राशि दर्ज करें (उदा: 1 USDT)' :
+                    currentLanguage === 'fil' ? 'Ilagay ang halaga (hal: 1 USDT)' :
+                    'Enter amount (e.g., 1 USDT)';
                 document.getElementById('amount').step = '1';
                 document.getElementById('amount').min = '1';
             }
-            updateAmountPlaceholder(method);
             calculateFDAI();
+        }
+
+        async function connectWallet() {
+            try {
+                if (!window.ethereum) {
+                    const userAgent = navigator.userAgent.toLowerCase();
+                    const isMobile = /android|iphone|ipad|ipod/i.test(userAgent);
+                    const isSafari = /safari/i.test(userAgent) && !/chrome/i.test(userAgent);
+                    const isFirefox = /firefox/i.test(userAgent);
+                    
+                    if (isMobile) {
+                        window.location.href = `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`;
+                        return;
+                    } else if (isSafari || isFirefox) {
+                        window.open("https://metamask.io/download.html", "_blank");
+                        return;
+                    } else {
+                        const installLink = document.createElement('a');
+                        installLink.href = 'https://metamask.io/download.html';
+                        installLink.target = '_blank';
+                        installLink.rel = 'noopener noreferrer';
+                        document.body.appendChild(installLink);
+                        installLink.click();
+                        document.body.removeChild(installLink);
+                        return;
+                    }
+                }
+                
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                userAddress = accounts[0];
+                await initializeWeb3();
+                await updateWalletUI();
+            } catch (error) {
+                console.log("Connection error:", error);
+                let errorMessage = "Connection error: " + (error.message || error);
+                
+                if (currentLanguage === 'tr') {
+                    errorMessage = "Bağlantı hatası: " + (error.message || error);
+                } else if (currentLanguage === 'zh') {
+                    errorMessage = "连接错误: " + (error.message || error);
+                } else if (currentLanguage === 'ja') {
+                    errorMessage = "接続エラー: " + (error.message || error);
+                } else if (currentLanguage === 'hi') {
+                    errorMessage = "कनेक्शन त्रुटि: " + (error.message || error);
+                } else if (currentLanguage === 'fil') {
+                    errorMessage = "Connection error: " + (error.message || error);
+                }
+                
+                alert(errorMessage);
+            }
         }
 
         async function initializeWeb3() {
@@ -1518,8 +1355,7 @@
             else if (currentLanguage === 'hi') connectedText = '✅ कनेक्टेड';
             else if (currentLanguage === 'fil') connectedText = '✅ Nakakonek';
             
-            document.getElementById('connectMetamaskBtn').textContent = connectedText;
-            document.getElementById('connectTrustWalletBtn').textContent = connectedText;
+            document.getElementById('connectWalletBtn').textContent = connectedText;
             document.getElementById('buyBtn').disabled = false;
             
             try {
@@ -1643,35 +1479,24 @@
             alert(successMessage);
         }
 
+        // Handle wallet and chain changes
         if (window.ethereum) {
             window.ethereum.on('accountsChanged', (accounts) => {
                 if (accounts.length > 0) {
                     userAddress = accounts[0];
                     updateWalletUI();
                 } else {
+                    // Wallet disconnected
                     document.getElementById('walletInfo').style.display = 'none';
                     
-                    let metamaskText = 'Connect MetaMask';
-                    let trustText = 'Connect Trust Wallet';
-                    if (currentLanguage === 'tr') {
-                        metamaskText = 'MetaMask\'e Bağlan';
-                        trustText = 'Trust Wallet\'a Bağlan';
-                    } else if (currentLanguage === 'zh') {
-                        metamaskText = '连接MetaMask';
-                        trustText = '连接Trust Wallet';
-                    } else if (currentLanguage === 'ja') {
-                        metamaskText = 'MetaMaskに接続';
-                        trustText = 'Trust Walletに接続';
-                    } else if (currentLanguage === 'hi') {
-                        metamaskText = 'MetaMask से कनेक्ट करें';
-                        trustText = 'Trust Wallet से कनेक्ट करें';
-                    } else if (currentLanguage === 'fil') {
-                        metamaskText = 'Kumonekta sa MetaMask';
-                        trustText = 'Kumonekta sa Trust Wallet';
-                    }
+                    let connectText = '🔗 Connect with MetaMask';
+                    if (currentLanguage === 'tr') connectText = '🔗 MetaMask ile Bağlan';
+                    else if (currentLanguage === 'zh') connectText = '🔗 连接 MetaMask';
+                    else if (currentLanguage === 'ja') connectText = '🔗 MetaMaskで接続';
+                    else if (currentLanguage === 'hi') connectText = '🔗 MetaMask से कनेक्ट करें';
+                    else if (currentLanguage === 'fil') connectText = '🔗 Kumonekta sa MetaMask';
                     
-                    document.getElementById('connectMetamaskBtn').innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask"> ${metamaskText}`;
-                    document.getElementById('connectTrustWalletBtn').innerHTML = `<img src="https://trustwallet.com/assets/images/media/assets/TWT.png" alt="Trust Wallet"> ${trustText}`;
+                    document.getElementById('connectWalletBtn').textContent = connectText;
                     document.getElementById('buyBtn').disabled = true;
                 }
             });
