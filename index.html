@@ -349,15 +349,6 @@
             box-shadow: 0 10px 20px rgba(0, 255, 102, 0.2);
         }
 
-        .team-photo {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--primary);
-            margin: 0 auto 1rem;
-        }
-
         /* Timeline Styling */
         .timeline {
             position: relative;
@@ -644,7 +635,7 @@
                 </div>
                 
                 <p id="rateInfo">1 BNB = 120,000,000,000 FDAI</p>
-                <button id="connectWalletBtn" data-i18n="connect_wallet">🔗 Connect with MetaMask</button>
+                <button id="connectWalletBtn" data-i18n="connect_wallet">Connect with MetaMask</button>
 
                 <div id="walletInfo" style="display: none;">
                     <h3 data-i18n="your_wallet">Your Wallet</h3>
@@ -664,7 +655,7 @@
                     <strong data-i18n="you_will_receive">You will receive:</strong> <span id="fdaiAmount">0</span> FDAI
                 </div>
                 
-                <button id="buyBtn" disabled data-i18n="buy_tokens">🚀 Buy FDAI Tokens</button>
+                <button id="buyBtn" disabled data-i18n="buy_tokens">Buy FDAI Tokens</button>
                 
                 <div class="info-box">
                     <h3 data-i18n="important_info">Important Information</h3>
@@ -805,8 +796,6 @@
         let userAddress = "";
         let usdtContract;
         let currentLanguage = 'en';
-        let isConnecting = false;
-        let connectionRequestActive = false;
 
         // Translation dictionary with new messages
         const translations = {
@@ -818,7 +807,7 @@
                 seconds: "Seconds",
                 presale_ends: "Presale ends in:",
                 payment_method: "Payment Method:",
-                connect_wallet: "🔗 Connect with MetaMask",
+                connect_wallet: "Connect with MetaMask",
                 connected: "Connected",
                 your_wallet: "Your Wallet",
                 address: "Address:",
@@ -826,7 +815,7 @@
                 usdt_balance: "USDT Balance:",
                 amount: "Amount:",
                 you_will_receive: "You will receive:",
-                buy_tokens: "🚀 Buy FDAI Tokens",
+                buy_tokens: "Buy FDAI Tokens",
                 important_info: "Important Information",
                 token_delivery_info: "After your token purchase, your tokens will be reflected in your wallet within 24 hours.",
                 network_warning: "Please make sure you are connected to the",
@@ -866,20 +855,12 @@
                 circulating_supply: "Circulating Supply:",
                 locked_supply: "Locked Supply:",
                 release_schedule: "Locked Token Release Schedule",
-                team_title: "Our Team",
-                ceo_title: "CEO & Founder",
-                ceo_exp: "10+ years in blockchain and AI technology",
-                cto_title: "CTO",
-                cto_exp: "Smart contract and DeFi expert",
-                cmo_title: "CMO",
-                cmo_exp: "Digital marketing specialist",
                 join_community: "Join Our Community",
                 whitepaper_title: "Download FreeDogeAI Whitepaper",
                 download_whitepaper: "Click here to download the whitepaper",
                 no_metamask: "MetaMask not installed!",
                 connected_success: "Successfully connected!",
                 connection_rejected: "Connection rejected by user",
-                pending_request: "There's a pending request. Please check MetaMask",
                 connection_error: "Connection error",
                 wrong_network: "Wrong network. Please switch to BSC",
                 account_changed: "Account changed",
@@ -894,7 +875,7 @@
                 seconds: "Saniye",
                 presale_ends: "Ön satış bitmesine kalan süre:",
                 payment_method: "Ödeme Yöntemi:",
-                connect_wallet: "🔗 MetaMask ile Bağlan",
+                connect_wallet: "MetaMask ile Bağlan",
                 connected: "Bağlandı",
                 your_wallet: "Cüzdanınız",
                 address: "Adres:",
@@ -902,7 +883,7 @@
                 usdt_balance: "USDT Bakiyesi:",
                 amount: "Miktar:",
                 you_will_receive: "Alacaklarınız:",
-                buy_tokens: "🚀 FDAI Token Satın Al",
+                buy_tokens: "FDAI Token Satın Al",
                 important_info: "Önemli Bilgiler",
                 token_delivery_info: "Token satın alımınızın ardından, tokenleriniz 24 saat içinde cüzdanınıza yansıyacaktır.",
                 network_warning: "Lütfen bağlı olduğunuz ağın",
@@ -942,20 +923,12 @@
                 circulating_supply: "Dolaşımdaki Arz:",
                 locked_supply: "Kilitli Arz:",
                 release_schedule: "Kilitli Token Çıkış Takvimi",
-                team_title: "Ekibimiz",
-                ceo_title: "CEO & Kurucu",
-                ceo_exp: "10+ yıllık blockchain ve AI teknolojisi deneyimi",
-                cto_title: "CTO",
-                cto_exp: "Akıllı kontrat ve DeFi uzmanı",
-                cmo_title: "CMO",
-                cmo_exp: "Dijital pazarlama uzmanı",
                 join_community: "Topluluğumuza Katılın",
                 whitepaper_title: "FreeDogeAI Whitepaper'ı İndirin",
                 download_whitepaper: "Whitepaper'ı indirmek için tıklayın",
                 no_metamask: "MetaMask yüklü değil!",
                 connected_success: "Başarıyla bağlandı!",
                 connection_rejected: "Bağlantı kullanıcı tarafından reddedildi",
-                pending_request: "Bekleyen bir istek var. Lütfen MetaMask'ı kontrol edin",
                 connection_error: "Bağlantı hatası",
                 wrong_network: "Yanlış ağ. Lütfen BSC'ye geçin",
                 account_changed: "Hesap değiştirildi",
@@ -1018,14 +991,6 @@
 
         // Connect wallet function with improved error handling
         async function connectWallet() {
-            if (isConnecting || connectionRequestActive) {
-                showConnectionStatus(getTranslation('pending_request'), false);
-                return;
-            }
-            
-            isConnecting = true;
-            connectionRequestActive = true;
-            
             try {
                 if (!window.ethereum) {
                     showConnectionStatus(getTranslation('no_metamask'), false);
@@ -1033,28 +998,9 @@
                     return;
                 }
 
-                // Clear any previous connection attempts
-                const provider = window.ethereum;
-                if (provider.removeAllListeners) {
-                    provider.removeAllListeners();
-                }
-
-                // Request accounts
-                const accounts = await provider.request({ 
-                    method: 'eth_requestAccounts',
-                    params: [] // Explicitly empty params to ensure fresh request
-                }).catch(err => {
-                    if (err.code === 4001) {
-                        // User rejected the request
-                        showConnectionStatus(getTranslation('connection_rejected'), false);
-                    } else if (err.code === -32002) {
-                        // Request already pending
-                        showConnectionStatus(getTranslation('pending_request'), false);
-                    } else {
-                        // Other errors
-                        showConnectionStatus(getTranslation('connection_error') + ": " + err.message, false);
-                    }
-                    throw err;
+                // Force MetaMask to show the connection popup
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts'
                 });
 
                 if (!accounts || accounts.length === 0) {
@@ -1069,10 +1015,12 @@
                 
             } catch (error) {
                 console.error("Connection error:", error);
-                // Error handling already done in the catch above
-            } finally {
-                isConnecting = false;
-                connectionRequestActive = false;
+                if (error.code === 4001) {
+                    // User rejected the request
+                    showConnectionStatus(getTranslation('connection_rejected'), false);
+                } else {
+                    showConnectionStatus(getTranslation('connection_error'), false);
+                }
             }
         }
 
@@ -1169,7 +1117,7 @@
             document.getElementById('walletAddress').textContent = shortAddress;
             
             document.getElementById('walletInfo').style.display = 'block';
-            document.getElementById('connectWalletBtn').textContent = '✅ ' + getTranslation('connected');
+            document.getElementById('connectWalletBtn').textContent = getTranslation('connected');
             document.getElementById('buyBtn').disabled = false;
             
             try {
@@ -1281,18 +1229,18 @@
             
             const receipt = await web3.eth.sendTransaction(tx);
             
-            let successMessage = `✅ ${bnbAmount} BNB successfully sent!\n\nYou will receive: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
+            let successMessage = `${bnbAmount} BNB successfully sent!\n\nYou will receive: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
             
             if (currentLanguage === 'tr') {
-                successMessage = `✅ ${bnbAmount} BNB başarıyla gönderildi!\n\nAlacaklarınız: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nİşlem Hash: ${receipt.transactionHash}`;
+                successMessage = `${bnbAmount} BNB başarıyla gönderildi!\n\nAlacaklarınız: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nİşlem Hash: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'zh') {
-                successMessage = `✅ ${bnbAmount} BNB 发送成功!\n\n您将获得: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\n交易哈希: ${receipt.transactionHash}`;
+                successMessage = `${bnbAmount} BNB 发送成功!\n\n您将获得: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\n交易哈希: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'ja') {
-                successMessage = `✅ ${bnbAmount} BNB の送信に成功しました!\n\n受け取る数量: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nトランザクションハッシュ: ${receipt.transactionHash}`;
+                successMessage = `${bnbAmount} BNB の送信に成功しました!\n\n受け取る数量: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nトランザクションハッシュ: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'hi') {
-                successMessage = `✅ ${bnbAmount} BNB सफलतापूर्वक भेजा गया!\n\nआपको प्राप्त होंगे: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nट्रांजैक्शन हैश: ${receipt.transactionHash}`;
+                successMessage = `${bnbAmount} BNB सफलतापूर्वक भेजा गया!\n\nआपको प्राप्त होंगे: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nट्रांजैक्शन हैश: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'fil') {
-                successMessage = `✅ ${bnbAmount} BNB matagumpay na naipadala!\n\nMatatanggap mo: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
+                successMessage = `${bnbAmount} BNB matagumpay na naipadala!\n\nMatatanggap mo: ${(bnbAmount * CONFIG.TOKENS_PER_BNB).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
             }
             
             alert(successMessage);
@@ -1312,18 +1260,18 @@
                 gasPrice: await web3.eth.getGasPrice()
             });
             
-            let successMessage = `✅ ${usdtAmount} USDT successfully sent!\n\nYou will receive: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
+            let successMessage = `${usdtAmount} USDT successfully sent!\n\nYou will receive: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
             
             if (currentLanguage === 'tr') {
-                successMessage = `✅ ${usdtAmount} USDT başarıyla gönderildi!\n\nAlacaklarınız: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nİşlem Hash: ${receipt.transactionHash}`;
+                successMessage = `${usdtAmount} USDT başarıyla gönderildi!\n\nAlacaklarınız: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nİşlem Hash: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'zh') {
-                successMessage = `✅ ${usdtAmount} USDT 发送成功!\n\n您将获得: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\n交易哈希: ${receipt.transactionHash}`;
+                successMessage = `${usdtAmount} USDT 发送成功!\n\n您将获得: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\n交易哈希: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'ja') {
-                successMessage = `✅ ${usdtAmount} USDT の送信に成功しました!\n\n受け取る数量: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nトランザクションハッシュ: ${receipt.transactionHash}`;
+                successMessage = `${usdtAmount} USDT の送信に成功しました!\n\n受け取る数量: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nトランザクションハッシュ: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'hi') {
-                successMessage = `✅ ${usdtAmount} USDT सफलतापूर्वक भेजा गया!\n\nआपको प्राप्त होंगे: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nट्रांजैक्शन हैश: ${receipt.transactionHash}`;
+                successMessage = `${usdtAmount} USDT सफलतापूर्वक भेजा गया!\n\nआपको प्राप्त होंगे: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nट्रांजैक्शन हैश: ${receipt.transactionHash}`;
             } else if (currentLanguage === 'fil') {
-                successMessage = `✅ ${usdtAmount} USDT matagumpay na naipadala!\n\nMatatanggap mo: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
+                successMessage = `${usdtAmount} USDT matagumpay na naipadala!\n\nMatatanggap mo: ${(usdtAmount * CONFIG.TOKENS_PER_USDT).toLocaleString()} FDAI\nTX Hash: ${receipt.transactionHash}`;
             }
             
             alert(successMessage);
@@ -1395,7 +1343,7 @@
                         showConnectionStatus(getTranslation('account_changed'), true);
                     } else {
                         document.getElementById('walletInfo').style.display = 'none';
-                        document.getElementById('connectWalletBtn').textContent = '🔗 ' + getTranslation('connect_wallet');
+                        document.getElementById('connectWalletBtn').textContent = getTranslation('connect_wallet');
                         document.getElementById('buyBtn').disabled = true;
                         showConnectionStatus(getTranslation('disconnected'), false);
                     }
