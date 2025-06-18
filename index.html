@@ -1,59 +1,85 @@
-<script>
-// TÜM BEKLEYEN İSTEKLERİ SIFIRLA
-if (window.ethereum) {
-  window.ethereum.removeAllListeners();
-  if (window.ethereum._state) {
-    window.ethereum._state.accounts = null;
-    window.ethereum._state.isConnected = false;
-  }
-}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FreeDogeAI Presale</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .wallet-btn {
+            padding: 12px 24px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #metamask {
+            background: #f6851b;
+            color: white;
+        }
+        #trustwallet {
+            background: #3375bb;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>FreeDogeAI Presale</h1>
+    
+    <button id="metamask" class="wallet-btn">Connect MetaMask</button>
+    <button id="trustwallet" class="wallet-btn">Connect Trust Wallet</button>
 
-// BASİT BAĞLANTI FONKSİYONU
-async function connectWallet() {
-  try {
-    // Eğer cüzdan yoksa uyar
-    if (!window.ethereum) {
-      window.open("https://metamask.io/download.html", "_blank");
-      throw new Error("Cüzdan uzantısı bulunamadı");
+    <script>
+    // 1. TÜM BEKLEYEN İSTEKLERİ TEMİZLE
+    if (window.ethereum) {
+        window.ethereum.removeAllListeners();
+        if (window.ethereum._state) {
+            window.ethereum._state.accounts = null;
+        }
     }
 
-    // BEKLEYEN İSTEKLERİ TEMİZLE (2. KORUMA KATMANI)
-    if (window.ethereum.request) {
-      await window.ethereum.request({ method: 'wallet_requestPermissions', params: [] });
+    // 2. BAĞLANTI FONKSİYONU
+    async function connectWallet() {
+        try {
+            // Cüzdan kontrolü
+            if (!window.ethereum) {
+                alert("Lütfen MetaMask veya Trust Wallet kurun!");
+                return;
+            }
+
+            // Hesapları al
+            const accounts = await window.ethereum.request({ 
+                method: 'eth_requestAccounts',
+                params: [] 
+            });
+
+            // Başarı mesajı
+            const shortAddr = accounts[0].substring(0,6) + "..." + accounts[0].substring(38);
+            alert("Bağlantı başarılı!\nCüzdan: " + shortAddr);
+
+        } catch (error) {
+            // Hata yönetimi
+            if (error.code === 4001) {
+                alert("Bağlantı reddedildi!");
+            } else {
+                alert("Hata: " + (error.message || "Bilinmeyen hata"));
+            }
+        }
     }
 
-    // HESAPLARI AL
-    const accounts = await window.ethereum.request({ 
-      method: 'eth_requestAccounts',
-      params: [] // Boş params ekleyerek çakışmayı önle
-    });
-
-    // BAŞARILI MESAJI
-    const shortAddress = `${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`;
-    console.log("Connected to:", shortAddress);
-    alert(`Bağlantı başarılı!\nCüzdan: ${shortAddress}`);
-
-  } catch (error) {
-    console.error("Connection error:", error);
-    if (error.code === 4001) {
-      alert("Bağlantı reddedildi! Lütfen izin verin.");
-    } else {
-      alert(`Hata: ${error.message || "Bilinmeyen hata"}`);
-    }
-  }
-}
-
-// BUTONLARI AYARLA
-document.getElementById('connectMetamaskBtn').onclick = () => {
-  window.ethereum = window.ethereum || { isMetaMask: true };
-  connectWallet();
-};
-
-document.getElementById('connectTrustWalletBtn').onclick = () => {
-  if (/Android|iPhone/i.test(navigator.userAgent)) {
-    window.location.href = `trust://browser?url=${encodeURIComponent(window.location.href)}`;
-  } else {
-    connectWallet();
-  }
-};
-</script>
+    // 3. BUTON AYARLARI
+    document.getElementById('metamask').onclick = connectWallet;
+    
+    document.getElementById('trustwallet').onclick = function() {
+        if (/Android|iPhone/i.test(navigator.userAgent)) {
+            window.location.href = "trust://browser?url=" + encodeURIComponent(window.location.href);
+        } else {
+            connectWallet();
+        }
+    };
+    </script>
+</body>
+</html>
