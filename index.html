@@ -1245,42 +1245,33 @@
             return /MetaMask/i.test(navigator.userAgent);
         }
 
-        async function connectWallet(walletType) {
+       async function connectWallet(walletType) {
   try {
-    // Önceki bağlantıları temizle
-    if (window.ethereum?.disconnect) await window.ethereum.disconnect();
+    // Eski bağlantıları temizle
+    if (window.ethereum?.removeAllListeners) window.ethereum.removeAllListeners();
     
-    // MetaMask için
-    if (walletType === 'metamask') {
-      if (typeof window.ethereum === 'undefined') {
-        window.open('https://metamask.io/download.html', '_blank');
+    // Mobile cihazlarda
+    if (/Android|iPhone/i.test(navigator.userAgent)) {
+      if (walletType === 'metamask') {
+        window.location.href = `https://metamask.app.link/dapp/${window.location.href}`;
       } else {
-        await window.ethereum.request({ 
-          method: 'wallet_requestPermissions', 
-          params: [{ eth_accounts: {} }] 
-        });
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        if (accounts.length > 0) {
-          userAddress = accounts[0];
-          await initializeWeb3();
-          await updateWalletUI();
-        }
-      }
-    }
-    // Trust Wallet için
-    else if (walletType === 'trustwallet') {
-      if (isMobile()) {
-        window.location.href = `trust://browser?url=${encodeURIComponent(window.location.href)}`;
+        window.location.href = `trust://browser?url=${window.location.href}`;
         setTimeout(() => {
-          window.location.href = `https://link.trustwallet.com/open_url?url=${encodeURIComponent(window.location.href)}`;
-        }, 500);
-      } else {
-        alert("Masaüstü bilgisayarda Trust Wallet bağlantısı için lütfen cüzdan uzantınızı kullanın");
+          window.location.href = `https://link.trustwallet.com/open_url?url=${window.location.href}`;
+        }, 300);
       }
+      return;
     }
+
+    // Desktop için
+    const accounts = await window.ethereum.request({ 
+      method: 'eth_requestAccounts',
+    });
+    userAddress = accounts[0];
+    alert("Bağlantı başarılı: " + userAddress.slice(0, 6) + "...");
+    
   } catch (error) {
-    console.error("Bağlantı hatası:", error);
-    alert("Bağlantı hatası: Lütfen sayfayı yenileyip tekrar deneyin");
+    alert("HATA: " + (error.message || "Cüzdan bağlantısı kurulamadı"));
   }
 }
 
