@@ -2,85 +2,61 @@
 <html>
 <head>
     <title>FreeDogeAI Presale</title>
-    <script>
-    // 1. SAYFA YÜKLENİRKEN TÜM ESKİ İSTEKLERİ TEMİZLE
-    window.addEventListener('load', () => {
-        if (window.ethereum) {
-            // MetaMask'in iç state'ini sıfırla
-            if (window.ethereum._state) {
-                window.ethereum._state.accounts = null;
-                window.ethereum._state.isConnected = false;
-                window.ethereum._state.isUnlocked = false;
-            }
-            // Tüm event listener'ları kaldır
-            if (window.ethereum.removeAllListeners) {
-                window.ethereum.removeAllListeners();
-            }
-        }
-    });
-    </script>
     <style>
-        body { font-family: Arial; padding: 20px; }
-        .wallet-btn {
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
             padding: 12px 24px;
-            margin: 10px;
             background: #2b6cb0;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
         }
     </style>
 </head>
 <body>
-    <h2>FreeDogeAI Presale</h2>
-    <button id="connectBtn" class="wallet-btn">Connect Wallet</button>
+    <h1>FreeDogeAI Presale</h1>
+    <button id="connectBtn">Connect Wallet</button>
 
     <script>
-    // 2. YENİ BAĞLANTI FONKSİYONU
+    // 1. TÜM BEKLEYEN İSTEKLERİ SIFIRLA
+    if (window.ethereum) {
+        window.ethereum.autoRefreshOnNetworkChange = false;
+        if (window.ethereum.removeAllListeners) {
+            window.ethereum.removeAllListeners();
+        }
+    }
+
+    // 2. BASİT BAĞLANTI FONKSİYONU
     async function connectWallet() {
         try {
-            // Cüzdan kontrolü
             if (!window.ethereum) {
                 alert("Please install MetaMask or Trust Wallet!");
                 return;
             }
 
-            // BEKLEYEN İSTEKLERİ KESİN OLARAK TEMİZLE
-            await window.ethereum.request({
-                method: 'wallet_requestPermissions',
-                params: [{ eth_accounts: {} }]
-            });
-
-            // HESAPLARI AL
+            // YENİ BİR İSTEK BAŞLAT
             const accounts = await window.ethereum.request({
                 method: 'eth_requestAccounts',
-                params: [] // Boş params ile çakışmayı önle
+                params: [] // ÇAKIŞMAYI ÖNLEMEK İÇİN BOŞ PARAMS
             });
 
-            // BAŞARI MESAJI
-            const shortAddr = `${accounts[0].slice(0,6)}...${accounts[0].slice(-4)}`;
-            alert(`Connected successfully!\nWallet: ${shortAddr}`);
+            alert("Connected: " + accounts[0].slice(0,6) + "..." + accounts[0].slice(-4));
 
         } catch (error) {
-            // HATA YÖNETİMİ
-            console.error("Connection error:", error);
-            if (error.code === 4001) {
-                alert("You rejected the connection!");
-            } else {
-                alert(`Error: ${error.message || "Unknown error"}`);
-            }
+            console.error("Error:", error);
+            alert("Connection failed: " + (error.message || "Unknown error"));
         }
     }
 
-    // 3. BUTON AYARI
-    document.getElementById('connectBtn').addEventListener('click', () => {
-        // ÖNCE TÜM BEKLEYEN İSTEKLERİ TEMİZLE
-        if (window.ethereum?.removeAllListeners) {
-            window.ethereum.removeAllListeners();
-        }
-        connectWallet();
-    });
+    // 3. BUTONA TIKLAMA EKLE
+    document.getElementById('connectBtn').onclick = connectWallet;
     </script>
 </body>
 </html>
