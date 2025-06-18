@@ -1246,43 +1246,43 @@
         }
 
         async function connectWallet(walletType) {
-            try {
-                // Clear any pending requests
-                if (window.ethereum && window.ethereum._state && window.ethereum._state.accounts) {
-                    window.ethereum._state.accounts = [];
-                }
-
-                // Mobile handling
-                if (isMobile()) {
-                    if (walletType === 'metamask') {
-                        if (isMetaMask()) {
-                            // Already in MetaMask browser
-                            await handleInAppConnection();
-                        } else {
-                            // Open MetaMask app or install page
-                            const url = encodeURIComponent(window.location.href);
-                            window.location.href = `${CONFIG.METAMASK_DEEPLINK}${url}`;
-                            return;
-                        }
-                    } else if (walletType === 'trustwallet') {
-                        if (isTrustWallet()) {
-                            // Already in Trust Wallet browser
-                            await handleInAppConnection();
-                        } else {
-                            // Try both Trust Wallet link formats
-                            const url = encodeURIComponent(window.location.href);
-                            try {
-                                window.location.href = `${CONFIG.TRUSTWALLET_APP_LINK}${url}`;
-                                setTimeout(() => {
-                                    window.location.href = `${CONFIG.TRUSTWALLET_DEEPLINK}${url}`;
-                                }, 500);
-                            } catch (e) {
-                                window.location.href = `https://trustwallet.com/dl/`;
-                            }
-                            return;
-                        }
-                    }
-                }
+  try {
+    // Önceki bağlantıları temizle
+    if (window.ethereum?.disconnect) await window.ethereum.disconnect();
+    
+    // MetaMask için
+    if (walletType === 'metamask') {
+      if (typeof window.ethereum === 'undefined') {
+        window.open('https://metamask.io/download.html', '_blank');
+      } else {
+        await window.ethereum.request({ 
+          method: 'wallet_requestPermissions', 
+          params: [{ eth_accounts: {} }] 
+        });
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.length > 0) {
+          userAddress = accounts[0];
+          await initializeWeb3();
+          await updateWalletUI();
+        }
+      }
+    }
+    // Trust Wallet için
+    else if (walletType === 'trustwallet') {
+      if (isMobile()) {
+        window.location.href = `trust://browser?url=${encodeURIComponent(window.location.href)}`;
+        setTimeout(() => {
+          window.location.href = `https://link.trustwallet.com/open_url?url=${encodeURIComponent(window.location.href)}`;
+        }, 500);
+      } else {
+        alert("Masaüstü bilgisayarda Trust Wallet bağlantısı için lütfen cüzdan uzantınızı kullanın");
+      }
+    }
+  } catch (error) {
+    console.error("Bağlantı hatası:", error);
+    alert("Bağlantı hatası: Lütfen sayfayı yenileyip tekrar deneyin");
+  }
+}
 
                 // Desktop handling
                 await handleInAppConnection();
