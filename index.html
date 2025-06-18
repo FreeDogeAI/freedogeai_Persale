@@ -1,65 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FreeDogeAI Presale</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            text-align: center;
+    <title>FreeDogeAI Fix</title>
+    <script>
+    // 1. TÜM BEKLEYEN İSTEKLERİ KÖKTEN TEMİZLE
+    function resetWallet() {
+        if (window.ethereum) {
+            // MetaMask'in iç state'ini sıfırla
+            if (window.ethereum._state) {
+                window.ethereum._state.accounts = null;
+                window.ethereum._state.isConnected = false;
+                window.ethereum._state.isUnlocked = false;
+            }
+            // Tüm event listener'ları kaldır
+            if (window.ethereum.removeAllListeners) {
+                window.ethereum.removeAllListeners();
+            }
+            // Tüm bekleyen istekleri iptal et
+            if (window.ethereum._metamask) {
+                window.ethereum._metamask.isUnlocked = () => Promise.resolve(false);
+            }
         }
-        button {
-            padding: 12px 24px;
-            background: #2b6cb0;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px;
+    }
+
+    // 2. YENİ BAĞLANTI FONKSİYONU
+    async function connectWallet() {
+        resetWallet(); // Önce her şeyi sıfırla
+        
+        try {
+            if (!window.ethereum) {
+                throw new Error("Cüzdan bulunamadı");
+            }
+
+            // YENİ BİR İSTEK BAŞLAT (ZAMAN AŞIMLI)
+            const accounts = await Promise.race([
+                window.ethereum.request({ method: 'eth_requestAccounts' }),
+                new Promise((_, reject) => setTimeout(() => reject(new Error("Zaman aşımı")), 5000))
+            ]);
+
+            const shortAddr = accounts[0].substring(0,6) + "..." + accounts[0].substring(38);
+            alert("BAĞLANDI: " + shortAddr);
+
+        } catch (error) {
+            console.error("HATA:", error);
+            alert("HATA: " + (error.message || "Bağlantı başarısız"));
+            resetWallet(); // Hata durumunda tekrar sıfırla
         }
-    </style>
+    }
+    </script>
 </head>
 <body>
     <h1>FreeDogeAI Presale</h1>
-    <button id="connectBtn">Connect Wallet</button>
-
-    <script>
-    // 1. TÜM BEKLEYEN İSTEKLERİ SIFIRLA
-    if (window.ethereum) {
-        window.ethereum.autoRefreshOnNetworkChange = false;
-        if (window.ethereum.removeAllListeners) {
-            window.ethereum.removeAllListeners();
-        }
-    }
-
-    // 2. BASİT BAĞLANTI FONKSİYONU
-    async function connectWallet() {
-    // TÜM BEKLEYEN İSTEKLERİ SIFIRLA
-    if (window.ethereum?._state) {
-        window.ethereum._state.accounts = null;
-        window.ethereum._state.isConnected = false;
-    }
-    
-    try {
-        // YENİ BİR İSTEK BAŞLAT
-        const accounts = await new Promise((resolve, reject) => {
-            window.ethereum.request({
-                method: 'eth_requestAccounts'
-            }).then(resolve).catch(reject);
-            
-            // 15 SANİYE ZAMAN AŞIMI
-            setTimeout(() => reject(new Error("Timeout")), 15000);
-        });
-        
-        alert("Connected: " + accounts[0].slice(0,6) + "...");
-    } catch (error) {
-        alert("Error: " + (error.message || "Connection failed"));
-    }
-}
-
-    // 3. BUTONA TIKLAMA EKLE
-    document.getElementById('connectBtn').onclick = connectWallet;
-    </script>
+    <button onclick="connectWallet()" 
+            style="padding:12px 24px; background:#2b6cb0; color:white; border:none; border-radius:8px; cursor:pointer;">
+        CONNECT WALLET
+    </button>
 </body>
 </html>
