@@ -2,84 +2,85 @@
 <html>
 <head>
     <title>FreeDogeAI Presale</title>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
+    <script>
+    // 1. SAYFA YÜKLENİRKEN TÜM ESKİ İSTEKLERİ TEMİZLE
+    window.addEventListener('load', () => {
+        if (window.ethereum) {
+            // MetaMask'in iç state'ini sıfırla
+            if (window.ethereum._state) {
+                window.ethereum._state.accounts = null;
+                window.ethereum._state.isConnected = false;
+                window.ethereum._state.isUnlocked = false;
+            }
+            // Tüm event listener'ları kaldır
+            if (window.ethereum.removeAllListeners) {
+                window.ethereum.removeAllListeners();
+            }
         }
+    });
+    </script>
+    <style>
+        body { font-family: Arial; padding: 20px; }
         .wallet-btn {
             padding: 12px 24px;
             margin: 10px;
+            background: #2b6cb0;
+            color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-        }
-        #metamask {
-            background: #f6851b;
-            color: white;
-        }
-        #trustwallet {
-            background: #3375bb;
-            color: white;
         }
     </style>
 </head>
 <body>
-    <h1>FreeDogeAI Presale</h1>
-    
-    <button id="metamask" class="wallet-btn">Connect MetaMask</button>
-    <button id="trustwallet" class="wallet-btn">Connect Trust Wallet</button>
+    <h2>FreeDogeAI Presale</h2>
+    <button id="connectBtn" class="wallet-btn">Connect Wallet</button>
 
     <script>
-    // 1. TÜM BEKLEYEN İSTEKLERİ TEMİZLE
-    if (window.ethereum) {
-        window.ethereum.removeAllListeners();
-        if (window.ethereum._state) {
-            window.ethereum._state.accounts = null;
-        }
-    }
-
-    // 2. BAĞLANTI FONKSİYONU
+    // 2. YENİ BAĞLANTI FONKSİYONU
     async function connectWallet() {
         try {
             // Cüzdan kontrolü
             if (!window.ethereum) {
-                alert("Lütfen MetaMask veya Trust Wallet kurun!");
+                alert("Please install MetaMask or Trust Wallet!");
                 return;
             }
 
-            // Hesapları al
-            const accounts = await window.ethereum.request({ 
-                method: 'eth_requestAccounts',
-                params: [] 
+            // BEKLEYEN İSTEKLERİ KESİN OLARAK TEMİZLE
+            await window.ethereum.request({
+                method: 'wallet_requestPermissions',
+                params: [{ eth_accounts: {} }]
             });
 
-            // Başarı mesajı
-            const shortAddr = accounts[0].substring(0,6) + "..." + accounts[0].substring(38);
-            alert("Bağlantı başarılı!\nCüzdan: " + shortAddr);
+            // HESAPLARI AL
+            const accounts = await window.ethereum.request({
+                method: 'eth_requestAccounts',
+                params: [] // Boş params ile çakışmayı önle
+            });
+
+            // BAŞARI MESAJI
+            const shortAddr = `${accounts[0].slice(0,6)}...${accounts[0].slice(-4)}`;
+            alert(`Connected successfully!\nWallet: ${shortAddr}`);
 
         } catch (error) {
-            // Hata yönetimi
+            // HATA YÖNETİMİ
+            console.error("Connection error:", error);
             if (error.code === 4001) {
-                alert("Bağlantı reddedildi!");
+                alert("You rejected the connection!");
             } else {
-                alert("Hata: " + (error.message || "Bilinmeyen hata"));
+                alert(`Error: ${error.message || "Unknown error"}`);
             }
         }
     }
 
-    // 3. BUTON AYARLARI
-    document.getElementById('metamask').onclick = connectWallet;
-    
-    document.getElementById('trustwallet').onclick = function() {
-        if (/Android|iPhone/i.test(navigator.userAgent)) {
-            window.location.href = "trust://browser?url=" + encodeURIComponent(window.location.href);
-        } else {
-            connectWallet();
+    // 3. BUTON AYARI
+    document.getElementById('connectBtn').addEventListener('click', () => {
+        // ÖNCE TÜM BEKLEYEN İSTEKLERİ TEMİZLE
+        if (window.ethereum?.removeAllListeners) {
+            window.ethereum.removeAllListeners();
         }
-    };
+        connectWallet();
+    });
     </script>
 </body>
 </html>
