@@ -1,59 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FreeDogeAI Fix</title>
+    <title>FreeDogeAI Ultimate Fix</title>
     <script>
-    // 1. TÜM BEKLEYEN İSTEKLERİ KÖKTEN TEMİZLE
-    function resetWallet() {
+    // 1. TÜM WALLET STATE'INI SIFIRLAMA
+    function hardResetWallet() {
         if (window.ethereum) {
-            // MetaMask'in iç state'ini sıfırla
+            // MetaMask özel temizlik
+            if (window.ethereum._metamask) {
+                window.ethereum._metamask.isUnlocked = () => Promise.resolve(false);
+                window.ethereum._metamask.isEnabled = () => Promise.resolve(false);
+            }
+            
+            // Tüm dinleyicileri kaldır
+            if (window.ethereum.removeAllListeners) {
+                window.ethereum.removeAllListeners();
+            }
+            
+            // Internal state'i sıfırla
             if (window.ethereum._state) {
                 window.ethereum._state.accounts = null;
                 window.ethereum._state.isConnected = false;
                 window.ethereum._state.isUnlocked = false;
             }
-            // Tüm event listener'ları kaldır
-            if (window.ethereum.removeAllListeners) {
-                window.ethereum.removeAllListeners();
-            }
-            // Tüm bekleyen istekleri iptal et
-            if (window.ethereum._metamask) {
-                window.ethereum._metamask.isUnlocked = () => Promise.resolve(false);
+            
+            // Çoklu provider durumunda
+            if (window.ethereum.providers?.length > 1) {
+                window.ethereum = window.ethereum.providers[0]; // Sadece ilkini kullan
             }
         }
     }
 
-    // 2. YENİ BAĞLANTI FONKSİYONU
+    // 2. AKILLI BAĞLANTI FONKSİYONU
     async function connectWallet() {
-        resetWallet(); // Önce her şeyi sıfırla
+        // ÖNCE MUTLAKA RESET
+        hardResetWallet();
         
         try {
             if (!window.ethereum) {
-                throw new Error("Cüzdan bulunamadı");
+                throw new Error("Lütfen MetaMask/Trust Wallet yükleyin");
             }
 
             // YENİ BİR İSTEK BAŞLAT (ZAMAN AŞIMLI)
             const accounts = await Promise.race([
-                window.ethereum.request({ method: 'eth_requestAccounts' }),
-                new Promise((_, reject) => setTimeout(() => reject(new Error("Zaman aşımı")), 5000))
+                window.ethereum.request({ 
+                    method: 'eth_requestAccounts',
+                    params: [] // Çakışmayı önlemek için
+                }),
+                new Promise((_, reject) => setTimeout(
+                    () => reject(new Error("İstek zaman aşımına uğradı")), 
+                    8000 // 8 saniye
+                ))
             ]);
 
-            const shortAddr = accounts[0].substring(0,6) + "..." + accounts[0].substring(38);
-            alert("BAĞLANDI: " + shortAddr);
+            // BAŞARILI DURUM
+            const shortAddr = `${accounts[0].substring(0,6)}...${accounts[0].substring(38)}`;
+            alert(`Bağlantı başarılı!\nCüzdan: ${shortAddr}`);
 
         } catch (error) {
-            console.error("HATA:", error);
-            alert("HATA: " + (error.message || "Bağlantı başarısız"));
-            resetWallet(); // Hata durumunda tekrar sıfırla
+            console.error("Bağlantı hatası:", error);
+            
+            // KULLANICI REDDETTİYSE
+            if (error.code === 4001) {
+                alert("Bağlantı reddedildi. Tekrar denemek için butona basın.");
+                hardResetWallet(); // Reddedince mutlaka resetle
+            } 
+            // ZAMAN AŞIMI
+            else if (error.message.includes("zaman aşımı")) {
+                alert("İstek çok uzun sürdü. Lütfen tekrar deneyin.");
+                hardResetWallet();
+            }
+            // DİĞER HATALAR
+            else {
+                alert(`Hata: ${error.message || "Bilinmeyen hata"}`);
+                hardResetWallet();
+            }
         }
     }
     </script>
 </head>
 <body>
     <h1>FreeDogeAI Presale</h1>
+    
+    <!-- TEK BUTONLA YÖNETİM -->
     <button onclick="connectWallet()" 
-            style="padding:12px 24px; background:#2b6cb0; color:white; border:none; border-radius:8px; cursor:pointer;">
+            style="padding:12px 24px; background:#2b6cb0; color:white; border:none; border-radius:8px; cursor:pointer; font-size:16px;">
         CONNECT WALLET
     </button>
+
+    <script>
+    // SAYFA YÜKLENİRKEN EK ÖNLEMLER
+    window.addEventListener('load', () => {
+        hardResetWallet();
+        window.ethereum?.autoRefreshOnNetworkChange = false;
+    });
+    </script>
 </body>
 </html>
