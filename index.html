@@ -1,86 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FreeDogeAI Ultimate Fix</title>
-    <script>
-    // 1. RADİKAL WALLET RESETLEME
-    function nuclearReset() {
-        if (window.ethereum) {
-            // MetaMask internal state override
-            if (window.ethereum._metamask) {
-                window.ethereum._metamask.isUnlocked = () => Promise.resolve(false);
-                window.ethereum._metamask.isEnabled = () => Promise.resolve(false);
-                window.ethereum._metamask._requests = new Map();
-            }
-            
-            // Provider-level reset
-            window.ethereum.removeAllListeners?.();
-            window.ethereum._state = {
-                accounts: null,
-                isConnected: false,
-                isUnlocked: false,
-                initialized: false
-            };
-            
-            // Multi-provider fix
-            if (window.ethereum.providers?.length) {
-                window.ethereum = window.ethereum.providers[0];
-            }
+    <title>Only MetaMask Connection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
         }
-    }
-
-    // 2. BAĞLANTI FONKSİYONU (YENİ NESİL)
-    async function connectWallet() {
-        // ÖNCE KÖKLÜ TEMİZLİK
-        nuclearReset();
-        
-        try {
-            if (!window.ethereum) throw new Error("Cüzdan bulunamadı");
-            
-            // YENİ BİR İSTEK BAŞLAT
-            const accounts = await Promise.race([
-                window.ethereum.request({ 
-                    method: 'eth_requestAccounts',
-                    params: []
-                }),
-                new Promise((_, reject) => setTimeout(
-                    () => reject(new Error("İstek zaman aşımı")), 
-                    10000
-                ))
-            ]);
-            
-            // BAŞARILI DURUM
-            alert(`Bağlantı başarılı!\n${accounts[0].slice(0,6)}...${accounts[0].slice(-4)}`);
-            
-        } catch (error) {
-            console.error("HATA:", error);
-            nuclearReset(); // HATA OLURSA TEKRAR RESET
-            
-            if (error.code === 4001) {
-                alert("Bağlantı reddedildi. Yeniden denemek için butona basın.");
-            } else {
-                alert(`Hata: ${error.message || "Bilinmeyen hata"}\nSayfayı yenileyip tekrar deneyin.`);
-            }
+        #connectBtn {
+            padding: 12px 24px;
+            background: #f6851b; /* MetaMask turuncusu */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
         }
-    }
-    </script>
+    </style>
 </head>
 <body>
-    <h1>FreeDogeAI Presale</h1>
-    <button onclick="connectWallet()" 
-            style="padding:12px 24px; background:#2b6cb0; color:white; border:none; border-radius:8px; cursor:pointer; font-size:16px; margin:20px;">
-        CONNECT WALLET
-    </button>
+    <h1>Sadece MetaMask Bağlantısı</h1>
+    <button id="connectBtn">META MASK'E BAĞLAN</button>
 
     <script>
-    // SAYFA YÜKLENİRKEN EK ÖNLEMLER
-    window.addEventListener('load', () => {
-        nuclearReset();
-        if (window.ethereum) {
-            window.ethereum.autoRefreshOnNetworkChange = false;
-            window.ethereum.on('disconnect', nuclearReset);
+    // 1. TÜM ESKİ İSTEKLERİ SIFIRLA
+    function resetMetaMask() {
+        if (window.ethereum?._metamask) {
+            window.ethereum._metamask.isUnlocked = () => Promise.resolve(false);
+            window.ethereum._metamask._requests = new Map();
         }
-    });
+        if (window.ethereum?.removeAllListeners) {
+            window.ethereum.removeAllListeners();
+        }
+    }
+
+    // 2. SAF META MASK BAĞLANTISI
+    async function connectMetaMask() {
+        resetMetaMask(); // Her tıklamada reset
+        
+        try {
+            // Sadece MetaMask kontrolü
+            if (!window.ethereum?.isMetaMask) {
+                const install = confirm("MetaMask yüklü değil! Yükleme sayfasına gidilsin mi?");
+                if (install) window.open("https://metamask.io/download.html", "_blank");
+                return;
+            }
+
+            // Yeni bağlantı isteği
+            const accounts = await window.ethereum.request({
+                method: 'eth_requestAccounts',
+                params: [] // Çakışma önleyici
+            });
+
+            // Başarı durumu
+            const shortAddress = `${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`;
+            alert(`Bağlantı başarılı!\nCüzdan: ${shortAddress}`);
+
+        } catch (error) {
+            console.error("Hata:", error);
+            resetMetaMask(); // Hata durumunda tekrar reset
+            
+            if (error.code === 4001) {
+                alert("Bağlantı reddedildi. Tekrar denemek için butona basın.");
+            } else {
+                alert(`Hata: ${error.message || "Bilinmeyen hata"}`);
+            }
+        }
+    }
+
+    // 3. BUTON AYARI
+    document.getElementById('connectBtn').onclick = connectMetaMask;
+
+    // Sayfa yüklendiğinde reset
+    window.addEventListener('load', resetMetaMask);
     </script>
 </body>
 </html>
