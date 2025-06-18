@@ -35,25 +35,28 @@
 
     // 2. BASİT BAĞLANTI FONKSİYONU
     async function connectWallet() {
-        try {
-            if (!window.ethereum) {
-                alert("Please install MetaMask or Trust Wallet!");
-                return;
-            }
-
-            // YENİ BİR İSTEK BAŞLAT
-            const accounts = await window.ethereum.request({
-                method: 'eth_requestAccounts',
-                params: [] // ÇAKIŞMAYI ÖNLEMEK İÇİN BOŞ PARAMS
-            });
-
-            alert("Connected: " + accounts[0].slice(0,6) + "..." + accounts[0].slice(-4));
-
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Connection failed: " + (error.message || "Unknown error"));
-        }
+    // TÜM BEKLEYEN İSTEKLERİ SIFIRLA
+    if (window.ethereum?._state) {
+        window.ethereum._state.accounts = null;
+        window.ethereum._state.isConnected = false;
     }
+    
+    try {
+        // YENİ BİR İSTEK BAŞLAT
+        const accounts = await new Promise((resolve, reject) => {
+            window.ethereum.request({
+                method: 'eth_requestAccounts'
+            }).then(resolve).catch(reject);
+            
+            // 15 SANİYE ZAMAN AŞIMI
+            setTimeout(() => reject(new Error("Timeout")), 15000);
+        });
+        
+        alert("Connected: " + accounts[0].slice(0,6) + "...");
+    } catch (error) {
+        alert("Error: " + (error.message || "Connection failed"));
+    }
+}
 
     // 3. BUTONA TIKLAMA EKLE
     document.getElementById('connectBtn').onclick = connectWallet;
