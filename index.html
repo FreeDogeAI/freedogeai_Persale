@@ -1,60 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI Presale</title>
-    <style>
-        .wallet-btn {
-            padding: 12px 24px;
-            background: #2b6cb0;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 5px;
-        }
-    </style>
-</head>
-<body>
-    <h1>FreeDogeAI Presale</h1>
-    
-    <button class="wallet-btn" id="connectMetamaskBtn">
-        Connect MetaMask
-    </button>
-    
-    <button class="wallet-btn" id="connectTrustWalletBtn">
-        Connect Trust Wallet
-    </button>
+<script>
+// TÜM BEKLEYEN İSTEKLERİ SIFIRLA
+if (window.ethereum) {
+  window.ethereum.removeAllListeners();
+  if (window.ethereum._state) {
+    window.ethereum._state.accounts = null;
+    window.ethereum._state.isConnected = false;
+  }
+}
 
-    <script>
-    // BASİT VE ÇALIŞAN CÜZDAN BAĞLANTISI
-    async function connectWallet() {
-        try {
-            // MetaMask/Trust Wallet kontrolü
-            if (!window.ethereum) {
-                alert("Please install MetaMask or Trust Wallet!");
-                return;
-            }
-            
-            // HESAPLARI İSTE
-            const accounts = await window.ethereum.request({ 
-                method: 'eth_requestAccounts' 
-            });
-            
-            // BAŞARILI MESAJI
-            const shortAddress = `${accounts[0].substring(0, 6)}...${accounts[0].substring(38)}`;
-            alert(`Connected successfully!\nWallet: ${shortAddress}`);
-            
-        } catch (error) {
-            // HATA DURUMU
-            alert(`Error: ${error.message || "User denied connection"}`);
-        }
+// BASİT BAĞLANTI FONKSİYONU
+async function connectWallet() {
+  try {
+    // Eğer cüzdan yoksa uyar
+    if (!window.ethereum) {
+      window.open("https://metamask.io/download.html", "_blank");
+      throw new Error("Cüzdan uzantısı bulunamadı");
     }
 
-    // BUTONLARA TIKLAMA ÖZELLİĞİ EKLE
-    document.getElementById('connectMetamaskBtn').addEventListener('click', connectWallet);
-    document.getElementById('connectTrustWalletBtn').addEventListener('click', connectWallet);
-    </script>
-</body>
-</html>
+    // BEKLEYEN İSTEKLERİ TEMİZLE (2. KORUMA KATMANI)
+    if (window.ethereum.request) {
+      await window.ethereum.request({ method: 'wallet_requestPermissions', params: [] });
+    }
+
+    // HESAPLARI AL
+    const accounts = await window.ethereum.request({ 
+      method: 'eth_requestAccounts',
+      params: [] // Boş params ekleyerek çakışmayı önle
+    });
+
+    // BAŞARILI MESAJI
+    const shortAddress = `${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`;
+    console.log("Connected to:", shortAddress);
+    alert(`Bağlantı başarılı!\nCüzdan: ${shortAddress}`);
+
+  } catch (error) {
+    console.error("Connection error:", error);
+    if (error.code === 4001) {
+      alert("Bağlantı reddedildi! Lütfen izin verin.");
+    } else {
+      alert(`Hata: ${error.message || "Bilinmeyen hata"}`);
+    }
+  }
+}
+
+// BUTONLARI AYARLA
+document.getElementById('connectMetamaskBtn').onclick = () => {
+  window.ethereum = window.ethereum || { isMetaMask: true };
+  connectWallet();
+};
+
+document.getElementById('connectTrustWalletBtn').onclick = () => {
+  if (/Android|iPhone/i.test(navigator.userAgent)) {
+    window.location.href = `trust://browser?url=${encodeURIComponent(window.location.href)}`;
+  } else {
+    connectWallet();
+  }
+};
+</script>
