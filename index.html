@@ -1245,43 +1245,30 @@
             return /MetaMask/i.test(navigator.userAgent);
         }
 
-       async function connectWallet(walletType) {
+       <script>
+// Basit ve çalışan cüzdan bağlantısı
+async function connectWallet() {
   try {
-    // Eski bağlantıları temizle
-    if (window.ethereum?.removeAllListeners) window.ethereum.removeAllListeners();
-    
-    // Mobile cihazlarda
-    if (/Android|iPhone/i.test(navigator.userAgent)) {
-      if (walletType === 'metamask') {
-        window.location.href = `https://metamask.app.link/dapp/${window.location.href}`;
-      } else {
-        window.location.href = `trust://browser?url=${window.location.href}`;
-        setTimeout(() => {
-          window.location.href = `https://link.trustwallet.com/open_url?url=${window.location.href}`;
-        }, 300);
-      }
+    if (!window.ethereum) {
+      alert("Lütfen MetaMask veya Trust Wallet yükleyin!");
       return;
     }
-
-    // Desktop için
+    
     const accounts = await window.ethereum.request({ 
-      method: 'eth_requestAccounts',
+      method: 'eth_requestAccounts' 
     });
-    userAddress = accounts[0];
-    alert("Bağlantı başarılı: " + userAddress.slice(0, 6) + "...");
+    
+    alert("Bağlantı başarılı!\nCüzdan: " + accounts[0].slice(0, 6) + "..." + accounts[0].slice(-4));
     
   } catch (error) {
-    alert("HATA: " + (error.message || "Cüzdan bağlantısı kurulamadı"));
+    alert("Hata: " + (error.message || "Bağlantı reddedildi"));
   }
 }
 
-                // Desktop handling
-                await handleInAppConnection();
-            } catch (error) {
-                console.error("Connection error:", error);
-                showErrorAlert(error);
-            }
-        }
+// Butonlara tıklama özelliği ekle
+document.getElementById('connectMetamaskBtn').onclick = connectWallet;
+document.getElementById('connectTrustWalletBtn').onclick = connectWallet;
+</script>
 
         async function handleInAppConnection() {
             if (window.ethereum) {
