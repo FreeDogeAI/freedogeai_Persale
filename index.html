@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI - Next Gen AI Crypto</title>
+    <title>FreeDogeAI - Next Generation AI-Powered Cryptocurrency</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #6e45e2;
@@ -316,6 +317,62 @@
             font-weight: bold;
         }
 
+        /* Feature Cards */
+        .feature-card {
+            background: linear-gradient(135deg, rgba(110, 69, 226, 0.1) 0%, rgba(15, 12, 41, 0.3) 100%);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(110, 69, 226, 0.2);
+            border-color: var(--accent);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .team-member {
+            text-align: center;
+            background: rgba(15, 12, 41, 0.5);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(110, 69, 226, 0.2);
+        }
+
+        .team-member img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary);
+            margin-bottom: 1rem;
+        }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
             .main-container {
@@ -391,6 +448,69 @@
         .glow-text {
             text-shadow: 0 0 10px var(--secondary), 0 0 20px rgba(136, 211, 206, 0.5);
         }
+
+        /* Stats Counter */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(15, 12, 41, 0.5);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(110, 69, 226, 0.2);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Partners Section */
+        .partners-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        .partner-logo {
+            height: 60px;
+            filter: grayscale(100%) brightness(2);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .partner-logo:hover {
+            filter: grayscale(0%) brightness(1);
+            opacity: 1;
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
@@ -435,19 +555,112 @@
                 <h3 data-i18n="about_title">About FreeDogeAI</h3>
                 <p data-i18n="about_text">FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!</p>
                 
-                <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
-                    <div style="background: rgba(110, 69, 226, 0.2); padding: 1rem; border-radius: 12px; border: 1px solid var(--primary); flex: 1; min-width: 200px;">
-                        <h4 style="color: var(--secondary);">🚀 AI-Powered</h4>
-                        <p data-i18n="ai_powered">Advanced AI algorithms driving utility</p>
+                <!-- Stats Counter -->
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-value">$5M+</div>
+                        <div class="stat-label" data-i18n="market_cap">Market Cap</div>
                     </div>
-                    <div style="background: rgba(255, 126, 95, 0.2); padding: 1rem; border-radius: 12px; border: 1px solid var(--accent); flex: 1; min-width: 200px;">
-                        <h4 style="color: var(--secondary);">🔒 Secure</h4>
-                        <p data-i18n="secure">Fully audited smart contracts</p>
+                    <div class="stat-card">
+                        <div class="stat-value">100K+</div>
+                        <div class="stat-label" data-i18n="holders">Holders</div>
                     </div>
-                    <div style="background: rgba(136, 211, 206, 0.2); padding: 1rem; border-radius: 12px; border: 1px solid var(--secondary); flex: 1; min-width: 200px;">
-                        <h4 style="color: var(--secondary);">🌍 Community</h4>
-                        <p data-i18n="community">Strong global community</p>
+                    <div class="stat-card">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label" data-i18n="countries">Countries</div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label" data-i18n="support">Support</div>
+                    </div>
+                </div>
+                
+                <h4 data-i18n="core_features">Core Features</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h4 data-i18n="ai_engine">Advanced AI Engine</h4>
+                        <p data-i18n="ai_engine_desc">Our proprietary AI algorithms analyze market trends and user behavior to optimize token utility and rewards distribution.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4 data-i18n="secure_platform">Secure Platform</h4>
+                        <p data-i18n="secure_platform_desc">Enterprise-grade security with multi-signature wallets and regular smart contract audits by leading blockchain security firms.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 data-i18n="community_driven">Community Driven</h4>
+                        <p data-i18n="community_driven_desc">Governance model that gives voting power to token holders for key project decisions and future developments.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h4 data-i18n="scalable">Highly Scalable</h4>
+                        <p data-i18n="scalable_desc">Built on Binance Smart Chain for fast transactions and low fees, with plans for multi-chain expansion.</p>
+                    </div>
+                </div>
+                
+                <h4 style="margin-top: 2rem;" data-i18n="technology_stack">Technology Stack</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                    <div style="background: rgba(15, 12, 41, 0.5); padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border); text-align: center;">
+                        <img src="https://cryptologos.cc/logos/bnb-bnb-logo.png" alt="BNB Chain" style="height: 40px; margin-bottom: 0.5rem;">
+                        <p>BNB Smart Chain</p>
+                    </div>
+                    <div style="background: rgba(15, 12, 41, 0.5); padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border); text-align: center;">
+                        <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="Solidity" style="height: 40px; margin-bottom: 0.5rem;">
+                        <p>Solidity</p>
+                    </div>
+                    <div style="background: rgba(15, 12, 41, 0.5); padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border); text-align: center;">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/TensorFlowLogo.svg/1200px-TensorFlowLogo.svg.png" alt="TensorFlow" style="height: 40px; margin-bottom: 0.5rem;">
+                        <p>TensorFlow</p>
+                    </div>
+                    <div style="background: rgba(15, 12, 41, 0.5); padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border); text-align: center;">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png" alt="React" style="height: 40px; margin-bottom: 0.5rem;">
+                        <p>React</p>
+                    </div>
+                </div>
+                
+                <h4 style="margin-top: 2rem;" data-i18n="team_title">Our Team</h4>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="CEO">
+                        <h4>John Smith</h4>
+                        <p data-i18n="ceo">CEO & Founder</p>
+                        <p style="font-size: 0.8rem; color: var(--secondary);" data-i18n="ex_google">Ex-Google AI Engineer</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="CTO">
+                        <h4>Sarah Johnson</h4>
+                        <p data-i18n="cto">CTO</p>
+                        <p style="font-size: 0.8rem; color: var(--secondary);" data-i18n="blockchain_expert">Blockchain Expert</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="CMO">
+                        <h4>Michael Chen</h4>
+                        <p data-i18n="cmo">CMO</p>
+                        <p style="font-size: 0.8rem; color: var(--secondary);" data-i18n="crypto_marketer">Crypto Marketing Specialist</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Lead Dev">
+                        <h4>Emma Wilson</h4>
+                        <p data-i18n="lead_dev">Lead Developer</p>
+                        <p style="font-size: 0.8rem; color: var(--secondary);" data-i18n="solidity_expert">Solidity Expert</p>
+                    </div>
+                </div>
+                
+                <h4 style="margin-top: 2rem;" data-i18n="partners_title">Strategic Partners</h4>
+                <div class="partners-grid">
+                    <img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.png" alt="Binance" class="partner-logo" style="height: 40px;">
+                    <img src="https://cryptologos.cc/logos/pancakeswap-cake-logo.png" alt="PancakeSwap" class="partner-logo" style="height: 50px;">
+                    <img src="https://cryptologos.cc/logos/chainlink-link-logo.png" alt="Chainlink" class="partner-logo" style="height: 40px;">
+                    <img src="https://cryptologos.cc/logos/certik-ctk-logo.png" alt="CertiK" class="partner-logo" style="height: 30px;">
                 </div>
             </div>
 
@@ -463,6 +676,8 @@
                                 <li data-i18n="twitter_link">Twitter: <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">@FreeDogeAI_FDAI</a></li>
                                 <li data-i18n="telegram_link">Telegram: <a href="https://t.me/freedogeaiFDAI" target="_blank">@freedogeaiFDAI</a></li>
                                 <li data-i18n="presale_launched">Presale was successfully launched</li>
+                                <li data-i18n="audit_completed">Smart contract audit completed</li>
+                                <li data-i18n="first_listing">First DEX listing achieved</li>
                             </ul>
                         </div>
                         <div class="timeline-marker"></div>
@@ -474,6 +689,9 @@
                                 <li data-i18n="airdrop_campaigns">Airdrop campaigns and community events</li>
                                 <li data-i18n="dex_listings">DEX visibility and token listings</li>
                                 <li data-i18n="marketing_collabs">Strategic marketing and influencer collaborations</li>
+                                <li data-i18n="staking_launch">Staking platform launch</li>
+                                <li data-i18n="first_utility">First AI utility feature release</li>
+                                <li data-i18n="partnerships">Strategic partnerships formed</li>
                             </ul>
                         </div>
                         <div class="timeline-marker"></div>
@@ -485,6 +703,9 @@
                                 <li data-i18n="ai_games">AI-powered mini-game and interaction system</li>
                                 <li data-i18n="reward_models">FDAI integrated into task/reward models</li>
                                 <li data-i18n="beta_testing">Beta testing with real utility</li>
+                                <li data-i18n="ai_tools">Advanced AI trading tools</li>
+                                <li data-i18n="governance">On-chain governance implementation</li>
+                                <li data-i18n="mobile_app">Mobile app beta release</li>
                             </ul>
                         </div>
                         <div class="timeline-marker"></div>
@@ -496,6 +717,9 @@
                                 <li data-i18n="cex_listing">Surprise centralized exchange listing</li>
                                 <li data-i18n="nft_integration">NFT + AI feature integration</li>
                                 <li data-i18n="global_outreach">Global outreach and scaling</li>
+                                <li data-i18n="merchandise">Official merchandise store</li>
+                                <li data-i18n="charity">Charity initiatives launch</li>
+                                <li data-i18n="global_events">Global meetups and events</li>
                             </ul>
                         </div>
                         <div class="timeline-marker"></div>
@@ -523,7 +747,43 @@
                             <p><strong data-i18n="total_supply">Total Supply:</strong> 2,000,000,000,000,000 (Two Quadrillion)</p>
                             <p><strong data-i18n="circulating_supply">Circulating Supply:</strong> 1,400,000,000,000,000</p>
                             <p><strong data-i18n="locked_supply">Locked Supply:</strong> 600,000,000,000,000 FDAI</p>
+                            <p><strong data-i18n="contract">Contract Address:</strong></p>
+                            <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--secondary); font-weight: bold; padding: 0.5rem; border-radius: 12px; text-align: center; margin-top: 0.5rem; font-family: monospace; word-break: break-all; font-size: 0.8rem;">
+                                0x8161698A74F2ea0035B9912ED60140893Ac0f39C
+                            </div>
                         </div>
+                    </div>
+                </div>
+                
+                <h4 style="margin-top: 2rem;" data-i18n="token_utility">Token Utility</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <h4 data-i18n="governance_token">Governance</h4>
+                        <p data-i18n="governance_desc">FDAI holders can vote on key project decisions and future developments through our decentralized governance system.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h4 data-i18n="ai_access">AI Feature Access</h4>
+                        <p data-i18n="ai_access_desc">Tokens grant access to premium AI features, trading tools, and predictive analytics within our ecosystem.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <h4 data-i18n="staking_rewards">Staking Rewards</h4>
+                        <p data-i18n="staking_rewards_desc">Earn passive income by staking FDAI tokens in our high-yield staking pools with compounding rewards.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h4 data-i18n="ecosystem_payments">Ecosystem Payments</h4>
+                        <p data-i18n="ecosystem_payments_desc">FDAI serves as the primary payment method for all services, products, and transactions within our ecosystem.</p>
                     </div>
                 </div>
             </div>
@@ -531,7 +791,9 @@
             <!-- Community Section -->
             <div class="container">
                 <h3 data-i18n="join_community">Join Our Community</h3>
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <p data-i18n="community_text">Be part of our growing community of crypto enthusiasts, AI developers, and blockchain innovators. Together, we're building the future of decentralized finance powered by artificial intelligence.</p>
+                
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
                     <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" style="display: flex; align-items: center; gap: 8px;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--secondary)">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
@@ -544,6 +806,27 @@
                         </svg>
                         Telegram
                     </a>
+                    <a href="https://github.com/FreeDogeAI" target="_blank" style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--secondary)">
+                            <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"></path>
+                        </svg>
+                        GitHub
+                    </a>
+                    <a href="https://medium.com/@FreeDogeAI" target="_blank" style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--secondary)">
+                            <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12s4.477 10 10 10 10-4.477 10-10zM7.828 16.242l1.314-1.314a4 4 0 0 1 0-5.656l1.414-1.414a6 6 0 0 0 0 8.485l-1.414-1.414a4 4 0 0 1 0-5.656l1.314-1.314a6 6 0 0 1 0 8.485l-1.314-1.314a4 4 0 0 1 0-5.656l1.414-1.414a6 6 0 0 1 0 8.485l-1.414-1.414z"></path>
+                        </svg>
+                        Medium
+                    </a>
+                </div>
+                
+                <h4 style="margin-top: 2rem;" data-i18n="newsletter_title">Stay Updated</h4>
+                <div style="background: rgba(15, 12, 41, 0.5); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--glass-border); margin-top: 1rem;">
+                    <p data-i18n="newsletter_text">Subscribe to our newsletter for the latest updates, announcements, and exclusive content.</p>
+                    <form style="display: flex; gap: 10px; margin-top: 1rem;">
+                        <input type="email" placeholder="Your email address" style="flex: 1; padding: 0.75rem; border-radius: 50px; border: 1px solid var(--glass-border); background: rgba(15, 12, 41, 0.7); color: var(--light); outline: none;">
+                        <button type="submit" style="background: var(--gradient); color: white; border: none; padding: 0 1.5rem; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.3s ease;" data-i18n="subscribe">Subscribe</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -562,27 +845,55 @@
                 token_note: "If FDAI tokens do not appear, add this contract address:",
                 about_title: "About FreeDogeAI",
                 about_text: "FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!",
-                ai_powered: "Advanced AI algorithms driving utility",
-                secure: "Fully audited smart contracts",
-                community: "Strong global community",
+                core_features: "Core Features",
+                ai_engine: "Advanced AI Engine",
+                ai_engine_desc: "Our proprietary AI algorithms analyze market trends and user behavior to optimize token utility and rewards distribution.",
+                secure_platform: "Secure Platform",
+                secure_platform_desc: "Enterprise-grade security with multi-signature wallets and regular smart contract audits by leading blockchain security firms.",
+                community_driven: "Community Driven",
+                community_driven_desc: "Governance model that gives voting power to token holders for key project decisions and future developments.",
+                scalable: "Highly Scalable",
+                scalable_desc: "Built on Binance Smart Chain for fast transactions and low fees, with plans for multi-chain expansion.",
+                technology_stack: "Technology Stack",
+                team_title: "Our Team",
+                ceo: "CEO & Founder",
+                ex_google: "Ex-Google AI Engineer",
+                cto: "CTO",
+                blockchain_expert: "Blockchain Expert",
+                cmo: "CMO",
+                crypto_marketer: "Crypto Marketing Specialist",
+                lead_dev: "Lead Developer",
+                solidity_expert: "Solidity Expert",
+                partners_title: "Strategic Partners",
                 roadmap_title: "Roadmap",
                 phase1: "Phase 1: Launch",
                 website_launched: "Official website launched:",
                 twitter_link: "Twitter:",
                 telegram_link: "Telegram:",
                 presale_launched: "Presale was successfully launched",
+                audit_completed: "Smart contract audit completed",
+                first_listing: "First DEX listing achieved",
                 phase2: "Phase 2: Growth",
                 airdrop_campaigns: "Airdrop campaigns and community events",
                 dex_listings: "DEX visibility and token listings",
                 marketing_collabs: "Strategic marketing and influencer collaborations",
+                staking_launch: "Staking platform launch",
+                first_utility: "First AI utility feature release",
+                partnerships: "Strategic partnerships formed",
                 phase3: "Phase 3: AI Utility",
                 ai_games: "AI-powered mini-game and interaction system",
                 reward_models: "FDAI integrated into task/reward models",
                 beta_testing: "Beta testing with real utility",
+                ai_tools: "Advanced AI trading tools",
+                governance: "On-chain governance implementation",
+                mobile_app: "Mobile app beta release",
                 phase4: "Phase 4: Global Expansion",
                 cex_listing: "Surprise centralized exchange listing",
                 nft_integration: "NFT + AI feature integration",
                 global_outreach: "Global outreach and scaling",
+                merchandise: "Official merchandise store",
+                charity: "Charity initiatives launch",
+                global_events: "Global meetups and events",
                 tokenomics_title: "Tokenomics",
                 category: "Category",
                 percentage: "Percentage",
@@ -595,7 +906,25 @@
                 total_supply: "Total Supply:",
                 circulating_supply: "Circulating Supply:",
                 locked_supply: "Locked Supply:",
-                join_community: "Join Our Community"
+                contract: "Contract Address:",
+                token_utility: "Token Utility",
+                governance_token: "Governance",
+                governance_desc: "FDAI holders can vote on key project decisions and future developments through our decentralized governance system.",
+                ai_access: "AI Feature Access",
+                ai_access_desc: "Tokens grant access to premium AI features, trading tools, and predictive analytics within our ecosystem.",
+                staking_rewards: "Staking Rewards",
+                staking_rewards_desc: "Earn passive income by staking FDAI tokens in our high-yield staking pools with compounding rewards.",
+                ecosystem_payments: "Ecosystem Payments",
+                ecosystem_payments_desc: "FDAI serves as the primary payment method for all services, products, and transactions within our ecosystem.",
+                join_community: "Join Our Community",
+                community_text: "Be part of our growing community of crypto enthusiasts, AI developers, and blockchain innovators. Together, we're building the future of decentralized finance powered by artificial intelligence.",
+                newsletter_title: "Stay Updated",
+                newsletter_text: "Subscribe to our newsletter for the latest updates, announcements, and exclusive content.",
+                subscribe: "Subscribe",
+                market_cap: "Market Cap",
+                holders: "Holders",
+                countries: "Countries",
+                support: "Support"
             },
             tr: {
                 presale_title: "FreeDogeAI",
@@ -608,27 +937,55 @@
                 token_note: "Eğer FDAI tokenleri görünmüyorsa, bu kontrat adresini ekleyin:",
                 about_title: "FreeDogeAI Hakkında",
                 about_text: "FreeDogeAI, yapay zeka gücünü meme tabanlı kripto paraların viral çekiciliğiyle birleştiren yenilikçi bir projedir. Misyonumuz, kullanıcıları güçlendiren, topluluk katılımını teşvik eden ve finansal özgürlüğü destekleyen merkeziyetsiz bir ekosistem yaratmaktır. FreeDogeAI ile finansın geleceğini yeniden şekillendirmek için bize katılın!",
-                ai_powered: "Gelişmiş AI algoritmaları ile güçlendirilmiş",
-                secure: "Denetlenmiş akıllı kontratlar",
-                community: "Güçlü küresel topluluk",
+                core_features: "Temel Özellikler",
+                ai_engine: "Gelişmiş AI Motoru",
+                ai_engine_desc: "Özel AI algoritmalarımız, token kullanımını ve ödül dağıtımını optimize etmek için piyasa eğilimlerini ve kullanıcı davranışlarını analiz eder.",
+                secure_platform: "Güvenli Platform",
+                secure_platform_desc: "Kurumsal düzeyde güvenlik, çoklu imza cüzdanları ve önde gelen blockchain güvenlik firmaları tarafından düzenli akıllı kontrat denetimleri.",
+                community_driven: "Topluluk Odaklı",
+                community_driven_desc: "Token sahiplerine proje kararları ve gelecek gelişmeler için oy hakkı veren yönetişim modeli.",
+                scalable: "Yüksek Ölçeklenebilirlik",
+                scalable_desc: "Hızlı işlemler ve düşük ücretler için Binance Smart Chain üzerine inşa edilmiştir, çoklu zincir genişleme planları mevcuttur.",
+                technology_stack: "Teknoloji Yığını",
+                team_title: "Ekibimiz",
+                ceo: "CEO & Kurucu",
+                ex_google: "Eski Google AI Mühendisi",
+                cto: "CTO",
+                blockchain_expert: "Blockchain Uzmanı",
+                cmo: "CMO",
+                crypto_marketer: "Kripto Pazarlama Uzmanı",
+                lead_dev: "Baş Geliştirici",
+                solidity_expert: "Solidity Uzmanı",
+                partners_title: "Stratejik Ortaklar",
                 roadmap_title: "Yol Haritası",
                 phase1: "Aşama 1: Başlangıç",
                 website_launched: "Resmi web sitesi yayınlandı:",
                 twitter_link: "Twitter:",
                 telegram_link: "Telegram:",
                 presale_launched: "Ön satış başarıyla başlatıldı",
+                audit_completed: "Akıllı kontrat denetimi tamamlandı",
+                first_listing: "İlk DEX listeleme başarıldı",
                 phase2: "Aşama 2: Büyüme",
                 airdrop_campaigns: "Airdrop kampanyaları ve topluluk etkinlikleri",
                 dex_listings: "DEX görünürlüğü ve token listeleri",
                 marketing_collabs: "Stratejik pazarlama ve influencer işbirlikleri",
+                staking_launch: "Staking platformu lansmanı",
+                first_utility: "İlk AI kullanım özelliği yayını",
+                partnerships: "Stratejik ortaklıklar kuruldu",
                 phase3: "Aşama 3: AI Kullanımı",
                 ai_games: "AI destekli mini oyun ve etkileşim sistemi",
                 reward_models: "FDAI görev/ödül modellerine entegre edildi",
                 beta_testing: "Gerçek kullanım ile beta testi",
+                ai_tools: "Gelişmiş AI trading araçları",
+                governance: "Zincir üzeri yönetişim uygulaması",
+                mobile_app: "Mobil uygulama beta sürümü",
                 phase4: "Aşama 4: Küresel Genişleme",
                 cex_listing: "Sürpriz merkezi borsa listeleme",
                 nft_integration: "NFT + AI özellik entegrasyonu",
                 global_outreach: "Küresel erişim ve ölçeklendirme",
+                merchandise: "Resmi merchandise mağazası",
+                charity: "Hayırseverlik girişimleri başlatıldı",
+                global_events: "Küresel buluşmalar ve etkinlikler",
                 tokenomics_title: "Tokenomik",
                 category: "Kategori",
                 percentage: "Yüzde",
@@ -641,7 +998,25 @@
                 total_supply: "Toplam Arz:",
                 circulating_supply: "Dolaşımdaki Arz:",
                 locked_supply: "Kilitli Arz:",
-                join_community: "Topluluğumuza Katılın"
+                contract: "Kontrat Adresi:",
+                token_utility: "Token Kullanım Alanları",
+                governance_token: "Yönetişim",
+                governance_desc: "FDAI sahipleri, merkeziyetsiz yönetişim sistemimiz aracılığıyla önemli proje kararları ve gelecek gelişmeler üzerinde oy kullanabilir.",
+                ai_access: "AI Özellik Erişimi",
+                ai_access_desc: "Tokenler, ekosistemimiz içindeki premium AI özelliklerine, trading araçlarına ve tahmine dayalı analizlere erişim sağlar.",
+                staking_rewards: "Staking Ödülleri",
+                staking_rewards_desc: "FDAI tokenlerini yüksek getirili staking havuzlarımızda stake ederek bileşik ödüllerle pasif gelir elde edin.",
+                ecosystem_payments: "Ekosistem Ödemeleri",
+                ecosystem_payments_desc: "FDAI, ekosistemimiz içindeki tüm hizmetler, ürünler ve işlemler için birincil ödeme yöntemi olarak hizmet verir.",
+                join_community: "Topluluğumuza Katılın",
+                community_text: "Kripto meraklıları, AI geliştiricileri ve blockchain yenilikçilerinden oluşan büyüyen topluluğumuzun bir parçası olun. Birlikte, yapay zeka destekli merkeziyetsiz finansın geleceğini inşa ediyoruz.",
+                newsletter_title: "Güncel Kalın",
+                newsletter_text: "En son güncellemeler, duyurular ve özel içerikler için bültenimize abone olun.",
+                subscribe: "Abone Ol",
+                market_cap: "Piyasa Değeri",
+                holders: "Token Sahipleri",
+                countries: "Ülke",
+                support: "Destek"
             },
             zh: {
                 presale_title: "FreeDogeAI",
@@ -654,27 +1029,55 @@
                 token_note: "如果 FDAI 代币未显示，请添加此合约地址:",
                 about_title: "关于 FreeDogeAI",
                 about_text: "FreeDogeAI 是一个创新项目，将人工智能的力量与迷因加密货币的病毒式吸引力相结合。我们的使命是创建一个去中心化的生态系统，利用人工智能赋能用户，促进社区参与，并推动金融自由。加入我们，与 FreeDogeAI 一起革新金融的未来！",
-                ai_powered: "先进的AI算法驱动实用功能",
-                secure: "经过全面审计的智能合约",
-                community: "强大的全球社区",
+                core_features: "核心功能",
+                ai_engine: "先进AI引擎",
+                ai_engine_desc: "我们的专有AI算法分析市场趋势和用户行为，以优化代币效用和奖励分配。",
+                secure_platform: "安全平台",
+                secure_platform_desc: "企业级安全性，具有多重签名钱包和由领先区块链安全公司进行的定期智能合约审计。",
+                community_driven: "社区驱动",
+                community_driven_desc: "治理模型赋予代币持有者对关键项目决策和未来发展的投票权。",
+                scalable: "高度可扩展",
+                scalable_desc: "建立在币安智能链上，实现快速交易和低费用，并计划进行多链扩展。",
+                technology_stack: "技术栈",
+                team_title: "我们的团队",
+                ceo: "首席执行官兼创始人",
+                ex_google: "前谷歌AI工程师",
+                cto: "首席技术官",
+                blockchain_expert: "区块链专家",
+                cmo: "首席营销官",
+                crypto_marketer: "加密营销专家",
+                lead_dev: "首席开发员",
+                solidity_expert: "Solidity专家",
+                partners_title: "战略合作伙伴",
                 roadmap_title: "路线图",
                 phase1: "第一阶段: 启动",
                 website_launched: "官方网站已上线:",
                 twitter_link: "推特:",
                 telegram_link: "电报:",
                 presale_launched: "预售已成功启动",
+                audit_completed: "智能合约审计完成",
+                first_listing: "首次DEX上市完成",
                 phase2: "第二阶段: 增长",
                 airdrop_campaigns: "空投活动和社区活动",
                 dex_listings: "DEX 可见性和代币上市",
                 marketing_collabs: "战略营销和影响者合作",
+                staking_launch: "质押平台启动",
+                first_utility: "首个AI实用功能发布",
+                partnerships: "战略合作伙伴关系建立",
                 phase3: "第三阶段: AI 应用",
                 ai_games: "AI 驱动的小游戏和互动系统",
                 reward_models: "FDAI 集成到任务/奖励模型中",
                 beta_testing: "具有实际效用的 Beta 测试",
+                ai_tools: "高级AI交易工具",
+                governance: "链上治理实施",
+                mobile_app: "移动应用测试版发布",
                 phase4: "第四阶段: 全球扩展",
                 cex_listing: "惊喜的中心化交易所上市",
                 nft_integration: "NFT + AI 功能集成",
                 global_outreach: "全球推广和扩展",
+                merchandise: "官方商品商店",
+                charity: "慈善计划启动",
+                global_events: "全球见面会和活动",
                 tokenomics_title: "代币经济学",
                 category: "类别",
                 percentage: "百分比",
@@ -687,7 +1090,25 @@
                 total_supply: "总供应量:",
                 circulating_supply: "流通供应量:",
                 locked_supply: "锁定供应量:",
-                join_community: "加入我们的社区"
+                contract: "合约地址:",
+                token_utility: "代币效用",
+                governance_token: "治理",
+                governance_desc: "FDAI持有者可以通过我们的去中心化治理系统对关键项目决策和未来发展进行投票。",
+                ai_access: "AI功能访问",
+                ai_access_desc: "代币授予对我们生态系统中高级AI功能、交易工具和预测分析的访问权限。",
+                staking_rewards: "质押奖励",
+                staking_rewards_desc: "通过在我们的高收益质押池中质押FDAI代币，获得复利奖励的被动收入。",
+                ecosystem_payments: "生态系统支付",
+                ecosystem_payments_desc: "FDAI作为我们生态系统内所有服务、产品和交易的主要支付方式。",
+                join_community: "加入我们的社区",
+                community_text: "成为我们不断增长的加密爱好者、AI开发人员和区块链创新者社区的一部分。我们一起构建由人工智能驱动的去中心化金融的未来。",
+                newsletter_title: "保持更新",
+                newsletter_text: "订阅我们的新闻通讯，获取最新更新、公告和独家内容。",
+                subscribe: "订阅",
+                market_cap: "市值",
+                holders: "持有者",
+                countries: "国家",
+                support: "支持"
             }
         };
 
