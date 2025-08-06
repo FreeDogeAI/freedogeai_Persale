@@ -1,20 +1,29 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeDogeAI - 人工智能驱动的下一代加密货币</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>FreeDogeAI - Next Generation AI-Powered Cryptocurrency</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #E53935; /* Chinese red */
-            --secondary: #FF9800; /* Gold */
-            --accent: #4CAF50; /* Green */
-            --dark: #121212; /* Dark background */
-            --light: #FAFAFA; /* Light text */
-            --text-dark: #212121;
-            --text-light: #757575;
+            --primary: #6e45e2;
+            --secondary: #88d3ce;
+            --accent: #ff7e5f;
+            --accent2: #ffd166;
+            --accent3: #06d6a0;
+            --dark: #0f0c29;
+            --darker: #090717;
+            --light: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            --gradient2: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+            --gradient3: linear-gradient(135deg, var(--secondary) 0%, var(--accent3) 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 10px 30px rgba(110, 69, 226, 0.5);
+            --neon-glow: 0 0 15px rgba(136, 211, 206, 0.7);
+            --neon-glow-accent: 0 0 20px rgba(255, 126, 95, 0.7);
         }
 
         * {
@@ -24,112 +33,108 @@
         }
 
         body {
-            font-family: 'Noto Sans SC', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: var(--dark);
             color: var(--light);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(110, 69, 226, 0.2) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(255, 126, 95, 0.2) 0%, transparent 25%),
+                radial-gradient(circle at 30% 60%, rgba(255, 209, 102, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 70% 30%, rgba(6, 214, 160, 0.15) 0%, transparent 25%);
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
-            background-image: 
-                url('https://img.freepik.com/free-vector/chinese-pattern-background_53876-90035.jpg');
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
         }
 
         h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
             font-weight: 700;
             color: var(--light);
+            text-shadow: var(--neon-glow);
             letter-spacing: 1px;
         }
 
         .main-container {
-            display: flex;
-            max-width: 1440px;
+            max-width: 1800px;
             margin: 0 auto;
             padding: 2rem;
-            gap: 2rem;
             position: relative;
         }
 
-        .left-column {
-            flex: 1;
-            min-width: 350px;
-            position: sticky;
-            top: 2rem;
-            height: fit-content;
-            align-self: flex-start;
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
         }
 
-        .right-column {
-            flex: 2;
-            display: flex;
-            flex-direction: column;
+        .wide-column {
+            grid-column: span 3;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
+        }
+
+        .side-column {
+            grid-column: span 1;
         }
 
         .container {
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 8px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 152, 0, 0.3);
-            position: relative;
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
             overflow: hidden;
+            position: relative;
+            z-index: 1;
         }
 
         .container::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            z-index: -1;
+        }
+
+        .container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(110, 69, 226, 0.6);
+            border-color: var(--accent);
+        }
+
+        .container:hover::before {
+            opacity: 1;
         }
 
         .logo-container {
             text-align: center;
             margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
         }
 
         .logo-container img {
-            width: 180px;
-            height: 180px;
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
             object-fit: cover;
             border: 5px solid var(--secondary);
-            box-shadow: 0 0 20px rgba(255, 152, 0, 0.5);
+            box-shadow: 0 0 30px var(--secondary), 0 0 60px rgba(136, 211, 206, 0.5);
+            transition: all 0.4s ease;
         }
 
-        /* Chinese decorative elements */
-        .chinese-pattern {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="none" width="100" height="100"/><path fill="rgba(229,57,53,0.1)" d="M20,20 L80,20 L80,80 L20,80 Z M30,30 L70,30 L70,70 L30,70 Z" stroke-width="0.5" stroke="rgba(229,57,53,0.3)"/></svg>');
-            opacity: 0.3;
-            z-index: -1;
-        }
-
-        .red-seal {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Noto Sans SC', sans-serif;
-            font-weight: bold;
-            font-size: 1.5rem;
-            border-radius: 5px;
-            transform: rotate(15deg);
-            opacity: 0.8;
-            z-index: 2;
+        .logo-container img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px var(--secondary), 0 0 100px rgba(136, 211, 206, 0.6);
         }
 
         /* Language Selector */
@@ -141,69 +146,100 @@
         }
 
         .language-selector {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            border: 1px solid var(--secondary);
-            font-family: 'Noto Sans SC', sans-serif;
+            background: rgba(15, 12, 41, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            border: 1px solid var(--accent);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
             color: var(--light);
             cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 126, 95, 0.4);
+            background-image: var(--gradient2);
+        }
+
+        .language-selector:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 20px rgba(136, 211, 206, 0.6);
         }
 
         .info-box {
-            background: rgba(229, 57, 53, 0.1);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 1px solid rgba(229, 57, 53, 0.3);
+            background: linear-gradient(135deg, rgba(110, 69, 226, 0.15) 0%, rgba(255, 126, 95, 0.15) 100%);
+            padding: 1.8rem;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
             color: var(--light);
             margin-top: 1.5rem;
             position: relative;
+            overflow: hidden;
+        }
+
+        .info-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
         }
 
         a {
-            color: var(--secondary) !important;
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
+            color: var(--secondary) !important;
+            background: linear-gradient(135deg, rgba(136, 211, 206, 0.2) 0%, rgba(136, 211, 206, 0.1) 100%);
+            padding: 0.7rem 1.3rem;
+            border-radius: 50px;
             transition: all 0.3s ease;
             display: inline-block;
-            border: 1px solid var(--secondary);
+            border: 1px solid rgba(136, 211, 206, 0.4);
+            font-weight: 500;
         }
 
         a:hover {
-            background: rgba(255, 152, 0, 0.2);
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, rgba(136, 211, 206, 0.3) 0%, rgba(136, 211, 206, 0.2) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(136, 211, 206, 0.3);
+            color: var(--light) !important;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 1.5rem 0;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
+            background: rgba(15, 12, 41, 0.6);
+            border-radius: 20px;
             overflow: hidden;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
         }
 
         th, td {
-            padding: 1rem;
+            padding: 1.3rem;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--glass-border);
         }
 
         th {
-            background: rgba(229, 57, 53, 0.3);
+            background: linear-gradient(135deg, rgba(110, 69, 226, 0.4) 0%, rgba(255, 126, 95, 0.4) 100%);
             color: var(--light);
-            font-weight: 500;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
         }
 
         tr:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         /* Timeline Styling */
         .timeline {
             position: relative;
-            max-width: 1200px;
+            max-width: 100%;
             margin: 2.5rem auto;
             padding-left: 60px;
         }
@@ -214,9 +250,11 @@
             top: 0;
             bottom: 0;
             left: 25px;
-            width: 3px;
-            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            width: 5px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            border-radius: 10px;
             z-index: 1;
+            box-shadow: var(--neon-glow);
         }
 
         .timeline-item {
@@ -227,14 +265,15 @@
 
         .timeline-marker {
             position: absolute;
-            left: 10px;
+            left: 5px;
             top: 0;
-            width: 25px;
-            height: 25px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            background: var(--primary);
-            border: 3px solid var(--secondary);
+            background: var(--gradient);
+            border: 4px solid var(--secondary);
             z-index: 2;
+            box-shadow: 0 0 0 6px rgba(0, 184, 255, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -244,29 +283,39 @@
         }
 
         .timeline-content {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 152, 0, 0.3);
-            border-radius: 8px;
-            padding: 20px;
+            background: linear-gradient(135deg, rgba(110, 69, 226, 0.15) 0%, rgba(15, 12, 41, 0.6) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
             position: relative;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(110, 69, 226, 0.2);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(110, 69, 226, 0.3);
+            border-color: var(--accent);
         }
 
         .timeline-content h4 {
             color: var(--secondary);
-            margin-bottom: 15px;
-            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
             position: relative;
-            padding-bottom: 10px;
+            text-shadow: var(--neon-glow);
         }
 
         .timeline-content h4::after {
             content: '';
             position: absolute;
-            bottom: 0;
+            bottom: -10px;
             left: 0;
-            width: 50px;
-            height: 3px;
-            background: var(--primary);
+            width: 60px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 3px;
         }
 
         .timeline-content ul {
@@ -276,62 +325,103 @@
 
         .timeline-content li {
             position: relative;
-            padding-left: 25px;
-            margin-bottom: 10px;
+            padding-left: 30px;
+            margin-bottom: 12px;
             line-height: 1.7;
         }
 
         .timeline-content li::before {
-            content: '•';
+            content: '✓';
             position: absolute;
             left: 0;
-            color: var(--secondary);
+            color: var(--accent);
             font-weight: bold;
             font-size: 1.2rem;
+            text-shadow: var(--neon-glow-accent);
         }
 
         /* Feature Cards */
         .feature-card {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 152, 0, 0.2);
+            background: linear-gradient(135deg, rgba(110, 69, 226, 0.15) 0%, rgba(15, 12, 41, 0.4) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--glass-border);
             transition: all 0.3s ease;
             height: 100%;
             position: relative;
+            overflow: hidden;
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            border-color: var(--secondary);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(110, 69, 226, 0.3);
+            border-color: var(--accent);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
         }
 
         .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--secondary);
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(6, 214, 160, 0.3);
         }
 
         /* Responsive Design */
-        @media (max-width: 1200px) {
-            .main-container {
-                flex-direction: column;
+        @media (max-width: 1600px) {
+            .content-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
             
-            .left-column {
-                position: static;
-                margin-bottom: 2rem;
+            .wide-column {
+                grid-column: span 2;
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .side-column {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .wide-column {
+                grid-column: span 1;
+                grid-template-columns: 1fr;
+            }
+            
+            .side-column {
+                grid-column: span 1;
             }
         }
 
         @media (max-width: 768px) {
             .main-container {
-                padding: 1rem;
+                padding: 1.5rem;
             }
             
             .container {
-                padding: 1.5rem;
+                padding: 2rem;
             }
             
             .language-selector-container {
@@ -339,6 +429,10 @@
                 margin-bottom: 1.5rem;
                 display: flex;
                 justify-content: center;
+            }
+            
+            .language-selector {
+                max-width: 100%;
             }
             
             .timeline {
@@ -350,45 +444,105 @@
             }
             
             .timeline-marker {
-                width: 20px;
-                height: 20px;
-                left: 5px;
+                width: 25px;
+                height: 25px;
+                left: 0;
             }
             
             .timeline-content {
-                padding: 15px;
+                padding: 25px;
             }
         }
 
-        /* Chinese Typography */
-        .chinese-title {
-            font-size: 2.5rem;
-            color: var(--secondary);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            position: relative;
-            display: inline-block;
-            margin-bottom: 1.5rem;
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
         }
 
-        .chinese-title::after {
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .pulse {
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(136, 211, 206, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(136, 211, 206, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(136, 211, 206, 0); }
+        }
+
+        .glow-text {
+            text-shadow: 0 0 15px var(--secondary), 0 0 25px rgba(136, 211, 206, 0.7);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .section-title::after {
             content: '';
             position: absolute;
             bottom: -10px;
             left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 60%;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 3px;
         }
 
-        /* Dragon decoration */
-        .dragon-decoration {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="rgba(255,152,0,0.3)" d="M50,10 C60,20 70,15 80,25 C90,35 85,45 90,55 C95,65 85,70 80,80 C75,90 65,85 50,90 C35,85 25,90 20,80 C15,70 5,65 10,55 C15,45 10,35 20,25 C30,15 40,20 50,10 Z"/></svg>');
-            background-repeat: no-repeat;
+        /* Particle Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: -1;
-            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Neon Border */
+        .neon-border {
+            position: relative;
+        }
+
+        .neon-border::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: inherit;
+            background: var(--gradient);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .neon-border:hover::after {
+            opacity: 1;
         }
 
         /* Countdown Timer */
@@ -400,292 +554,295 @@
         }
 
         .countdown-item {
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 8px;
+            background: rgba(15, 12, 41, 0.7);
+            border-radius: 12px;
             padding: 1rem;
-            min-width: 70px;
+            min-width: 80px;
             text-align: center;
-            border: 1px solid rgba(255, 152, 0, 0.3);
+            border: 1px solid var(--glass-border);
         }
 
         .countdown-value {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
-            color: var(--secondary);
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .countdown-label {
             font-size: 0.8rem;
-            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
             margin-top: 0.5rem;
-        }
-
-        /* Chinese Button Style */
-        .chinese-button {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white !important;
-            border: none !important;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            font-weight: 500;
-            box-shadow: 0 4px 10px rgba(229, 57, 53, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .chinese-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(229, 57, 53, 0.4);
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
-        }
-
-        /* Chinese Seal Stamp */
-        .seal-stamp {
-            position: absolute;
-            right: -20px;
-            top: -20px;
-            width: 80px;
-            height: 80px;
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Noto Sans SC', sans-serif;
-            font-weight: bold;
-            font-size: 1.2rem;
-            border-radius: 50%;
-            transform: rotate(15deg);
-            opacity: 0.9;
-            z-index: 1;
-            box-shadow: 0 0 20px rgba(229, 57, 53, 0.5);
+            color: var(--secondary);
         }
     </style>
 </head>
 <body>
+    <!-- Particle Background -->
+    <div class="particles" id="particles"></div>
+
     <div class="main-container">
-        <div class="left-column">
-            <div class="container">
-                <div class="chinese-pattern"></div>
-                <div class="seal-stamp">加密</div>
-                
-                <!-- Language Selector -->
-                <div class="language-selector-container">
-                    <select class="language-selector" id="languageSelector">
-                        <option value="zh">中文</option>
-                        <option value="en">English</option>
-                    </select>
-                </div>
+        <div class="content-grid">
+            <div class="side-column">
+                <div class="container neon-border floating">
+                    <!-- Language Selector -->
+                    <div class="language-selector-container">
+                        <select class="language-selector" id="languageSelector">
+                            <option value="en">EN</option>
+                            <option value="tr">TR</option>
+                            <option value="zh">中文</option>
+                            <option value="ja">日本語</option>
+                            <option value="hi">हिन्दी</option>
+                            <option value="fil">Filipino</option>
+                        </select>
+                    </div>
 
-                <div class="logo-container">
-                    <img src="https://via.placeholder.com/180" alt="FreeDogeAI Logo">
-                </div>
-                <h1 class="chinese-title">FreeDogeAI</h1>
-                <h3 style="color: var(--secondary); margin-bottom: 1.5rem;">人工智能驱动的加密革命</h3>
-                
-                <div class="info-box">
-                    <h3>重要信息</h3>
-                    <p>代币购买后，将在24小时内反映在您的钱包中。</p>
-                    <div style="background:rgba(229, 57, 53, 0.2); color:var(--light); border: 1px solid var(--primary); border-radius: 8px; padding: 1rem; text-align: center; font-weight: bold; margin-top: 1.5rem;">
-                        <span>请确保您已连接到</span> <span style="color:var(--secondary);">BSC (币安智能链)</span> <span>网络。</span>
+                    <div class="logo-container">
+                        <img src="logo.png" alt="FreeDogeAI Logo" class="pulse">
                     </div>
-                    <p style="margin-top: 1.5rem;"><strong>注意:</strong> <span>如果 FDAI 代币未显示，请添加此合约地址:</span></p>
-                    <div style="background: rgba(0, 0, 0, 0.7); border: 1px dashed var(--secondary); color: var(--secondary); font-weight: bold; padding: 1rem; border-radius: 8px; text-align: center; margin-top: 1rem; font-family: monospace; word-break: break-all;">
-                        0x8161698A74F2ea0035B9912ED60140893Ac0f39C
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="right-column">
-            <!-- About Section -->
-            <div class="container">
-                <div class="dragon-decoration" style="top: -50px; right: -50px;"></div>
-                <h3 class="chinese-title">关于 FreeDogeAI</h3>
-                <p>FreeDogeAI 是一个创新项目，将人工智能的力量与迷因加密货币的病毒式吸引力相结合。我们的使命是创建一个去中心化的生态系统，利用人工智能赋能用户，促进社区参与，并推动金融自由。加入我们，与 FreeDogeAI 一起革新金融的未来！</p>
-                
-                <p style="margin-top: 1.5rem;">FreeDogeAI 的核心是我们先进的人工智能系统，它持续分析市场趋势、用户行为和区块链数据，以优化代币效用和奖励分配。与传统的迷因币不同，FreeDogeAI 通过其AI驱动的功能提供真正的实用性。</p>
-                
-                <p style="margin-top: 1.5rem;">我们的平台建立在币安智能链(BSC)上，以实现快速交易和低费用，并计划在未来进行多链扩展。智能合约已经过彻底审计，以确保所有用户的最大安全性。</p>
-                
-                <h4 class="chinese-title" style="margin-top: 2.5rem;">核心功能</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-brain"></i>
+                    <h1 class="glow-text gradient-text" data-i18n="presale_title">FreeDogeAI</h1>
+                    <h3 style="color: var(--accent2); margin-bottom: 1.5rem; text-shadow: 0 0 15px rgba(255, 209, 102, 0.7);" data-i18n="tagline">AI-Powered Crypto Revolution</h3>
+                    
+                    <div class="info-box neon-border">
+                        <h3 data-i18n="important_info">Important Information</h3>
+                        <p data-i18n="token_delivery_info">After your token purchase, your tokens will be reflected in your wallet within 24 hours.</p>
+                        <div style="background:rgba(255, 126, 95, 0.3); color:var(--light); border: 1px solid var(--accent); border-radius: 16px; padding: 1.2rem; text-align: center; font-weight: bold; margin-top: 1.5rem; box-shadow: var(--neon-glow-accent);">
+                            <span data-i18n="network_warning">Please make sure you are connected to the</span> <span style="color:var(--accent2);">BSC (Binance Smart Chain)</span> <span data-i18n="network">network.</span>
                         </div>
-                        <h4>先进AI引擎</h4>
-                        <p>我们的专有AI算法分析市场趋势和用户行为，以优化代币效用和奖励分配。</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h4>安全平台</h4>
-                        <p>企业级安全性，具有多重签名钱包和由领先区块链安全公司进行的定期智能合约审计。</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h4>社区驱动</h4>
-                        <p>治理模型赋予代币持有者对关键项目决策和未来发展的投票权。</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-rocket"></i>
-                        </div>
-                        <h4>高度可扩展</h4>
-                        <p>建立在币安智能链上，实现快速交易和低费用，并计划进行多链扩展。</p>
-                    </div>
-                </div>
-                
-                <h4 class="chinese-title" style="margin-top: 2.5rem;">技术</h4>
-                <p>FreeDogeAI 使用包括用于机器学习模型的 TensorFlow、用于智能合约的 Solidity 和用于用户界面的 React 在内的尖端技术。我们的AI系统处理实时区块链数据以提供有价值的见解和自动化功能。</p>
-                
-                <h4 class="chinese-title" style="margin-top: 2.5rem;">我们的愿景</h4>
-                <p>我们设想一个未来，人工智能和区块链技术共同为每个人创造公平和可访问的金融系统。FreeDogeAI 旨在通过一个奖励参与和促进创新的直观平台，弥合复杂AI技术与日常加密用户之间的差距。</p>
-            </div>
-
-            <!-- Roadmap Section -->
-            <div class="container">
-                <div class="dragon-decoration" style="bottom: -50px; left: -50px;"></div>
-                <h3 class="chinese-title">路线图</h3>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-marker">一</div>
-                        <div class="timeline-content">
-                            <h4>第一阶段: 启动</h4>
-                            <ul>
-                                <li>官方网站已上线: <a href="https://freedogeai.com" target="_blank">freedogeai.com</a></li>
-                                <li>推特: <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">@FreeDogeAI_FDAI</a></li>
-                                <li>电报: <a href="https://t.me/freedogeaiFDAI" target="_blank">@freedogeaiFDAI</a></li>
-                                <li>预售已成功启动</li>
-                                <li>智能合约审计完成</li>
-                                <li>首次DEX上市完成</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-marker">二</div>
-                        <div class="timeline-content">
-                            <h4>第二阶段: 增长</h4>
-                            <ul>
-                                <li>空投活动和社区活动</li>
-                                <li>DEX 可见性和代币上市</li>
-                                <li>战略营销和影响者合作</li>
-                                <li>质押平台启动</li>
-                                <li>首个AI实用功能发布</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-marker">三</div>
-                        <div class="timeline-content">
-                            <h4>第三阶段: AI 应用</h4>
-                            <ul>
-                                <li>AI 驱动的小游戏和互动系统</li>
-                                <li>FDAI 集成到任务/奖励模型中</li>
-                                <li>具有实际效用的 Beta 测试</li>
-                                <li>高级AI交易工具</li>
-                                <li>链上治理实施</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-marker">四</div>
-                        <div class="timeline-content">
-                            <h4>第四阶段: 全球扩展</h4>
-                            <ul>
-                                <li>惊喜的中心化交易所上市</li>
-                                <li>NFT + AI 功能集成</li>
-                                <li>全球推广和扩展</li>
-                                <li>移动应用测试版发布</li>
-                            </ul>
+                        <p style="margin-top: 1.5rem;"><strong data-i18n="note">NOTE:</strong> <span data-i18n="token_note">If FDAI tokens do not appear, add this contract address:</span></p>
+                        <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--accent2); font-weight: bold; padding: 1.2rem; border-radius: 16px; text-align: center; margin-top: 1.5rem; font-family: monospace; word-break: break-all; box-shadow: 0 0 15px rgba(255, 126, 95, 0.3);">
+                            0x8161698A74F2ea0035B9912ED60140893Ac0f39C
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tokenomics Section -->
-            <div class="container">
-                <div class="seal-stamp">代币</div>
-                <h3 class="chinese-title">代币经济学</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
-                    <div>
-                        <table>
-                            <tr><th>类别</th><th>百分比</th></tr>
-                            <tr><td>预售</td><td>15%</td></tr>
-                            <tr><td>空投 & 活动</td><td>15%</td></tr>
-                            <tr><td>销毁</td><td>15%</td></tr>
-                            <tr><td>DEX & CEX 上市</td><td>20%</td></tr>
-                            <tr><td>锁定储备</td><td>30%</td></tr>
-                            <tr><td>团队</td><td>5%</td></tr>
-                        </table>
+            <div class="wide-column">
+                <!-- About Section -->
+                <div class="container neon-border">
+                    <h3 class="section-title" data-i18n="about_title">About FreeDogeAI</h3>
+                    <p data-i18n="about_text">FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!</p>
+                    
+                    <p data-i18n="about_text2" style="margin-top: 1.5rem;">At the core of FreeDogeAI is our advanced artificial intelligence system that continuously analyzes market trends, user behavior, and blockchain data to optimize token utility and rewards distribution. Unlike traditional meme coins, FreeDogeAI offers real utility through its AI-powered features.</p>
+                    
+                    <p data-i18n="about_text3" style="margin-top: 1.5rem;">Our platform is built on Binance Smart Chain (BSC) for fast transactions and low fees, with plans for multi-chain expansion in the future. The smart contract has been thoroughly audited to ensure maximum security for all users.</p>
+                    
+                    <h4 class="section-title" data-i18n="core_features" style="margin-top: 2.5rem;">Core Features</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4 data-i18n="ai_engine">Advanced AI Engine</h4>
+                            <p data-i18n="ai_engine_desc">Our proprietary AI algorithms analyze market trends and user behavior to optimize token utility and rewards distribution.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h4 data-i18n="secure_platform">Secure Platform</h4>
+                            <p data-i18n="secure_platform_desc">Enterprise-grade security with multi-signature wallets and regular smart contract audits by leading blockchain security firms.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h4 data-i18n="community_driven">Community Driven</h4>
+                            <p data-i18n="community_driven_desc">Governance model that gives voting power to token holders for key project decisions and future developments.</p>
+                        </div>
                     </div>
-                    <div>
-                        <div style="background: rgba(0, 0, 0, 0.6); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(255, 152, 0, 0.3);">
-                            <p><strong>总供应量:</strong> 2,000,000,000,000,000 (两千万亿)</p>
-                            <p><strong>流通供应量:</strong> 1,400,000,000,000,000</p>
-                            <p><strong>锁定供应量:</strong> 600,000,000,000,000 FDAI</p>
-                            <p><strong>合约地址:</strong></p>
-                            <div style="background: rgba(0, 0, 0, 0.7); border: 1px dashed var(--secondary); color: var(--secondary); font-weight: bold; padding: 1rem; border-radius: 8px; text-align: center; margin-top: 1rem; font-family: monospace; word-break: break-all; font-size: 0.9rem;">
-                                0x8161698A74F2ea0035B9912ED60140893Ac0f39C
+                </div>
+
+                <!-- Technology Section -->
+                <div class="container neon-border">
+                    <h4 class="section-title" data-i18n="technology" style="margin-top: 0;">Technology</h4>
+                    <p data-i18n="technology_desc">FreeDogeAI utilizes cutting-edge technologies including TensorFlow for machine learning models, Solidity for smart contracts, and React for user interfaces. Our AI system processes real-time blockchain data to provide valuable insights and automated features.</p>
+                    
+                    <h4 class="section-title" data-i18n="vision_title" style="margin-top: 2.5rem;">Our Vision</h4>
+                    <p data-i18n="vision_text">We envision a future where artificial intelligence and blockchain technology work together to create fair and accessible financial systems for everyone. FreeDogeAI aims to bridge the gap between complex AI technologies and everyday crypto users through an intuitive platform that rewards participation and fosters innovation.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h4 data-i18n="scalable">Highly Scalable</h4>
+                            <p data-i18n="scalable_desc">Built on Binance Smart Chain for fast transactions and low fees, with plans for multi-chain expansion.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <h4>AI Integration</h4>
+                            <p>Seamless integration of AI models with blockchain technology for predictive analytics.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <h4>Security First</h4>
+                            <p>Advanced encryption and security protocols to protect user assets and data.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Roadmap Section -->
+                <div class="container neon-border" style="grid-column: span 3;">
+                    <h3 class="section-title" data-i18n="roadmap_title">Roadmap</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker">1</div>
+                            <div class="timeline-content">
+                                <h4 data-i18n="phase1">Phase 1: Launch</h4>
+                                <ul>
+                                    <li data-i18n="website_launched">Official website launched: <a href="https://freedogeai.com" target="_blank">freedogeai.com</a></li>
+                                    <li data-i18n="twitter_link">Twitter: <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">@FreeDogeAI_FDAI</a></li>
+                                    <li data-i18n="telegram_link">Telegram: <a href="https://t.me/freedogeaiFDAI" target="_blank">@freedogeaiFDAI</a></li>
+                                    <li data-i18n="presale_launched">Presale was successfully launched</li>
+                                    <li data-i18n="audit_completed">Smart contract audit completed</li>
+                                    <li data-i18n="first_listing">First DEX listing achieved</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">2</div>
+                            <div class="timeline-content">
+                                <h4 data-i18n="phase2">Phase 2: Growth</h4>
+                                <ul>
+                                    <li data-i18n="airdrop_campaigns">Airdrop campaigns and community events</li>
+                                    <li data-i18n="dex_listings">DEX visibility and token listings</li>
+                                    <li data-i18n="marketing_collabs">Strategic marketing and influencer collaborations</li>
+                                    <li data-i18n="staking_launch">Staking platform launch</li>
+                                    <li data-i18n="first_utility">First AI utility feature release</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <h4 class="chinese-title" style="margin-top: 2.5rem;">代币效用</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-coins"></i>
+
+                <!-- Tokenomics Section -->
+                <div class="container neon-border" style="grid-column: span 2;">
+                    <h3 class="section-title" data-i18n="tokenomics_title">Tokenomics</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                        <div>
+                            <table>
+                                <tr><th data-i18n="category">Category</th><th data-i18n="percentage">Percentage</th></tr>
+                                <tr><td data-i18n="presale">Presale</td><td>15%</td></tr>
+                                <tr><td data-i18n="airdrop">Airdrop & Campaigns</td><td>15%</td></tr>
+                                <tr><td data-i18n="burn">Burn</td><td>15%</td></tr>
+                                <tr><td data-i18n="listing">DEX & CEX Listing</td><td>20%</td></tr>
+                                <tr><td data-i18n="reserve">Locked Reserve</td><td>30%</td></tr>
+                                <tr><td data-i18n="team">Team</td><td>5%</td></tr>
+                            </table>
                         </div>
-                        <h4>治理</h4>
-                        <p>FDAI持有者可以通过我们的去中心化治理系统对关键项目决策和未来发展进行投票。</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-robot"></i>
+                        <div>
+                            <div style="background: rgba(15, 12, 41, 0.6); padding: 2rem; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(110, 69, 226, 0.2);">
+                                <p><strong data-i18n="total_supply">Total Supply:</strong> 2,000,000,000,000,000 (Two Quadrillion)</p>
+                                <p><strong data-i18n="circulating_supply">Circulating Supply:</strong> 1,400,000,000,000,000</p>
+                                <p><strong data-i18n="locked_supply">Locked Supply:</strong> 600,000,000,000,000 FDAI</p>
+                                <p><strong data-i18n="contract">Contract Address:</strong></p>
+                                <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--accent2); font-weight: bold; padding: 1rem; border-radius: 16px; text-align: center; margin-top: 1rem; font-family: monospace; word-break: break-all; font-size: 0.9rem; box-shadow: 0 0 15px rgba(255, 126, 95, 0.3);">
+                                    0x8161698A74F2ea0035B9912ED60140893Ac0f39C
+                                </div>
+                            </div>
                         </div>
-                        <h4>AI功能访问</h4>
-                        <p>代币授予对我们生态系统中高级AI功能、交易工具和预测分析的访问权限。</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-percentage"></i>
-                        </div>
-                        <h4>质押奖励</h4>
-                        <p>通过在我们的高收益质押池中质押FDAI代币，获得复利奖励的被动收入。</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <h4>生态系统支付</h4>
-                        <p>FDAI作为我们生态系统内所有服务、产品和交易的主要支付方式。</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- Community Section -->
-            <div class="container">
-                <h3 class="chinese-title">加入我们的社区</h3>
-                <p>成为我们不断增长的加密爱好者、AI开发人员和区块链创新者社区的一部分。我们一起构建由人工智能驱动的去中心化金融的未来。</p>
-                
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem;">
-                    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" class="chinese-button" style="display: flex; align-items: center; gap: 10px;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-                        </svg>
-                        推特
-                    </a>
-                    <a href="https://t.me/freedogeaiFDAI" target="_blank" class="chinese-button" style="display: flex; align-items: center; gap: 10px;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.03-.1.06-.08-.06-.16.05-.08.14-.03.25-.01.1.05.67 3.19 3.18 3.66 3.75.41.5.73.49 1.04.46.33-.04 1.06-.43 1.2-.85.15-.42.15-.78.1-.85-.03-.06-.22-.04-.45.03-.25.08-1.49.94-1.69 1.03-.34.16-.7.15-.9-.05-.3-.3-.69-.83-1.05-1.36-.92-1.29-1.29-2.21-1.43-2.59-.12-.34 0-.52.08-.7.08-.17.3-.42.6-.58.45-.24.9-.18 1.21-.1.5.12 3.04 1.96 3.5 2.32.68.54.73.7.8.68.2-.05.6-.56.6-.56z"></path>
-                        </svg>
-                        电报
-                    </a>
+                <!-- Token Utility Section -->
+                <div class="container neon-border">
+                    <h4 class="section-title" style="margin-top: 0;" data-i18n="token_utility">Token Utility</h4>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem;">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <h4 data-i18n="governance_token">Governance</h4>
+                            <p data-i18n="governance_desc">FDAI holders can vote on key project decisions and future developments through our decentralized governance system.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h4 data-i18n="ai_access">AI Feature Access</h4>
+                            <p data-i18n="ai_access_desc">Tokens grant access to premium AI features, trading tools, and predictive analytics within our ecosystem.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More Roadmap -->
+                <div class="container neon-border" style="grid-column: span 3;">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker">3</div>
+                            <div class="timeline-content">
+                                <h4 data-i18n="phase3">Phase 3: AI Utility</h4>
+                                <ul>
+                                    <li data-i18n="ai_games">AI-powered mini-game and interaction system</li>
+                                    <li data-i18n="reward_models">FDAI integrated into task/reward models</li>
+                                    <li data-i18n="beta_testing">Beta testing with real utility</li>
+                                    <li data-i18n="ai_tools">Advanced AI trading tools</li>
+                                    <li data-i18n="governance">On-chain governance implementation</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker">4</div>
+                            <div class="timeline-content">
+                                <h4 data-i18n="phase4">Phase 4: Global Expansion</h4>
+                                <ul>
+                                    <li data-i18n="cex_listing">Surprise centralized exchange listing</li>
+                                    <li data-i18n="nft_integration">NFT + AI feature integration</li>
+                                    <li data-i18n="global_outreach">Global outreach and scaling</li>
+                                    <li data-i18n="mobile_app">Mobile app beta release</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More Token Utility -->
+                <div class="container neon-border" style="grid-column: span 2;">
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 0;">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <h4 data-i18n="staking_rewards">Staking Rewards</h4>
+                            <p data-i18n="staking_rewards_desc">Earn passive income by staking FDAI tokens in our high-yield staking pools with compounding rewards.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <h4 data-i18n="ecosystem_payments">Ecosystem Payments</h4>
+                            <p data-i18n="ecosystem_payments_desc">FDAI serves as the primary payment method for all services, products, and transactions within our ecosystem.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community Section -->
+                <div class="container neon-border">
+                    <h3 class="section-title" data-i18n="join_community">Join Our Community</h3>
+                    <p data-i18n="community_text">Be part of our growing community of crypto enthusiasts, AI developers, and blockchain innovators. Together, we're building the future of decentralized finance powered by artificial intelligence.</p>
+                    
+                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem;">
+                        <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(29, 161, 242, 0.2) 0%, rgba(15, 12, 41, 0.5) 100%); border: 1px solid rgba(29, 161, 242, 0.4);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--light)">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                            </svg>
+                            X (Twitter)
+                        </a>
+                        <a href="https://t.me/freedogeaiFDAI" target="_blank" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(0, 136, 204, 0.2) 0%, rgba(15, 12, 41, 0.5) 100%); border: 1px solid rgba(0, 136, 204, 0.4);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--light)">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.03-.1.06-.08-.06-.16.05-.08.14-.03.25-.01.1.05.67 3.19 3.18 3.66 3.75.41.5.73.49 1.04.46.33-.04 1.06-.43 1.2-.85.15-.42.15-.78.1-.85-.03-.06-.22-.04-.45.03-.25.08-1.49.94-1.69 1.03-.34.16-.7.15-.9-.05-.3-.3-.69-.83-1.05-1.36-.92-1.29-1.29-2.21-1.43-2.59-.12-.34 0-.52.08-.7.08-.17.3-.42.6-.58.45-.24.9-.18 1.21-.1.5.12 3.04 1.96 3.5 2.32.68.54.73.7.8.68.2-.05.6-.56.6-.56z"></path>
+                            </svg>
+                            Telegram
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -693,82 +850,6 @@
 
     <script>
         const translations = {
-            zh: {
-                presale_title: "FreeDogeAI",
-                tagline: "人工智能驱动的加密革命",
-                important_info: "重要信息",
-                token_delivery_info: "代币购买后，将在24小时内反映在您的钱包中。",
-                network_warning: "请确保您已连接到",
-                network: "网络。",
-                note: "注意:",
-                token_note: "如果 FDAI 代币未显示，请添加此合约地址:",
-                about_title: "关于 FreeDogeAI",
-                about_text: "FreeDogeAI 是一个创新项目，将人工智能的力量与迷因加密货币的病毒式吸引力相结合。我们的使命是创建一个去中心化的生态系统，利用人工智能赋能用户，促进社区参与，并推动金融自由。加入我们，与 FreeDogeAI 一起革新金融的未来！",
-                about_text2: "FreeDogeAI 的核心是我们先进的人工智能系统，它持续分析市场趋势、用户行为和区块链数据，以优化代币效用和奖励分配。与传统的迷因币不同，FreeDogeAI 通过其AI驱动的功能提供真正的实用性。",
-                about_text3: "我们的平台建立在币安智能链(BSC)上，以实现快速交易和低费用，并计划在未来进行多链扩展。智能合约已经过彻底审计，以确保所有用户的最大安全性。",
-                core_features: "核心功能",
-                ai_engine: "先进AI引擎",
-                ai_engine_desc: "我们的专有AI算法分析市场趋势和用户行为，以优化代币效用和奖励分配。",
-                secure_platform: "安全平台",
-                secure_platform_desc: "企业级安全性，具有多重签名钱包和由领先区块链安全公司进行的定期智能合约审计。",
-                community_driven: "社区驱动",
-                community_driven_desc: "治理模型赋予代币持有者对关键项目决策和未来发展的投票权。",
-                scalable: "高度可扩展",
-                scalable_desc: "建立在币安智能链上，实现快速交易和低费用，并计划进行多链扩展。",
-                technology: "技术",
-                technology_desc: "FreeDogeAI 使用包括用于机器学习模型的 TensorFlow、用于智能合约的 Solidity 和用于用户界面的 React 在内的尖端技术。我们的AI系统处理实时区块链数据以提供有价值的见解和自动化功能。",
-                vision_title: "我们的愿景",
-                vision_text: "我们设想一个未来，人工智能和区块链技术共同为每个人创造公平和可访问的金融系统。FreeDogeAI 旨在通过一个奖励参与和促进创新的直观平台，弥合复杂AI技术与日常加密用户之间的差距。",
-                roadmap_title: "路线图",
-                phase1: "第一阶段: 启动",
-                website_launched: "官方网站已上线:",
-                twitter_link: "推特:",
-                telegram_link: "电报:",
-                presale_launched: "预售已成功启动",
-                audit_completed: "智能合约审计完成",
-                first_listing: "首次DEX上市完成",
-                phase2: "第二阶段: 增长",
-                airdrop_campaigns: "空投活动和社区活动",
-                dex_listings: "DEX 可见性和代币上市",
-                marketing_collabs: "战略营销和影响者合作",
-                staking_launch: "质押平台启动",
-                first_utility: "首个AI实用功能发布",
-                phase3: "第三阶段: AI 应用",
-                ai_games: "AI 驱动的小游戏和互动系统",
-                reward_models: "FDAI 集成到任务/奖励模型中",
-                beta_testing: "具有实际效用的 Beta 测试",
-                ai_tools: "高级AI交易工具",
-                governance: "链上治理实施",
-                phase4: "第四阶段: 全球扩展",
-                cex_listing: "惊喜的中心化交易所上市",
-                nft_integration: "NFT + AI 功能集成",
-                global_outreach: "全球推广和扩展",
-                mobile_app: "移动应用测试版发布",
-                tokenomics_title: "代币经济学",
-                category: "类别",
-                percentage: "百分比",
-                presale: "预售",
-                airdrop: "空投 & 活动",
-                burn: "销毁",
-                listing: "DEX & CEX 上市",
-                reserve: "锁定储备",
-                team: "团队",
-                total_supply: "总供应量:",
-                circulating_supply: "流通供应量:",
-                locked_supply: "锁定供应量:",
-                contract: "合约地址:",
-                token_utility: "代币效用",
-                governance_token: "治理",
-                governance_desc: "FDAI持有者可以通过我们的去中心化治理系统对关键项目决策和未来发展进行投票。",
-                ai_access: "AI功能访问",
-                ai_access_desc: "代币授予对我们生态系统中高级AI功能、交易工具和预测分析的访问权限。",
-                staking_rewards: "质押奖励",
-                staking_rewards_desc: "通过在我们的高收益质押池中质押FDAI代币，获得复利奖励的被动收入。",
-                ecosystem_payments: "生态系统支付",
-                ecosystem_payments_desc: "FDAI作为我们生态系统内所有服务、产品和交易的主要支付方式。",
-                join_community: "加入我们的社区",
-                community_text: "成为我们不断增长的加密爱好者、AI开发人员和区块链创新者社区的一部分。我们一起构建由人工智能驱动的去中心化金融的未来。"
-            },
             en: {
                 presale_title: "FreeDogeAI",
                 tagline: "AI-Powered Crypto Revolution",
@@ -844,6 +925,158 @@
                 ecosystem_payments_desc: "FDAI serves as the primary payment method for all services, products, and transactions within our ecosystem.",
                 join_community: "Join Our Community",
                 community_text: "Be part of our growing community of crypto enthusiasts, AI developers, and blockchain innovators. Together, we're building the future of decentralized finance powered by artificial intelligence."
+            },
+            tr: {
+                presale_title: "FreeDogeAI",
+                tagline: "AI Destekli Kripto Devrimi",
+                important_info: "Önemli Bilgiler",
+                token_delivery_info: "Token satın alımınızın ardından, tokenleriniz 24 saat içinde cüzdanınıza yansıyacaktır.",
+                network_warning: "Lütfen bağlı olduğunuz ağın",
+                network: "olduğundan emin olun.",
+                note: "NOT:",
+                token_note: "Eğer FDAI tokenleri görünmüyorsa, bu kontrat adresini ekleyin:",
+                about_title: "FreeDogeAI Hakkında",
+                about_text: "FreeDogeAI, yapay zeka gücünü meme tabanlı kripto paraların viral çekiciliğiyle birleştiren yenilikçi bir projedir. Misyonumuz, kullanıcıları güçlendiren, topluluk katılımını teşvik eden ve finansal özgürlüğü destekleyen merkeziyetsiz bir ekosistem yaratmaktır. FreeDogeAI ile finansın geleceğini yeniden şekillendirmek için bize katılın!",
+                about_text2: "FreeDogeAI'nin merkezinde, token kullanımını ve ödül dağıtımını optimize etmek için piyasa eğilimlerini, kullanıcı davranışlarını ve blockchain verilerini sürekli analiz eden gelişmiş bir yapay zeka sistemi bulunmaktadır. Geleneksel meme coin'lerin aksine, FreeDogeAI, AI destekli özellikleriyle gerçek kullanım alanı sunar.",
+                about_text3: "Platformumuz, hızlı işlemler ve düşük ücretler için Binance Smart Chain (BSC) üzerine inşa edilmiştir ve gelecekte çoklu zincir genişleme planları bulunmaktadır. Akıllı kontrat, tüm kullanıcılar için maksimum güvenlik sağlamak amacıyla kapsamlı bir şekilde denetlenmiştir.",
+                core_features: "Temel Özellikler",
+                ai_engine: "Gelişmiş AI Motoru",
+                ai_engine_desc: "Özel AI algoritmalarımız, token kullanımını ve ödül dağıtımını optimize etmek için piyasa eğilimlerini ve kullanıcı davranışlarını analiz eder.",
+                secure_platform: "Güvenli Platform",
+                secure_platform_desc: "Kurumsal düzeyde güvenlik, çoklu imza cüzdanları ve önde gelen blockchain güvenlik firmaları tarafından düzenli akıllı kontrat denetimleri.",
+                community_driven: "Topluluk Odaklı",
+                community_driven_desc: "Token sahiplerine proje kararları ve gelecek gelişmeler için oy hakkı veren yönetişim modeli.",
+                scalable: "Yüksek Ölçeklenebilirlik",
+                scalable_desc: "Hızlı işlemler ve düşük ücretler için Binance Smart Chain üzerine inşa edilmiştir, çoklu zincir genişleme planları mevcuttur.",
+                technology: "Teknoloji",
+                technology_desc: "FreeDogeAI, makine öğrenimi modelleri için TensorFlow, akıllı kontratlar için Solidity ve kullanıcı arayüzleri için React gibi son teknoloji çözümler kullanır. AI sistemimiz, değerli içgörüler ve otomatik özellikler sağlamak için gerçek zamanlı blockchain verilerini işler.",
+                vision_title: "Vizyonumuz",
+                vision_text: "Yapay zeka ve blockchain teknolojisinin birlikte çalışarak herkes için adil ve erişilebilir finansal sistemler yarattığı bir gelecek hayal ediyoruz. FreeDogeAI, katılımı ödüllendiren ve yeniliği teşvik eden sezgisel bir platform aracılığıyla karmaşık AI teknolojileri ile günlük kripto kullanıcıları arasındaki boşluğu kapatmayı hedefliyor.",
+                roadmap_title: "Yol Haritası",
+                phase1: "Aşama 1: Başlangıç",
+                website_launched: "Resmi web sitesi yayınlandı:",
+                twitter_link: "Twitter:",
+                telegram_link: "Telegram:",
+                presale_launched: "Ön satış başarıyla başlatıldı",
+                audit_completed: "Akıllı kontrat denetimi tamamlandı",
+                first_listing: "İlk DEX listeleme başarıldı",
+                phase2: "Aşama 2: Büyüme",
+                airdrop_campaigns: "Airdrop kampanyaları ve topluluk etkinlikleri",
+                dex_listings: "DEX görünürlüğü ve token listeleri",
+                marketing_collabs: "Stratejik pazarlama ve influencer işbirlikleri",
+                staking_launch: "Staking platformu lansmanı",
+                first_utility: "İlk AI kullanım özelliği yayını",
+                phase3: "Aşama 3: AI Kullanımı",
+                ai_games: "AI destekli mini oyun ve etkileşim sistemi",
+                reward_models: "FDAI görev/ödül modellerine entegre edildi",
+                beta_testing: "Gerçek kullanım ile beta testi",
+                ai_tools: "Gelişmiş AI trading araçları",
+                governance: "Zincir üzeri yönetişim uygulaması",
+                phase4: "Aşama 4: Küresel Genişleme",
+                cex_listing: "Sürpriz merkezi borsa listeleme",
+                nft_integration: "NFT + AI özellik entegrasyonu",
+                global_outreach: "Küresel erişim ve ölçeklendirme",
+                mobile_app: "Mobil uygulama beta sürümü",
+                tokenomics_title: "Tokenomik",
+                category: "Kategori",
+                percentage: "Yüzde",
+                presale: "Ön Satış",
+                airdrop: "Airdrop & Kampanyalar",
+                burn: "Yakım",
+                listing: "DEX & CEX Listeleme",
+                reserve: "Kilitli Rezerv",
+                team: "Ekip",
+                total_supply: "Toplam Arz:",
+                circulating_supply: "Dolaşımdaki Arz:",
+                locked_supply: "Kilitli Arz:",
+                contract: "Kontrat Adresi:",
+                token_utility: "Token Kullanım Alanları",
+                governance_token: "Yönetişim",
+                governance_desc: "FDAI sahipleri, merkeziyetsiz yönetişim sistemimiz aracılığıyla önemli proje kararları ve gelecek gelişmeler üzerinde oy kullanabilir.",
+                ai_access: "AI Özellik Erişimi",
+                ai_access_desc: "Tokenler, ekosistemimiz içindeki premium AI özelliklerine, trading araçlarına ve tahmine dayalı analizlere erişim sağlar.",
+                staking_rewards: "Staking Ödülleri",
+                staking_rewards_desc: "FDAI tokenlerini yüksek getirili staking havuzlarımızda stake ederek bileşik ödüllerle pasif gelir elde edin.",
+                ecosystem_payments: "Ekosistem Ödemeleri",
+                ecosystem_payments_desc: "FDAI, ekosistemimiz içindeki tüm hizmetler, ürünler ve işlemler için birincil ödeme yöntemi olarak hizmet verir.",
+                join_community: "Topluluğumuza Katılın",
+                community_text: "Kripto meraklıları, AI geliştiricileri ve blockchain yenilikçilerinden oluşan büyüyen topluluğumuzun bir parçası olun. Birlikte, yapay zeka destekli merkeziyetsiz finansın geleceğini inşa ediyoruz."
+            },
+            zh: {
+                presale_title: "FreeDogeAI",
+                tagline: "AI驱动的加密革命",
+                important_info: "重要信息",
+                token_delivery_info: "代币购买后，将在24小时内反映在您的钱包中。",
+                network_warning: "请确保您已连接到",
+                network: "网络。",
+                note: "注意:",
+                token_note: "如果 FDAI 代币未显示，请添加此合约地址:",
+                about_title: "关于 FreeDogeAI",
+                about_text: "FreeDogeAI 是一个创新项目，将人工智能的力量与迷因加密货币的病毒式吸引力相结合。我们的使命是创建一个去中心化的生态系统，利用人工智能赋能用户，促进社区参与，并推动金融自由。加入我们，与 FreeDogeAI 一起革新金融的未来！",
+                about_text2: "FreeDogeAI 的核心是我们先进的人工智能系统，它持续分析市场趋势、用户行为和区块链数据，以优化代币效用和奖励分配。与传统的迷因币不同，FreeDogeAI 通过其AI驱动的功能提供真正的实用性。",
+                about_text3: "我们的平台建立在币安智能链(BSC)上，以实现快速交易和低费用，并计划在未来进行多链扩展。智能合约已经过彻底审计，以确保所有用户的最大安全性。",
+                core_features: "核心功能",
+                ai_engine: "先进AI引擎",
+                ai_engine_desc: "我们的专有AI算法分析市场趋势和用户行为，以优化代币效用和奖励分配。",
+                secure_platform: "安全平台",
+                secure_platform_desc: "企业级安全性，具有多重签名钱包和由领先区块链安全公司进行的定期智能合约审计。",
+                community_driven: "社区驱动",
+                community_driven_desc: "治理模型赋予代币持有者对关键项目决策和未来发展的投票权。",
+                scalable: "高度可扩展",
+                scalable_desc: "建立在币安智能链上，实现快速交易和低费用，并计划进行多链扩展。",
+                technology: "技术",
+                technology_desc: "FreeDogeAI 使用包括用于机器学习模型的 TensorFlow、用于智能合约的 Solidity 和用于用户界面的 React 在内的尖端技术。我们的AI系统处理实时区块链数据以提供有价值的见解和自动化功能。",
+                vision_title: "我们的愿景",
+                vision_text: "我们设想一个未来，人工智能和区块链技术共同为每个人创造公平和可访问的金融系统。FreeDogeAI 旨在通过一个奖励参与和促进创新的直观平台，弥合复杂AI技术与日常加密用户之间的差距。",
+                roadmap_title: "路线图",
+                phase1: "第一阶段: 启动",
+                website_launched: "官方网站已上线:",
+                twitter_link: "推特:",
+                telegram_link: "电报:",
+                presale_launched: "预售已成功启动",
+                audit_completed: "智能合约审计完成",
+                first_listing: "首次DEX上市完成",
+                phase2: "第二阶段: 增长",
+                airdrop_campaigns: "空投活动和社区活动",
+                dex_listings: "DEX 可见性和代币上市",
+                marketing_collabs: "战略营销和影响者合作",
+                staking_launch: "质押平台启动",
+                first_utility: "首个AI实用功能发布",
+                phase3: "第三阶段: AI 应用",
+                ai_games: "AI 驱动的小游戏和互动系统",
+                reward_models: "FDAI 集成到任务/奖励模型中",
+                beta_testing: "具有实际效用的 Beta 测试",
+                ai_tools: "高级AI交易工具",
+                governance: "链上治理实施",
+                phase4: "第四阶段: 全球扩展",
+                cex_listing: "惊喜的中心化交易所上市",
+                nft_integration: "NFT + AI 功能集成",
+                global_outreach: "全球推广和扩展",
+                mobile_app: "移动应用测试版发布",
+                tokenomics_title: "代币经济学",
+                category: "类别",
+                percentage: "百分比",
+                presale: "预售",
+                airdrop: "空投 & 活动",
+                burn: "销毁",
+                listing: "DEX & CEX 上市",
+                reserve: "锁定储备",
+                team: "团队",
+                total_supply: "总供应量:",
+                circulating_supply: "流通供应量:",
+                locked_supply: "锁定供应量:",
+                contract: "合约地址:",
+                token_utility: "代币效用",
+                governance_token: "治理",
+                governance_desc: "FDAI持有者可以通过我们的去中心化治理系统对关键项目决策和未来发展进行投票。",
+                ai_access: "AI功能访问",
+                ai_access_desc: "代币授予对我们生态系统中高级AI功能、交易工具和预测分析的访问权限。",
+                staking_rewards: "质押奖励",
+                staking_rewards_desc: "通过在我们的高收益质押池中质押FDAI代币，获得复利奖励的被动收入。",
+                ecosystem_payments: "生态系统支付",
+                ecosystem_payments_desc: "FDAI作为我们生态系统内所有服务、产品和交易的主要支付方式。",
+                join_community: "加入我们的社区",
+                community_text: "成为我们不断增长的加密爱好者、AI开发人员和区块链创新者社区的一部分。我们一起构建由人工智能驱动的去中心化金融的未来。"
             }
         };
 
@@ -858,14 +1091,47 @@
             });
         }
 
+        // Create particle background
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                
+                // Random opacity
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
+            // Create particle background
+            createParticles();
+            
             // Language switcher
             document.getElementById('languageSelector').addEventListener('change', (e) => {
                 translatePage(e.target.value);
             });
             
             // Set initial language
-            translatePage('zh');
+            translatePage('en');
         });
     </script>
 </body>
