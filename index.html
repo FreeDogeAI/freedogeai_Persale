@@ -11,14 +11,19 @@
             --primary: #6e45e2;
             --secondary: #88d3ce;
             --accent: #ff7e5f;
+            --accent2: #ffd166;
+            --accent3: #06d6a0;
             --dark: #0f0c29;
             --darker: #090717;
             --light: #ffffff;
             --gradient: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            --glass: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --shadow: 0 10px 30px rgba(110, 69, 226, 0.3);
+            --gradient2: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+            --gradient3: linear-gradient(135deg, var(--secondary) 0%, var(--accent3) 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 10px 30px rgba(110, 69, 226, 0.5);
             --neon-glow: 0 0 15px rgba(136, 211, 206, 0.7);
+            --neon-glow-accent: 0 0 20px rgba(255, 126, 95, 0.7);
         }
 
         * {
@@ -32,8 +37,10 @@
             background-color: var(--dark);
             color: var(--light);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(110, 69, 226, 0.15) 0%, transparent 25%),
-                radial-gradient(circle at 90% 80%, rgba(255, 126, 95, 0.15) 0%, transparent 25%);
+                radial-gradient(circle at 10% 20%, rgba(110, 69, 226, 0.2) 0%, transparent 25%),
+                radial-gradient(circle at 90% 80%, rgba(255, 126, 95, 0.2) 0%, transparent 25%),
+                radial-gradient(circle at 30% 60%, rgba(255, 209, 102, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 70% 30%, rgba(6, 214, 160, 0.15) 0%, transparent 25%);
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
@@ -74,15 +81,16 @@
 
         .container {
             background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem;
+            border-radius: 24px;
+            padding: 2.5rem;
             box-shadow: var(--shadow);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
             overflow: hidden;
             position: relative;
+            z-index: 1;
         }
 
         .container::before {
@@ -92,14 +100,16 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.6s ease;
+            z-index: -1;
         }
 
         .container:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(110, 69, 226, 0.4);
+            box-shadow: 0 15px 40px rgba(110, 69, 226, 0.6);
+            border-color: var(--accent);
         }
 
         .container:hover::before {
@@ -114,32 +124,32 @@
         }
 
         .logo-container img {
-            width: 180px;
-            height: 180px;
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid var(--secondary);
-            box-shadow: 0 0 30px var(--secondary), 0 0 60px rgba(136, 211, 206, 0.3);
+            border: 5px solid var(--secondary);
+            box-shadow: 0 0 30px var(--secondary), 0 0 60px rgba(136, 211, 206, 0.5);
             transition: all 0.4s ease;
         }
 
         .logo-container img:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 40px var(--secondary), 0 0 80px rgba(136, 211, 206, 0.4);
+            box-shadow: 0 0 50px var(--secondary), 0 0 100px rgba(136, 211, 206, 0.6);
         }
 
-        /* Dil Seçici */
+        /* Language Selector */
         .language-selector-container {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 20px;
+            right: 20px;
             z-index: 100;
         }
 
         .language-selector {
             background: rgba(15, 12, 41, 0.8);
             backdrop-filter: blur(10px);
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1.2rem;
             border-radius: 50px;
             border: 1px solid var(--accent);
             font-family: 'Poppins', sans-serif;
@@ -147,22 +157,23 @@
             color: var(--light);
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(255, 126, 95, 0.3);
+            box-shadow: 0 0 15px rgba(255, 126, 95, 0.4);
+            background-image: var(--gradient2);
         }
 
         .language-selector:focus {
             outline: none;
             border-color: var(--secondary);
-            box-shadow: 0 0 15px rgba(136, 211, 206, 0.5);
+            box-shadow: 0 0 20px rgba(136, 211, 206, 0.6);
         }
 
         .info-box {
-            background: linear-gradient(135deg, rgba(110, 69, 226, 0.1) 0%, rgba(255, 126, 95, 0.1) 100%);
-            padding: 1.5rem;
-            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(110, 69, 226, 0.15) 0%, rgba(255, 126, 95, 0.15) 100%);
+            padding: 1.8rem;
+            border-radius: 20px;
             border: 1px solid var(--glass-border);
             color: var(--light);
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             position: relative;
             overflow: hidden;
         }
@@ -173,62 +184,65 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 3px;
+            height: 4px;
             background: var(--gradient);
         }
 
         a {
             text-decoration: none;
             color: var(--secondary) !important;
-            background: linear-gradient(135deg, rgba(136, 211, 206, 0.15) 0%, rgba(136, 211, 206, 0.05) 100%);
-            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(136, 211, 206, 0.2) 0%, rgba(136, 211, 206, 0.1) 100%);
+            padding: 0.7rem 1.3rem;
             border-radius: 50px;
             transition: all 0.3s ease;
             display: inline-block;
-            border: 1px solid rgba(136, 211, 206, 0.3);
+            border: 1px solid rgba(136, 211, 206, 0.4);
+            font-weight: 500;
         }
 
         a:hover {
-            background: linear-gradient(135deg, rgba(136, 211, 206, 0.25) 0%, rgba(136, 211, 206, 0.15) 100%);
+            background: linear-gradient(135deg, rgba(136, 211, 206, 0.3) 0%, rgba(136, 211, 206, 0.2) 100%);
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(136, 211, 206, 0.2);
+            box-shadow: 0 8px 20px rgba(136, 211, 206, 0.3);
+            color: var(--light) !important;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1rem 0;
-            background: rgba(15, 12, 41, 0.5);
-            border-radius: 16px;
+            margin: 1.5rem 0;
+            background: rgba(15, 12, 41, 0.6);
+            border-radius: 20px;
             overflow: hidden;
             backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
         }
 
         th, td {
-            padding: 1.2rem;
+            padding: 1.3rem;
             text-align: left;
             border-bottom: 1px solid var(--glass-border);
         }
 
         th {
-            background: linear-gradient(135deg, rgba(110, 69, 226, 0.3) 0%, rgba(255, 126, 95, 0.3) 100%);
+            background: linear-gradient(135deg, rgba(110, 69, 226, 0.4) 0%, rgba(255, 126, 95, 0.4) 100%);
             color: var(--light);
             font-family: 'Orbitron', sans-serif;
             text-transform: uppercase;
             font-size: 0.8rem;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         tr:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         /* Timeline Styling */
         .timeline {
             position: relative;
             max-width: 1200px;
-            margin: 2rem auto;
-            padding-left: 50px;
+            margin: 2.5rem auto;
+            padding-left: 60px;
         }
 
         .timeline::before {
@@ -236,63 +250,71 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            left: 20px;
-            width: 4px;
+            left: 25px;
+            width: 5px;
             background: linear-gradient(to bottom, var(--primary), var(--accent));
             border-radius: 10px;
             z-index: 1;
+            box-shadow: var(--neon-glow);
         }
 
         .timeline-item {
             position: relative;
-            margin-bottom: 40px;
-            padding-left: 30px;
+            margin-bottom: 50px;
+            padding-left: 40px;
         }
 
         .timeline-marker {
             position: absolute;
-            left: 0;
+            left: 5px;
             top: 0;
-            width: 24px;
-            height: 24px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             background: var(--gradient);
-            border: 3px solid var(--secondary);
+            border: 4px solid var(--secondary);
             z-index: 2;
-            box-shadow: 0 0 0 4px rgba(0, 184, 255, 0.2);
+            box-shadow: 0 0 0 6px rgba(0, 184, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light);
+            font-size: 0.8rem;
+            font-weight: bold;
         }
 
         .timeline-content {
-            background: linear-gradient(135deg, rgba(110, 69, 226, 0.1) 0%, rgba(15, 12, 41, 0.5) 100%);
-            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, rgba(110, 69, 226, 0.15) 0%, rgba(15, 12, 41, 0.6) 100%);
+            backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 25px;
+            border-radius: 20px;
+            padding: 30px;
             position: relative;
             transition: all 0.4s ease;
-            box-shadow: 0 5px 25px rgba(110, 69, 226, 0.1);
+            box-shadow: 0 8px 30px rgba(110, 69, 226, 0.2);
         }
 
         .timeline-content:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(110, 69, 226, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(110, 69, 226, 0.3);
             border-color: var(--accent);
         }
 
         .timeline-content h4 {
             color: var(--secondary);
-            margin-bottom: 15px;
-            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
             position: relative;
+            text-shadow: var(--neon-glow);
         }
 
         .timeline-content h4::after {
             content: '';
             position: absolute;
-            bottom: -8px;
+            bottom: -10px;
             left: 0;
-            width: 50px;
-            height: 3px;
+            width: 60px;
+            height: 4px;
             background: var(--gradient);
             border-radius: 3px;
         }
@@ -304,9 +326,9 @@
 
         .timeline-content li {
             position: relative;
-            padding-left: 25px;
-            margin-bottom: 10px;
-            line-height: 1.6;
+            padding-left: 30px;
+            margin-bottom: 12px;
+            line-height: 1.7;
         }
 
         .timeline-content li::before {
@@ -315,31 +337,52 @@
             left: 0;
             color: var(--accent);
             font-weight: bold;
+            font-size: 1.2rem;
+            text-shadow: var(--neon-glow-accent);
         }
 
         /* Feature Cards */
         .feature-card {
-            background: linear-gradient(135deg, rgba(110, 69, 226, 0.1) 0%, rgba(15, 12, 41, 0.3) 100%);
-            border-radius: 16px;
-            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(110, 69, 226, 0.15) 0%, rgba(15, 12, 41, 0.4) 100%);
+            border-radius: 20px;
+            padding: 2rem;
             border: 1px solid var(--glass-border);
             transition: all 0.3s ease;
             height: 100%;
+            position: relative;
+            overflow: hidden;
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(110, 69, 226, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(110, 69, 226, 0.3);
             border-color: var(--accent);
         }
 
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
         .feature-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: var(--gradient);
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: var(--gradient3);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-shadow: 0 0 10px rgba(6, 214, 160, 0.3);
         }
 
         /* Responsive Design */
@@ -356,16 +399,16 @@
 
         @media (max-width: 768px) {
             .main-container {
-                padding: 1rem;
+                padding: 1.5rem;
             }
             
             .container {
-                padding: 1.5rem;
+                padding: 2rem;
             }
             
             .language-selector-container {
                 position: static;
-                margin-bottom: 1rem;
+                margin-bottom: 1.5rem;
                 display: flex;
                 justify-content: center;
             }
@@ -375,28 +418,28 @@
             }
             
             .timeline {
-                padding-left: 30px;
+                padding-left: 40px;
             }
             
             .timeline::before {
-                left: 10px;
+                left: 15px;
             }
             
             .timeline-marker {
-                width: 20px;
-                height: 20px;
-                left: -5px;
+                width: 25px;
+                height: 25px;
+                left: 0;
             }
             
             .timeline-content {
-                padding: 20px;
+                padding: 25px;
             }
         }
 
         /* Animations */
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-15px); }
             100% { transform: translateY(0px); }
         }
 
@@ -405,25 +448,128 @@
         }
 
         .pulse {
-            animation: pulse 2s infinite;
+            animation: pulse 3s infinite;
         }
 
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(136, 211, 206, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(136, 211, 206, 0); }
+            70% { box-shadow: 0 0 0 20px rgba(136, 211, 206, 0); }
             100% { box-shadow: 0 0 0 0 rgba(136, 211, 206, 0); }
         }
 
         .glow-text {
-            text-shadow: 0 0 10px var(--secondary), 0 0 20px rgba(136, 211, 206, 0.5);
+            text-shadow: 0 0 15px var(--secondary), 0 0 25px rgba(136, 211, 206, 0.7);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60%;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+
+        /* Particle Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Neon Border */
+        .neon-border {
+            position: relative;
+        }
+
+        .neon-border::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: inherit;
+            background: var(--gradient);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .neon-border:hover::after {
+            opacity: 1;
+        }
+
+        /* Countdown Timer */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .countdown-item {
+            background: rgba(15, 12, 41, 0.7);
+            border-radius: 12px;
+            padding: 1rem;
+            min-width: 80px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+        }
+
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: bold;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .countdown-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+            color: var(--secondary);
         }
     </style>
 </head>
 <body>
+    <!-- Particle Background -->
+    <div class="particles" id="particles"></div>
+
     <div class="main-container">
         <div class="left-column floating">
-            <div class="container">
-                <!-- Dil Seçici Kutusu -->
+            <div class="container neon-border">
+                <!-- Language Selector -->
                 <div class="language-selector-container">
                     <select class="language-selector" id="languageSelector">
                         <option value="en">EN</option>
@@ -438,17 +584,17 @@
                 <div class="logo-container">
                     <img src="logo.png" alt="FreeDogeAI Logo" class="pulse">
                 </div>
-                <h1 class="glow-text" data-i18n="presale_title">FreeDogeAI</h1>
-                <h3 style="color: var(--secondary); margin-bottom: 1.5rem;" data-i18n="tagline">AI-Powered Crypto Revolution</h3>
+                <h1 class="glow-text gradient-text" data-i18n="presale_title">FreeDogeAI</h1>
+                <h3 style="color: var(--accent2); margin-bottom: 1.5rem; text-shadow: 0 0 15px rgba(255, 209, 102, 0.7);" data-i18n="tagline">AI-Powered Crypto Revolution</h3>
                 
-                <div class="info-box">
+                <div class="info-box neon-border">
                     <h3 data-i18n="important_info">Important Information</h3>
                     <p data-i18n="token_delivery_info">After your token purchase, your tokens will be reflected in your wallet within 24 hours.</p>
-                    <div style="background:rgba(255, 126, 95, 0.2); color:var(--light); border: 1px solid var(--accent); border-radius: 12px; padding: 1rem; text-align: center; font-weight: bold; margin-top: 1rem;">
-                        <span data-i18n="network_warning">Please make sure you are connected to the</span> <span style="color:var(--secondary);">BSC (Binance Smart Chain)</span> <span data-i18n="network">network.</span>
+                    <div style="background:rgba(255, 126, 95, 0.3); color:var(--light); border: 1px solid var(--accent); border-radius: 16px; padding: 1.2rem; text-align: center; font-weight: bold; margin-top: 1.5rem; box-shadow: var(--neon-glow-accent);">
+                        <span data-i18n="network_warning">Please make sure you are connected to the</span> <span style="color:var(--accent2);">BSC (Binance Smart Chain)</span> <span data-i18n="network">network.</span>
                     </div>
-                    <p style="margin-top: 1rem;"><strong data-i18n="note">NOTE:</strong> <span data-i18n="token_note">If FDAI tokens do not appear, add this contract address:</span></p>
-                    <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--secondary); font-weight: bold; padding: 1rem; border-radius: 12px; text-align: center; margin-top: 1rem; font-family: monospace; word-break: break-all;">
+                    <p style="margin-top: 1.5rem;"><strong data-i18n="note">NOTE:</strong> <span data-i18n="token_note">If FDAI tokens do not appear, add this contract address:</span></p>
+                    <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--accent2); font-weight: bold; padding: 1.2rem; border-radius: 16px; text-align: center; margin-top: 1.5rem; font-family: monospace; word-break: break-all; box-shadow: 0 0 15px rgba(255, 126, 95, 0.3);">
                         0x8161698A74F2ea0035B9912ED60140893Ac0f39C
                     </div>
                 </div>
@@ -457,16 +603,16 @@
 
         <div class="right-column">
             <!-- About Section -->
-            <div class="container">
-                <h3 data-i18n="about_title">About FreeDogeAI</h3>
+            <div class="container neon-border">
+                <h3 class="section-title" data-i18n="about_title">About FreeDogeAI</h3>
                 <p data-i18n="about_text">FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!</p>
                 
-                <p data-i18n="about_text2" style="margin-top: 1rem;">At the core of FreeDogeAI is our advanced artificial intelligence system that continuously analyzes market trends, user behavior, and blockchain data to optimize token utility and rewards distribution. Unlike traditional meme coins, FreeDogeAI offers real utility through its AI-powered features.</p>
+                <p data-i18n="about_text2" style="margin-top: 1.5rem;">At the core of FreeDogeAI is our advanced artificial intelligence system that continuously analyzes market trends, user behavior, and blockchain data to optimize token utility and rewards distribution. Unlike traditional meme coins, FreeDogeAI offers real utility through its AI-powered features.</p>
                 
-                <p data-i18n="about_text3" style="margin-top: 1rem;">Our platform is built on Binance Smart Chain (BSC) for fast transactions and low fees, with plans for multi-chain expansion in the future. The smart contract has been thoroughly audited to ensure maximum security for all users.</p>
+                <p data-i18n="about_text3" style="margin-top: 1.5rem;">Our platform is built on Binance Smart Chain (BSC) for fast transactions and low fees, with plans for multi-chain expansion in the future. The smart contract has been thoroughly audited to ensure maximum security for all users.</p>
                 
-                <h4 data-i18n="core_features" style="margin-top: 2rem;">Core Features</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                <h4 class="section-title" data-i18n="core_features" style="margin-top: 2.5rem;">Core Features</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-brain"></i>
@@ -497,18 +643,19 @@
                     </div>
                 </div>
                 
-                <h4 data-i18n="technology" style="margin-top: 2rem;">Technology</h4>
+                <h4 class="section-title" data-i18n="technology" style="margin-top: 2.5rem;">Technology</h4>
                 <p data-i18n="technology_desc">FreeDogeAI utilizes cutting-edge technologies including TensorFlow for machine learning models, Solidity for smart contracts, and React for user interfaces. Our AI system processes real-time blockchain data to provide valuable insights and automated features.</p>
                 
-                <h4 data-i18n="vision_title" style="margin-top: 2rem;">Our Vision</h4>
+                <h4 class="section-title" data-i18n="vision_title" style="margin-top: 2.5rem;">Our Vision</h4>
                 <p data-i18n="vision_text">We envision a future where artificial intelligence and blockchain technology work together to create fair and accessible financial systems for everyone. FreeDogeAI aims to bridge the gap between complex AI technologies and everyday crypto users through an intuitive platform that rewards participation and fosters innovation.</p>
             </div>
 
             <!-- Roadmap Section -->
-            <div class="container">
-                <h3 data-i18n="roadmap_title">Roadmap</h3>
+            <div class="container neon-border">
+                <h3 class="section-title" data-i18n="roadmap_title">Roadmap</h3>
                 <div class="timeline">
                     <div class="timeline-item">
+                        <div class="timeline-marker">1</div>
                         <div class="timeline-content">
                             <h4 data-i18n="phase1">Phase 1: Launch</h4>
                             <ul>
@@ -520,9 +667,9 @@
                                 <li data-i18n="first_listing">First DEX listing achieved</li>
                             </ul>
                         </div>
-                        <div class="timeline-marker"></div>
                     </div>
                     <div class="timeline-item">
+                        <div class="timeline-marker">2</div>
                         <div class="timeline-content">
                             <h4 data-i18n="phase2">Phase 2: Growth</h4>
                             <ul>
@@ -533,9 +680,9 @@
                                 <li data-i18n="first_utility">First AI utility feature release</li>
                             </ul>
                         </div>
-                        <div class="timeline-marker"></div>
                     </div>
                     <div class="timeline-item">
+                        <div class="timeline-marker">3</div>
                         <div class="timeline-content">
                             <h4 data-i18n="phase3">Phase 3: AI Utility</h4>
                             <ul>
@@ -546,9 +693,9 @@
                                 <li data-i18n="governance">On-chain governance implementation</li>
                             </ul>
                         </div>
-                        <div class="timeline-marker"></div>
                     </div>
                     <div class="timeline-item">
+                        <div class="timeline-marker">4</div>
                         <div class="timeline-content">
                             <h4 data-i18n="phase4">Phase 4: Global Expansion</h4>
                             <ul>
@@ -558,15 +705,14 @@
                                 <li data-i18n="mobile_app">Mobile app beta release</li>
                             </ul>
                         </div>
-                        <div class="timeline-marker"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Tokenomics Section -->
-            <div class="container">
-                <h3 data-i18n="tokenomics_title">Tokenomics</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <div class="container neon-border">
+                <h3 class="section-title" data-i18n="tokenomics_title">Tokenomics</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
                     <div>
                         <table>
                             <tr><th data-i18n="category">Category</th><th data-i18n="percentage">Percentage</th></tr>
@@ -579,20 +725,20 @@
                         </table>
                     </div>
                     <div>
-                        <div style="background: rgba(15, 12, 41, 0.5); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--glass-border);">
+                        <div style="background: rgba(15, 12, 41, 0.6); padding: 2rem; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(110, 69, 226, 0.2);">
                             <p><strong data-i18n="total_supply">Total Supply:</strong> 2,000,000,000,000,000 (Two Quadrillion)</p>
                             <p><strong data-i18n="circulating_supply">Circulating Supply:</strong> 1,400,000,000,000,000</p>
                             <p><strong data-i18n="locked_supply">Locked Supply:</strong> 600,000,000,000,000 FDAI</p>
                             <p><strong data-i18n="contract">Contract Address:</strong></p>
-                            <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--secondary); font-weight: bold; padding: 0.5rem; border-radius: 12px; text-align: center; margin-top: 0.5rem; font-family: monospace; word-break: break-all; font-size: 0.8rem;">
+                            <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--accent2); font-weight: bold; padding: 1rem; border-radius: 16px; text-align: center; margin-top: 1rem; font-family: monospace; word-break: break-all; font-size: 0.9rem; box-shadow: 0 0 15px rgba(255, 126, 95, 0.3);">
                                 0x8161698A74F2ea0035B9912ED60140893Ac0f39C
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <h4 style="margin-top: 2rem;" data-i18n="token_utility">Token Utility</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                <h4 class="section-title" style="margin-top: 2.5rem;" data-i18n="token_utility">Token Utility</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
                     <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-coins"></i>
@@ -625,25 +771,25 @@
             </div>
 
             <!-- Community Section -->
-            <div class="container">
-                <h3 data-i18n="join_community">Join Our Community</h3>
+            <div class="container neon-border">
+                <h3 class="section-title" data-i18n="join_community">Join Our Community</h3>
                 <p data-i18n="community_text">Be part of our growing community of crypto enthusiasts, AI developers, and blockchain innovators. Together, we're building the future of decentralized finance powered by artificial intelligence.</p>
                 
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
-                    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" style="display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--secondary)">
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem;">
+                    <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(29, 161, 242, 0.2) 0%, rgba(15, 12, 41, 0.5) 100%); border: 1px solid rgba(29, 161, 242, 0.4);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--light)">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
                         </svg>
                         X (Twitter)
                     </a>
-                    <a href="https://t.me/freedogeaiFDAI" target="_blank" style="display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--secondary)">
+                    <a href="https://t.me/freedogeaiFDAI" target="_blank" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(0, 136, 204, 0.2) 0%, rgba(15, 12, 41, 0.5) 100%); border: 1px solid rgba(0, 136, 204, 0.4);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--light)">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.03-.1.06-.08-.06-.16.05-.08.14-.03.25-.01.1.05.67 3.19 3.18 3.66 3.75.41.5.73.49 1.04.46.33-.04 1.06-.43 1.2-.85.15-.42.15-.78.1-.85-.03-.06-.22-.04-.45.03-.25.08-1.49.94-1.69 1.03-.34.16-.7.15-.9-.05-.3-.3-.69-.83-1.05-1.36-.92-1.29-1.29-2.21-1.43-2.59-.12-.34 0-.52.08-.7.08-.17.3-.42.6-.58.45-.24.9-.18 1.21-.1.5.12 3.04 1.96 3.5 2.32.68.54.73.7.8.68.2-.05.6-.56.6-.56z"></path>
                         </svg>
                         Telegram
                     </a>
-                    <a href="https://github.com/FreeDogeAI" target="_blank" style="display: flex; align-items: center; gap: 8px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--secondary)">
+                    <a href="https://github.com/FreeDogeAI" target="_blank" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(110, 84, 148, 0.2) 0%, rgba(15, 12, 41, 0.5) 100%); border: 1px solid rgba(110, 84, 148, 0.4);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--light)">
                             <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"></path>
                         </svg>
                         GitHub
@@ -896,7 +1042,40 @@
             });
         }
 
+        // Create particle background
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                
+                // Random opacity
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
+            // Create particle background
+            createParticles();
+            
             // Language switcher
             document.getElementById('languageSelector').addEventListener('change', (e) => {
                 translatePage(e.target.value);
