@@ -761,15 +761,17 @@
                     </table>
                 </div>
                 <div>
-                    <div style="background: rgba(15, 12, 41, 0.6); padding: 2rem; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(110, 69, 226, 0.2);">
-                        <p><strong data-i18n="total_supply">Total Supply:</strong> 2,000,000,000,000,000 (Two Quadrillion)</p>
-                        <p><strong data-i18n="circulating_supply">Circulating Supply:</strong> 1,400,000,000,000,000</p>
-                        <p><strong data-i18n="locked_supply">Locked Supply:</strong> 600,000,000,000,000 FDAI</p>
-                        <p><strong data-i18n="contract">Contract Address:</strong></p>
-                        <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--accent2); font-weight: bold; padding: 1rem; border-radius: 16px; text-align: center; margin-top: 1rem; font-family: monospace; word-break: break-all; font-size: 0.9rem; box-shadow: 0 0 15px rgba(255, 126, 95, 0.3);">
-                            0x8161698A74F2ea0035B9912ED60140893Ac0f39C
-                        </div>
-                    </div>
+                    <table>
+                        <tr><th data-i18n="total_supply">Total Supply</th><td>2,000,000,000,000,000 (Two Quadrillion)</td></tr>
+                        <tr><th data-i18n="circulating_supply">Circulating Supply</th><td>1,400,000,000,000,000</td></tr>
+                        <tr><th data-i18n="locked_supply">Locked Supply</th><td>600,000,000,000,000 FDAI</td></tr>
+                        <tr><th colspan="2" style="text-align: center;" data-i18n="contract">Contract Address</th></tr>
+                        <tr><td colspan="2" style="text-align: center;">
+                            <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--accent2); font-weight: bold; padding: 1rem; border-radius: 16px; font-family: monospace; word-break: break-all; font-size: 0.9rem; box-shadow: 0 0 15px rgba(255, 126, 95, 0.3);">
+                                0x8161698A74F2ea0035B9912ED60140893Ac0f39C
+                            </div>
+                        </td></tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -945,7 +947,7 @@
                 vision_text: "Yapay zeka ve blockchain teknolojisinin birlikte çalışarak herkes için adil ve erişilebilir finansal sistemler yarattığı bir gelecek hayal ediyoruz. FreeDogeAI, katılımı ödüllendiren ve yeniliği teşvik eden sezgisel bir platform aracılığıyla karmaşık AI teknolojileri ile günlük kripto kullanıcıları arasındaki boşluğu kapatmayı hedefliyor.",
                 roadmap_title: "Yol Haritası",
                 phase1: "Aşama 1: Başlangıç",
-                website_launched: "Resmi web sitesi yayınlandı freedogeai.com:",
+                website_launched: "Resmi web sitesi yayınlandı: <a href='https://freedogeai.com' target='_blank'>freedogeai.com</a>",
                 twitter_link: "Twitter:",
                 telegram_link: "Telegram:",
                 presale_launched: "Ön satış başarıyla başlatıldı",
@@ -1079,7 +1081,11 @@
             elements.forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang] && translations[lang][key]) {
-                    el.textContent = translations[lang][key];
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.value = translations[lang][key];
+                    } else {
+                        el.innerHTML = translations[lang][key];
+                    }
                 }
             });
         }
