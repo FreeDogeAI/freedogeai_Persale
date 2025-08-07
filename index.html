@@ -55,27 +55,10 @@
         }
 
         .main-container {
-            max-width: 1800px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
             position: relative;
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-        }
-
-        .wide-column {
-            grid-column: span 3;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        .side-column {
-            grid-column: span 1;
         }
 
         .container {
@@ -90,6 +73,8 @@
             overflow: hidden;
             position: relative;
             z-index: 1;
+            margin-bottom: 2rem;
+            width: 100%;
         }
 
         .container::before {
@@ -385,37 +370,7 @@
         }
 
         /* Responsive Design */
-        @media (max-width: 1600px) {
-            .content-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .wide-column {
-                grid-column: span 2;
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .side-column {
-                grid-column: span 1;
-            }
-        }
-
         @media (max-width: 1200px) {
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .wide-column {
-                grid-column: span 1;
-                grid-template-columns: 1fr;
-            }
-            
-            .side-column {
-                grid-column: span 1;
-            }
-        }
-
-        @media (max-width: 768px) {
             .main-container {
                 padding: 1.5rem;
             }
@@ -578,6 +533,52 @@
             margin-top: 0.5rem;
             color: var(--secondary);
         }
+
+        /* New wide layout styles */
+        .header-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+        }
+
+        .header-content {
+            flex: 1;
+            padding-right: 2rem;
+        }
+
+        .header-image {
+            flex: 0 0 300px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            .header-content {
+                padding-right: 0;
+                margin-bottom: 2rem;
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -585,175 +586,85 @@
     <div class="particles" id="particles"></div>
 
     <div class="main-container">
-        <div class="content-grid">
-            <div class="side-column">
-                <div class="container neon-border floating">
-                    <!-- Language Selector -->
-                    <div class="language-selector-container">
-                        <select class="language-selector" id="languageSelector">
-                            <option value="en">EN</option>
-                            <option value="tr">TR</option>
-                            <option value="zh">中文</option>
-                            <option value="ja">日本語</option>
-                            <option value="hi">हिन्दी</option>
-                            <option value="fil">Filipino</option>
-                        </select>
-                    </div>
-
-                    <div class="logo-container">
-                        <img src="logo.png" alt="FreeDogeAI Logo" class="pulse">
-                    </div>
-                    <h1 class="glow-text gradient-text" data-i18n="presale_title">FreeDogeAI</h1>
-                    <h3 style="color: var(--accent2); margin-bottom: 1.5rem; text-shadow: 0 0 15px rgba(255, 209, 102, 0.7);" data-i18n="tagline">AI-Powered Crypto Revolution</h3>
-                    
-                    <div class="info-box neon-border">
-                        <h3 data-i18n="important_info">Important Information</h3>
-                        <p data-i18n="token_delivery_info">After your token purchase, your tokens will be reflected in your wallet within 24 hours.</p>
-                        <div style="background:rgba(255, 126, 95, 0.3); color:var(--light); border: 1px solid var(--accent); border-radius: 16px; padding: 1.2rem; text-align: center; font-weight: bold; margin-top: 1.5rem; box-shadow: var(--neon-glow-accent);">
-                            <span data-i18n="network_warning">Please make sure you are connected to the</span> <span style="color:var(--accent2);">BSC (Binance Smart Chain)</span> <span data-i18n="network">network.</span>
-                        </div>
-                        <p style="margin-top: 1.5rem;"><strong data-i18n="note">NOTE:</strong> <span data-i18n="token_note">If FDAI tokens do not appear, add this contract address:</span></p>
-                        <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--accent2); font-weight: bold; padding: 1.2rem; border-radius: 16px; text-align: center; margin-top: 1.5rem; font-family: monospace; word-break: break-all; box-shadow: 0 0 15px rgba(255, 126, 95, 0.3);">
-                            0x8161698A74F2ea0035B9912ED60140893Ac0f39C
-                        </div>
-                    </div>
-                </div>
+        <!-- Header Section -->
+        <div class="container neon-border">
+            <!-- Language Selector -->
+            <div class="language-selector-container">
+                <select class="language-selector" id="languageSelector">
+                    <option value="en">EN</option>
+                    <option value="tr">TR</option>
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="fil">Filipino</option>
+                </select>
             </div>
 
-            <div class="wide-column">
-                <!-- About Section -->
-                <div class="container neon-border">
-                    <h3 class="section-title" data-i18n="about_title">About FreeDogeAI</h3>
-                    <p data-i18n="about_text">FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!</p>
-                    
-                    <p data-i18n="about_text2" style="margin-top: 1.5rem;">At the core of FreeDogeAI is our advanced artificial intelligence system that continuously analyzes market trends, user behavior, and blockchain data to optimize token utility and rewards distribution. Unlike traditional meme coins, FreeDogeAI offers real utility through its AI-powered features.</p>
-                    
-                    <p data-i18n="about_text3" style="margin-top: 1.5rem;">Our platform is built on Binance Smart Chain (BSC) for fast transactions and low fees, with plans for multi-chain expansion in the future. The smart contract has been thoroughly audited to ensure maximum security for all users.</p>
-                    
-                    <h4 class="section-title" data-i18n="core_features" style="margin-top: 2.5rem;">Core Features</h4>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-brain"></i>
-                            </div>
-                            <h4 data-i18n="ai_engine">Advanced AI Engine</h4>
-                            <p data-i18n="ai_engine_desc">Our proprietary AI algorithms analyze market trends and user behavior to optimize token utility and rewards distribution.</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
-                            <h4 data-i18n="secure_platform">Secure Platform</h4>
-                            <p data-i18n="secure_platform_desc">Enterprise-grade security with multi-signature wallets and regular smart contract audits by leading blockchain security firms.</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <h4 data-i18n="community_driven">Community Driven</h4>
-                            <p data-i18n="community_driven_desc">Governance model that gives voting power to token holders for key project decisions and future developments.</p>
-                        </div>
-                    </div>
+            <div class="logo-container">
+                <img src="logo.png" alt="FreeDogeAI Logo" class="pulse">
+            </div>
+            <h1 class="glow-text gradient-text" data-i18n="presale_title">FreeDogeAI</h1>
+            <h3 style="color: var(--accent2); margin-bottom: 1.5rem; text-shadow: 0 0 15px rgba(255, 209, 102, 0.7);" data-i18n="tagline">AI-Powered Crypto Revolution</h3>
+            
+            <div class="info-box neon-border">
+                <h3 data-i18n="important_info">Important Information</h3>
+                <p data-i18n="token_delivery_info">After your token purchase, your tokens will be reflected in your wallet within 24 hours.</p>
+                <div style="background:rgba(255, 126, 95, 0.3); color:var(--light); border: 1px solid var(--accent); border-radius: 16px; padding: 1.2rem; text-align: center; font-weight: bold; margin-top: 1.5rem; box-shadow: var(--neon-glow-accent);">
+                    <span data-i18n="network_warning">Please make sure you are connected to the</span> <span style="color:var(--accent2);">BSC (Binance Smart Chain)</span> <span data-i18n="network">network.</span>
                 </div>
+                <p style="margin-top: 1.5rem;"><strong data-i18n="note">NOTE:</strong> <span data-i18n="token_note">If FDAI tokens do not appear, add this contract address:</span></p>
+                <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--accent2); font-weight: bold; padding: 1.2rem; border-radius: 16px; text-align: center; margin-top: 1.5rem; font-family: monospace; word-break: break-all; box-shadow: 0 0 15px rgba(255, 126, 95, 0.3);">
+                    0x8161698A74F2ea0035B9912ED60140893Ac0f39C
+                </div>
+            </div>
+        </div>
 
-                <!-- Technology Section -->
-                <div class="container neon-border">
+        <!-- About Section -->
+        <div class="container neon-border">
+            <h3 class="section-title" data-i18n="about_title">About FreeDogeAI</h3>
+            <p data-i18n="about_text">FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!</p>
+            
+            <p data-i18n="about_text2" style="margin-top: 1.5rem;">At the core of FreeDogeAI is our advanced artificial intelligence system that continuously analyzes market trends, user behavior, and blockchain data to optimize token utility and rewards distribution. Unlike traditional meme coins, FreeDogeAI offers real utility through its AI-powered features.</p>
+            
+            <p data-i18n="about_text3" style="margin-top: 1.5rem;">Our platform is built on Binance Smart Chain (BSC) for fast transactions and low fees, with plans for multi-chain expansion in the future. The smart contract has been thoroughly audited to ensure maximum security for all users.</p>
+            
+            <h4 class="section-title" data-i18n="core_features" style="margin-top: 2.5rem;">Core Features</h4>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4 data-i18n="ai_engine">Advanced AI Engine</h4>
+                    <p data-i18n="ai_engine_desc">Our proprietary AI algorithms analyze market trends and user behavior to optimize token utility and rewards distribution.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4 data-i18n="secure_platform">Secure Platform</h4>
+                    <p data-i18n="secure_platform_desc">Enterprise-grade security with multi-signature wallets and regular smart contract audits by leading blockchain security firms.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h4 data-i18n="community_driven">Community Driven</h4>
+                    <p data-i18n="community_driven_desc">Governance model that gives voting power to token holders for key project decisions and future developments.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technology Section -->
+        <div class="container neon-border">
+            <div class="two-column">
+                <div>
                     <h4 class="section-title" data-i18n="technology" style="margin-top: 0;">Technology</h4>
                     <p data-i18n="technology_desc">FreeDogeAI utilizes cutting-edge technologies including TensorFlow for machine learning models, Solidity for smart contracts, and React for user interfaces. Our AI system processes real-time blockchain data to provide valuable insights and automated features.</p>
                     
                     <h4 class="section-title" data-i18n="vision_title" style="margin-top: 2.5rem;">Our Vision</h4>
                     <p data-i18n="vision_text">We envision a future where artificial intelligence and blockchain technology work together to create fair and accessible financial systems for everyone. FreeDogeAI aims to bridge the gap between complex AI technologies and everyday crypto users through an intuitive platform that rewards participation and fosters innovation.</p>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-rocket"></i>
-                            </div>
-                            <h4 data-i18n="scalable">Highly Scalable</h4>
-                            <p data-i18n="scalable_desc">Built on Binance Smart Chain for fast transactions and low fees, with plans for multi-chain expansion.</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-cogs"></i>
-                            </div>
-                            <h4>AI Integration</h4>
-                            <p>Seamless integration of AI models with blockchain technology for predictive analytics.</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-lock"></i>
-                            </div>
-                            <h4>Security First</h4>
-                            <p>Advanced encryption and security protocols to protect user assets and data.</p>
-                        </div>
-                    </div>
                 </div>
-
-                <!-- Roadmap Section -->
-                <div class="container neon-border" style="grid-column: span 3;">
-                    <h3 class="section-title" data-i18n="roadmap_title">Roadmap</h3>
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-marker">1</div>
-                            <div class="timeline-content">
-                                <h4 data-i18n="phase1">Phase 1: Launch</h4>
-                                <ul>
-                                    <li data-i18n="website_launched">Official website launched: <a href="https://freedogeai.com" target="_blank">freedogeai.com</a></li>
-                                    <li data-i18n="twitter_link">Twitter: <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">@FreeDogeAI_FDAI</a></li>
-                                    <li data-i18n="telegram_link">Telegram: <a href="https://t.me/freedogeaiFDAI" target="_blank">@freedogeaiFDAI</a></li>
-                                    <li data-i18n="presale_launched">Presale was successfully launched</li>
-                                    <li data-i18n="audit_completed">Smart contract audit completed</li>
-                                    <li data-i18n="first_listing">First DEX listing achieved</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-marker">2</div>
-                            <div class="timeline-content">
-                                <h4 data-i18n="phase2">Phase 2: Growth</h4>
-                                <ul>
-                                    <li data-i18n="airdrop_campaigns">Airdrop campaigns and community events</li>
-                                    <li data-i18n="dex_listings">DEX visibility and token listings</li>
-                                    <li data-i18n="marketing_collabs">Strategic marketing and influencer collaborations</li>
-                                    <li data-i18n="staking_launch">Staking platform launch</li>
-                                    <li data-i18n="first_utility">First AI utility feature release</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tokenomics Section -->
-                <div class="container neon-border" style="grid-column: span 2;">
-                    <h3 class="section-title" data-i18n="tokenomics_title">Tokenomics</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-                        <div>
-                            <table>
-                                <tr><th data-i18n="category">Category</th><th data-i18n="percentage">Percentage</th></tr>
-                                <tr><td data-i18n="presale">Presale</td><td>15%</td></tr>
-                                <tr><td data-i18n="airdrop">Airdrop & Campaigns</td><td>15%</td></tr>
-                                <tr><td data-i18n="burn">Burn</td><td>15%</td></tr>
-                                <tr><td data-i18n="listing">DEX & CEX Listing</td><td>20%</td></tr>
-                                <tr><td data-i18n="reserve">Locked Reserve</td><td>30%</td></tr>
-                                <tr><td data-i18n="team">Team</td><td>5%</td></tr>
-                            </table>
-                        </div>
-                        <div>
-                            <div style="background: rgba(15, 12, 41, 0.6); padding: 2rem; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(110, 69, 226, 0.2);">
-                                <p><strong data-i18n="total_supply">Total Supply:</strong> 2,000,000,000,000,000 (Two Quadrillion)</p>
-                                <p><strong data-i18n="circulating_supply">Circulating Supply:</strong> 1,400,000,000,000,000</p>
-                                <p><strong data-i18n="locked_supply">Locked Supply:</strong> 600,000,000,000,000 FDAI</p>
-                                <p><strong data-i18n="contract">Contract Address:</strong></p>
-                                <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--accent2); font-weight: bold; padding: 1rem; border-radius: 16px; text-align: center; margin-top: 1rem; font-family: monospace; word-break: break-all; font-size: 0.9rem; box-shadow: 0 0 15px rgba(255, 126, 95, 0.3);">
-                                    0x8161698A74F2ea0035B9912ED60140893Ac0f39C
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Token Utility Section -->
-                <div class="container neon-border">
+                <div>
                     <h4 class="section-title" style="margin-top: 0;" data-i18n="token_utility">Token Utility</h4>
                     <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem;">
                         <div class="feature-card">
@@ -772,78 +683,157 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- More Roadmap -->
-                <div class="container neon-border" style="grid-column: span 3;">
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-marker">3</div>
-                            <div class="timeline-content">
-                                <h4 data-i18n="phase3">Phase 3: AI Utility</h4>
-                                <ul>
-                                    <li data-i18n="ai_games">AI-powered mini-game and interaction system</li>
-                                    <li data-i18n="reward_models">FDAI integrated into task/reward models</li>
-                                    <li data-i18n="beta_testing">Beta testing with real utility</li>
-                                    <li data-i18n="ai_tools">Advanced AI trading tools</li>
-                                    <li data-i18n="governance">On-chain governance implementation</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-marker">4</div>
-                            <div class="timeline-content">
-                                <h4 data-i18n="phase4">Phase 4: Global Expansion</h4>
-                                <ul>
-                                    <li data-i18n="cex_listing">Surprise centralized exchange listing</li>
-                                    <li data-i18n="nft_integration">NFT + AI feature integration</li>
-                                    <li data-i18n="global_outreach">Global outreach and scaling</li>
-                                    <li data-i18n="mobile_app">Mobile app beta release</li>
-                                </ul>
-                            </div>
+        <!-- Roadmap Section -->
+        <div class="container neon-border">
+            <h3 class="section-title" data-i18n="roadmap_title">Roadmap</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">1</div>
+                    <div class="timeline-content">
+                        <h4 data-i18n="phase1">Phase 1: Launch</h4>
+                        <ul>
+                            <li data-i18n="website_launched">Official website launched: <a href="https://freedogeai.com" target="_blank">freedogeai.com</a></li>
+                            <li data-i18n="twitter_link">Twitter: <a href="https://x.com/FreeDogeAI_FDAI" target="_blank">@FreeDogeAI_FDAI</a></li>
+                            <li data-i18n="telegram_link">Telegram: <a href="https://t.me/freedogeaiFDAI" target="_blank">@freedogeaiFDAI</a></li>
+                            <li data-i18n="presale_launched">Presale was successfully launched</li>
+                            <li data-i18n="audit_completed">Smart contract audit completed</li>
+                            <li data-i18n="first_listing">First DEX listing achieved</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">2</div>
+                    <div class="timeline-content">
+                        <h4 data-i18n="phase2">Phase 2: Growth</h4>
+                        <ul>
+                            <li data-i18n="airdrop_campaigns">Airdrop campaigns and community events</li>
+                            <li data-i18n="dex_listings">DEX visibility and token listings</li>
+                            <li data-i18n="marketing_collabs">Strategic marketing and influencer collaborations</li>
+                            <li data-i18n="staking_launch">Staking platform launch</li>
+                            <li data-i18n="first_utility">First AI utility feature release</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">3</div>
+                    <div class="timeline-content">
+                        <h4 data-i18n="phase3">Phase 3: AI Utility</h4>
+                        <ul>
+                            <li data-i18n="ai_games">AI-powered mini-game and interaction system</li>
+                            <li data-i18n="reward_models">FDAI integrated into task/reward models</li>
+                            <li data-i18n="beta_testing">Beta testing with real utility</li>
+                            <li data-i18n="ai_tools">Advanced AI trading tools</li>
+                            <li data-i18n="governance">On-chain governance implementation</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">4</div>
+                    <div class="timeline-content">
+                        <h4 data-i18n="phase4">Phase 4: Global Expansion</h4>
+                        <ul>
+                            <li data-i18n="cex_listing">Surprise centralized exchange listing</li>
+                            <li data-i18n="nft_integration">NFT + AI feature integration</li>
+                            <li data-i18n="global_outreach">Global outreach and scaling</li>
+                            <li data-i18n="mobile_app">Mobile app beta release</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tokenomics Section -->
+        <div class="container neon-border">
+            <h3 class="section-title" data-i18n="tokenomics_title">Tokenomics</h3>
+            <div class="two-column">
+                <div>
+                    <table>
+                        <tr><th data-i18n="category">Category</th><th data-i18n="percentage">Percentage</th></tr>
+                        <tr><td data-i18n="presale">Presale</td><td>15%</td></tr>
+                        <tr><td data-i18n="airdrop">Airdrop & Campaigns</td><td>15%</td></tr>
+                        <tr><td data-i18n="burn">Burn</td><td>15%</td></tr>
+                        <tr><td data-i18n="listing">DEX & CEX Listing</td><td>20%</td></tr>
+                        <tr><td data-i18n="reserve">Locked Reserve</td><td>30%</td></tr>
+                        <tr><td data-i18n="team">Team</td><td>5%</td></tr>
+                    </table>
+                </div>
+                <div>
+                    <div style="background: rgba(15, 12, 41, 0.6); padding: 2rem; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(110, 69, 226, 0.2);">
+                        <p><strong data-i18n="total_supply">Total Supply:</strong> 2,000,000,000,000,000 (Two Quadrillion)</p>
+                        <p><strong data-i18n="circulating_supply">Circulating Supply:</strong> 1,400,000,000,000,000</p>
+                        <p><strong data-i18n="locked_supply">Locked Supply:</strong> 600,000,000,000,000 FDAI</p>
+                        <p><strong data-i18n="contract">Contract Address:</strong></p>
+                        <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--accent2); font-weight: bold; padding: 1rem; border-radius: 16px; text-align: center; margin-top: 1rem; font-family: monospace; word-break: break-all; font-size: 0.9rem; box-shadow: 0 0 15px rgba(255, 126, 95, 0.3);">
+                            0x8161698A74F2ea0035B9912ED60140893Ac0f39C
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- More Token Utility -->
-                <div class="container neon-border" style="grid-column: span 2;">
-                    <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 0;">
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-percentage"></i>
-                            </div>
-                            <h4 data-i18n="staking_rewards">Staking Rewards</h4>
-                            <p data-i18n="staking_rewards_desc">Earn passive income by staking FDAI tokens in our high-yield staking pools with compounding rewards.</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-shopping-cart"></i>
-                            </div>
-                            <h4 data-i18n="ecosystem_payments">Ecosystem Payments</h4>
-                            <p data-i18n="ecosystem_payments_desc">FDAI serves as the primary payment method for all services, products, and transactions within our ecosystem.</p>
-                        </div>
+        <!-- More Features Section -->
+        <div class="container neon-border">
+            <h4 class="section-title" style="margin-top: 0;" data-i18n="additional_features">Additional Features</h4>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
                     </div>
+                    <h4 data-i18n="scalable">Highly Scalable</h4>
+                    <p data-i18n="scalable_desc">Built on Binance Smart Chain for fast transactions and low fees, with plans for multi-chain expansion.</p>
                 </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h4>AI Integration</h4>
+                    <p>Seamless integration of AI models with blockchain technology for predictive analytics.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h4>Security First</h4>
+                    <p>Advanced encryption and security protocols to protect user assets and data.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h4 data-i18n="staking_rewards">Staking Rewards</h4>
+                    <p data-i18n="staking_rewards_desc">Earn passive income by staking FDAI tokens in our high-yield staking pools with compounding rewards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h4 data-i18n="ecosystem_payments">Ecosystem Payments</h4>
+                    <p data-i18n="ecosystem_payments_desc">FDAI serves as the primary payment method for all services, products, and transactions within our ecosystem.</p>
+                </div>
+            </div>
+        </div>
 
-                <!-- Community Section -->
-                <div class="container neon-border">
-                    <h3 class="section-title" data-i18n="join_community">Join Our Community</h3>
-                    <p data-i18n="community_text">Be part of our growing community of crypto enthusiasts, AI developers, and blockchain innovators. Together, we're building the future of decentralized finance powered by artificial intelligence.</p>
-                    
-                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem;">
-                        <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(29, 161, 242, 0.2) 0%, rgba(15, 12, 41, 0.5) 100%); border: 1px solid rgba(29, 161, 242, 0.4);">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--light)">
-                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-                            </svg>
-                            X (Twitter)
-                        </a>
-                        <a href="https://t.me/freedogeaiFDAI" target="_blank" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(0, 136, 204, 0.2) 0%, rgba(15, 12, 41, 0.5) 100%); border: 1px solid rgba(0, 136, 204, 0.4);">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--light)">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.03-.1.06-.08-.06-.16.05-.08.14-.03.25-.01.1.05.67 3.19 3.18 3.66 3.75.41.5.73.49 1.04.46.33-.04 1.06-.43 1.2-.85.15-.42.15-.78.1-.85-.03-.06-.22-.04-.45.03-.25.08-1.49.94-1.69 1.03-.34.16-.7.15-.9-.05-.3-.3-.69-.83-1.05-1.36-.92-1.29-1.29-2.21-1.43-2.59-.12-.34 0-.52.08-.7.08-.17.3-.42.6-.58.45-.24.9-.18 1.21-.1.5.12 3.04 1.96 3.5 2.32.68.54.73.7.8.68.2-.05.6-.56.6-.56z"></path>
-                            </svg>
-                            Telegram
-                        </a>
-                    </div>
-                </div>
+        <!-- Community Section -->
+        <div class="container neon-border">
+            <h3 class="section-title" data-i18n="join_community">Join Our Community</h3>
+            <p data-i18n="community_text">Be part of our growing community of crypto enthusiasts, AI developers, and blockchain innovators. Together, we're building the future of decentralized finance powered by artificial intelligence.</p>
+            
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem;">
+                <a href="https://x.com/FreeDogeAI_FDAI" target="_blank" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(29, 161, 242, 0.2) 0%, rgba(15, 12, 41, 0.5) 100%); border: 1px solid rgba(29, 161, 242, 0.4);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--light)">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                    </svg>
+                    X (Twitter)
+                </a>
+                <a href="https://t.me/freedogeaiFDAI" target="_blank" style="display: flex; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(0, 136, 204, 0.2) 0%, rgba(15, 12, 41, 0.5) 100%); border: 1px solid rgba(0, 136, 204, 0.4);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--light)">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.03-.1.06-.08-.06-.16.05-.08.14-.03.25-.01.1.05.67 3.19 3.18 3.66 3.75.41.5.73.49 1.04.46.33-.04 1.06-.43 1.2-.85.15-.42.15-.78.1-.85-.03-.06-.22-.04-.45.03-.25.08-1.49.94-1.69 1.03-.34.16-.7.15-.9-.05-.3-.3-.69-.83-1.05-1.36-.92-1.29-1.29-2.21-1.43-2.59-.12-.34 0-.52.08-.7.08-.17.3-.42.6-.58.45-.24.9-.18 1.21-.1.5.12 3.04 1.96 3.5 2.32.68.54.73.7.8.68.2-.05.6-.56.6-.56z"></path>
+                    </svg>
+                    Telegram
+                </a>
             </div>
         </div>
     </div>
@@ -924,7 +914,8 @@
                 ecosystem_payments: "Ecosystem Payments",
                 ecosystem_payments_desc: "FDAI serves as the primary payment method for all services, products, and transactions within our ecosystem.",
                 join_community: "Join Our Community",
-                community_text: "Be part of our growing community of crypto enthusiasts, AI developers, and blockchain innovators. Together, we're building the future of decentralized finance powered by artificial intelligence."
+                community_text: "Be part of our growing community of crypto enthusiasts, AI developers, and blockchain innovators. Together, we're building the future of decentralized finance powered by artificial intelligence.",
+                additional_features: "Additional Features"
             },
             tr: {
                 presale_title: "FreeDogeAI",
@@ -1000,7 +991,8 @@
                 ecosystem_payments: "Ekosistem Ödemeleri",
                 ecosystem_payments_desc: "FDAI, ekosistemimiz içindeki tüm hizmetler, ürünler ve işlemler için birincil ödeme yöntemi olarak hizmet verir.",
                 join_community: "Topluluğumuza Katılın",
-                community_text: "Kripto meraklıları, AI geliştiricileri ve blockchain yenilikçilerinden oluşan büyüyen topluluğumuzun bir parçası olun. Birlikte, yapay zeka destekli merkeziyetsiz finansın geleceğini inşa ediyoruz."
+                community_text: "Kripto meraklıları, AI geliştiricileri ve blockchain yenilikçilerinden oluşan büyüyen topluluğumuzun bir parçası olun. Birlikte, yapay zeka destekli merkeziyetsiz finansın geleceğini inşa ediyoruz.",
+                additional_features: "Ek Özellikler"
             },
             zh: {
                 presale_title: "FreeDogeAI",
@@ -1076,7 +1068,8 @@
                 ecosystem_payments: "生态系统支付",
                 ecosystem_payments_desc: "FDAI作为我们生态系统内所有服务、产品和交易的主要支付方式。",
                 join_community: "加入我们的社区",
-                community_text: "成为我们不断增长的加密爱好者、AI开发人员和区块链创新者社区的一部分。我们一起构建由人工智能驱动的去中心化金融的未来。"
+                community_text: "成为我们不断增长的加密爱好者、AI开发人员和区块链创新者社区的一部分。我们一起构建由人工智能驱动的去中心化金融的未来。",
+                additional_features: "附加功能"
             }
         };
 
