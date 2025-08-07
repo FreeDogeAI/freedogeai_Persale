@@ -579,6 +579,31 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* New styles for announcement box */
+        .announcement-box {
+            background: linear-gradient(135deg, rgba(255, 126, 95, 0.3) 0%, rgba(255, 209, 102, 0.3) 100%);
+            border: 2px solid var(--accent2);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: 0 0 30px rgba(255, 209, 102, 0.5);
+        }
+
+        .announcement-text {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--light);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        }
+
+        .announcement-subtext {
+            font-size: 1.2rem;
+            color: var(--light);
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
@@ -606,16 +631,9 @@
             <h1 class="glow-text gradient-text" data-i18n="presale_title">FreeDogeAI</h1>
             <h3 style="color: var(--accent2); margin-bottom: 1.5rem; text-shadow: 0 0 15px rgba(255, 209, 102, 0.7);" data-i18n="tagline">AI-Powered Crypto Revolution</h3>
             
-            <div class="info-box neon-border">
-                <h3 data-i18n="important_info">Important Information</h3>
-                <p data-i18n="token_delivery_info">After your token purchase, your tokens will be reflected in your wallet within 24 hours.</p>
-                <div style="background:rgba(255, 126, 95, 0.3); color:var(--light); border: 1px solid var(--accent); border-radius: 16px; padding: 1.2rem; text-align: center; font-weight: bold; margin-top: 1.5rem; box-shadow: var(--neon-glow-accent);">
-                    <span data-i18n="network_warning">Please make sure you are connected to the</span> <span style="color:var(--accent2);">BSC (Binance Smart Chain)</span> <span data-i18n="network">network.</span>
-                </div>
-                <p style="margin-top: 1.5rem;"><strong data-i18n="note">NOTE:</strong> <span data-i18n="token_note">If FDAI tokens do not appear, add this contract address:</span></p>
-                <div style="background: rgba(15, 12, 41, 0.7); border: 2px dashed var(--accent); color: var(--accent2); font-weight: bold; padding: 1.2rem; border-radius: 16px; text-align: center; margin-top: 1.5rem; font-family: monospace; word-break: break-all; box-shadow: 0 0 15px rgba(255, 126, 95, 0.3);">
-                    0x8161698A74F2ea0035B9912ED60140893Ac0f39C
-                </div>
+            <div class="announcement-box">
+                <div class="announcement-text" data-i18n="big_news">NEXT DOGE</div>
+                <div class="announcement-subtext" data-i18n="coming_soon">Big news coming soon!</div>
             </div>
         </div>
 
@@ -845,12 +863,8 @@
             en: {
                 presale_title: "FreeDogeAI",
                 tagline: "AI-Powered Crypto Revolution",
-                important_info: "Important Information",
-                token_delivery_info: "After your token purchase, your tokens will be reflected in your wallet within 24 hours.",
-                network_warning: "Please make sure you are connected to the",
-                network: "network.",
-                note: "NOTE:",
-                token_note: "If FDAI tokens do not appear, add this contract address:",
+                big_news: "NEXT DOGE",
+                coming_soon: "Big news coming soon!",
                 about_title: "About FreeDogeAI",
                 about_text: "FreeDogeAI is an innovative project combining the power of artificial intelligence with the viral appeal of meme-based cryptocurrencies. Our mission is to create a decentralized ecosystem that leverages AI to empower users, foster community engagement, and drive financial freedom. Join us in revolutionizing the future of finance with FreeDogeAI!",
                 about_text2: "At the core of FreeDogeAI is our advanced artificial intelligence system that continuously analyzes market trends, user behavior, and blockchain data to optimize token utility and rewards distribution. Unlike traditional meme coins, FreeDogeAI offers real utility through its AI-powered features.",
@@ -922,12 +936,8 @@
             tr: {
                 presale_title: "FreeDogeAI",
                 tagline: "AI Destekli Kripto Devrimi",
-                important_info: "Önemli Bilgiler",
-                token_delivery_info: "Token satın alımınızın ardından, tokenleriniz 24 saat içinde cüzdanınıza yansıyacaktır.",
-                network_warning: "Lütfen bağlı olduğunuz ağın",
-                network: "olduğundan emin olun.",
-                note: "NOT:",
-                token_note: "Eğer FDAI tokenleri görünmüyorsa, bu kontrat adresini ekleyin:",
+                big_news: "NEXT DOGE",
+                coming_soon: "Büyük haberler yakında geliyor!",
                 about_title: "FreeDogeAI Hakkında",
                 about_text: "FreeDogeAI, yapay zeka gücünü meme tabanlı kripto paraların viral çekiciliğiyle birleştiren yenilikçi bir projedir. Misyonumuz, kullanıcıları güçlendiren, topluluk katılımını teşvik eden ve finansal özgürlüğü destekleyen merkeziyetsiz bir ekosistem yaratmaktır. FreeDogeAI ile finansın geleceğini yeniden şekillendirmek için bize katılın!",
                 about_text2: "FreeDogeAI'nin merkezinde, token kullanımını ve ödül dağıtımını optimize etmek için piyasa eğilimlerini, kullanıcı davranışlarını ve blockchain verilerini sürekli analiz eden gelişmiş bir yapay zeka sistemi bulunmaktadır. Geleneksel meme coin'lerin aksine, FreeDogeAI, AI destekli özellikleriyle gerçek kullanım alanı sunar.",
@@ -999,12 +1009,8 @@
             zh: {
                 presale_title: "FreeDogeAI",
                 tagline: "AI驱动的加密革命",
-                important_info: "重要信息",
-                token_delivery_info: "代币购买后，将在24小时内反映在您的钱包中。",
-                network_warning: "请确保您已连接到",
-                network: "网络。",
-                note: "注意:",
-                token_note: "如果 FDAI 代币未显示，请添加此合约地址:",
+                big_news: "NEXT DOGE",
+                coming_soon: "重大消息即将公布!",
                 about_title: "关于 FreeDogeAI",
                 about_text: "FreeDogeAI 是一个创新项目，将人工智能的力量与迷因加密货币的病毒式吸引力相结合。我们的使命是创建一个去中心化的生态系统，利用人工智能赋能用户，促进社区参与，并推动金融自由。加入我们，与 FreeDogeAI 一起革新金融的未来！",
                 about_text2: "FreeDogeAI 的核心是我们先进的人工智能系统，它持续分析市场趋势、用户行为和区块链数据，以优化代币效用和奖励分配。与传统的迷因币不同，FreeDogeAI 通过其AI驱动的功能提供真正的实用性。",
