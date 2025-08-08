@@ -477,6 +477,12 @@
             color: transparent;
         }
 
+        /* Yellow Title */
+        .yellow-title {
+            color: #ffd166 !important;
+            text-shadow: 0 0 15px rgba(255, 209, 102, 0.7) !important;
+        }
+
         /* Neon Border */
         .neon-border {
             position: relative;
@@ -508,7 +514,9 @@
             margin: 2rem 0;
         }
 
-        .countdown-item {
+       
+
+ .countdown-item {
             background: rgba(15, 12, 41, 0.7);
             border-radius: 12px;
             padding: 1rem;
@@ -604,6 +612,26 @@
             color: var(--light);
             opacity: 0.9;
         }
+
+        /* Whitepaper Download Button */
+        .whitepaper-btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, rgba(255, 209, 102, 0.2) 0%, rgba(255, 209, 102, 0.1) 100%);
+            border: 1px solid rgba(255, 209, 102, 0.4);
+            color: #ffd166 !important;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .whitepaper-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 209, 102, 0.3) 0%, rgba(255, 209, 102, 0.2) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 209, 102, 0.3);
+            color: #fff !important;
+        }
     </style>
 </head>
 <body>
@@ -628,12 +656,19 @@
             <div class="logo-container">
                 <img src="logo.png" alt="FreeDogeAI Logo" class="pulse">
             </div>
-            <h1 class="glow-text gradient-text" data-i18n="presale_title">FreeDogeAI</h1>
+            <h1 class="yellow-title glow-text" data-i18n="presale_title">FreeDogeAI</h1>
             <h3 style="color: var(--accent2); margin-bottom: 1.5rem; text-shadow: 0 0 15px rgba(255, 209, 102, 0.7);" data-i18n="tagline">AI-Powered Crypto Revolution</h3>
             
             <div class="announcement-box">
                 <div class="announcement-text" data-i18n="big_news">NEXT DOGE</div>
                 <div class="announcement-subtext" data-i18n="coming_soon">Big news coming soon!</div>
+            </div>
+
+            <!-- Whitepaper Download Button -->
+            <div style="text-align: center;">
+                <a href="FreeDogeAI-Whitepaper.pdf" download class="whitepaper-btn" data-i18n="download_whitepaper">
+                    <i class="fas fa-file-pdf"></i> Download Whitepaper
+                </a>
             </div>
         </div>
 
@@ -931,7 +966,8 @@
                 ecosystem_payments_desc: "FDAI serves as the primary payment method for all services, products, and transactions within our ecosystem.",
                 join_community: "Join Our Community",
                 community_text: "Be part of our growing community of crypto enthusiasts, AI developers, and blockchain innovators. Together, we're building the future of decentralized finance powered by artificial intelligence.",
-                additional_features: "Additional Features"
+                additional_features: "Additional Features",
+                download_whitepaper: "Download Whitepaper"
             },
             tr: {
                 presale_title: "FreeDogeAI",
@@ -1004,7 +1040,8 @@
                 ecosystem_payments_desc: "FDAI, ekosistemimiz içindeki tüm hizmetler, ürünler ve işlemler için birincil ödeme yöntemi olarak hizmet verir.",
                 join_community: "Topluluğumuza Katılın",
                 community_text: "Kripto meraklıları, AI geliştiricileri ve blockchain yenilikçilerinden oluşan büyüyen topluluğumuzun bir parçası olun. Birlikte, yapay zeka destekli merkeziyetsiz finansın geleceğini inşa ediyoruz.",
-                additional_features: "Ek Özellikler"
+                additional_features: "Ek Özellikler",
+                download_whitepaper: "Whitepaper İndir"
             },
             zh: {
                 presale_title: "FreeDogeAI",
@@ -1077,7 +1114,8 @@
                 ecosystem_payments_desc: "FDAI作为我们生态系统内所有服务、产品和交易的主要支付方式。",
                 join_community: "加入我们的社区",
                 community_text: "成为我们不断增长的加密爱好者、AI开发人员和区块链创新者社区的一部分。我们一起构建由人工智能驱动的去中心化金融的未来。",
-                additional_features: "附加功能"
+                additional_features: "附加功能",
+                download_whitepaper: "下载白皮书"
             }
         };
 
